@@ -6,3 +6,4 @@
 *.db-wal
 .env
 coverage.out
+/build/

@@ -37,7 +37,8 @@ archives:
       - README.md
       - CHANGELOG.md
       - SECURITY.md
-      - docs/**/*
+      - docs/*.md
+      - docs/**/*.md
       - deploy/Caddyfile
       - deploy/install-linux.sh
       - deploy/systemd/*

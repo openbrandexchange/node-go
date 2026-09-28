@@ -3,8 +3,39 @@ on:
   push:
     branches: [main]
   pull_request:
+  schedule:
+    - cron: "17 5 * * 1" # weekly: new vulnerabilities in unchanged code
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-go@v7
+        with:
+          go-version-file: go.mod
+      - name: Format
+        run: test -z "$(gofmt -l . | tee /dev/stderr)"
+      - name: Vet
+        run: go vet ./...
+      - name: Staticcheck
+        run: go run honnef.co/go/tools/cmd/staticcheck@v0.8.1 ./...
+      - name: Shell scripts
+        run: shellcheck deploy/*.sh scripts/*.sh e2e/run.sh
+      - name: GoReleaser configuration
+        uses: goreleaser/goreleaser-action@v7
+        with:
+          version: "~> v2"
+          args: check
+
   test:
     runs-on: ubuntu-latest
     services:
@@ -17,60 +48,168 @@ jobs:
         ports: ["5432:5432"]
         options: --health-cmd "pg_isready -U obx" --health-interval 5s --health-timeout 5s --health-retries 10
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-go@v5
+      - uses: actions/checkout@v7
+      - uses: actions/setup-go@v7
         with:
-          go-version: "1.26"
-      - name: Format
-        run: test -z "$(gofmt -l .)"
-      - name: Vet
-        run: go vet ./...
-      - name: Test (SQLite)
+          go-version-file: go.mod
+      - name: Tests (SQLite), incl. the 25-language check
         run: go test ./...
-      - name: Test (PostgreSQL)
+      - name: Tests (PostgreSQL)
         env:
           OBX_TEST_DATABASE_URL: postgres://obx:obx@127.0.0.1:5432/obx?sslmode=disable
         run: go test ./internal/node
-      - name: Shell scripts
-        run: shellcheck deploy/*.sh scripts/*.sh e2e/run.sh
+      - name: Build for every platform
+        run: |
+          for t in linux/amd64 linux/arm64 darwin/amd64 darwin/arm64 windows/amd64 windows/arm64; do
+            GOOS=${t%/*} GOARCH=${t#*/} CGO_ENABLED=0 go build -trimpath -o /dev/null . || exit 1
+          done
+
+  race:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-go@v7
+        with:
+          go-version-file: go.mod
+      - name: Race detector
+        run: go test -race -timeout 35m ./internal/...
+
+  security:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-go@v7
+        with:
+          go-version-file: go.mod
+      - name: govulncheck
+        run: go run golang.org/x/vuln/cmd/govulncheck@v1.8.0 ./...
+      - name: Dependency licences
+        run: scripts/check-licenses.sh
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+      - name: npm audit (browser tests; nothing of it ships)
+        working-directory: e2e
+        run: npm ci && npm audit --omit=dev && npm audit --audit-level=high
+
+  load:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-go@v7
+        with:
+          go-version-file: go.mod
+      - name: Load test (10 000 products, 60 000 variants, 40 000 images)
+        env:
+          OBX_LOAD_TEST: "1"
+        run: go test ./internal/node -run TestLoad -v -timeout 30m | tee load.txt
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: load-test
+          path: load.txt
+
+  e2e:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-go@v7
+        with:
+          go-version-file: go.mod
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+      - name: Install Playwright
+        working-directory: e2e
+        run: npm ci && npx playwright install --with-deps chromium
+      - name: Browser tests (every task, axe on every screen, keyboard only)
+        run: e2e/run.sh
+      - uses: actions/upload-artifact@v7
+        if: failure()
+        with:
+          name: e2e-report
+          path: |
+            e2e/playwright-report
+            e2e/test-results
+            e2e/tmp/node.log
 
   conformance:
-    # Runs the OBX conformance suite from obx-go (a private sibling repository
-    # until it is published). Needs a token with read access in OBX_GO_TOKEN.
+    # The OBX conformance suite lives in obx-go, a private sibling repository
+    # until the project is published: add a repository secret OBX_READ_TOKEN
+    # (fine-grained token, read access to openbrandexchange/obx-go contents).
     runs-on: ubuntu-latest
     env:
-      OBX_GO_TOKEN: ${{ secrets.OBX_GO_TOKEN }}
+      OBX_READ_TOKEN: ${{ secrets.OBX_READ_TOKEN }}
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_USER: obx
+          POSTGRES_PASSWORD: obx
+          POSTGRES_DB: obx
+        ports: ["5432:5432"]
+        options: --health-cmd "pg_isready -U obx" --health-interval 5s --health-timeout 5s --health-retries 10
     steps:
-      - name: Skip without obx-go access
-        if: env.OBX_GO_TOKEN == ''
-        run: echo "OBX_GO_TOKEN is not set; skipping the conformance suite."
-      - uses: actions/checkout@v4
-        if: env.OBX_GO_TOKEN != ''
+      - name: Skip without access to obx-go
+        if: env.OBX_READ_TOKEN == ''
+        run: echo "::notice::OBX_READ_TOKEN is not set; the conformance suite is skipped (see docs/development.md)."
+      - uses: actions/checkout@v7
+        if: env.OBX_READ_TOKEN != ''
         with:
           path: node-go
-      - uses: actions/checkout@v4
-        if: env.OBX_GO_TOKEN != ''
+      - uses: actions/checkout@v7
+        if: env.OBX_READ_TOKEN != ''
         with:
           repository: openbrandexchange/obx-go
-          token: ${{ secrets.OBX_GO_TOKEN }}
+          token: ${{ secrets.OBX_READ_TOKEN }}
           path: obx-go
-      - uses: actions/setup-go@v5
-        if: env.OBX_GO_TOKEN != ''
+      - uses: actions/setup-go@v7
+        if: env.OBX_READ_TOKEN != ''
         with:
-          go-version: "1.26"
-      - name: Conformance (all profiles)
-        if: env.OBX_GO_TOKEN != ''
+          go-version-file: node-go/go.mod
+      - name: Conformance in-process (SQLite)
+        if: env.OBX_READ_TOKEN != ''
         working-directory: node-go/conformance
-        run: go test -v ./...
+        run: go test -count=1 -v ./...
+      - name: Conformance in-process (PostgreSQL)
+        if: env.OBX_READ_TOKEN != ''
+        working-directory: node-go/conformance
+        env:
+          OBX_TEST_DATABASE_URL: postgres://obx:obx@127.0.0.1:5432/obx?sslmode=disable
+        run: go test -count=1 ./...
+      - name: obx-conformance all against a running node-go
+        if: env.OBX_READ_TOKEN != ''
+        run: |
+          set -eu
+          (cd node-go && go build -o "$RUNNER_TEMP/node-go" .)
+          (cd obx-go && go build -o "$RUNNER_TEMP/obx-conformance" ./cmd/obx-conformance)
+          OBX_DATA_DIR="$RUNNER_TEMP/data" PORT=18490 OBX_PUBLIC_URL=http://127.0.0.1:18490 OBX_SETUP_CODE=CI-CONF-CODE \
+            OBX_ALLOW_PRIVATE_URLS=true OBX_LOG_FORMAT=json "$RUNNER_TEMP/node-go" serve >"$RUNNER_TEMP/node.log" 2>&1 &
+          for _ in $(seq 1 30); do curl -fs http://127.0.0.1:18490/readyz >/dev/null && break; sleep 1; done
+          "$RUNNER_TEMP/obx-conformance" all --url http://127.0.0.1:18490 --setup-code CI-CONF-CODE --rate-limit-test --format markdown | tee "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@v7
+        if: failure() && env.OBX_READ_TOKEN != ''
+        with:
+          name: conformance-node-log
+          path: ${{ runner.temp }}/node.log
 
   docker:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - name: Build image
-        run: docker build -t node-go:ci .
-      - name: Smoke test
-        run: |
-          docker run -d --name node -p 8080:8080 -e OBX_SETUP_CODE=CI-CODE node-go:ci
-          for i in $(seq 1 30); do curl -fs localhost:8080/healthz && break; sleep 1; done
-          curl -fs localhost:8080/admin/api/setup | grep -q '"required":true'
+      - uses: actions/checkout@v7
+      - uses: docker/setup-qemu-action@v4
+      - uses: docker/setup-buildx-action@v4
+      - name: Multi-arch build (linux/amd64, linux/arm64), not pushed
+        uses: docker/build-push-action@v7
+        with:
+          context: .
+          platforms: linux/amd64,linux/arm64
+          push: false
+          build-args: VERSION=ci
+      - name: Image, Litestream restore, backup and restore
+        run: scripts/test-docker.sh
+      - name: Docker Compose with Caddy over HTTPS (DOMAIN + ADMIN_EMAIL only)
+        run: scripts/test-compose-https.sh
+      - name: Cloud Run script against the real gcloud CLI
+        run: scripts/test-cloudrun.sh
