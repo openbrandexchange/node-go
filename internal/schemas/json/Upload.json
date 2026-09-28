@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openbrandexchange.com/schemas/v0.1/Upload.json",
+  "type": "object",
+  "title": "Upload",
+  "properties": {
+    "id": {
+      "$ref": "Common.json#/$defs/Id"
+    },
+    "sha256": {
+      "$ref": "Common.json#/$defs/Sha256"
+    },
+    "bytes": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "content_type": {
+      "type": "string"
+    },
+    "part_bytes": {
+      "type": "integer",
+      "description": "Every part except the last MUST be exactly this size (>= 5 MiB).",
+      "minimum": 5242880
+    },
+    "parts_total": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "received_parts": {
+      "type": "array",
+      "items": {
+        "type": "integer",
+        "minimum": 1
+      },
+      "description": "Part numbers already stored (resume by sending the others)."
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "open",
+        "completed",
+        "aborted",
+        "expired"
+      ]
+    },
+    "expires_at": {
+      "$ref": "Common.json#/$defs/DateTime"
+    }
+  },
+  "required": [
+    "id",
+    "sha256",
+    "bytes",
+    "content_type",
+    "part_bytes",
+    "parts_total",
+    "received_parts",
+    "status",
+    "expires_at"
+  ],
+  "additionalProperties": false,
+  "patternProperties": {
+    "^x-[a-z0-9]+-[a-z0-9_-]+$": true
+  }
+}

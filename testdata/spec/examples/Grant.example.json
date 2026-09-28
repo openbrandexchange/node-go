@@ -1,0 +1,18 @@
+{
+  "id": "grt_3",
+  "retailer": {
+    "id": "rtl_3",
+    "name": "Example Store"
+  },
+  "brand_ids": [
+    "brd_kestrel"
+  ],
+  "scopes": [
+    "catalog:read",
+    "media:read",
+    "usage:write"
+  ],
+  "original_allowed": false,
+  "status": "active",
+  "updated_at": "2026-09-28T10:00:00Z"
+}

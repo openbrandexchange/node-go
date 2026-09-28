@@ -1,0 +1,77 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openbrandexchange.com/schemas/v0.1/ExportRequest.json",
+  "type": "object",
+  "title": "ExportRequest",
+  "properties": {
+    "filter": {
+      "type": "object",
+      "description": "All given filters must match (AND). Empty = everything visible.",
+      "properties": {
+        "brand_ids": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "$ref": "Common.json#/$defs/Id"
+          }
+        },
+        "product_ids": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "$ref": "Common.json#/$defs/Id"
+          },
+          "maxItems": 10000
+        },
+        "gtins": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "$ref": "Common.json#/$defs/GtinInput"
+          },
+          "maxItems": 10000
+        },
+        "updated_since": {
+          "anyOf": [
+            {
+              "$ref": "Common.json#/$defs/DateTime"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "additionalProperties": false,
+      "patternProperties": {
+        "^x-[a-z0-9]+-[a-z0-9_-]+$": true
+      }
+    },
+    "renditions": {
+      "type": "array",
+      "items": {
+        "$ref": "Common.json#/$defs/RenditionName"
+      },
+      "description": "Renditions to include as files; [] = data only. 'original' requires media:original.",
+      "uniqueItems": true
+    },
+    "include_data": {
+      "type": "boolean",
+      "description": "Include product/variant/asset lines in the manifest (default true).",
+      "default": true
+    }
+  },
+  "required": [
+    "renditions"
+  ],
+  "additionalProperties": false,
+  "patternProperties": {
+    "^x-[a-z0-9]+-[a-z0-9_-]+$": true
+  }
+}

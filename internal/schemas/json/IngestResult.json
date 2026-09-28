@@ -1,0 +1,106 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openbrandexchange.com/schemas/v0.1/IngestResult.json",
+  "type": "object",
+  "title": "IngestResult",
+  "properties": {
+    "index": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "description": "0-based position in the batch (batch only).",
+      "minimum": 0
+    },
+    "op": {
+      "type": "string",
+      "enum": [
+        "upsert",
+        "patch",
+        "delete",
+        "publish",
+        "unpublish"
+      ]
+    },
+    "kind": {
+      "type": "string",
+      "enum": [
+        "brand",
+        "product",
+        "variant",
+        "asset"
+      ]
+    },
+    "external_id": {
+      "$ref": "Common.json#/$defs/ExternalId"
+    },
+    "result": {
+      "type": "string",
+      "enum": [
+        "created",
+        "updated",
+        "unchanged",
+        "deleted",
+        "error"
+      ],
+      "description": "unchanged: the stored representation is identical; no change entry was written."
+    },
+    "id": {
+      "anyOf": [
+        {
+          "$ref": "Common.json#/$defs/Id",
+          "description": "Protocol id of the object (null on error before creation)."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "visibility": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "enum": [
+        "visible",
+        "hidden",
+        "pending_files",
+        null
+      ],
+      "description": "visible: served by the protocol. hidden: unpublished or a parent is hidden/missing. pending_files: asset waiting for its original or required renditions."
+    },
+    "etag": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "error": {
+      "anyOf": [
+        {
+          "$ref": "Problem.json"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "warnings": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "maxLength": 1000
+      }
+    }
+  },
+  "required": [
+    "op",
+    "kind",
+    "external_id",
+    "result"
+  ],
+  "additionalProperties": false,
+  "patternProperties": {
+    "^x-[a-z0-9]+-[a-z0-9_-]+$": true
+  }
+}

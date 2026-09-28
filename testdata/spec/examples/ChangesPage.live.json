@@ -1,0 +1,73 @@
+{
+  "changes": [
+    {
+      "seq": 1042,
+      "type": "asset",
+      "op": "delete",
+      "id": "ast_7",
+      "external_id": "KO-1001_NVY_2",
+      "brand_id": "brd_kestrel",
+      "product_id": "prd_1",
+      "updated_at": "2026-09-28T10:00:00Z"
+    },
+    {
+      "seq": 1043,
+      "type": "variant",
+      "op": "upsert",
+      "id": "var_9",
+      "external_id": "2000100101025",
+      "brand_id": "brd_kestrel",
+      "product_id": "prd_1",
+      "updated_at": "2026-09-28T10:00:00Z",
+      "data": {
+        "id": "var_9",
+        "external_id": "2000100101025",
+        "product_id": "prd_1",
+        "brand_id": "brd_kestrel",
+        "gtin": "02000100101025",
+        "gtin_original": "2000100101025",
+        "sku": "KO-1001-NVY-M",
+        "color": {
+          "code": "NVY",
+          "name": {
+            "en": "Navy",
+            "nl": "Marineblauw"
+          },
+          "supplier_color": "Deep Navy"
+        },
+        "size": "M",
+        "size_system": "INT",
+        "updated_at": "2026-09-28T10:00:00Z"
+      }
+    },
+    {
+      "seq": 1044,
+      "type": "grant",
+      "op": "upsert",
+      "id": "grt_3",
+      "external_id": null,
+      "brand_id": null,
+      "product_id": null,
+      "updated_at": "2026-09-28T10:00:00Z",
+      "resync": true,
+      "data": {
+        "id": "grt_3",
+        "retailer": {
+          "id": "rtl_3",
+          "name": "Example Store"
+        },
+        "brand_ids": null,
+        "scopes": [
+          "catalog:read",
+          "media:read"
+        ],
+        "original_allowed": false,
+        "status": "active",
+        "updated_at": "2026-09-28T10:00:00Z"
+      }
+    }
+  ],
+  "next_cursor": "bGl2ZToxMDQ0",
+  "has_more": false,
+  "phase": "live"
+}

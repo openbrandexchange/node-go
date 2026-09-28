@@ -1,0 +1,70 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openbrandexchange.com/schemas/v0.1/WebhookSubscription.json",
+  "type": "object",
+  "title": "WebhookSubscription",
+  "properties": {
+    "id": {
+      "$ref": "Common.json#/$defs/Id"
+    },
+    "url": {
+      "$ref": "Common.json#/$defs/Url",
+      "description": "HTTPS endpoint receiving events (http only for localhost in dev mode)."
+    },
+    "events": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z_]+\\.[a-z_]+$"
+      },
+      "description": "Event types; ['*'] not allowed, list explicitly.",
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "secret": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Signing secret, 'whsec_' + random. Returned only on creation."
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "disabled"
+      ],
+      "description": "disabled after 3 days of failed deliveries (re-enable by recreating)."
+    },
+    "created_at": {
+      "$ref": "Common.json#/$defs/DateTime"
+    },
+    "last_delivery_at": {
+      "anyOf": [
+        {
+          "$ref": "Common.json#/$defs/DateTime"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "last_status": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    }
+  },
+  "required": [
+    "id",
+    "url",
+    "events",
+    "status",
+    "created_at"
+  ],
+  "additionalProperties": false,
+  "patternProperties": {
+    "^x-[a-z0-9]+-[a-z0-9_-]+$": true
+  }
+}

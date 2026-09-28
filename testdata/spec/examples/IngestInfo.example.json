@@ -1,0 +1,45 @@
+{
+  "token": {
+    "id": "tok_1",
+    "name": "PIM nightly",
+    "scopes": [
+      "ingest:read",
+      "ingest:write"
+    ],
+    "brand_external_ids": null,
+    "expires_at": null
+  },
+  "limits": {
+    "max_upload_bytes": 104857600,
+    "max_object_bytes": 2147483648,
+    "part_bytes": 8388608,
+    "max_batch_operations": 1000,
+    "max_import_bytes": 2147483648
+  },
+  "renditions": {
+    "server_generated": false,
+    "required": [
+      "original",
+      "web",
+      "square",
+      "thumb"
+    ]
+  },
+  "accepted_content_types": [
+    "image/jpeg",
+    "image/png",
+    "image/webp",
+    "image/tiff"
+  ],
+  "default_status": "published",
+  "brands": [
+    {
+      "external_id": "kestrel",
+      "name": "Kestrel"
+    }
+  ],
+  "languages": [
+    "nl",
+    "en"
+  ]
+}

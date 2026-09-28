@@ -1,0 +1,26 @@
+{
+  "id": "src_2",
+  "name": "PIM feed",
+  "kind": "https_url",
+  "enabled": true,
+  "schedule": {
+    "frequency": "hourly",
+    "timezone": "UTC"
+  },
+  "mode": "mirror",
+  "allow_mass_unpublish": false,
+  "config": {
+    "kind": "https_url",
+    "url": "https://pim.kestrel.example/exports/obx-package.zip",
+    "images_url": null
+  },
+  "credentials_set": {
+    "headers": [
+      "Authorization"
+    ]
+  },
+  "last_run": null,
+  "next_run_at": null,
+  "created_at": "2026-09-28T10:00:00Z",
+  "updated_at": "2026-09-28T10:00:00Z"
+}

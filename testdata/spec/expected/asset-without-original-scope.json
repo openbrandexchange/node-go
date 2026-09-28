@@ -1,0 +1,74 @@
+{
+  "id": "{{id}}",
+  "external_id": "KO-1001_NVY_1",
+  "product_id": "{{id}}",
+  "brand_id": "{{id}}",
+  "media_type": "image",
+  "color_code": "NVY",
+  "variant_ids": null,
+  "role": "packshot",
+  "view": "front",
+  "position": 1,
+  "filename": "KO-1001_NVY_1_front.png",
+  "alt_text": null,
+  "content_type": "image/png",
+  "width": 1200,
+  "height": 1500,
+  "bytes": 11002,
+  "sha256": "e6ca102a01ef3792dd1c487b08ef22e1d2270af7a745c04efe21ed174cadf73e",
+  "rights": {
+    "license": "retailer-use",
+    "license_text": null,
+    "channels": [
+      "webshop",
+      "marketplace",
+      "social"
+    ],
+    "territories": null,
+    "embargo_until": null,
+    "expires_at": null,
+    "credit": null,
+    "model_release": null
+  },
+  "provenance": {
+    "ai_generated": false,
+    "ai_edited": false,
+    "source": "photo",
+    "c2pa": "none",
+    "c2pa_manifest_url": null,
+    "generator": null
+  },
+  "renditions": {
+    "web": {
+      "name": "web",
+      "url": "{{url}}",
+      "url_expires_at": "{{datetime|null}}",
+      "content_type": "image/jpeg",
+      "width": 1200,
+      "height": 1500,
+      "bytes": "{{int}}",
+      "sha256": "{{sha256}}"
+    },
+    "square": {
+      "name": "square",
+      "url": "{{url}}",
+      "url_expires_at": "{{datetime|null}}",
+      "content_type": "image/jpeg",
+      "width": 1500,
+      "height": 1500,
+      "bytes": "{{int}}",
+      "sha256": "{{sha256}}"
+    },
+    "thumb": {
+      "name": "thumb",
+      "url": "{{url}}",
+      "url_expires_at": "{{datetime|null}}",
+      "content_type": "image/jpeg",
+      "width": 480,
+      "height": 600,
+      "bytes": "{{int}}",
+      "sha256": "{{sha256}}"
+    }
+  },
+  "updated_at": "{{datetime}}"
+}

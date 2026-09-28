@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openbrandexchange.com/schemas/v0.1/BrandInput.json",
+  "type": "object",
+  "title": "BrandInput",
+  "description": "Ingest write model for a brand. Key: the brand's external_id (path).",
+  "properties": {
+    "name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200
+    },
+    "logo_url": {
+      "anyOf": [
+        {
+          "$ref": "Common.json#/$defs/Url",
+          "description": "Fetched by the node once (SSRF-protected) or null."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "website": {
+      "anyOf": [
+        {
+          "$ref": "Common.json#/$defs/Url"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "description": {
+      "anyOf": [
+        {
+          "$ref": "LocalizedText.json"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "status": {
+      "$ref": "Common.json#/$defs/PublicationStatus"
+    }
+  },
+  "required": [
+    "name"
+  ],
+  "additionalProperties": false,
+  "patternProperties": {
+    "^x-[a-z0-9]+-[a-z0-9_-]+$": true
+  }
+}

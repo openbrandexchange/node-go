@@ -1,0 +1,85 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openbrandexchange.com/schemas/v0.1/Variant.json",
+  "type": "object",
+  "title": "Variant",
+  "description": "A sellable colour/size combination of a product.",
+  "properties": {
+    "id": {
+      "$ref": "Common.json#/$defs/Id"
+    },
+    "external_id": {
+      "$ref": "Common.json#/$defs/ExternalId"
+    },
+    "product_id": {
+      "$ref": "Common.json#/$defs/Id"
+    },
+    "brand_id": {
+      "$ref": "Common.json#/$defs/Id"
+    },
+    "gtin": {
+      "anyOf": [
+        {
+          "$ref": "Common.json#/$defs/Gtin14",
+          "description": "Normalised GTIN-14. The consumer's match key."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "gtin_original": {
+      "anyOf": [
+        {
+          "$ref": "Common.json#/$defs/GtinInput",
+          "description": "GTIN exactly as the brand supplied it (e.g. 13-digit EAN)."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "sku": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "The brand's article/SKU number for this variant.",
+      "maxLength": 200
+    },
+    "color": {
+      "$ref": "Color.json"
+    },
+    "size": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Size label, e.g. 'M', '42', '32/34', 'ONE SIZE'.",
+      "maxLength": 64
+    },
+    "size_system": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Optional size system, e.g. EU, UK, US, INT, FR, IT.",
+      "maxLength": 16
+    },
+    "updated_at": {
+      "$ref": "Common.json#/$defs/DateTime"
+    }
+  },
+  "required": [
+    "id",
+    "external_id",
+    "product_id",
+    "brand_id",
+    "color",
+    "updated_at"
+  ],
+  "additionalProperties": false,
+  "patternProperties": {
+    "^x-[a-z0-9]+-[a-z0-9_-]+$": true
+  }
+}

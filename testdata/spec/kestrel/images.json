@@ -1,0 +1,272 @@
+{
+  "KO-1001_NVY_1_front.png": {
+    "bytes": 11002,
+    "color": "NVY",
+    "height": 1500,
+    "position": 1,
+    "qualifier": "front",
+    "sha256": "e6ca102a01ef3792dd1c487b08ef22e1d2270af7a745c04efe21ed174cadf73e",
+    "style": "KO-1001",
+    "width": 1200
+  },
+  "KO-1001_NVY_2_back.png": {
+    "bytes": 10930,
+    "color": "NVY",
+    "height": 1500,
+    "position": 2,
+    "qualifier": "back",
+    "sha256": "495be8858cf472c88a761d7359a24acdec5b324482f669c0a7d572aaf1c85ed4",
+    "style": "KO-1001",
+    "width": 1200
+  },
+  "KO-1001_OAT_1_front.png": {
+    "bytes": 10993,
+    "color": "OAT",
+    "height": 1500,
+    "position": 1,
+    "qualifier": "front",
+    "sha256": "c122a4db7ac1ce755ac170a69bf232d29947d946245dd4d7f172a3bcf88783fe",
+    "style": "KO-1001",
+    "width": 1200
+  },
+  "KO-1001_OAT_2_back.png": {
+    "bytes": 10933,
+    "color": "OAT",
+    "height": 1500,
+    "position": 2,
+    "qualifier": "back",
+    "sha256": "fd0e333d27207e0315817045596a1a324a6f5ef7503e36b4f17fe75d729f7ef6",
+    "style": "KO-1001",
+    "width": 1200
+  },
+  "KO-1002_BLK_1_front.png": {
+    "bytes": 12065,
+    "color": "BLK",
+    "height": 1500,
+    "position": 1,
+    "qualifier": "front",
+    "sha256": "1500ccf092d0bea3b29451accef35e2a93f235420c0448c804a08a4cf55dfa94",
+    "style": "KO-1002",
+    "width": 1200
+  },
+  "KO-1002_BLK_2_back.png": {
+    "bytes": 11997,
+    "color": "BLK",
+    "height": 1500,
+    "position": 2,
+    "qualifier": "back",
+    "sha256": "d79b5326aa2254dd631f5858df985b86c7ee5fd4f5df9c2f33a84d3799b3b4e6",
+    "style": "KO-1002",
+    "width": 1200
+  },
+  "KO-1002_OLV_1_front.png": {
+    "bytes": 35148,
+    "color": "OLV",
+    "height": 3000,
+    "position": 1,
+    "qualifier": "front",
+    "sha256": "112995c1bf3cdc71662d08b53903d8bd48ac51841b5eb4319a529562c366d697",
+    "style": "KO-1002",
+    "width": 2400
+  },
+  "KO-1002_OLV_2_back.png": {
+    "bytes": 10945,
+    "color": "OLV",
+    "height": 1500,
+    "position": 2,
+    "qualifier": "back",
+    "sha256": "18f22da3dfe34f4a20347b15961aca8f47494b8004ad21ac5d70af9d46cb4326",
+    "style": "KO-1002",
+    "width": 1200
+  },
+  "KO-1003_BLK_1_front.png": {
+    "bytes": 12063,
+    "color": "BLK",
+    "height": 1500,
+    "position": 1,
+    "qualifier": "front",
+    "sha256": "c74eb130c1bb9a95c7f34a62826d4eeb89781a73cf9d55a00deab1d4b15f231a",
+    "style": "KO-1003",
+    "width": 1200
+  },
+  "KO-1003_BLK_2_back.png": {
+    "bytes": 11997,
+    "color": "BLK",
+    "height": 1500,
+    "position": 2,
+    "qualifier": "back",
+    "sha256": "19b700f23b558129d2c5c776ee8787ca73557dc1d15c228c24312888fff3aa97",
+    "style": "KO-1003",
+    "width": 1200
+  },
+  "KO-1003_RST_1_front.png": {
+    "bytes": 11000,
+    "color": "RST",
+    "height": 1500,
+    "position": 1,
+    "qualifier": "front",
+    "sha256": "0275be106155a05b5157c7593766c8dc5a08aaf90bb6eb742350f970f32d3c78",
+    "style": "KO-1003",
+    "width": 1200
+  },
+  "KO-1003_RST_2_back.png": {
+    "bytes": 10931,
+    "color": "RST",
+    "height": 1500,
+    "position": 2,
+    "qualifier": "back",
+    "sha256": "e57c61b8a40bd65b989d615a5f7001011b06d58ac81ca13748d5d9701ff2e36b",
+    "style": "KO-1003",
+    "width": 1200
+  },
+  "KO-1003_RST_3_model.png": {
+    "bytes": 10982,
+    "color": "RST",
+    "height": 1500,
+    "position": 3,
+    "qualifier": "model",
+    "sha256": "dc22080cbbac972bf7b289c65d8849f9a99cd1e3e44ef8e88fc92681ead72a20",
+    "style": "KO-1003",
+    "width": 1200
+  },
+  "KO-1003_WHT_1_front.png": {
+    "bytes": 10995,
+    "color": "WHT",
+    "height": 1500,
+    "position": 1,
+    "qualifier": "front",
+    "sha256": "ce2a89596298c26c6a9e82e5ae4f561b8e93665d33bef23306e3b0dc969d8564",
+    "style": "KO-1003",
+    "width": 1200
+  },
+  "KO-1003_WHT_2_back.png": {
+    "bytes": 10930,
+    "color": "WHT",
+    "height": 1500,
+    "position": 2,
+    "qualifier": "back",
+    "sha256": "b9521c4cdcfa25f62a1e0303f0f83fdfbfbe7232eb7d454051ea08f21a018751",
+    "style": "KO-1003",
+    "width": 1200
+  },
+  "KO-1004_IND_1_front.png": {
+    "bytes": 10998,
+    "color": "IND",
+    "height": 1500,
+    "position": 1,
+    "qualifier": "front",
+    "sha256": "997719e93ce0367b36e550552cccfeaa4668543edbbbf0abbceec1c2b27d09e1",
+    "style": "KO-1004",
+    "width": 1200
+  },
+  "KO-1004_IND_2_back.png": {
+    "bytes": 10930,
+    "color": "IND",
+    "height": 1500,
+    "position": 2,
+    "qualifier": "back",
+    "sha256": "eeb7399bc6ddc3dd37011b80d7c33e9c0af1c0f7cd969fd1f71e793aa31488ee",
+    "style": "KO-1004",
+    "width": 1200
+  },
+  "KO-1004_IND_3_detail.png": {
+    "bytes": 11037,
+    "color": "IND",
+    "height": 1500,
+    "position": 3,
+    "qualifier": "detail",
+    "sha256": "13ed38b301a5292e6937adc0e77eaa913e5aeecb0a71edb99c02e3e3e4c0c1a8",
+    "style": "KO-1004",
+    "width": 1200
+  },
+  "KO-1005_COG_1_front.png": {
+    "bytes": 10993,
+    "color": "COG",
+    "height": 1500,
+    "position": 1,
+    "qualifier": "front",
+    "sha256": "f89eeaaf7e5deab298967a6655c31086a9d7e29bb25af96803723711acf87fc2",
+    "style": "KO-1005",
+    "width": 1200
+  },
+  "KO-1005_COG_2_side.png": {
+    "bytes": 10908,
+    "color": "COG",
+    "height": 1500,
+    "position": 2,
+    "qualifier": "side",
+    "sha256": "742f2da61d81e1adbc970b7166244ad28ed15ab18bc402c32ee0d88b504c6571",
+    "style": "KO-1005",
+    "width": 1200
+  },
+  "KO-1005_COG_3_inside.png": {
+    "bytes": 11069,
+    "color": "COG",
+    "height": 1500,
+    "position": 3,
+    "qualifier": "inside",
+    "sha256": "6ba90b91ef54eb35ae8c6d1f02575b6c7867e8f9f265639fe3dc6efcec8e3db3",
+    "style": "KO-1005",
+    "width": 1200
+  },
+  "KO-1006_NVY_1_front.png": {
+    "bytes": 10990,
+    "color": "NVY",
+    "height": 1500,
+    "position": 1,
+    "qualifier": "front",
+    "sha256": "a6e51b18e02d96f87cca6017c5ef0e8674c0c8f5b2292a738715bc551231912f",
+    "style": "KO-1006",
+    "width": 1200
+  },
+  "KO-1006_RST_1_front.png": {
+    "bytes": 10992,
+    "color": "RST",
+    "height": 1500,
+    "position": 1,
+    "qualifier": "front",
+    "sha256": "3d3a0b99fa383c5070d845de20271502aadf2d6aac2ad07a3b6493b0612eeb61",
+    "style": "KO-1006",
+    "width": 1200
+  },
+  "KT-2001_BLK_1_front.png": {
+    "bytes": 12052,
+    "color": "BLK",
+    "height": 1500,
+    "position": 1,
+    "qualifier": "front",
+    "sha256": "69097433c1676fba89026af0790a7a25dabafca57734ff21a78d7f19d9a36cba",
+    "style": "KT-2001",
+    "width": 1200
+  },
+  "KT-2001_BLK_2_back.png": {
+    "bytes": 11980,
+    "color": "BLK",
+    "height": 1500,
+    "position": 2,
+    "qualifier": "back",
+    "sha256": "45c241504a5176a1a97378a1c04660fa60c077c8103a2d2c659d1338db456912",
+    "style": "KT-2001",
+    "width": 1200
+  },
+  "KT-2002_YLW_1_front.png": {
+    "bytes": 11005,
+    "color": "YLW",
+    "height": 1500,
+    "position": 1,
+    "qualifier": "front",
+    "sha256": "88976fa4dca53db08392953615e3a0a3a1f25704ace10500c7f2bce9179d0202",
+    "style": "KT-2002",
+    "width": 1200
+  },
+  "KT-2002_YLW_2_back.png": {
+    "bytes": 10954,
+    "color": "YLW",
+    "height": 1500,
+    "position": 2,
+    "qualifier": "back",
+    "sha256": "f4c68f0d22c17dae658942b1e4b13fd024ba09327c8ca36e683ae516e85f2882",
+    "style": "KT-2002",
+    "width": 1200
+  }
+}

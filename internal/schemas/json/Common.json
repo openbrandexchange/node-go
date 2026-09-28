@@ -1,0 +1,225 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openbrandexchange.com/schemas/v0.1/Common.json",
+  "title": "Common definitions",
+  "description": "Shared scalar definitions used by all OBX schemas.",
+  "$defs": {
+    "Id": {
+      "type": "string",
+      "description": "Opaque, node-assigned identifier. Stable for the life of the object. Consumers MUST treat it as opaque.",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._~-]{0,127}$",
+      "examples": [
+        "prd_01J9ZK3Q7T5W"
+      ]
+    },
+    "ExternalId": {
+      "type": "string",
+      "description": "The brand's own identifier for an object (from its PIM/ERP/spreadsheet). 1-200 characters, no control characters and no '/'. Leading/trailing whitespace is trimmed by nodes. Compared case-sensitively.",
+      "minLength": 1,
+      "maxLength": 200,
+      "pattern": "^[^\\x00-\\x1F\\x7F/]+$",
+      "examples": [
+        "KO-1001"
+      ]
+    },
+    "DateTime": {
+      "type": "string",
+      "description": "RFC 3339 timestamp, UTC recommended.",
+      "format": "date-time",
+      "examples": [
+        "2026-09-28T10:00:00Z"
+      ]
+    },
+    "Sha256": {
+      "type": "string",
+      "description": "Lowercase hex SHA-256 of the exact bytes.",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "Gtin14": {
+      "type": "string",
+      "description": "GTIN normalised to 14 digits (left-padded with zeros).",
+      "pattern": "^[0-9]{14}$",
+      "examples": [
+        "02000010010011"
+      ]
+    },
+    "GtinInput": {
+      "type": "string",
+      "description": "A GTIN as supplied: GTIN-8, UPC-A (12), EAN-13 or GTIN-14 digits.",
+      "pattern": "^([0-9]{8}|[0-9]{12,14})$",
+      "examples": [
+        "2000010010011"
+      ]
+    },
+    "LanguageTag": {
+      "type": "string",
+      "description": "BCP 47 language tag, restricted to language or language-REGION.",
+      "pattern": "^[a-z]{2,3}(-[A-Z]{2})?$",
+      "examples": [
+        "nl",
+        "en",
+        "de-CH"
+      ]
+    },
+    "CountryCode": {
+      "type": "string",
+      "description": "ISO 3166-1 alpha-2 country code.",
+      "pattern": "^[A-Z]{2}$",
+      "examples": [
+        "NL"
+      ]
+    },
+    "Url": {
+      "type": "string",
+      "description": "Absolute http(s) URL.",
+      "format": "uri",
+      "pattern": "^https?://",
+      "maxLength": 2048
+    },
+    "Cursor": {
+      "type": "string",
+      "description": "Opaque pagination or feed cursor. Clients MUST NOT parse or construct it.",
+      "minLength": 1,
+      "maxLength": 4096
+    },
+    "HexColor": {
+      "type": "string",
+      "description": "sRGB colour as #rrggbb.",
+      "pattern": "^#[0-9a-fA-F]{6}$",
+      "examples": [
+        "#1F4E5F"
+      ]
+    },
+    "Email": {
+      "type": "string",
+      "description": "E-mail address.",
+      "format": "email",
+      "maxLength": 254
+    },
+    "Scope": {
+      "type": "string",
+      "enum": [
+        "catalog:read",
+        "media:read",
+        "media:original",
+        "usage:write"
+      ],
+      "description": "OBX Protocol OAuth2 scope."
+    },
+    "IngestScope": {
+      "type": "string",
+      "enum": [
+        "ingest:read",
+        "ingest:write",
+        "ingest:delete"
+      ],
+      "description": "OBX Ingest token scope."
+    },
+    "Role": {
+      "type": "string",
+      "enum": [
+        "packshot",
+        "model",
+        "detail",
+        "ghost",
+        "flatlay",
+        "scene",
+        "swatch",
+        "size_chart",
+        "other"
+      ],
+      "description": "What the image shows. Stable key; labels are presentation."
+    },
+    "View": {
+      "type": "string",
+      "enum": [
+        "front",
+        "back",
+        "side",
+        "left",
+        "right",
+        "top",
+        "bottom",
+        "tilted_left",
+        "tilted_right",
+        "inside",
+        "detail",
+        "other"
+      ],
+      "description": "Viewing angle. Aligned with Fashion Cloud product_view plus 'inside'."
+    },
+    "RenditionName": {
+      "type": "string",
+      "enum": [
+        "original",
+        "web",
+        "square",
+        "thumb"
+      ],
+      "description": "Rendition name."
+    },
+    "Channel": {
+      "type": "string",
+      "enum": [
+        "webshop",
+        "marketplace",
+        "social",
+        "print"
+      ],
+      "description": "Sales/marketing channel a rights grant covers."
+    },
+    "PublicationStatus": {
+      "type": "string",
+      "enum": [
+        "published",
+        "unpublished"
+      ],
+      "description": "Brand-side publication state. Only 'published' objects (with published parents) are visible through the OBX Protocol."
+    },
+    "ErrorCode": {
+      "type": "string",
+      "enum": [
+        "invalid_request",
+        "validation_failed",
+        "unauthorized",
+        "invalid_token",
+        "access_revoked",
+        "insufficient_scope",
+        "forbidden",
+        "not_found",
+        "method_not_allowed",
+        "conflict",
+        "precondition_failed",
+        "payload_too_large",
+        "unsupported_media_type",
+        "rate_limited",
+        "limit_exceeded",
+        "cursor_invalid",
+        "cursor_expired",
+        "export_expired",
+        "original_not_allowed",
+        "invalid_gtin",
+        "gtin_conflict",
+        "position_conflict",
+        "checksum_mismatch",
+        "blob_missing",
+        "upload_incomplete",
+        "unknown_parent",
+        "files_missing",
+        "import_invalid",
+        "mass_unpublish_refused",
+        "unsafe_url",
+        "csrf_failed",
+        "invalid_credentials",
+        "account_blocked",
+        "setup_required",
+        "setup_completed",
+        "invite_invalid",
+        "not_implemented",
+        "internal_error",
+        "service_unavailable"
+      ],
+      "description": "Machine-readable OBX error code (see docs/protocol.md#errors). Clients MUST treat unknown codes by HTTP status."
+    }
+  }
+}

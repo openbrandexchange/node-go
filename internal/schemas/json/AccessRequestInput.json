@@ -1,0 +1,137 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openbrandexchange.com/schemas/v0.1/AccessRequestInput.json",
+  "type": "object",
+  "title": "AccessRequestInput",
+  "properties": {
+    "retailer": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Company / shop name.",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "reference": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "The retailer's customer number at the brand, if known.",
+          "maxLength": 100
+        },
+        "website": {
+          "anyOf": [
+            {
+              "$ref": "Common.json#/$defs/Url"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "vat_number": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 32
+        },
+        "country": {
+          "anyOf": [
+            {
+              "$ref": "Common.json#/$defs/CountryCode"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "additionalProperties": false,
+      "patternProperties": {
+        "^x-[a-z0-9]+-[a-z0-9_-]+$": true
+      }
+    },
+    "contact": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "email": {
+          "$ref": "Common.json#/$defs/Email"
+        },
+        "phone": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 40
+        },
+        "language": {
+          "anyOf": [
+            {
+              "$ref": "Common.json#/$defs/LanguageTag"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "name",
+        "email"
+      ],
+      "additionalProperties": false,
+      "patternProperties": {
+        "^x-[a-z0-9]+-[a-z0-9_-]+$": true
+      }
+    },
+    "access": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "portal",
+          "api"
+        ]
+      },
+      "description": "What is requested: portal account and/or API client credentials. Default [\"portal\"].",
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "requested_brand_ids": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "$ref": "Common.json#/$defs/Id"
+      },
+      "description": "Brands of interest; null = all."
+    },
+    "message": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "maxLength": 2000
+    }
+  },
+  "required": [
+    "retailer",
+    "contact"
+  ],
+  "additionalProperties": false,
+  "patternProperties": {
+    "^x-[a-z0-9]+-[a-z0-9_-]+$": true
+  }
+}

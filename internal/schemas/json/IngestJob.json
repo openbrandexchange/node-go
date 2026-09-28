@@ -1,0 +1,128 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openbrandexchange.com/schemas/v0.1/IngestJob.json",
+  "type": "object",
+  "title": "IngestJob",
+  "properties": {
+    "id": {
+      "$ref": "Common.json#/$defs/Id"
+    },
+    "kind": {
+      "type": "string",
+      "enum": [
+        "batch",
+        "import"
+      ]
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "queued",
+        "running",
+        "succeeded",
+        "failed"
+      ]
+    },
+    "created_at": {
+      "$ref": "Common.json#/$defs/DateTime"
+    },
+    "finished_at": {
+      "anyOf": [
+        {
+          "$ref": "Common.json#/$defs/DateTime"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "progress": {
+      "type": "object",
+      "properties": {
+        "done": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "total": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        }
+      },
+      "required": [
+        "done",
+        "total"
+      ],
+      "additionalProperties": false,
+      "patternProperties": {
+        "^x-[a-z0-9]+-[a-z0-9_-]+$": true
+      }
+    },
+    "summary": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "properties": {
+        "created": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "updated": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "unchanged": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "deleted": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "errors": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "created",
+        "updated",
+        "unchanged",
+        "deleted",
+        "errors"
+      ],
+      "additionalProperties": false,
+      "patternProperties": {
+        "^x-[a-z0-9]+-[a-z0-9_-]+$": true
+      }
+    },
+    "import_run": {
+      "anyOf": [
+        {
+          "$ref": "ImportRun.json"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "results_url": {
+      "$ref": "Common.json#/$defs/Url"
+    }
+  },
+  "required": [
+    "id",
+    "kind",
+    "status",
+    "created_at",
+    "progress",
+    "results_url"
+  ],
+  "additionalProperties": false,
+  "patternProperties": {
+    "^x-[a-z0-9]+-[a-z0-9_-]+$": true
+  }
+}

@@ -1,0 +1,80 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openbrandexchange.com/schemas/v0.1/DirectoryEntry.json",
+  "type": "object",
+  "title": "DirectoryEntry",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Slug, unique in the directory.",
+      "pattern": "^[a-z0-9][a-z0-9-]{1,62}$"
+    },
+    "name": {
+      "type": "string",
+      "description": "Publisher (brand company) name.",
+      "minLength": 1,
+      "maxLength": 200
+    },
+    "discovery_url": {
+      "$ref": "Common.json#/$defs/Url",
+      "description": "https://<host>/.well-known/obx"
+    },
+    "website": {
+      "anyOf": [
+        {
+          "$ref": "Common.json#/$defs/Url"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "brands": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "maxLength": 200
+      },
+      "description": "Brand names for search.",
+      "minItems": 1
+    },
+    "countries": {
+      "type": "array",
+      "items": {
+        "$ref": "Common.json#/$defs/CountryCode"
+      },
+      "description": "Countries the brand sells in."
+    },
+    "categories": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z][a-z0-9_]{0,63}$"
+      },
+      "description": "Recommended: fashion, shoes, accessories, sports, outdoor, kids, lingerie, home."
+    },
+    "languages": {
+      "type": "array",
+      "items": {
+        "$ref": "Common.json#/$defs/LanguageTag"
+      },
+      "minItems": 1
+    },
+    "listed_at": {
+      "type": "string",
+      "format": "date"
+    }
+  },
+  "required": [
+    "id",
+    "name",
+    "discovery_url",
+    "brands",
+    "languages",
+    "listed_at"
+  ],
+  "additionalProperties": false,
+  "patternProperties": {
+    "^x-[a-z0-9]+-[a-z0-9_-]+$": true
+  }
+}

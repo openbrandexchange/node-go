@@ -1,0 +1,168 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openbrandexchange.com/schemas/v0.1/Asset.json",
+  "type": "object",
+  "title": "Asset",
+  "description": "A final, published product image with order, rights and provenance.",
+  "properties": {
+    "id": {
+      "$ref": "Common.json#/$defs/Id"
+    },
+    "external_id": {
+      "$ref": "Common.json#/$defs/ExternalId"
+    },
+    "product_id": {
+      "$ref": "Common.json#/$defs/Id"
+    },
+    "brand_id": {
+      "$ref": "Common.json#/$defs/Id"
+    },
+    "media_type": {
+      "type": "string",
+      "enum": [
+        "image"
+      ],
+      "description": "Kind of media. v0.1 only defines image; consumers MUST ignore unknown values."
+    },
+    "color_code": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "The colour this asset belongs to (Variant.color.code); null = all colours of the product.",
+      "maxLength": 64
+    },
+    "variant_ids": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "$ref": "Common.json#/$defs/Id"
+      },
+      "description": "Optional: restrict the asset to specific variants (rare)."
+    },
+    "role": {
+      "$ref": "Common.json#/$defs/Role"
+    },
+    "view": {
+      "anyOf": [
+        {
+          "$ref": "Common.json#/$defs/View"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "position": {
+      "type": "integer",
+      "description": "Order within (product, color_code), 1-based. Unique among visible assets of that product+colour.",
+      "minimum": 1,
+      "maximum": 999
+    },
+    "filename": {
+      "type": "string",
+      "description": "Suggested download filename for the original, e.g. KO-1001_NVY_1.jpg.",
+      "minLength": 1,
+      "maxLength": 255
+    },
+    "alt_text": {
+      "anyOf": [
+        {
+          "$ref": "LocalizedText.json"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "content_type": {
+      "type": "string",
+      "description": "Media type of the original.",
+      "examples": [
+        "image/jpeg"
+      ]
+    },
+    "width": {
+      "type": "integer",
+      "description": "Original width in px.",
+      "minimum": 1
+    },
+    "height": {
+      "type": "integer",
+      "description": "Original height in px.",
+      "minimum": 1
+    },
+    "bytes": {
+      "type": "integer",
+      "description": "Original size in bytes.",
+      "minimum": 1
+    },
+    "sha256": {
+      "$ref": "Common.json#/$defs/Sha256",
+      "description": "SHA-256 of the original bytes (always present, even when the original rendition is not offered to this consumer)."
+    },
+    "rights": {
+      "$ref": "Rights.json"
+    },
+    "provenance": {
+      "$ref": "Provenance.json"
+    },
+    "renditions": {
+      "type": "object",
+      "description": "Renditions by name. 'original' is present only when the brand allows original downloads AND the caller has media:original (portal: the retailer is allowed originals).",
+      "properties": {
+        "original": {
+          "$ref": "Rendition.json"
+        },
+        "web": {
+          "$ref": "Rendition.json"
+        },
+        "square": {
+          "$ref": "Rendition.json"
+        },
+        "thumb": {
+          "$ref": "Rendition.json"
+        }
+      },
+      "required": [
+        "web",
+        "square",
+        "thumb"
+      ],
+      "additionalProperties": false,
+      "patternProperties": {
+        "^x-[a-z0-9]+-[a-z0-9_-]+$": true
+      }
+    },
+    "updated_at": {
+      "$ref": "Common.json#/$defs/DateTime"
+    }
+  },
+  "required": [
+    "id",
+    "external_id",
+    "product_id",
+    "brand_id",
+    "media_type",
+    "color_code",
+    "role",
+    "view",
+    "position",
+    "filename",
+    "content_type",
+    "width",
+    "height",
+    "bytes",
+    "sha256",
+    "rights",
+    "provenance",
+    "renditions",
+    "updated_at"
+  ],
+  "additionalProperties": false,
+  "patternProperties": {
+    "^x-[a-z0-9]+-[a-z0-9_-]+$": true
+  }
+}

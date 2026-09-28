@@ -1,0 +1,6 @@
+{
+  "access_token": "obxa_ZXhhbXBsZS1hY2Nlc3MtdG9rZW4",
+  "token_type": "Bearer",
+  "expires_in": 3600,
+  "scope": "catalog:read media:read"
+}

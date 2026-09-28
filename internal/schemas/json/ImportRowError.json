@@ -1,0 +1,61 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openbrandexchange.com/schemas/v0.1/ImportRowError.json",
+  "type": "object",
+  "title": "ImportRowError",
+  "properties": {
+    "file": {
+      "type": "string",
+      "description": "products.csv, assets.csv or the image file name.",
+      "maxLength": 255
+    },
+    "row": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "description": "1-based data row (header = row 0); null for image files.",
+      "minimum": 1
+    },
+    "column": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "maxLength": 100
+    },
+    "severity": {
+      "type": "string",
+      "enum": [
+        "error",
+        "warning"
+      ],
+      "description": "error: row/file skipped. warning: imported with a correction."
+    },
+    "obx_error": {
+      "$ref": "Common.json#/$defs/ErrorCode"
+    },
+    "detail": {
+      "type": "string",
+      "maxLength": 2000
+    },
+    "value": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "maxLength": 500
+    }
+  },
+  "required": [
+    "file",
+    "row",
+    "severity",
+    "obx_error",
+    "detail"
+  ],
+  "additionalProperties": false,
+  "patternProperties": {
+    "^x-[a-z0-9]+-[a-z0-9_-]+$": true
+  }
+}

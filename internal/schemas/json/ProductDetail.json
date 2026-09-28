@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openbrandexchange.com/schemas/v0.1/ProductDetail.json",
+  "title": "ProductDetail",
+  "description": "A Product with its published variants and visible assets embedded. Returned by GET /products, /products/{id} and by-GTIN lookups.",
+  "type": "object",
+  "$ref": "Product.json",
+  "required": [
+    "variants",
+    "assets"
+  ],
+  "properties": {
+    "variants": {
+      "type": "array",
+      "items": {
+        "$ref": "Variant.json"
+      }
+    },
+    "assets": {
+      "type": "array",
+      "items": {
+        "$ref": "Asset.json"
+      }
+    }
+  }
+}

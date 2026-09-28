@@ -1,0 +1,147 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openbrandexchange.com/schemas/v0.1/ProductInput.json",
+  "type": "object",
+  "title": "ProductInput",
+  "description": "Ingest write model for a product. Key: external_id (path); when a brand has no separate product id, use the style number.",
+  "properties": {
+    "brand_external_id": {
+      "anyOf": [
+        {
+          "$ref": "Common.json#/$defs/ExternalId",
+          "description": "Required unless the node has exactly one brand."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "style_number": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200
+    },
+    "name": {
+      "$ref": "LocalizedText.json"
+    },
+    "description": {
+      "anyOf": [
+        {
+          "$ref": "LocalizedText.json"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "item_type": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "pattern": "^[a-z][a-z0-9_]{0,63}$"
+    },
+    "gpc_brick": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "pattern": "^[0-9]{8}$"
+    },
+    "target_group": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "pattern": "^[a-z][a-z0-9_]{0,63}$"
+    },
+    "season": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "maxLength": 64
+    },
+    "collection": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "maxLength": 200
+    },
+    "materials": {
+      "anyOf": [
+        {
+          "$ref": "Materials.json"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "care": {
+      "anyOf": [
+        {
+          "$ref": "Care.json"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "country_of_origin": {
+      "anyOf": [
+        {
+          "$ref": "Common.json#/$defs/CountryCode"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "dpp_url": {
+      "anyOf": [
+        {
+          "$ref": "Common.json#/$defs/Url"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "attributes": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "propertyNames": {
+        "pattern": "^[a-z][a-z0-9_]{0,63}$"
+      },
+      "additionalProperties": {
+        "anyOf": [
+          {
+            "type": [
+              "string",
+              "number",
+              "boolean"
+            ]
+          },
+          {
+            "$ref": "LocalizedText.json"
+          }
+        ]
+      }
+    },
+    "status": {
+      "$ref": "Common.json#/$defs/PublicationStatus"
+    }
+  },
+  "required": [
+    "style_number",
+    "name"
+  ],
+  "additionalProperties": false,
+  "patternProperties": {
+    "^x-[a-z0-9]+-[a-z0-9_-]+$": true
+  }
+}

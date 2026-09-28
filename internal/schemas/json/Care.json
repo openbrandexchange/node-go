@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openbrandexchange.com/schemas/v0.1/Care.json",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "code": {
+        "type": "string",
+        "description": "Care instruction key, ISO 3758 aligned (recommended list in docs/import-format.md#care-codes), e.g. wash_30, do_not_bleach, tumble_dry_low, iron_low, dry_clean_p, do_not_dry_clean.",
+        "pattern": "^[a-z][a-z0-9_]{0,63}$"
+      },
+      "text": {
+        "anyOf": [
+          {
+            "$ref": "LocalizedText.json"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "code"
+    ],
+    "additionalProperties": false,
+    "patternProperties": {
+      "^x-[a-z0-9]+-[a-z0-9_-]+$": true
+    }
+  },
+  "title": "Care",
+  "description": "Ordered care instructions."
+}

@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openbrandexchange.com/schemas/v0.1/VariantInput.json",
+  "type": "object",
+  "title": "VariantInput",
+  "description": "Ingest write model for a variant. Key: external_id (path); default convention = the GTIN, else <style>-<color>-<size>.",
+  "properties": {
+    "product_external_id": {
+      "$ref": "Common.json#/$defs/ExternalId"
+    },
+    "gtin": {
+      "anyOf": [
+        {
+          "$ref": "Common.json#/$defs/GtinInput",
+          "description": "Check digit MUST be valid (invalid_gtin). Unique within the node (gtin_conflict)."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "sku": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "maxLength": 200
+    },
+    "color": {
+      "$ref": "Color.json"
+    },
+    "size": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "maxLength": 64
+    },
+    "size_system": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "maxLength": 16
+    },
+    "status": {
+      "$ref": "Common.json#/$defs/PublicationStatus"
+    }
+  },
+  "required": [
+    "product_external_id",
+    "color"
+  ],
+  "additionalProperties": false,
+  "patternProperties": {
+    "^x-[a-z0-9]+-[a-z0-9_-]+$": true
+  }
+}

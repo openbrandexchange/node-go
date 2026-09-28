@@ -1,0 +1,192 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openbrandexchange.com/schemas/v0.1/ImportRun.json",
+  "type": "object",
+  "title": "ImportRun",
+  "properties": {
+    "id": {
+      "$ref": "Common.json#/$defs/Id"
+    },
+    "source_id": {
+      "anyOf": [
+        {
+          "$ref": "Common.json#/$defs/Id",
+          "description": "ImportSource for scheduled/pull runs; null for uploads."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "trigger": {
+      "type": "string",
+      "enum": [
+        "upload",
+        "api",
+        "schedule",
+        "manual_run",
+        "cli"
+      ]
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "queued",
+        "running",
+        "succeeded",
+        "failed"
+      ],
+      "description": "succeeded may still contain row errors (see counts.errors)."
+    },
+    "mode": {
+      "type": "string",
+      "enum": [
+        "upsert",
+        "mirror"
+      ]
+    },
+    "dry_run": {
+      "type": "boolean"
+    },
+    "created_at": {
+      "$ref": "Common.json#/$defs/DateTime"
+    },
+    "started_at": {
+      "anyOf": [
+        {
+          "$ref": "Common.json#/$defs/DateTime"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "finished_at": {
+      "anyOf": [
+        {
+          "$ref": "Common.json#/$defs/DateTime"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "files": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 1024
+          },
+          "bytes": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "sha256": {
+            "anyOf": [
+              {
+                "$ref": "Common.json#/$defs/Sha256"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "name",
+          "bytes"
+        ],
+        "additionalProperties": false,
+        "patternProperties": {
+          "^x-[a-z0-9]+-[a-z0-9_-]+$": true
+        }
+      }
+    },
+    "counts": {
+      "type": "object",
+      "properties": {
+        "rows": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "files": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "created": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "updated": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "unchanged": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "unpublished": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "errors": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "warnings": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "rows",
+        "files",
+        "created",
+        "updated",
+        "unchanged",
+        "unpublished",
+        "errors",
+        "warnings"
+      ],
+      "additionalProperties": false,
+      "patternProperties": {
+        "^x-[a-z0-9]+-[a-z0-9_-]+$": true
+      }
+    },
+    "error": {
+      "anyOf": [
+        {
+          "$ref": "Problem.json"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "errors_preview": {
+      "type": "array",
+      "items": {
+        "$ref": "ImportRowError.json"
+      },
+      "description": "First <= 50 errors; page through the full list via the errors endpoint.",
+      "maxItems": 50
+    }
+  },
+  "required": [
+    "id",
+    "source_id",
+    "trigger",
+    "status",
+    "mode",
+    "dry_run",
+    "created_at",
+    "counts"
+  ],
+  "additionalProperties": false,
+  "patternProperties": {
+    "^x-[a-z0-9]+-[a-z0-9_-]+$": true
+  }
+}

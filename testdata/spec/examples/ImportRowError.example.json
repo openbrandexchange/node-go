@@ -1,0 +1,9 @@
+{
+  "file": "KO-9999_BLK_1.jpg",
+  "row": null,
+  "column": null,
+  "severity": "error",
+  "obx_error": "unknown_parent",
+  "detail": "No product with style number KO-9999.",
+  "value": "KO-9999"
+}

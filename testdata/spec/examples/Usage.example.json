@@ -1,0 +1,19 @@
+{
+  "events": [
+    {
+      "asset_id": "ast_1",
+      "rendition": "web",
+      "event": "published",
+      "channel": "webshop",
+      "at": "2026-09-28T10:00:00Z",
+      "count": 1
+    },
+    {
+      "asset_id": "ast_2",
+      "rendition": null,
+      "event": "synced",
+      "channel": null,
+      "at": "2026-09-28T10:00:00Z"
+    }
+  ]
+}

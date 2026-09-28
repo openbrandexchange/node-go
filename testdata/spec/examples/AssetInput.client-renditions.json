@@ -1,0 +1,38 @@
+{
+  "product_external_id": "KO-1007",
+  "color_code": "SND",
+  "role": "packshot",
+  "view": "front",
+  "position": 1,
+  "rights": {
+    "channels": [
+      "webshop"
+    ],
+    "embargo_until": "2027-02-01T00:00:00Z"
+  },
+  "provenance": {
+    "ai_generated": false,
+    "ai_edited": true,
+    "source": "composite"
+  },
+  "files": {
+    "original": {
+      "sha256": "6666666666666666666666666666666666666666666666666666666666666666"
+    },
+    "web": {
+      "sha256": "7777777777777777777777777777777777777777777777777777777777777777",
+      "width": 1600,
+      "height": 2000
+    },
+    "square": {
+      "sha256": "8888888888888888888888888888888888888888888888888888888888888888",
+      "width": 2000,
+      "height": 2000
+    },
+    "thumb": {
+      "sha256": "9999999999999999999999999999999999999999999999999999999999999999",
+      "width": 480,
+      "height": 600
+    }
+  }
+}

@@ -1,0 +1,72 @@
+{
+  "id": "src_1",
+  "name": "ERP nightly export",
+  "kind": "sftp",
+  "enabled": true,
+  "schedule": {
+    "frequency": "daily",
+    "time": "02:00",
+    "weekday": null,
+    "timezone": "Europe/Amsterdam"
+  },
+  "mode": "upsert",
+  "allow_mass_unpublish": false,
+  "config": {
+    "kind": "sftp",
+    "host": "sftp.kestrel.example",
+    "port": 22,
+    "username": "obx",
+    "path": "/exports/obx",
+    "host_key_fingerprint": "SHA256:AAAAC3NzaC1lZDI1NTE5AAAAIExampleOnly"
+  },
+  "credentials_set": {
+    "password": false,
+    "private_key": true,
+    "access_key_id": false,
+    "secret_access_key": false,
+    "headers": []
+  },
+  "last_run": {
+    "id": "run_1",
+    "source_id": "src_1",
+    "trigger": "schedule",
+    "status": "succeeded",
+    "mode": "upsert",
+    "dry_run": false,
+    "created_at": "2026-09-28T10:00:00Z",
+    "started_at": "2026-09-28T10:00:00Z",
+    "finished_at": "2026-09-28T10:00:00Z",
+    "files": [
+      {
+        "name": "products.csv",
+        "bytes": 10240,
+        "sha256": "5555555555555555555555555555555555555555555555555555555555555555"
+      }
+    ],
+    "counts": {
+      "rows": 40,
+      "files": 27,
+      "created": 75,
+      "updated": 0,
+      "unchanged": 0,
+      "unpublished": 0,
+      "errors": 1,
+      "warnings": 0
+    },
+    "error": null,
+    "errors_preview": [
+      {
+        "file": "products.csv",
+        "row": 12,
+        "column": "gtin",
+        "severity": "error",
+        "obx_error": "invalid_gtin",
+        "detail": "Check digit should be 8.",
+        "value": "2000100101019"
+      }
+    ]
+  },
+  "next_run_at": "2026-09-29T00:00:00Z",
+  "created_at": "2026-09-28T10:00:00Z",
+  "updated_at": "2026-09-28T10:00:00Z"
+}

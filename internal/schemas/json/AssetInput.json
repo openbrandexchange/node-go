@@ -1,0 +1,344 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openbrandexchange.com/schemas/v0.1/AssetInput.json",
+  "type": "object",
+  "title": "AssetInput",
+  "description": "Ingest write model for an asset. Key: external_id (path); filename-pattern convention = <style>_<color>_<position>.",
+  "properties": {
+    "product_external_id": {
+      "$ref": "Common.json#/$defs/ExternalId"
+    },
+    "color_code": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "maxLength": 64
+    },
+    "variant_external_ids": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "$ref": "Common.json#/$defs/ExternalId"
+      }
+    },
+    "media_type": {
+      "type": "string",
+      "enum": [
+        "image"
+      ]
+    },
+    "role": {
+      "$ref": "Common.json#/$defs/Role"
+    },
+    "view": {
+      "anyOf": [
+        {
+          "$ref": "Common.json#/$defs/View"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "position": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 999
+    },
+    "filename": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Download filename; default <external_id>.<ext>.",
+      "maxLength": 255
+    },
+    "alt_text": {
+      "anyOf": [
+        {
+          "$ref": "LocalizedText.json"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "rights": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "properties": {
+        "license": {
+          "type": "string",
+          "enum": [
+            "retailer-use",
+            "custom"
+          ]
+        },
+        "license_text": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 20000
+        },
+        "channels": {
+          "type": "array",
+          "items": {
+            "$ref": "Common.json#/$defs/Channel"
+          },
+          "uniqueItems": true
+        },
+        "territories": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "$ref": "Common.json#/$defs/CountryCode"
+          },
+          "uniqueItems": true
+        },
+        "embargo_until": {
+          "anyOf": [
+            {
+              "$ref": "Common.json#/$defs/DateTime"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "expires_at": {
+          "anyOf": [
+            {
+              "$ref": "Common.json#/$defs/DateTime"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "credit": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 500
+        },
+        "model_release": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        }
+      },
+      "additionalProperties": false,
+      "patternProperties": {
+        "^x-[a-z0-9]+-[a-z0-9_-]+$": true
+      },
+      "description": "Partial Rights; omitted fields take the node's default rights (Settings). null = all defaults."
+    },
+    "provenance": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "properties": {
+        "ai_generated": {
+          "type": "boolean"
+        },
+        "ai_edited": {
+          "type": "boolean"
+        },
+        "source": {
+          "type": "string",
+          "enum": [
+            "photo",
+            "generated",
+            "composite"
+          ]
+        },
+        "c2pa": {
+          "type": "string",
+          "enum": [
+            "embedded",
+            "sidecar",
+            "none"
+          ]
+        },
+        "c2pa_manifest_url": {
+          "anyOf": [
+            {
+              "$ref": "Common.json#/$defs/Url"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "generator": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 200
+        }
+      },
+      "additionalProperties": false,
+      "patternProperties": {
+        "^x-[a-z0-9]+-[a-z0-9_-]+$": true
+      },
+      "description": "Omitted fields default to ai_generated=false, ai_edited=false, source=photo (generated when ai_generated), c2pa=none (nodes MAY detect embedded C2PA)."
+    },
+    "files": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "description": "Attach previously uploaded blobs atomically. Omit to keep current files (or upload via PUT .../files/{rendition}).",
+      "properties": {
+        "original": {
+          "type": "object",
+          "description": "Reference to an uploaded blob. width/height are required for client-generated renditions and for originals whose type the node cannot parse (e.g. TIFF).",
+          "properties": {
+            "sha256": {
+              "$ref": "Common.json#/$defs/Sha256"
+            },
+            "width": {
+              "type": [
+                "integer",
+                "null"
+              ],
+              "minimum": 1
+            },
+            "height": {
+              "type": [
+                "integer",
+                "null"
+              ],
+              "minimum": 1
+            }
+          },
+          "required": [
+            "sha256"
+          ],
+          "additionalProperties": false,
+          "patternProperties": {
+            "^x-[a-z0-9]+-[a-z0-9_-]+$": true
+          }
+        },
+        "web": {
+          "type": "object",
+          "description": "Reference to an uploaded blob. width/height are required for client-generated renditions and for originals whose type the node cannot parse (e.g. TIFF).",
+          "properties": {
+            "sha256": {
+              "$ref": "Common.json#/$defs/Sha256"
+            },
+            "width": {
+              "type": [
+                "integer",
+                "null"
+              ],
+              "minimum": 1
+            },
+            "height": {
+              "type": [
+                "integer",
+                "null"
+              ],
+              "minimum": 1
+            }
+          },
+          "required": [
+            "sha256"
+          ],
+          "additionalProperties": false,
+          "patternProperties": {
+            "^x-[a-z0-9]+-[a-z0-9_-]+$": true
+          }
+        },
+        "square": {
+          "type": "object",
+          "description": "Reference to an uploaded blob. width/height are required for client-generated renditions and for originals whose type the node cannot parse (e.g. TIFF).",
+          "properties": {
+            "sha256": {
+              "$ref": "Common.json#/$defs/Sha256"
+            },
+            "width": {
+              "type": [
+                "integer",
+                "null"
+              ],
+              "minimum": 1
+            },
+            "height": {
+              "type": [
+                "integer",
+                "null"
+              ],
+              "minimum": 1
+            }
+          },
+          "required": [
+            "sha256"
+          ],
+          "additionalProperties": false,
+          "patternProperties": {
+            "^x-[a-z0-9]+-[a-z0-9_-]+$": true
+          }
+        },
+        "thumb": {
+          "type": "object",
+          "description": "Reference to an uploaded blob. width/height are required for client-generated renditions and for originals whose type the node cannot parse (e.g. TIFF).",
+          "properties": {
+            "sha256": {
+              "$ref": "Common.json#/$defs/Sha256"
+            },
+            "width": {
+              "type": [
+                "integer",
+                "null"
+              ],
+              "minimum": 1
+            },
+            "height": {
+              "type": [
+                "integer",
+                "null"
+              ],
+              "minimum": 1
+            }
+          },
+          "required": [
+            "sha256"
+          ],
+          "additionalProperties": false,
+          "patternProperties": {
+            "^x-[a-z0-9]+-[a-z0-9_-]+$": true
+          }
+        }
+      },
+      "additionalProperties": false,
+      "patternProperties": {
+        "^x-[a-z0-9]+-[a-z0-9_-]+$": true
+      }
+    },
+    "status": {
+      "$ref": "Common.json#/$defs/PublicationStatus"
+    }
+  },
+  "required": [
+    "product_external_id",
+    "role",
+    "position"
+  ],
+  "additionalProperties": false,
+  "patternProperties": {
+    "^x-[a-z0-9]+-[a-z0-9_-]+$": true
+  }
+}

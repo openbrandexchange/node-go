@@ -1,0 +1,43 @@
+{
+  "results": [
+    {
+      "input": "2000100101025",
+      "gtin": "02000100101025",
+      "status": "matched",
+      "product_id": "{{id}}",
+      "variant_id": "{{id}}"
+    },
+    {
+      "input": "2000 200101031",
+      "gtin": "02000200101031",
+      "status": "matched",
+      "product_id": "{{id}}",
+      "variant_id": "{{id}}"
+    },
+    {
+      "input": "2000999901010",
+      "gtin": "02000999901010",
+      "status": "unmatched",
+      "product_id": null,
+      "variant_id": null
+    },
+    {
+      "input": "12345",
+      "gtin": null,
+      "status": "invalid",
+      "product_id": null,
+      "variant_id": null
+    },
+    {
+      "input": "ABC",
+      "gtin": null,
+      "status": "invalid",
+      "product_id": null,
+      "variant_id": null
+    }
+  ],
+  "products": [
+    "{{product:KO-1001}}",
+    "{{product:KT-2001}}"
+  ]
+}

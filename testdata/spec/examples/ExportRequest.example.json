@@ -1,0 +1,14 @@
+{
+  "filter": {
+    "brand_ids": [
+      "brd_kestrel"
+    ],
+    "product_ids": null,
+    "gtins": null,
+    "updated_since": null
+  },
+  "renditions": [
+    "web"
+  ],
+  "include_data": true
+}

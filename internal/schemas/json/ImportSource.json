@@ -1,0 +1,338 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openbrandexchange.com/schemas/v0.1/ImportSource.json",
+  "type": "object",
+  "title": "ImportSource",
+  "description": "A scheduled pull import configured in the node admin. Unchanged remote files (same ETag/size+mtime/sha256) are skipped.",
+  "properties": {
+    "id": {
+      "$ref": "Common.json#/$defs/Id"
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200
+    },
+    "kind": {
+      "type": "string",
+      "enum": [
+        "https_url",
+        "sftp",
+        "s3"
+      ]
+    },
+    "enabled": {
+      "type": "boolean"
+    },
+    "schedule": {
+      "type": "object",
+      "properties": {
+        "frequency": {
+          "type": "string",
+          "enum": [
+            "manual",
+            "hourly",
+            "daily",
+            "weekly"
+          ]
+        },
+        "time": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "HH:MM (24 h) for daily/weekly.",
+          "pattern": "^([01][0-9]|2[0-3]):[0-5][0-9]$"
+        },
+        "weekday": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "description": "1 = Monday ... 7 = Sunday, for weekly.",
+          "minimum": 1,
+          "maximum": 7
+        },
+        "timezone": {
+          "type": "string",
+          "description": "IANA timezone, default UTC.",
+          "examples": [
+            "Europe/Amsterdam"
+          ]
+        }
+      },
+      "required": [
+        "frequency"
+      ],
+      "additionalProperties": false,
+      "patternProperties": {
+        "^x-[a-z0-9]+-[a-z0-9_-]+$": true
+      }
+    },
+    "mode": {
+      "type": "string",
+      "enum": [
+        "upsert",
+        "mirror"
+      ],
+      "description": "mirror also unpublishes products (of the brands in the file) that are absent; refused when it would unpublish more than half of them (mass_unpublish_refused) unless allow_mass_unpublish."
+    },
+    "allow_mass_unpublish": {
+      "type": "boolean"
+    },
+    "config": {
+      "description": "Non-secret settings per kind.",
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "https_url"
+            },
+            "url": {
+              "$ref": "Common.json#/$defs/Url",
+              "description": "HTTPS URL of a canonical CSV or a package zip. Private, loopback and link-local addresses are refused (unsafe_url) unless the node runs with OBX_ALLOW_PRIVATE_URLS=true."
+            },
+            "images_url": {
+              "anyOf": [
+                {
+                  "$ref": "Common.json#/$defs/Url",
+                  "description": "Optional separate images zip."
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          },
+          "required": [
+            "kind",
+            "url"
+          ],
+          "additionalProperties": false,
+          "patternProperties": {
+            "^x-[a-z0-9]+-[a-z0-9_-]+$": true
+          }
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "sftp"
+            },
+            "host": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 255
+            },
+            "port": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 65535,
+              "default": 22
+            },
+            "username": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 200
+            },
+            "path": {
+              "type": "string",
+              "description": "Folder containing products.csv (optional assets.csv) and images, or a package zip path.",
+              "minLength": 1,
+              "maxLength": 1024
+            },
+            "host_key_fingerprint": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "SHA256:... ; when null the first key seen is pinned (trust on first use).",
+              "maxLength": 200
+            }
+          },
+          "required": [
+            "kind",
+            "host",
+            "username",
+            "path"
+          ],
+          "additionalProperties": false,
+          "patternProperties": {
+            "^x-[a-z0-9]+-[a-z0-9_-]+$": true
+          }
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "s3"
+            },
+            "endpoint": {
+              "anyOf": [
+                {
+                  "$ref": "Common.json#/$defs/Url",
+                  "description": "S3-compatible endpoint (R2, MinIO, ...); null = AWS."
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "region": {
+              "type": "string",
+              "maxLength": 64
+            },
+            "bucket": {
+              "type": "string",
+              "minLength": 3,
+              "maxLength": 63
+            },
+            "prefix": {
+              "type": "string",
+              "description": "Key prefix acting as the folder.",
+              "maxLength": 1024
+            },
+            "path_style": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "kind",
+            "region",
+            "bucket",
+            "prefix"
+          ],
+          "additionalProperties": false,
+          "patternProperties": {
+            "^x-[a-z0-9]+-[a-z0-9_-]+$": true
+          }
+        }
+      ]
+    },
+    "credentials": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "properties": {
+        "password": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 1000
+        },
+        "private_key": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "PEM/OpenSSH private key.",
+          "maxLength": 20000
+        },
+        "access_key_id": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 200
+        },
+        "secret_access_key": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 1000
+        },
+        "headers": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "description": "Extra request headers for https_url (e.g. Authorization).",
+          "additionalProperties": {
+            "type": "string",
+            "maxLength": 4000
+          },
+          "maxProperties": 10
+        }
+      },
+      "additionalProperties": false,
+      "patternProperties": {
+        "^x-[a-z0-9]+-[a-z0-9_-]+$": true
+      },
+      "description": "WRITE-ONLY. Accepted on create/update, never returned. Omit to keep stored values; send null for a field to clear it."
+    },
+    "credentials_set": {
+      "type": "object",
+      "description": "Read-only: which credentials are stored.",
+      "properties": {
+        "password": {
+          "type": "boolean"
+        },
+        "private_key": {
+          "type": "boolean"
+        },
+        "access_key_id": {
+          "type": "boolean"
+        },
+        "secret_access_key": {
+          "type": "boolean"
+        },
+        "headers": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Names of stored headers."
+        }
+      },
+      "additionalProperties": false,
+      "patternProperties": {
+        "^x-[a-z0-9]+-[a-z0-9_-]+$": true
+      }
+    },
+    "last_run": {
+      "anyOf": [
+        {
+          "$ref": "ImportRun.json"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "next_run_at": {
+      "anyOf": [
+        {
+          "$ref": "Common.json#/$defs/DateTime"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "created_at": {
+      "$ref": "Common.json#/$defs/DateTime"
+    },
+    "updated_at": {
+      "$ref": "Common.json#/$defs/DateTime"
+    }
+  },
+  "required": [
+    "id",
+    "name",
+    "kind",
+    "enabled",
+    "schedule",
+    "mode",
+    "config",
+    "created_at",
+    "updated_at"
+  ],
+  "additionalProperties": false,
+  "patternProperties": {
+    "^x-[a-z0-9]+-[a-z0-9_-]+$": true
+  }
+}

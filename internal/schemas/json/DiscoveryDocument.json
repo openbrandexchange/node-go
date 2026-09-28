@@ -1,0 +1,280 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openbrandexchange.com/schemas/v0.1/DiscoveryDocument.json",
+  "type": "object",
+  "title": "DiscoveryDocument",
+  "description": "Served at GET /.well-known/obx on the node's host (also on custom domains).",
+  "properties": {
+    "obx_version": {
+      "type": "string",
+      "description": "Protocol major.minor implemented, e.g. '0.1'.",
+      "pattern": "^[0-9]+\\.[0-9]+$"
+    },
+    "spec_version": {
+      "type": "string",
+      "description": "Exact spec version, e.g. '0.1.0-draft'."
+    },
+    "node": {
+      "type": "object",
+      "description": "Implementation name/version, e.g. obx-node-go 0.1.0.",
+      "properties": {
+        "software": {
+          "type": "string",
+          "maxLength": 100
+        },
+        "version": {
+          "type": "string",
+          "maxLength": 100
+        }
+      },
+      "required": [
+        "software",
+        "version"
+      ],
+      "additionalProperties": false,
+      "patternProperties": {
+        "^x-[a-z0-9]+-[a-z0-9_-]+$": true
+      }
+    },
+    "publisher": {
+      "type": "object",
+      "description": "The brand company operating this node.",
+      "properties": {
+        "id": {
+          "$ref": "Common.json#/$defs/Id"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "logo_url": {
+          "anyOf": [
+            {
+              "$ref": "Common.json#/$defs/Url"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "accent_color": {
+          "anyOf": [
+            {
+              "$ref": "Common.json#/$defs/HexColor"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "website": {
+          "anyOf": [
+            {
+              "$ref": "Common.json#/$defs/Url"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "contact_email": {
+          "anyOf": [
+            {
+              "$ref": "Common.json#/$defs/Email"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "welcome_text": {
+          "anyOf": [
+            {
+              "$ref": "LocalizedText.json"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "id",
+        "name"
+      ],
+      "additionalProperties": false,
+      "patternProperties": {
+        "^x-[a-z0-9]+-[a-z0-9_-]+$": true
+      }
+    },
+    "api_base": {
+      "$ref": "Common.json#/$defs/Url",
+      "description": "Base URL of the OBX Protocol, ending in /obx/v1 (no trailing slash)."
+    },
+    "portal_url": {
+      "anyOf": [
+        {
+          "$ref": "Common.json#/$defs/Url",
+          "description": "Retailer portal URL (humans)."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "auth": {
+      "type": "object",
+      "properties": {
+        "token_endpoint": {
+          "$ref": "Common.json#/$defs/Url"
+        },
+        "scopes_supported": {
+          "type": "array",
+          "items": {
+            "$ref": "Common.json#/$defs/Scope"
+          }
+        },
+        "token_endpoint_auth_methods_supported": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "client_secret_basic",
+              "client_secret_post"
+            ]
+          },
+          "minItems": 1
+        }
+      },
+      "required": [
+        "token_endpoint",
+        "scopes_supported",
+        "token_endpoint_auth_methods_supported"
+      ],
+      "additionalProperties": false,
+      "patternProperties": {
+        "^x-[a-z0-9]+-[a-z0-9_-]+$": true
+      }
+    },
+    "access_requests_url": {
+      "anyOf": [
+        {
+          "$ref": "Common.json#/$defs/Url",
+          "description": "POST endpoint for access requests; null when the brand does not accept requests."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "ingest_url": {
+      "anyOf": [
+        {
+          "$ref": "Common.json#/$defs/Url",
+          "description": "Base URL of the OBX Ingest API (/obx/v1/ingest) when enabled."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "capabilities": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z][a-z0-9_.-]*$"
+      },
+      "description": "Supported optional features. Defined: changes, products, by_gtin, renditions, exports, webhooks, usage, access_requests, ingest, ingest.server_renditions, portal. Unknown values MUST be ignored.",
+      "uniqueItems": true
+    },
+    "brands": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "Common.json#/$defs/Id"
+          },
+          "name": {
+            "type": "string"
+          },
+          "logo_url": {
+            "anyOf": [
+              {
+                "$ref": "Common.json#/$defs/Url"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "name"
+        ],
+        "additionalProperties": false,
+        "patternProperties": {
+          "^x-[a-z0-9]+-[a-z0-9_-]+$": true
+        }
+      },
+      "description": "Published brands (public)."
+    },
+    "languages": {
+      "type": "array",
+      "items": {
+        "$ref": "Common.json#/$defs/LanguageTag"
+      },
+      "description": "Languages the content is offered in, first = default.",
+      "minItems": 1
+    },
+    "limits": {
+      "type": "object",
+      "properties": {
+        "changes_page_max": {
+          "type": "integer",
+          "minimum": 100
+        },
+        "products_page_max": {
+          "type": "integer",
+          "minimum": 25
+        },
+        "gtin_lookup_max": {
+          "type": "integer",
+          "minimum": 2000
+        },
+        "tombstone_retention_days": {
+          "type": "integer",
+          "minimum": 90
+        }
+      },
+      "required": [
+        "changes_page_max",
+        "products_page_max",
+        "gtin_lookup_max",
+        "tombstone_retention_days"
+      ],
+      "additionalProperties": false,
+      "patternProperties": {
+        "^x-[a-z0-9]+-[a-z0-9_-]+$": true
+      }
+    }
+  },
+  "required": [
+    "obx_version",
+    "spec_version",
+    "node",
+    "publisher",
+    "api_base",
+    "auth",
+    "capabilities",
+    "brands",
+    "languages",
+    "limits"
+  ],
+  "additionalProperties": false,
+  "patternProperties": {
+    "^x-[a-z0-9]+-[a-z0-9_-]+$": true
+  }
+}

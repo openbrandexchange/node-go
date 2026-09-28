@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openbrandexchange.com/schemas/v0.1/ChangesPage.json",
+  "type": "object",
+  "title": "ChangesPage",
+  "properties": {
+    "changes": {
+      "type": "array",
+      "items": {
+        "$ref": "Change.json"
+      }
+    },
+    "next_cursor": {
+      "$ref": "Common.json#/$defs/Cursor",
+      "description": "Always present. Pass it on the next call (immediately when has_more, later otherwise)."
+    },
+    "has_more": {
+      "type": "boolean",
+      "description": "True when more entries are available right now."
+    },
+    "phase": {
+      "type": "string",
+      "enum": [
+        "snapshot",
+        "live"
+      ],
+      "description": "snapshot: replaying current state after a cursor-less start; live: incremental changes. The first page with phase=live after a snapshot means the snapshot is complete."
+    }
+  },
+  "required": [
+    "changes",
+    "next_cursor",
+    "has_more",
+    "phase"
+  ],
+  "additionalProperties": false,
+  "patternProperties": {
+    "^x-[a-z0-9]+-[a-z0-9_-]+$": true
+  }
+}

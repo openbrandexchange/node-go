@@ -1,0 +1,12 @@
+{
+  "index": 0,
+  "op": "upsert",
+  "kind": "product",
+  "external_id": "KO-1001",
+  "result": "created",
+  "id": "prd_1",
+  "visibility": "visible",
+  "etag": "\"a1b2\"",
+  "error": null,
+  "warnings": []
+}

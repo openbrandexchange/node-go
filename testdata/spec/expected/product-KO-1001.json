@@ -1,0 +1,561 @@
+{
+  "id": "{{id}}",
+  "external_id": "KO-1001",
+  "brand_id": "{{id}}",
+  "style_number": "KO-1001",
+  "name": {
+    "en": "Merino Crew Sweater",
+    "nl": "Merino trui met ronde hals"
+  },
+  "description": {
+    "en": "Fine-knit crew neck sweater in soft merino wool.",
+    "nl": "Fijngebreide trui met ronde hals van zachte merinowol."
+  },
+  "item_type": "sweater",
+  "gpc_brick": null,
+  "target_group": "unisex",
+  "season": "AW26",
+  "collection": "Highland",
+  "materials": [
+    {
+      "part": "main",
+      "fibers": [
+        {
+          "fiber": "merino_wool",
+          "percentage": 100
+        }
+      ]
+    }
+  ],
+  "care": [
+    {
+      "code": "wash_30_very_mild",
+      "text": null
+    },
+    {
+      "code": "do_not_bleach",
+      "text": null
+    },
+    {
+      "code": "do_not_tumble_dry",
+      "text": null
+    },
+    {
+      "code": "dry_flat",
+      "text": null
+    },
+    {
+      "code": "iron_low",
+      "text": null
+    },
+    {
+      "code": "dry_clean_p",
+      "text": null
+    }
+  ],
+  "country_of_origin": "PT",
+  "dpp_url": null,
+  "attributes": null,
+  "created_at": "{{datetime}}",
+  "updated_at": "{{datetime}}",
+  "variants": [
+    {
+      "id": "{{id}}",
+      "external_id": "2000100101018",
+      "product_id": "{{id}}",
+      "brand_id": "{{id}}",
+      "gtin": "02000100101018",
+      "gtin_original": "2000100101018",
+      "sku": "KO-1001-NVY-S",
+      "color": {
+        "code": "NVY",
+        "name": {
+          "en": "Navy",
+          "nl": "Marineblauw"
+        },
+        "supplier_color": "Deep Navy"
+      },
+      "size": "S",
+      "size_system": "INT",
+      "updated_at": "{{datetime}}"
+    },
+    {
+      "id": "{{id}}",
+      "external_id": "2000100101025",
+      "product_id": "{{id}}",
+      "brand_id": "{{id}}",
+      "gtin": "02000100101025",
+      "gtin_original": "2000100101025",
+      "sku": "KO-1001-NVY-M",
+      "color": {
+        "code": "NVY",
+        "name": {
+          "en": "Navy",
+          "nl": "Marineblauw"
+        },
+        "supplier_color": "Deep Navy"
+      },
+      "size": "M",
+      "size_system": "INT",
+      "updated_at": "{{datetime}}"
+    },
+    {
+      "id": "{{id}}",
+      "external_id": "2000100101032",
+      "product_id": "{{id}}",
+      "brand_id": "{{id}}",
+      "gtin": "02000100101032",
+      "gtin_original": "2000100101032",
+      "sku": "KO-1001-NVY-L",
+      "color": {
+        "code": "NVY",
+        "name": {
+          "en": "Navy",
+          "nl": "Marineblauw"
+        },
+        "supplier_color": "Deep Navy"
+      },
+      "size": "L",
+      "size_system": "INT",
+      "updated_at": "{{datetime}}"
+    },
+    {
+      "id": "{{id}}",
+      "external_id": "2000100101049",
+      "product_id": "{{id}}",
+      "brand_id": "{{id}}",
+      "gtin": "02000100101049",
+      "gtin_original": "2000100101049",
+      "sku": "KO-1001-NVY-XL",
+      "color": {
+        "code": "NVY",
+        "name": {
+          "en": "Navy",
+          "nl": "Marineblauw"
+        },
+        "supplier_color": "Deep Navy"
+      },
+      "size": "XL",
+      "size_system": "INT",
+      "updated_at": "{{datetime}}"
+    },
+    {
+      "id": "{{id}}",
+      "external_id": "2000100102015",
+      "product_id": "{{id}}",
+      "brand_id": "{{id}}",
+      "gtin": "02000100102015",
+      "gtin_original": "2000100102015",
+      "sku": "KO-1001-OAT-S",
+      "color": {
+        "code": "OAT",
+        "name": {
+          "en": "Oatmeal",
+          "nl": "Havermout"
+        },
+        "supplier_color": "Oat Melange"
+      },
+      "size": "S",
+      "size_system": "INT",
+      "updated_at": "{{datetime}}"
+    },
+    {
+      "id": "{{id}}",
+      "external_id": "2000100102022",
+      "product_id": "{{id}}",
+      "brand_id": "{{id}}",
+      "gtin": "02000100102022",
+      "gtin_original": "2000100102022",
+      "sku": "KO-1001-OAT-M",
+      "color": {
+        "code": "OAT",
+        "name": {
+          "en": "Oatmeal",
+          "nl": "Havermout"
+        },
+        "supplier_color": "Oat Melange"
+      },
+      "size": "M",
+      "size_system": "INT",
+      "updated_at": "{{datetime}}"
+    },
+    {
+      "id": "{{id}}",
+      "external_id": "2000100102039",
+      "product_id": "{{id}}",
+      "brand_id": "{{id}}",
+      "gtin": "02000100102039",
+      "gtin_original": "2000100102039",
+      "sku": "KO-1001-OAT-L",
+      "color": {
+        "code": "OAT",
+        "name": {
+          "en": "Oatmeal",
+          "nl": "Havermout"
+        },
+        "supplier_color": "Oat Melange"
+      },
+      "size": "L",
+      "size_system": "INT",
+      "updated_at": "{{datetime}}"
+    },
+    {
+      "id": "{{id}}",
+      "external_id": "2000100102046",
+      "product_id": "{{id}}",
+      "brand_id": "{{id}}",
+      "gtin": "02000100102046",
+      "gtin_original": "2000100102046",
+      "sku": "KO-1001-OAT-XL",
+      "color": {
+        "code": "OAT",
+        "name": {
+          "en": "Oatmeal",
+          "nl": "Havermout"
+        },
+        "supplier_color": "Oat Melange"
+      },
+      "size": "XL",
+      "size_system": "INT",
+      "updated_at": "{{datetime}}"
+    }
+  ],
+  "assets": [
+    {
+      "id": "{{id}}",
+      "external_id": "KO-1001_NVY_1",
+      "product_id": "{{id}}",
+      "brand_id": "{{id}}",
+      "media_type": "image",
+      "color_code": "NVY",
+      "variant_ids": null,
+      "role": "packshot",
+      "view": "front",
+      "position": 1,
+      "filename": "KO-1001_NVY_1_front.png",
+      "alt_text": null,
+      "content_type": "image/png",
+      "width": 1200,
+      "height": 1500,
+      "bytes": 11002,
+      "sha256": "e6ca102a01ef3792dd1c487b08ef22e1d2270af7a745c04efe21ed174cadf73e",
+      "rights": {
+        "license": "retailer-use",
+        "license_text": null,
+        "channels": [
+          "webshop",
+          "marketplace",
+          "social"
+        ],
+        "territories": null,
+        "embargo_until": null,
+        "expires_at": null,
+        "credit": null,
+        "model_release": null
+      },
+      "provenance": {
+        "ai_generated": false,
+        "ai_edited": false,
+        "source": "photo",
+        "c2pa": "none",
+        "c2pa_manifest_url": null,
+        "generator": null
+      },
+      "renditions": {
+        "original": {
+          "name": "original",
+          "url": "{{url}}",
+          "url_expires_at": "{{datetime|null}}",
+          "content_type": "image/png",
+          "width": 1200,
+          "height": 1500,
+          "bytes": 11002,
+          "sha256": "e6ca102a01ef3792dd1c487b08ef22e1d2270af7a745c04efe21ed174cadf73e"
+        },
+        "web": {
+          "name": "web",
+          "url": "{{url}}",
+          "url_expires_at": "{{datetime|null}}",
+          "content_type": "image/jpeg",
+          "width": 1200,
+          "height": 1500,
+          "bytes": "{{int}}",
+          "sha256": "{{sha256}}"
+        },
+        "square": {
+          "name": "square",
+          "url": "{{url}}",
+          "url_expires_at": "{{datetime|null}}",
+          "content_type": "image/jpeg",
+          "width": 1500,
+          "height": 1500,
+          "bytes": "{{int}}",
+          "sha256": "{{sha256}}"
+        },
+        "thumb": {
+          "name": "thumb",
+          "url": "{{url}}",
+          "url_expires_at": "{{datetime|null}}",
+          "content_type": "image/jpeg",
+          "width": 480,
+          "height": 600,
+          "bytes": "{{int}}",
+          "sha256": "{{sha256}}"
+        }
+      },
+      "updated_at": "{{datetime}}"
+    },
+    {
+      "id": "{{id}}",
+      "external_id": "KO-1001_NVY_2",
+      "product_id": "{{id}}",
+      "brand_id": "{{id}}",
+      "media_type": "image",
+      "color_code": "NVY",
+      "variant_ids": null,
+      "role": "packshot",
+      "view": "back",
+      "position": 2,
+      "filename": "KO-1001_NVY_2_back.png",
+      "alt_text": null,
+      "content_type": "image/png",
+      "width": 1200,
+      "height": 1500,
+      "bytes": 10930,
+      "sha256": "495be8858cf472c88a761d7359a24acdec5b324482f669c0a7d572aaf1c85ed4",
+      "rights": {
+        "license": "retailer-use",
+        "license_text": null,
+        "channels": [
+          "webshop",
+          "marketplace",
+          "social"
+        ],
+        "territories": null,
+        "embargo_until": null,
+        "expires_at": null,
+        "credit": null,
+        "model_release": null
+      },
+      "provenance": {
+        "ai_generated": false,
+        "ai_edited": false,
+        "source": "photo",
+        "c2pa": "none",
+        "c2pa_manifest_url": null,
+        "generator": null
+      },
+      "renditions": {
+        "original": {
+          "name": "original",
+          "url": "{{url}}",
+          "url_expires_at": "{{datetime|null}}",
+          "content_type": "image/png",
+          "width": 1200,
+          "height": 1500,
+          "bytes": 10930,
+          "sha256": "495be8858cf472c88a761d7359a24acdec5b324482f669c0a7d572aaf1c85ed4"
+        },
+        "web": {
+          "name": "web",
+          "url": "{{url}}",
+          "url_expires_at": "{{datetime|null}}",
+          "content_type": "image/jpeg",
+          "width": 1200,
+          "height": 1500,
+          "bytes": "{{int}}",
+          "sha256": "{{sha256}}"
+        },
+        "square": {
+          "name": "square",
+          "url": "{{url}}",
+          "url_expires_at": "{{datetime|null}}",
+          "content_type": "image/jpeg",
+          "width": 1500,
+          "height": 1500,
+          "bytes": "{{int}}",
+          "sha256": "{{sha256}}"
+        },
+        "thumb": {
+          "name": "thumb",
+          "url": "{{url}}",
+          "url_expires_at": "{{datetime|null}}",
+          "content_type": "image/jpeg",
+          "width": 480,
+          "height": 600,
+          "bytes": "{{int}}",
+          "sha256": "{{sha256}}"
+        }
+      },
+      "updated_at": "{{datetime}}"
+    },
+    {
+      "id": "{{id}}",
+      "external_id": "KO-1001_OAT_1",
+      "product_id": "{{id}}",
+      "brand_id": "{{id}}",
+      "media_type": "image",
+      "color_code": "OAT",
+      "variant_ids": null,
+      "role": "packshot",
+      "view": "front",
+      "position": 1,
+      "filename": "KO-1001_OAT_1_front.png",
+      "alt_text": null,
+      "content_type": "image/png",
+      "width": 1200,
+      "height": 1500,
+      "bytes": 10993,
+      "sha256": "c122a4db7ac1ce755ac170a69bf232d29947d946245dd4d7f172a3bcf88783fe",
+      "rights": {
+        "license": "retailer-use",
+        "license_text": null,
+        "channels": [
+          "webshop",
+          "marketplace",
+          "social"
+        ],
+        "territories": null,
+        "embargo_until": null,
+        "expires_at": null,
+        "credit": null,
+        "model_release": null
+      },
+      "provenance": {
+        "ai_generated": false,
+        "ai_edited": false,
+        "source": "photo",
+        "c2pa": "none",
+        "c2pa_manifest_url": null,
+        "generator": null
+      },
+      "renditions": {
+        "original": {
+          "name": "original",
+          "url": "{{url}}",
+          "url_expires_at": "{{datetime|null}}",
+          "content_type": "image/png",
+          "width": 1200,
+          "height": 1500,
+          "bytes": 10993,
+          "sha256": "c122a4db7ac1ce755ac170a69bf232d29947d946245dd4d7f172a3bcf88783fe"
+        },
+        "web": {
+          "name": "web",
+          "url": "{{url}}",
+          "url_expires_at": "{{datetime|null}}",
+          "content_type": "image/jpeg",
+          "width": 1200,
+          "height": 1500,
+          "bytes": "{{int}}",
+          "sha256": "{{sha256}}"
+        },
+        "square": {
+          "name": "square",
+          "url": "{{url}}",
+          "url_expires_at": "{{datetime|null}}",
+          "content_type": "image/jpeg",
+          "width": 1500,
+          "height": 1500,
+          "bytes": "{{int}}",
+          "sha256": "{{sha256}}"
+        },
+        "thumb": {
+          "name": "thumb",
+          "url": "{{url}}",
+          "url_expires_at": "{{datetime|null}}",
+          "content_type": "image/jpeg",
+          "width": 480,
+          "height": 600,
+          "bytes": "{{int}}",
+          "sha256": "{{sha256}}"
+        }
+      },
+      "updated_at": "{{datetime}}"
+    },
+    {
+      "id": "{{id}}",
+      "external_id": "KO-1001_OAT_2",
+      "product_id": "{{id}}",
+      "brand_id": "{{id}}",
+      "media_type": "image",
+      "color_code": "OAT",
+      "variant_ids": null,
+      "role": "packshot",
+      "view": "back",
+      "position": 2,
+      "filename": "KO-1001_OAT_2_back.png",
+      "alt_text": null,
+      "content_type": "image/png",
+      "width": 1200,
+      "height": 1500,
+      "bytes": 10933,
+      "sha256": "fd0e333d27207e0315817045596a1a324a6f5ef7503e36b4f17fe75d729f7ef6",
+      "rights": {
+        "license": "retailer-use",
+        "license_text": null,
+        "channels": [
+          "webshop",
+          "marketplace",
+          "social"
+        ],
+        "territories": null,
+        "embargo_until": null,
+        "expires_at": null,
+        "credit": null,
+        "model_release": null
+      },
+      "provenance": {
+        "ai_generated": false,
+        "ai_edited": false,
+        "source": "photo",
+        "c2pa": "none",
+        "c2pa_manifest_url": null,
+        "generator": null
+      },
+      "renditions": {
+        "original": {
+          "name": "original",
+          "url": "{{url}}",
+          "url_expires_at": "{{datetime|null}}",
+          "content_type": "image/png",
+          "width": 1200,
+          "height": 1500,
+          "bytes": 10933,
+          "sha256": "fd0e333d27207e0315817045596a1a324a6f5ef7503e36b4f17fe75d729f7ef6"
+        },
+        "web": {
+          "name": "web",
+          "url": "{{url}}",
+          "url_expires_at": "{{datetime|null}}",
+          "content_type": "image/jpeg",
+          "width": 1200,
+          "height": 1500,
+          "bytes": "{{int}}",
+          "sha256": "{{sha256}}"
+        },
+        "square": {
+          "name": "square",
+          "url": "{{url}}",
+          "url_expires_at": "{{datetime|null}}",
+          "content_type": "image/jpeg",
+          "width": 1500,
+          "height": 1500,
+          "bytes": "{{int}}",
+          "sha256": "{{sha256}}"
+        },
+        "thumb": {
+          "name": "thumb",
+          "url": "{{url}}",
+          "url_expires_at": "{{datetime|null}}",
+          "content_type": "image/jpeg",
+          "width": 480,
+          "height": 600,
+          "bytes": "{{int}}",
+          "sha256": "{{sha256}}"
+        }
+      },
+      "updated_at": "{{datetime}}"
+    }
+  ]
+}

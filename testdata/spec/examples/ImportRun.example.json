@@ -1,0 +1,40 @@
+{
+  "id": "run_1",
+  "source_id": "src_1",
+  "trigger": "schedule",
+  "status": "succeeded",
+  "mode": "upsert",
+  "dry_run": false,
+  "created_at": "2026-09-28T10:00:00Z",
+  "started_at": "2026-09-28T10:00:00Z",
+  "finished_at": "2026-09-28T10:00:00Z",
+  "files": [
+    {
+      "name": "products.csv",
+      "bytes": 10240,
+      "sha256": "5555555555555555555555555555555555555555555555555555555555555555"
+    }
+  ],
+  "counts": {
+    "rows": 40,
+    "files": 27,
+    "created": 75,
+    "updated": 0,
+    "unchanged": 0,
+    "unpublished": 0,
+    "errors": 1,
+    "warnings": 0
+  },
+  "error": null,
+  "errors_preview": [
+    {
+      "file": "products.csv",
+      "row": 12,
+      "column": "gtin",
+      "severity": "error",
+      "obx_error": "invalid_gtin",
+      "detail": "Check digit should be 8.",
+      "value": "2000100101019"
+    }
+  ]
+}

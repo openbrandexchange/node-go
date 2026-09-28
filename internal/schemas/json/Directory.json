@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openbrandexchange.com/schemas/v0.1/Directory.json",
+  "type": "object",
+  "title": "Directory",
+  "description": "directory.json: a public list of OBX nodes (discovery URLs only, no data).",
+  "properties": {
+    "version": {
+      "const": 1
+    },
+    "updated_at": {
+      "$ref": "Common.json#/$defs/DateTime"
+    },
+    "entries": {
+      "type": "array",
+      "items": {
+        "$ref": "DirectoryEntry.json"
+      }
+    }
+  },
+  "required": [
+    "version",
+    "updated_at",
+    "entries"
+  ],
+  "additionalProperties": false,
+  "patternProperties": {
+    "^x-[a-z0-9]+-[a-z0-9_-]+$": true
+  }
+}

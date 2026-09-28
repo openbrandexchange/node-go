@@ -1,0 +1,15 @@
+{
+  "id": "upl_1",
+  "sha256": "4444444444444444444444444444444444444444444444444444444444444444",
+  "bytes": 83886080,
+  "content_type": "image/tiff",
+  "part_bytes": 8388608,
+  "parts_total": 10,
+  "received_parts": [
+    1,
+    2,
+    3
+  ],
+  "status": "open",
+  "expires_at": "2026-09-29T10:00:00Z"
+}

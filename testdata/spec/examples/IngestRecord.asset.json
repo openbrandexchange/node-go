@@ -1,0 +1,29 @@
+{
+  "kind": "asset",
+  "id": "ast_1",
+  "external_id": "KO-1001_NVY_1",
+  "status": "published",
+  "visibility": "pending_files",
+  "etag": "\"c3d4\"",
+  "created_at": "2026-09-28T10:00:00Z",
+  "updated_at": "2026-09-28T10:00:00Z",
+  "data": {
+    "product_external_id": "KO-1001",
+    "color_code": "NVY",
+    "role": "packshot",
+    "view": "front",
+    "position": 1,
+    "files": {
+      "original": {
+        "sha256": "2222222222222222222222222222222222222222222222222222222222222222",
+        "width": 1200,
+        "height": 1500
+      }
+    }
+  },
+  "missing_files": [
+    "web",
+    "square",
+    "thumb"
+  ]
+}

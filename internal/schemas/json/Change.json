@@ -1,0 +1,106 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openbrandexchange.com/schemas/v0.1/Change.json",
+  "type": "object",
+  "title": "Change",
+  "description": "One entry of the change feed.",
+  "properties": {
+    "seq": {
+      "type": "integer",
+      "description": "Node-wide monotonically increasing sequence number of this entry (snapshot entries carry the object's latest seq).",
+      "minimum": 1
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "brand",
+        "product",
+        "variant",
+        "asset",
+        "grant"
+      ],
+      "description": "Object type. Consumers MUST ignore entries with unknown types."
+    },
+    "op": {
+      "type": "string",
+      "enum": [
+        "upsert",
+        "delete"
+      ],
+      "description": "upsert: the object is visible to you with this current state. delete: tombstone, the object is no longer visible to you (deleted, unpublished, parent hidden, outside grant, rights expired)."
+    },
+    "id": {
+      "$ref": "Common.json#/$defs/Id"
+    },
+    "external_id": {
+      "anyOf": [
+        {
+          "$ref": "Common.json#/$defs/ExternalId"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "brand_id": {
+      "anyOf": [
+        {
+          "$ref": "Common.json#/$defs/Id"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "product_id": {
+      "anyOf": [
+        {
+          "$ref": "Common.json#/$defs/Id",
+          "description": "Parent product for variant/asset entries."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "updated_at": {
+      "$ref": "Common.json#/$defs/DateTime",
+      "description": "upsert: the object's updated_at. delete: when it stopped being visible."
+    },
+    "data": {
+      "description": "Present on upsert (never on delete): the CURRENT representation (Brand, Product without variants/assets, Variant, Asset or Grant according to type).",
+      "anyOf": [
+        {
+          "$ref": "Brand.json"
+        },
+        {
+          "$ref": "Product.json"
+        },
+        {
+          "$ref": "Variant.json"
+        },
+        {
+          "$ref": "Asset.json"
+        },
+        {
+          "$ref": "Grant.json"
+        }
+      ]
+    },
+    "resync": {
+      "type": "boolean",
+      "description": "Only on type=grant: true when your visible set changed; restart /changes without a cursor (full snapshot) and sweep."
+    }
+  },
+  "required": [
+    "seq",
+    "type",
+    "op",
+    "id",
+    "updated_at"
+  ],
+  "additionalProperties": false,
+  "patternProperties": {
+    "^x-[a-z0-9]+-[a-z0-9_-]+$": true
+  }
+}

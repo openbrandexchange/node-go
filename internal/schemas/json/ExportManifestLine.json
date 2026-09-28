@@ -1,0 +1,191 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openbrandexchange.com/schemas/v0.1/ExportManifestLine.json",
+  "title": "ExportManifestLine",
+  "description": "One line of an export manifest (NDJSON). First line is 'header'. Consumers MUST ignore unknown line types.",
+  "oneOf": [
+    {
+      "type": "object",
+      "properties": {
+        "type": {
+          "const": "header"
+        },
+        "export_id": {
+          "$ref": "Common.json#/$defs/Id"
+        },
+        "created_at": {
+          "$ref": "Common.json#/$defs/DateTime"
+        },
+        "obx_version": {
+          "type": "string"
+        },
+        "changes_cursor": {
+          "$ref": "Common.json#/$defs/Cursor",
+          "description": "Live /changes cursor positioned at the export's snapshot moment: continue incrementally from here."
+        },
+        "counts": {
+          "type": "object",
+          "properties": {
+            "products": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "variants": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "assets": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "files": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          "required": [
+            "products",
+            "variants",
+            "assets",
+            "files"
+          ],
+          "additionalProperties": false,
+          "patternProperties": {
+            "^x-[a-z0-9]+-[a-z0-9_-]+$": true
+          }
+        }
+      },
+      "required": [
+        "type",
+        "export_id",
+        "created_at",
+        "obx_version",
+        "changes_cursor",
+        "counts"
+      ],
+      "additionalProperties": false,
+      "patternProperties": {
+        "^x-[a-z0-9]+-[a-z0-9_-]+$": true
+      }
+    },
+    {
+      "type": "object",
+      "properties": {
+        "type": {
+          "const": "brand"
+        },
+        "data": {
+          "$ref": "Brand.json"
+        }
+      },
+      "required": [
+        "type",
+        "data"
+      ],
+      "additionalProperties": false,
+      "patternProperties": {
+        "^x-[a-z0-9]+-[a-z0-9_-]+$": true
+      }
+    },
+    {
+      "type": "object",
+      "properties": {
+        "type": {
+          "const": "product"
+        },
+        "data": {
+          "$ref": "Product.json"
+        }
+      },
+      "required": [
+        "type",
+        "data"
+      ],
+      "additionalProperties": false,
+      "patternProperties": {
+        "^x-[a-z0-9]+-[a-z0-9_-]+$": true
+      }
+    },
+    {
+      "type": "object",
+      "properties": {
+        "type": {
+          "const": "variant"
+        },
+        "data": {
+          "$ref": "Variant.json"
+        }
+      },
+      "required": [
+        "type",
+        "data"
+      ],
+      "additionalProperties": false,
+      "patternProperties": {
+        "^x-[a-z0-9]+-[a-z0-9_-]+$": true
+      }
+    },
+    {
+      "type": "object",
+      "properties": {
+        "type": {
+          "const": "asset"
+        },
+        "data": {
+          "$ref": "Asset.json"
+        }
+      },
+      "required": [
+        "type",
+        "data"
+      ],
+      "additionalProperties": false,
+      "patternProperties": {
+        "^x-[a-z0-9]+-[a-z0-9_-]+$": true
+      }
+    },
+    {
+      "type": "object",
+      "properties": {
+        "type": {
+          "const": "file"
+        },
+        "asset_id": {
+          "$ref": "Common.json#/$defs/Id"
+        },
+        "rendition": {
+          "$ref": "Common.json#/$defs/RenditionName"
+        },
+        "part": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "path": {
+          "type": "string",
+          "description": "Path inside the zip part: <style_number>/<rendition>/<filename>.",
+          "maxLength": 1024
+        },
+        "bytes": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "sha256": {
+          "$ref": "Common.json#/$defs/Sha256"
+        }
+      },
+      "required": [
+        "type",
+        "asset_id",
+        "rendition",
+        "part",
+        "path",
+        "bytes",
+        "sha256"
+      ],
+      "additionalProperties": false,
+      "patternProperties": {
+        "^x-[a-z0-9]+-[a-z0-9_-]+$": true
+      }
+    }
+  ]
+}

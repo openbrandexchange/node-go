@@ -1,0 +1,14 @@
+{
+  "KL-9001_GRN_1.png": {
+    "bytes": 10997,
+    "sha256": "beb4b21f95dfb2bf541b6bacc84e8e7effbf578fb7765632154ddfd11122f5ab"
+  },
+  "KL-9001_GRN_1_v2.png": {
+    "bytes": 11235,
+    "sha256": "2a4800d01c62a44f51c2da14ec7602e92215ce823612904aaee36cc559a1c813"
+  },
+  "KL-9001_GRN_2.png": {
+    "bytes": 10939,
+    "sha256": "783a164a67ac79304353c308c102710d32696e2d4ad1a0d5518b69cbccdabbcb"
+  }
+}

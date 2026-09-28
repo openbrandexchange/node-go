@@ -1,0 +1,87 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openbrandexchange.com/schemas/v0.1/GtinLookupResult.json",
+  "type": "object",
+  "title": "GtinLookupResult",
+  "properties": {
+    "results": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "input": {
+            "type": "string",
+            "description": "The code as submitted (trimmed).",
+            "maxLength": 64
+          },
+          "gtin": {
+            "anyOf": [
+              {
+                "$ref": "Common.json#/$defs/Gtin14"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "matched",
+              "unmatched",
+              "invalid"
+            ],
+            "description": "invalid: not 8, 12, 13 or 14 digits after removing spaces."
+          },
+          "product_id": {
+            "anyOf": [
+              {
+                "$ref": "Common.json#/$defs/Id"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "variant_id": {
+            "anyOf": [
+              {
+                "$ref": "Common.json#/$defs/Id"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "input",
+          "gtin",
+          "status",
+          "product_id",
+          "variant_id"
+        ],
+        "additionalProperties": false,
+        "patternProperties": {
+          "^x-[a-z0-9]+-[a-z0-9_-]+$": true
+        }
+      },
+      "description": "One result per distinct normalised input, in input order."
+    },
+    "products": {
+      "type": "array",
+      "items": {
+        "$ref": "ProductDetail.json"
+      },
+      "description": "Each matched product once."
+    }
+  },
+  "required": [
+    "results",
+    "products"
+  ],
+  "additionalProperties": false,
+  "patternProperties": {
+    "^x-[a-z0-9]+-[a-z0-9_-]+$": true
+  }
+}

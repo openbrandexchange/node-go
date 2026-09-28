@@ -1,0 +1,170 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openbrandexchange.com/schemas/v0.1/IngestInfo.json",
+  "type": "object",
+  "title": "IngestInfo",
+  "description": "GET /obx/v1/ingest: who am I, limits, and whether clients must generate renditions.",
+  "properties": {
+    "token": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "Common.json#/$defs/Id"
+        },
+        "name": {
+          "type": "string"
+        },
+        "scopes": {
+          "type": "array",
+          "items": {
+            "$ref": "Common.json#/$defs/IngestScope"
+          }
+        },
+        "brand_external_ids": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "$ref": "Common.json#/$defs/ExternalId"
+          },
+          "description": "Restriction; null = all brands."
+        },
+        "expires_at": {
+          "anyOf": [
+            {
+              "$ref": "Common.json#/$defs/DateTime"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "scopes",
+        "brand_external_ids",
+        "expires_at"
+      ],
+      "additionalProperties": false,
+      "patternProperties": {
+        "^x-[a-z0-9]+-[a-z0-9_-]+$": true
+      }
+    },
+    "limits": {
+      "type": "object",
+      "properties": {
+        "max_upload_bytes": {
+          "type": "integer",
+          "description": "Largest single-request body (blob/file upload).",
+          "minimum": 26214400
+        },
+        "max_object_bytes": {
+          "type": "integer",
+          "description": "Largest original via multipart upload.",
+          "minimum": 524288000
+        },
+        "part_bytes": {
+          "type": "integer",
+          "minimum": 5242880
+        },
+        "max_batch_operations": {
+          "type": "integer",
+          "minimum": 1000
+        },
+        "max_import_bytes": {
+          "type": "integer",
+          "minimum": 524288000
+        }
+      },
+      "required": [
+        "max_upload_bytes",
+        "max_object_bytes",
+        "part_bytes",
+        "max_batch_operations",
+        "max_import_bytes"
+      ],
+      "additionalProperties": false,
+      "patternProperties": {
+        "^x-[a-z0-9]+-[a-z0-9_-]+$": true
+      }
+    },
+    "renditions": {
+      "type": "object",
+      "properties": {
+        "server_generated": {
+          "type": "boolean",
+          "description": "true: the node renders web/square/thumb itself. false: clients MUST upload them (admin UI and obx CLI do this automatically)."
+        },
+        "required": {
+          "type": "array",
+          "items": {
+            "$ref": "Common.json#/$defs/RenditionName"
+          }
+        }
+      },
+      "required": [
+        "server_generated",
+        "required"
+      ],
+      "additionalProperties": false,
+      "patternProperties": {
+        "^x-[a-z0-9]+-[a-z0-9_-]+$": true
+      }
+    },
+    "accepted_content_types": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Original media types accepted, at least image/jpeg, image/png, image/webp."
+    },
+    "default_status": {
+      "$ref": "Common.json#/$defs/PublicationStatus"
+    },
+    "brands": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "external_id": {
+            "$ref": "Common.json#/$defs/ExternalId"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "external_id",
+          "name"
+        ],
+        "additionalProperties": false,
+        "patternProperties": {
+          "^x-[a-z0-9]+-[a-z0-9_-]+$": true
+        }
+      }
+    },
+    "languages": {
+      "type": "array",
+      "items": {
+        "$ref": "Common.json#/$defs/LanguageTag"
+      },
+      "minItems": 1
+    }
+  },
+  "required": [
+    "token",
+    "limits",
+    "renditions",
+    "accepted_content_types",
+    "default_status",
+    "brands",
+    "languages"
+  ],
+  "additionalProperties": false,
+  "patternProperties": {
+    "^x-[a-z0-9]+-[a-z0-9_-]+$": true
+  }
+}

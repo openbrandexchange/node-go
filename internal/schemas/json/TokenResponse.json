@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openbrandexchange.com/schemas/v0.1/TokenResponse.json",
+  "type": "object",
+  "title": "TokenResponse",
+  "properties": {
+    "access_token": {
+      "type": "string",
+      "minLength": 16
+    },
+    "token_type": {
+      "const": "Bearer"
+    },
+    "expires_in": {
+      "type": "integer",
+      "minimum": 60,
+      "maximum": 86400
+    },
+    "scope": {
+      "type": "string",
+      "description": "Space-separated granted scopes."
+    }
+  },
+  "required": [
+    "access_token",
+    "token_type",
+    "expires_in",
+    "scope"
+  ]
+}

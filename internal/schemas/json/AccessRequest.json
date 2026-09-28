@@ -1,0 +1,124 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openbrandexchange.com/schemas/v0.1/AccessRequest.json",
+  "type": "object",
+  "title": "AccessRequest",
+  "description": "A retailer's request for access. Admin API adds retailer/contact details (see node-admin.yaml).",
+  "properties": {
+    "id": {
+      "$ref": "Common.json#/$defs/Id"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "approved",
+        "rejected"
+      ]
+    },
+    "created_at": {
+      "$ref": "Common.json#/$defs/DateTime"
+    },
+    "decided_at": {
+      "anyOf": [
+        {
+          "$ref": "Common.json#/$defs/DateTime"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "reason": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Rejection reason written by the brand (optional).",
+      "maxLength": 2000
+    },
+    "request_token": {
+      "type": "string",
+      "description": "Returned ONLY in the 202 response of POST /access-requests. Bearer token for polling GET /access-requests/{id}. Store it; it is not shown again.",
+      "minLength": 20
+    },
+    "status_url": {
+      "$ref": "Common.json#/$defs/Url"
+    },
+    "portal": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "properties": {
+        "invited": {
+          "type": "boolean",
+          "description": "An invitation e-mail was sent to the contact."
+        },
+        "login_url": {
+          "$ref": "Common.json#/$defs/Url"
+        }
+      },
+      "required": [
+        "invited",
+        "login_url"
+      ],
+      "additionalProperties": false,
+      "patternProperties": {
+        "^x-[a-z0-9]+-[a-z0-9_-]+$": true
+      }
+    },
+    "credentials": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "description": "Present when API access was approved.",
+      "properties": {
+        "client_id": {
+          "type": "string"
+        },
+        "client_secret": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Returned exactly once: on the first status read after approval. null afterwards."
+        },
+        "token_endpoint": {
+          "$ref": "Common.json#/$defs/Url"
+        },
+        "scopes": {
+          "type": "array",
+          "items": {
+            "$ref": "Common.json#/$defs/Scope"
+          }
+        },
+        "claimed": {
+          "type": "boolean",
+          "description": "True once the secret has been returned."
+        }
+      },
+      "required": [
+        "client_id",
+        "client_secret",
+        "token_endpoint",
+        "scopes",
+        "claimed"
+      ],
+      "additionalProperties": false,
+      "patternProperties": {
+        "^x-[a-z0-9]+-[a-z0-9_-]+$": true
+      }
+    }
+  },
+  "required": [
+    "id",
+    "status",
+    "created_at"
+  ],
+  "additionalProperties": false,
+  "patternProperties": {
+    "^x-[a-z0-9]+-[a-z0-9_-]+$": true
+  }
+}

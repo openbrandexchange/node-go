@@ -1,0 +1,9 @@
+{
+  "type": "https://openbrandexchange.com/errors/cursor_expired",
+  "title": "Cursor expired",
+  "status": 410,
+  "detail": "The cursor is older than the tombstone retention; restart without a cursor.",
+  "instance": null,
+  "obx_error": "cursor_expired",
+  "retry_after": null
+}

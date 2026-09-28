@@ -1,0 +1,13 @@
+{
+  "id": "whk_1",
+  "url": "https://store.example/hooks/obx",
+  "events": [
+    "changes.available",
+    "grant.updated"
+  ],
+  "secret": "whsec_Tm90LWEtcmVhbC1zZWNyZXQtZXhhbXBsZQ",
+  "status": "active",
+  "created_at": "2026-09-28T10:00:00Z",
+  "last_delivery_at": null,
+  "last_status": null
+}

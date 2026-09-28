@@ -1,0 +1,59 @@
+{
+  "id": "job_1",
+  "kind": "import",
+  "status": "succeeded",
+  "created_at": "2026-09-28T10:00:00Z",
+  "finished_at": "2026-09-28T10:00:00Z",
+  "progress": {
+    "done": 67,
+    "total": 67
+  },
+  "summary": {
+    "created": 75,
+    "updated": 0,
+    "unchanged": 0,
+    "deleted": 0,
+    "errors": 1
+  },
+  "import_run": {
+    "id": "run_1",
+    "source_id": null,
+    "trigger": "api",
+    "status": "succeeded",
+    "mode": "upsert",
+    "dry_run": false,
+    "created_at": "2026-09-28T10:00:00Z",
+    "started_at": "2026-09-28T10:00:00Z",
+    "finished_at": "2026-09-28T10:00:00Z",
+    "files": [
+      {
+        "name": "products.csv",
+        "bytes": 10240,
+        "sha256": "5555555555555555555555555555555555555555555555555555555555555555"
+      }
+    ],
+    "counts": {
+      "rows": 40,
+      "files": 27,
+      "created": 75,
+      "updated": 0,
+      "unchanged": 0,
+      "unpublished": 0,
+      "errors": 1,
+      "warnings": 0
+    },
+    "error": null,
+    "errors_preview": [
+      {
+        "file": "products.csv",
+        "row": 12,
+        "column": "gtin",
+        "severity": "error",
+        "obx_error": "invalid_gtin",
+        "detail": "Check digit should be 8.",
+        "value": "2000100101019"
+      }
+    ]
+  },
+  "results_url": "https://brands.kestrel.example/obx/v1/ingest/jobs/job_1/results"
+}

@@ -1,0 +1,85 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openbrandexchange.com/schemas/v0.1/Problem.json",
+  "type": "object",
+  "title": "Problem",
+  "description": "application/problem+json (RFC 9457) error body. Exception: the OAuth2 token endpoint uses RFC 6749 error JSON.",
+  "properties": {
+    "type": {
+      "type": "string",
+      "description": "URI identifying the problem type: https://openbrandexchange.com/errors/<obx_error>.",
+      "format": "uri"
+    },
+    "title": {
+      "type": "string"
+    },
+    "status": {
+      "type": "integer",
+      "minimum": 400,
+      "maximum": 599
+    },
+    "detail": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "instance": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "obx_error": {
+      "$ref": "Common.json#/$defs/ErrorCode"
+    },
+    "errors": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "pointer": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "JSON Pointer (RFC 6901) into the request body, or a CSV locator like 'row:12/gtin'."
+          },
+          "obx_error": {
+            "$ref": "Common.json#/$defs/ErrorCode"
+          },
+          "detail": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "obx_error",
+          "detail"
+        ],
+        "additionalProperties": false,
+        "patternProperties": {
+          "^x-[a-z0-9]+-[a-z0-9_-]+$": true
+        }
+      },
+      "description": "Field-level errors (validation_failed)."
+    },
+    "retry_after": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "description": "Seconds; mirrors Retry-After.",
+      "minimum": 0
+    }
+  },
+  "required": [
+    "type",
+    "title",
+    "status",
+    "obx_error"
+  ],
+  "additionalProperties": false,
+  "patternProperties": {
+    "^x-[a-z0-9]+-[a-z0-9_-]+$": true
+  }
+}

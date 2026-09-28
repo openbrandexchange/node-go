@@ -1,0 +1,30 @@
+{
+  "version": 1,
+  "updated_at": "2026-09-28T10:00:00Z",
+  "entries": [
+    {
+      "id": "kestrel-outfitters",
+      "name": "Kestrel Outfitters",
+      "discovery_url": "https://brands.kestrel.example/.well-known/obx",
+      "website": "https://kestrel.example",
+      "brands": [
+        "Kestrel",
+        "Kestrel Trail"
+      ],
+      "countries": [
+        "NL",
+        "BE",
+        "DE"
+      ],
+      "categories": [
+        "fashion",
+        "outdoor"
+      ],
+      "languages": [
+        "nl",
+        "en"
+      ],
+      "listed_at": "2026-09-28"
+    }
+  ]
+}

@@ -1,0 +1,72 @@
+{
+  "obx_version": "0.1",
+  "spec_version": "0.1.0-draft",
+  "node": {
+    "software": "obx-node-go",
+    "version": "0.1.0"
+  },
+  "publisher": {
+    "id": "pub_kestrel",
+    "name": "Kestrel Outfitters",
+    "logo_url": "https://brands.kestrel.example/logo.png",
+    "accent_color": "#1F4E5F",
+    "website": "https://kestrel.example",
+    "contact_email": "trade@kestrel.example",
+    "welcome_text": {
+      "en": "Welcome, retail partners.",
+      "nl": "Welkom, retailpartners."
+    }
+  },
+  "api_base": "https://brands.kestrel.example/obx/v1",
+  "portal_url": "https://brands.kestrel.example/",
+  "auth": {
+    "token_endpoint": "https://brands.kestrel.example/obx/v1/oauth/token",
+    "scopes_supported": [
+      "catalog:read",
+      "media:read",
+      "media:original",
+      "usage:write"
+    ],
+    "token_endpoint_auth_methods_supported": [
+      "client_secret_basic",
+      "client_secret_post"
+    ]
+  },
+  "access_requests_url": "https://brands.kestrel.example/obx/v1/access-requests",
+  "ingest_url": "https://brands.kestrel.example/obx/v1/ingest",
+  "capabilities": [
+    "changes",
+    "products",
+    "by_gtin",
+    "renditions",
+    "exports",
+    "webhooks",
+    "usage",
+    "access_requests",
+    "ingest",
+    "ingest.server_renditions",
+    "portal"
+  ],
+  "brands": [
+    {
+      "id": "brd_kestrel",
+      "name": "Kestrel",
+      "logo_url": null
+    },
+    {
+      "id": "brd_trail",
+      "name": "Kestrel Trail",
+      "logo_url": null
+    }
+  ],
+  "languages": [
+    "nl",
+    "en"
+  ],
+  "limits": {
+    "changes_page_max": 500,
+    "products_page_max": 100,
+    "gtin_lookup_max": 2000,
+    "tombstone_retention_days": 90
+  }
+}

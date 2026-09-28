@@ -1,0 +1,22 @@
+{
+  "id": "acr_1",
+  "status": "approved",
+  "created_at": "2026-09-28T10:00:00Z",
+  "decided_at": "2026-09-28T10:00:00Z",
+  "reason": null,
+  "status_url": "https://brands.kestrel.example/obx/v1/access-requests/acr_1",
+  "portal": {
+    "invited": true,
+    "login_url": "https://brands.kestrel.example/login"
+  },
+  "credentials": {
+    "client_id": "obxc_8Jk2m",
+    "client_secret": "obxs_Qm9yZ2V0LW1lLW5vdC10aGlzLWlzLWZha2U",
+    "token_endpoint": "https://brands.kestrel.example/obx/v1/oauth/token",
+    "scopes": [
+      "catalog:read",
+      "media:read"
+    ],
+    "claimed": true
+  }
+}

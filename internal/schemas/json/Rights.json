@@ -1,0 +1,88 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openbrandexchange.com/schemas/v0.1/Rights.json",
+  "type": "object",
+  "title": "Rights",
+  "properties": {
+    "license": {
+      "type": "string",
+      "enum": [
+        "retailer-use",
+        "custom"
+      ],
+      "description": "retailer-use: the standard OBX retailer licence (docs/protocol.md#rights): use to sell the brand's products in the listed channels and territories. custom: see license_text."
+    },
+    "license_text": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Required when license is custom.",
+      "maxLength": 20000
+    },
+    "channels": {
+      "type": "array",
+      "items": {
+        "$ref": "Common.json#/$defs/Channel"
+      },
+      "description": "Channels the retailer may use the asset in.",
+      "uniqueItems": true
+    },
+    "territories": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "$ref": "Common.json#/$defs/CountryCode"
+      },
+      "description": "Allowed territories; null means worldwide.",
+      "uniqueItems": true
+    },
+    "embargo_until": {
+      "anyOf": [
+        {
+          "$ref": "Common.json#/$defs/DateTime",
+          "description": "The asset is delivered ahead of time but MUST NOT be shown publicly before this moment."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "expires_at": {
+      "anyOf": [
+        {
+          "$ref": "Common.json#/$defs/DateTime",
+          "description": "After this moment the asset MUST no longer be used (it is also removed from the feed)."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "credit": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Required credit line, if any (e.g. photographer).",
+      "maxLength": 500
+    },
+    "model_release": {
+      "type": [
+        "boolean",
+        "null"
+      ],
+      "description": "True when a model release covering the listed channels exists; null when unknown or not applicable."
+    }
+  },
+  "required": [
+    "license",
+    "channels"
+  ],
+  "additionalProperties": false,
+  "patternProperties": {
+    "^x-[a-z0-9]+-[a-z0-9_-]+$": true
+  }
+}

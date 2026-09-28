@@ -1,0 +1,77 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openbrandexchange.com/schemas/v0.1/Grant.json",
+  "type": "object",
+  "title": "Grant",
+  "description": "What a retailer is allowed to see. Returned by GET /obx/v1/grant and as 'data' of grant changes.",
+  "properties": {
+    "id": {
+      "$ref": "Common.json#/$defs/Id"
+    },
+    "retailer": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "Common.json#/$defs/Id"
+        },
+        "name": {
+          "type": "string",
+          "maxLength": 200
+        }
+      },
+      "required": [
+        "id",
+        "name"
+      ],
+      "additionalProperties": false,
+      "patternProperties": {
+        "^x-[a-z0-9]+-[a-z0-9_-]+$": true
+      }
+    },
+    "brand_ids": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "$ref": "Common.json#/$defs/Id"
+      },
+      "description": "Brands this retailer may see; null = all published brands of the node."
+    },
+    "scopes": {
+      "type": "array",
+      "items": {
+        "$ref": "Common.json#/$defs/Scope"
+      },
+      "description": "Scopes this retailer's API clients may request.",
+      "uniqueItems": true
+    },
+    "original_allowed": {
+      "type": "boolean",
+      "description": "Whether original renditions are available to this retailer (brand setting AND grant)."
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "revoked"
+      ]
+    },
+    "updated_at": {
+      "$ref": "Common.json#/$defs/DateTime"
+    }
+  },
+  "required": [
+    "id",
+    "retailer",
+    "brand_ids",
+    "scopes",
+    "original_allowed",
+    "status",
+    "updated_at"
+  ],
+  "additionalProperties": false,
+  "patternProperties": {
+    "^x-[a-z0-9]+-[a-z0-9_-]+$": true
+  }
+}

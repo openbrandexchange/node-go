@@ -1,0 +1,175 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openbrandexchange.com/schemas/v0.1/Product.json",
+  "type": "object",
+  "title": "Product",
+  "description": "A style/model. In /changes entries 'data' holds the product without 'variants' and 'assets'; product endpoints return ProductDetail (with both arrays).",
+  "properties": {
+    "id": {
+      "$ref": "Common.json#/$defs/Id"
+    },
+    "external_id": {
+      "$ref": "Common.json#/$defs/ExternalId"
+    },
+    "brand_id": {
+      "$ref": "Common.json#/$defs/Id"
+    },
+    "style_number": {
+      "type": "string",
+      "description": "The brand's style/model number.",
+      "minLength": 1,
+      "maxLength": 200
+    },
+    "name": {
+      "$ref": "LocalizedText.json"
+    },
+    "description": {
+      "anyOf": [
+        {
+          "$ref": "LocalizedText.json"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "item_type": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Open vocabulary; recommended keys in docs/protocol.md#item-types (e.g. t_shirt, sweater, jacket, jeans, bag).",
+      "pattern": "^[a-z][a-z0-9_]{0,63}$"
+    },
+    "gpc_brick": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Optional GS1 GPC brick code.",
+      "pattern": "^[0-9]{8}$"
+    },
+    "target_group": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Open vocabulary; recommended: women, men, unisex, girls, boys, kids, baby.",
+      "pattern": "^[a-z][a-z0-9_]{0,63}$"
+    },
+    "season": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Season label as used by the brand, e.g. SS26, AW26, NOS.",
+      "maxLength": 64
+    },
+    "collection": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Collection name.",
+      "maxLength": 200
+    },
+    "materials": {
+      "anyOf": [
+        {
+          "$ref": "Materials.json"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "care": {
+      "anyOf": [
+        {
+          "$ref": "Care.json"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "country_of_origin": {
+      "anyOf": [
+        {
+          "$ref": "Common.json#/$defs/CountryCode"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "dpp_url": {
+      "anyOf": [
+        {
+          "$ref": "Common.json#/$defs/Url",
+          "description": "Link to the product's Digital Product Passport, when one exists."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "attributes": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "description": "Additional brand attributes. Keys lower_snake_case; values string, number, boolean or LocalizedText.",
+      "propertyNames": {
+        "pattern": "^[a-z][a-z0-9_]{0,63}$"
+      },
+      "additionalProperties": {
+        "anyOf": [
+          {
+            "type": [
+              "string",
+              "number",
+              "boolean"
+            ]
+          },
+          {
+            "$ref": "LocalizedText.json"
+          }
+        ]
+      }
+    },
+    "created_at": {
+      "$ref": "Common.json#/$defs/DateTime"
+    },
+    "updated_at": {
+      "$ref": "Common.json#/$defs/DateTime",
+      "description": "Changes whenever the protocol representation of this product (own fields only) changes."
+    },
+    "variants": {
+      "type": "array",
+      "items": {
+        "$ref": "Variant.json"
+      },
+      "description": "Present in product responses (GET /products...), absent in /changes data. Only published variants."
+    },
+    "assets": {
+      "type": "array",
+      "items": {
+        "$ref": "Asset.json"
+      },
+      "description": "Present in product responses (GET /products...), absent in /changes data. Only visible assets, ordered by color_code then position."
+    }
+  },
+  "required": [
+    "id",
+    "external_id",
+    "brand_id",
+    "style_number",
+    "name",
+    "updated_at"
+  ],
+  "additionalProperties": false,
+  "patternProperties": {
+    "^x-[a-z0-9]+-[a-z0-9_-]+$": true
+  }
+}

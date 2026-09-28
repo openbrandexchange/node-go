@@ -1,0 +1,137 @@
+{
+  "description": "Live /changes entries (after draining the initial snapshot) produced by replaying script.ndjson in order on a node that already contains nothing but the setup brand. after_op = 0-based index of the operation that produced the entry.",
+  "changes": [
+    {
+      "after_op": 0,
+      "type": "brand",
+      "op": "upsert",
+      "external_id": "kestrel-lab"
+    },
+    {
+      "after_op": 1,
+      "type": "product",
+      "op": "upsert",
+      "external_id": "KL-9001"
+    },
+    {
+      "after_op": 2,
+      "type": "variant",
+      "op": "upsert",
+      "external_id": "2009001001014"
+    },
+    {
+      "after_op": 3,
+      "type": "variant",
+      "op": "upsert",
+      "external_id": "2009001001021"
+    },
+    {
+      "after_op": 4,
+      "type": "asset",
+      "op": "upsert",
+      "external_id": "KL-9001_GRN_1"
+    },
+    {
+      "after_op": 6,
+      "type": "product",
+      "op": "upsert",
+      "external_id": "KL-9001"
+    },
+    {
+      "after_op": 7,
+      "type": "asset",
+      "op": "upsert",
+      "external_id": "KL-9001_GRN_1"
+    },
+    {
+      "after_op": 8,
+      "type": "asset",
+      "op": "upsert",
+      "external_id": "KL-9001_GRN_2"
+    },
+    {
+      "after_op": 10,
+      "type": "asset",
+      "op": "delete",
+      "external_id": "KL-9001_GRN_2"
+    },
+    {
+      "after_op": 12,
+      "type": "variant",
+      "op": "upsert",
+      "external_id": "2009001001021"
+    },
+    {
+      "after_op": 13,
+      "type": "product",
+      "op": "delete",
+      "external_id": "KL-9001"
+    },
+    {
+      "after_op": 13,
+      "type": "variant",
+      "op": "delete",
+      "external_id": "2009001001014"
+    },
+    {
+      "after_op": 13,
+      "type": "variant",
+      "op": "delete",
+      "external_id": "2009001001021"
+    },
+    {
+      "after_op": 13,
+      "type": "asset",
+      "op": "delete",
+      "external_id": "KL-9001_GRN_1"
+    },
+    {
+      "after_op": 14,
+      "type": "product",
+      "op": "upsert",
+      "external_id": "KL-9001"
+    },
+    {
+      "after_op": 14,
+      "type": "variant",
+      "op": "upsert",
+      "external_id": "2009001001014"
+    },
+    {
+      "after_op": 14,
+      "type": "variant",
+      "op": "upsert",
+      "external_id": "2009001001021"
+    },
+    {
+      "after_op": 14,
+      "type": "asset",
+      "op": "upsert",
+      "external_id": "KL-9001_GRN_1"
+    },
+    {
+      "after_op": 15,
+      "type": "variant",
+      "op": "delete",
+      "external_id": "2009001001021"
+    },
+    {
+      "after_op": 17,
+      "type": "product",
+      "op": "delete",
+      "external_id": "KL-9001"
+    },
+    {
+      "after_op": 17,
+      "type": "variant",
+      "op": "delete",
+      "external_id": "2009001001014"
+    },
+    {
+      "after_op": 17,
+      "type": "asset",
+      "op": "delete",
+      "external_id": "KL-9001_GRN_1"
+    }
+  ]
+}

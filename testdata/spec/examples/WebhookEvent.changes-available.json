@@ -1,0 +1,8 @@
+{
+  "id": "evt_1",
+  "type": "changes.available",
+  "created_at": "2026-09-28T10:00:00Z",
+  "data": {
+    "latest_seq": 1044
+  }
+}

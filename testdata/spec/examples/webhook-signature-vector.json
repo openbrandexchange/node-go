@@ -1,0 +1,7 @@
+{
+  "description": "HMAC-SHA256 over '<timestamp>.<raw body>' with the secret string as key (UTF-8 bytes, including the whsec_ prefix).",
+  "secret": "whsec_Tm90LWEtcmVhbC1zZWNyZXQtZXhhbXBsZQ",
+  "timestamp": "1790000000",
+  "raw_body": "{\"id\":\"evt_1\",\"type\":\"changes.available\",\"created_at\":\"2026-09-28T10:00:00Z\",\"data\":{\"latest_seq\":1044}}",
+  "header": "v1=1d8877f935fbd33ac8d9b95bc5cbe7ac04d81529e0337810aa42f6d405aee121"
+}

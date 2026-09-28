@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openbrandexchange.com/schemas/v0.1/Blob.json",
+  "type": "object",
+  "title": "Blob",
+  "properties": {
+    "sha256": {
+      "$ref": "Common.json#/$defs/Sha256"
+    },
+    "bytes": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "content_type": {
+      "type": "string"
+    },
+    "width": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "minimum": 1
+    },
+    "height": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "minimum": 1
+    },
+    "created": {
+      "type": "boolean",
+      "description": "false when the node already had these bytes (dedupe)."
+    }
+  },
+  "required": [
+    "sha256",
+    "bytes",
+    "content_type",
+    "created"
+  ],
+  "additionalProperties": false,
+  "patternProperties": {
+    "^x-[a-z0-9]+-[a-z0-9_-]+$": true
+  }
+}

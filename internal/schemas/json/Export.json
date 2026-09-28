@@ -1,0 +1,139 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openbrandexchange.com/schemas/v0.1/Export.json",
+  "type": "object",
+  "title": "Export",
+  "properties": {
+    "id": {
+      "$ref": "Common.json#/$defs/Id"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "queued",
+        "running",
+        "succeeded",
+        "failed",
+        "expired"
+      ]
+    },
+    "created_at": {
+      "$ref": "Common.json#/$defs/DateTime"
+    },
+    "finished_at": {
+      "anyOf": [
+        {
+          "$ref": "Common.json#/$defs/DateTime"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "expires_at": {
+      "anyOf": [
+        {
+          "$ref": "Common.json#/$defs/DateTime",
+          "description": "Files are deleted after this (>= 24 h after finishing)."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "progress": {
+      "type": "object",
+      "properties": {
+        "done": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "total": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        }
+      },
+      "required": [
+        "done",
+        "total"
+      ],
+      "additionalProperties": false,
+      "patternProperties": {
+        "^x-[a-z0-9]+-[a-z0-9_-]+$": true
+      }
+    },
+    "manifest_url": {
+      "anyOf": [
+        {
+          "$ref": "Common.json#/$defs/Url",
+          "description": "NDJSON manifest (ExportManifestLine per line); requires Bearer or is signed."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "parts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "number": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "url": {
+            "$ref": "Common.json#/$defs/Url"
+          },
+          "bytes": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "sha256": {
+            "$ref": "Common.json#/$defs/Sha256"
+          },
+          "files": {
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "required": [
+          "number",
+          "url",
+          "bytes",
+          "sha256",
+          "files"
+        ],
+        "additionalProperties": false,
+        "patternProperties": {
+          "^x-[a-z0-9]+-[a-z0-9_-]+$": true
+        }
+      },
+      "description": "Independent zip files (not a split archive), each <= 2 GiB."
+    },
+    "error": {
+      "anyOf": [
+        {
+          "$ref": "Problem.json"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  },
+  "required": [
+    "id",
+    "status",
+    "created_at",
+    "progress",
+    "parts"
+  ],
+  "additionalProperties": false,
+  "patternProperties": {
+    "^x-[a-z0-9]+-[a-z0-9_-]+$": true
+  }
+}

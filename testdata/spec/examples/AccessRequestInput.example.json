@@ -1,0 +1,21 @@
+{
+  "retailer": {
+    "name": "Example Store",
+    "reference": "C-1002",
+    "website": "https://store.example",
+    "vat_number": null,
+    "country": "NL"
+  },
+  "contact": {
+    "name": "Sam Buyer",
+    "email": "buyer@store.example",
+    "phone": null,
+    "language": "nl"
+  },
+  "access": [
+    "portal",
+    "api"
+  ],
+  "requested_brand_ids": null,
+  "message": "We stock Kestrel since 2024."
+}

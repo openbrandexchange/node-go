@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openbrandexchange.com/schemas/v0.1/UsageEvent.json",
+  "type": "object",
+  "title": "UsageEvent",
+  "properties": {
+    "asset_id": {
+      "$ref": "Common.json#/$defs/Id"
+    },
+    "rendition": {
+      "anyOf": [
+        {
+          "$ref": "Common.json#/$defs/RenditionName"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "event": {
+      "type": "string",
+      "enum": [
+        "synced",
+        "published",
+        "downloaded",
+        "removed"
+      ],
+      "description": "synced: stored in the retailer's system; published: live in a channel; downloaded: fetched by a person; removed: taken offline."
+    },
+    "channel": {
+      "anyOf": [
+        {
+          "$ref": "Common.json#/$defs/Channel"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "at": {
+      "$ref": "Common.json#/$defs/DateTime"
+    },
+    "count": {
+      "type": "integer",
+      "minimum": 1,
+      "default": 1
+    }
+  },
+  "required": [
+    "asset_id",
+    "event",
+    "at"
+  ],
+  "additionalProperties": false,
+  "patternProperties": {
+    "^x-[a-z0-9]+-[a-z0-9_-]+$": true
+  }
+}

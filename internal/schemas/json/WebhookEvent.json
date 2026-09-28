@@ -1,0 +1,37 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openbrandexchange.com/schemas/v0.1/WebhookEvent.json",
+  "type": "object",
+  "title": "WebhookEvent",
+  "description": "Webhook payload. Signed: OBX-Webhook-Signature: v1=<hex HMAC-SHA256(secret, timestamp + '.' + raw_body)>.",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique event id (use for de-duplication).",
+      "minLength": 1,
+      "maxLength": 128
+    },
+    "type": {
+      "type": "string",
+      "description": "Protocol: changes.available, grant.updated, export.completed. Brand admin: access_request.created, import_run.completed, ingest_job.completed. Both: webhook.test. Receivers MUST ignore unknown types.",
+      "pattern": "^[a-z_]+\\.[a-z_]+$"
+    },
+    "created_at": {
+      "$ref": "Common.json#/$defs/DateTime"
+    },
+    "data": {
+      "type": "object",
+      "description": "changes.available: {latest_seq}. grant.updated: {grant: Grant}. export.completed: {export_id, status}. access_request.created: {access_request_id, retailer_name}. import_run.completed: {import_run_id, status, counts}. ingest_job.completed: {job_id, status}. webhook.test: {}. Webhooks are wake-up calls: always fetch state through the API."
+    }
+  },
+  "required": [
+    "id",
+    "type",
+    "created_at",
+    "data"
+  ],
+  "additionalProperties": false,
+  "patternProperties": {
+    "^x-[a-z0-9]+-[a-z0-9_-]+$": true
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openbrandexchange.com/schemas/v0.1/Color.json",
+  "type": "object",
+  "title": "Color",
+  "properties": {
+    "code": {
+      "type": "string",
+      "description": "The brand's colour code, stable key (e.g. 'NVY', '001').",
+      "minLength": 1,
+      "maxLength": 64
+    },
+    "name": {
+      "anyOf": [
+        {
+          "$ref": "LocalizedText.json"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "supplier_color": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Colour name as used in the brand's own systems/labels.",
+      "maxLength": 200
+    }
+  },
+  "required": [
+    "code"
+  ],
+  "additionalProperties": false,
+  "patternProperties": {
+    "^x-[a-z0-9]+-[a-z0-9_-]+$": true
+  }
+}

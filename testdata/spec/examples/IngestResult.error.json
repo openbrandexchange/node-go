@@ -1,0 +1,18 @@
+{
+  "index": 11,
+  "op": "upsert",
+  "kind": "variant",
+  "external_id": "bad-gtin",
+  "result": "error",
+  "id": null,
+  "visibility": null,
+  "etag": null,
+  "error": {
+    "type": "https://openbrandexchange.com/errors/invalid_gtin",
+    "title": "Invalid GTIN",
+    "status": 422,
+    "detail": "Check digit should be 8.",
+    "obx_error": "invalid_gtin"
+  },
+  "warnings": []
+}

@@ -1,0 +1,87 @@
+{
+  "id": "{{id}}",
+  "external_id": "KO-1003_RST_3",
+  "product_id": "{{id}}",
+  "brand_id": "{{id}}",
+  "media_type": "image",
+  "color_code": "RST",
+  "variant_ids": null,
+  "role": "model",
+  "view": null,
+  "position": 3,
+  "filename": "KO-1003_RST_3_model.png",
+  "alt_text": {
+    "en": "AI-generated image of a model wearing the rust tee",
+    "nl": "Met AI gegenereerd beeld van een model in het roestkleurige T-shirt"
+  },
+  "content_type": "image/png",
+  "width": 1200,
+  "height": 1500,
+  "bytes": 10982,
+  "sha256": "dc22080cbbac972bf7b289c65d8849f9a99cd1e3e44ef8e88fc92681ead72a20",
+  "rights": {
+    "license": "retailer-use",
+    "license_text": null,
+    "channels": [
+      "webshop",
+      "marketplace",
+      "social"
+    ],
+    "territories": null,
+    "embargo_until": null,
+    "expires_at": null,
+    "credit": null,
+    "model_release": null
+  },
+  "provenance": {
+    "ai_generated": true,
+    "ai_edited": false,
+    "source": "generated",
+    "c2pa": "none",
+    "c2pa_manifest_url": null,
+    "generator": "fictional-image-model 1.0"
+  },
+  "renditions": {
+    "original": {
+      "name": "original",
+      "url": "{{url}}",
+      "url_expires_at": "{{datetime|null}}",
+      "content_type": "image/png",
+      "width": 1200,
+      "height": 1500,
+      "bytes": 10982,
+      "sha256": "dc22080cbbac972bf7b289c65d8849f9a99cd1e3e44ef8e88fc92681ead72a20"
+    },
+    "web": {
+      "name": "web",
+      "url": "{{url}}",
+      "url_expires_at": "{{datetime|null}}",
+      "content_type": "image/jpeg",
+      "width": 1200,
+      "height": 1500,
+      "bytes": "{{int}}",
+      "sha256": "{{sha256}}"
+    },
+    "square": {
+      "name": "square",
+      "url": "{{url}}",
+      "url_expires_at": "{{datetime|null}}",
+      "content_type": "image/jpeg",
+      "width": 1500,
+      "height": 1500,
+      "bytes": "{{int}}",
+      "sha256": "{{sha256}}"
+    },
+    "thumb": {
+      "name": "thumb",
+      "url": "{{url}}",
+      "url_expires_at": "{{datetime|null}}",
+      "content_type": "image/jpeg",
+      "width": 480,
+      "height": 600,
+      "bytes": "{{int}}",
+      "sha256": "{{sha256}}"
+    }
+  },
+  "updated_at": "{{datetime}}"
+}

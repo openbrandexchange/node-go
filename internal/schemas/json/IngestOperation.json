@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openbrandexchange.com/schemas/v0.1/IngestOperation.json",
+  "type": "object",
+  "title": "IngestOperation",
+  "description": "One operation of POST /obx/v1/ingest/batch (JSON array element or NDJSON line).",
+  "properties": {
+    "op": {
+      "type": "string",
+      "enum": [
+        "upsert",
+        "patch",
+        "delete",
+        "publish",
+        "unpublish"
+      ],
+      "description": "upsert = PUT (create or replace); patch = JSON merge patch; publish/unpublish = patch of status."
+    },
+    "kind": {
+      "type": "string",
+      "enum": [
+        "brand",
+        "product",
+        "variant",
+        "asset"
+      ]
+    },
+    "external_id": {
+      "$ref": "Common.json#/$defs/ExternalId"
+    },
+    "data": {
+      "type": "object",
+      "description": "upsert: BrandInput|ProductInput|VariantInput|AssetInput by kind. patch: merge patch of that. Absent for delete/publish/unpublish."
+    },
+    "if_match": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Optional ETag precondition."
+    }
+  },
+  "required": [
+    "op",
+    "kind",
+    "external_id"
+  ],
+  "additionalProperties": false,
+  "patternProperties": {
+    "^x-[a-z0-9]+-[a-z0-9_-]+$": true
+  }
+}

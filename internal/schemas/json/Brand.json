@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openbrandexchange.com/schemas/v0.1/Brand.json",
+  "type": "object",
+  "title": "Brand",
+  "description": "A brand (label) published by this node. One node (one brand company) may publish several brands.",
+  "properties": {
+    "id": {
+      "$ref": "Common.json#/$defs/Id"
+    },
+    "external_id": {
+      "$ref": "Common.json#/$defs/ExternalId"
+    },
+    "name": {
+      "type": "string",
+      "description": "Brand name as shown to retailers.",
+      "minLength": 1,
+      "maxLength": 200
+    },
+    "logo_url": {
+      "anyOf": [
+        {
+          "$ref": "Common.json#/$defs/Url",
+          "description": "Public logo URL (PNG/JPEG/WebP/SVG). Logos are public branding."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "website": {
+      "anyOf": [
+        {
+          "$ref": "Common.json#/$defs/Url"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "description": {
+      "anyOf": [
+        {
+          "$ref": "LocalizedText.json"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "updated_at": {
+      "$ref": "Common.json#/$defs/DateTime"
+    }
+  },
+  "required": [
+    "id",
+    "external_id",
+    "name",
+    "updated_at"
+  ],
+  "additionalProperties": false,
+  "patternProperties": {
+    "^x-[a-z0-9]+-[a-z0-9_-]+$": true
+  }
+}

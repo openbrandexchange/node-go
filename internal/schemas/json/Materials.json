@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openbrandexchange.com/schemas/v0.1/Materials.json",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "part": {
+        "type": "string",
+        "description": "Garment part. Recommended keys: main, outer, lining, filling, trim, sole, upper, insole. 'main' when the product has one composition.",
+        "pattern": "^[a-z][a-z0-9_]{0,63}$",
+        "examples": [
+          "main"
+        ]
+      },
+      "fibers": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "fiber": {
+              "type": "string",
+              "description": "Fibre key, lowercase English (recommended list in docs/import-format.md#fibres), e.g. cotton, organic_cotton, elastane, wool, merino_wool, polyester, recycled_polyester, polyamide, viscose, linen, silk, leather.",
+              "pattern": "^[a-z][a-z0-9_]{0,63}$"
+            },
+            "percentage": {
+              "type": "number",
+              "exclusiveMinimum": 0,
+              "maximum": 100
+            }
+          },
+          "required": [
+            "fiber",
+            "percentage"
+          ],
+          "additionalProperties": false,
+          "patternProperties": {
+            "^x-[a-z0-9]+-[a-z0-9_-]+$": true
+          }
+        },
+        "minItems": 1,
+        "description": "Percentages of one part SHOULD sum to 100."
+      }
+    },
+    "required": [
+      "part",
+      "fibers"
+    ],
+    "additionalProperties": false,
+    "patternProperties": {
+      "^x-[a-z0-9]+-[a-z0-9_-]+$": true
+    }
+  },
+  "title": "Materials",
+  "description": "Fibre composition per part (textile labelling regulation / DPP ready)."
+}

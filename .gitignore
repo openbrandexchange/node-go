@@ -1,0 +1,8 @@
+/data/
+/node-go
+/dist/
+*.db
+*.db-shm
+*.db-wal
+.env
+coverage.out

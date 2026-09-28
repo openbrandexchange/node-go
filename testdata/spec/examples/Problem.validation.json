@@ -1,0 +1,15 @@
+{
+  "type": "https://openbrandexchange.com/errors/validation_failed",
+  "title": "Validation failed",
+  "status": 422,
+  "detail": null,
+  "instance": "/obx/v1/ingest/variants/bad-gtin",
+  "obx_error": "validation_failed",
+  "errors": [
+    {
+      "pointer": "/gtin",
+      "obx_error": "invalid_gtin",
+      "detail": "Check digit should be 8."
+    }
+  ]
+}
