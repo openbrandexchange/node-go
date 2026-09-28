@@ -32,7 +32,7 @@ jobs:
           OBX_TEST_DATABASE_URL: postgres://obx:obx@127.0.0.1:5432/obx?sslmode=disable
         run: go test ./internal/node
       - name: Shell scripts
-        run: shellcheck deploy/*.sh scripts/*.sh
+        run: shellcheck deploy/*.sh scripts/*.sh e2e/run.sh
 
   conformance:
     # Runs the OBX conformance suite from obx-go (a private sibling repository

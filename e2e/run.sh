@@ -18,7 +18,8 @@ sed 's/Merino Crew Sweater/Merino Crew Jumper/' "$ROOT/testdata/spec/kestrel/pro
 (cd "$TMP/export" && zip -qr "$TMP/package.zip" products.csv assets.csv images)
 [ -d "$HERE/node_modules" ] || (cd "$HERE" && npm ci && npx playwright install chromium)
 
-OBX_DATA_DIR="$TMP/data" PORT="$PORT" OBX_PUBLIC_URL="http://localhost:$PORT" \
+URL="http://localhost:$PORT"
+OBX_DATA_DIR="$TMP/data" PORT="$PORT" OBX_PUBLIC_URL="$URL" \
   OBX_SETUP_CODE=SETUP-1234 OBX_ALLOW_PRIVATE_URLS=true OBX_MAIL_LOG_BODIES=true \
   "$TMP/node-go" serve >"$TMP/node.log" 2>&1 &
 NODE_PID=$!
