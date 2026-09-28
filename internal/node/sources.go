@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"net/http"
-	"strconv"
 	"strings"
 	"time"
 
@@ -498,5 +497,3 @@ func (a *App) scheduleDue(ctx context.Context) {
 		}
 	}
 }
-
-func itoa(n int) string { return strconv.Itoa(n) }
