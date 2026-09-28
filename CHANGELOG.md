@@ -5,55 +5,10 @@ follows [Semantic Versioning](https://semver.org/): the major version changes wh
 more than replacing the software (see [docs/upgrading.md](docs/upgrading.md)); database migrations
 are always forward-only and applied automatically on start.
 
-## [Unreleased]
-
-### Added
-
-- `DRY_RUN=1 ./deploy/cloudrun.sh` prints the `gcloud` commands a real run executes and changes
-  nothing; it works without the Google Cloud CLI.
-
-### Changed
-
-- The web interface is admin-ui 0.1.1 (commit dabdcd0): invitation language, clearer
-  scheduled-import errors, websites typed without https://, "Show the key" after approving an API
-  key request, and a "Get started" step to set up e-mail while none is configured.
-- The web interface is served under admin-ui's strict Content-Security-Policy: no inline styles and
-  no fonts from other hosts.
-
-### Fixed
-
-- The setup code is accepted in lowercase, with spaces instead of dashes, or without dashes.
-- E-mails no longer show a double full stop after a company name that ends in one ("B.V..").
-- A successful connection test of a scheduled import no longer adds an English line under the
-  translated result.
-- A missing file under `/assets/` or `/locales/` is a 404, also when the browser accepts HTML, so a
-  tab left open during an upgrade reloads once instead of reading the start page as code.
-- An import no longer takes away what it does not state about an image (spec import rule 8): the
-  images alone, or with an assets.csv that has no row for them, keep their embargo, credit, alt
-  text and AI label, also when those were set in the admin. Before, every such import reset them
-  to the defaults, which lifted embargoes.
-- Every zip a retailer downloads (one product, the selection, a background download) holds an
-  `assets.csv` with one row per image: its usage rights, embargo and AI provenance in the import
-  format's columns (spec import-format.md §2.3). Before, a zip held only the files, so a shop could
-  publish an embargoed image without seeing the embargo.
-- A column that a products.csv does not have leaves that field of an existing product or variant as
-  it is (spec import rule 9, per language for texts): a file with only `style_number` and `name:nl`
-  changes only the Dutch names. Before, it removed the descriptions, materials, care codes and the
-  other languages. An empty cell in a column the file has still removes the value.
-- Image names: the rightmost role or view wins (`_back_front` is view front) and `_model_other` is
-  role model with view other, as the spec says; before, such a file was refused.
-- Discovery reports `spec_version` 0.1.0 instead of 0.1.0-draft.
-- A new API key without chosen scopes gets `catalog:read` and `media:read`, plus `media:original`
-  when the retailer may download originals, as the spec says; it got every scope, `usage:write`
-  included.
-- Renewing an API key that was made when approving an access request retires the secret still
-  waiting for the requester's software, so the status address no longer hands out a secret that
-  stopped working ("Show the key" in the admin renews it).
-
 ## [0.1.0] - 2026-09-28
 
 First release. Implements Open Brand Exchange protocol 0.1 (read API, ingest API, node admin and
-portal API) and passes `obx-conformance all` (58 of 58 tests, including the rate-limit test) on
+portal API) and passes `obx-conformance all` (61 of 61 tests, including the rate-limit test) on
 SQLite and PostgreSQL.
 
 ### For brands
@@ -103,5 +58,49 @@ SQLite and PostgreSQL.
 - Tested at 10 000 products, 60 000 variants and 40 000 images: portal pages, `/changes` pages and
   EAN lookups stay well below 100 ms at the median ([docs/performance.md](docs/performance.md)).
 
-[Unreleased]: https://github.com/openbrandexchange/node-go/compare/v0.1.0...HEAD
+### Also in this release
+
+#### Added
+
+- `DRY_RUN=1 ./deploy/cloudrun.sh` prints the `gcloud` commands a real run executes and changes
+  nothing; it works without the Google Cloud CLI.
+
+#### Changed
+
+- The web interface is admin-ui 0.1.1 (commit dabdcd0): invitation language, clearer
+  scheduled-import errors, websites typed without https://, "Show the key" after approving an API
+  key request, and a "Get started" step to set up e-mail while none is configured.
+- The web interface is served under admin-ui's strict Content-Security-Policy: no inline styles and
+  no fonts from other hosts.
+
+#### Fixed
+
+- The setup code is accepted in lowercase, with spaces instead of dashes, or without dashes.
+- E-mails no longer show a double full stop after a company name that ends in one ("B.V..").
+- A successful connection test of a scheduled import no longer adds an English line under the
+  translated result.
+- A missing file under `/assets/` or `/locales/` is a 404, also when the browser accepts HTML, so a
+  tab left open during an upgrade reloads once instead of reading the start page as code.
+- An import no longer takes away what it does not state about an image (spec import rule 8): the
+  images alone, or with an assets.csv that has no row for them, keep their embargo, credit, alt
+  text and AI label, also when those were set in the admin. Before, every such import reset them
+  to the defaults, which lifted embargoes.
+- Every zip a retailer downloads (one product, the selection, a background download) holds an
+  `assets.csv` with one row per image: its usage rights, embargo and AI provenance in the import
+  format's columns (spec import-format.md §2.3). Before, a zip held only the files, so a shop could
+  publish an embargoed image without seeing the embargo.
+- A column that a products.csv does not have leaves that field of an existing product or variant as
+  it is (spec import rule 9, per language for texts): a file with only `style_number` and `name:nl`
+  changes only the Dutch names. Before, it removed the descriptions, materials, care codes and the
+  other languages. An empty cell in a column the file has still removes the value.
+- Image names: the rightmost role or view wins (`_back_front` is view front) and `_model_other` is
+  role model with view other, as the spec says; before, such a file was refused.
+- Discovery reports `spec_version` 0.1.0 instead of 0.1.0-draft.
+- A new API key without chosen scopes gets `catalog:read` and `media:read`, plus `media:original`
+  when the retailer may download originals, as the spec says; it got every scope, `usage:write`
+  included.
+- Renewing an API key that was made when approving an access request retires the secret still
+  waiting for the requester's software, so the status address no longer hands out a secret that
+  stopped working ("Show the key" in the admin renews it).
+
 [0.1.0]: https://github.com/openbrandexchange/node-go/releases/tag/v0.1.0
