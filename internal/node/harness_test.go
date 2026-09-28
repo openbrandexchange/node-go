@@ -21,6 +21,8 @@ import (
 	"testing"
 
 	"github.com/openbrandexchange/node-go/internal/config"
+	"github.com/openbrandexchange/node-go/internal/db"
+	"github.com/openbrandexchange/node-go/internal/ids"
 	"github.com/openbrandexchange/node-go/internal/schemas"
 )
 
@@ -53,8 +55,22 @@ func newTestNode(t *testing.T) *testNode {
 		SecretKey: []byte("test-secret-key-that-is-long-enough-1234567890"), SetupCode: testSetupCode,
 		AllowPrivateURLs: true, Workers: 1, LogFormat: "text", ChangeRetentionDays: 400, MailFrom: "no-reply@example.test",
 	}
-	if os.Getenv("OBX_TEST_DATABASE_URL") != "" {
-		cfg.DatabaseURL = os.Getenv("OBX_TEST_DATABASE_URL")
+	if pg := os.Getenv("OBX_TEST_DATABASE_URL"); pg != "" {
+		// One schema per test node on a shared Postgres server.
+		schema := "t_" + strings.ToLower(ids.New("s")[2:])
+		d, err := db.Open(pg)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if _, err := d.SQL.Exec(`CREATE SCHEMA ` + schema); err != nil {
+			t.Fatal(err)
+		}
+		d.Close()
+		sep := "?"
+		if strings.Contains(pg, "?") {
+			sep = "&"
+		}
+		cfg.DatabaseURL = pg + sep + "search_path=" + schema
 	}
 	log := slog.New(slog.NewTextHandler(io.Discard, nil))
 	if os.Getenv("OBX_TEST_LOG") != "" {
