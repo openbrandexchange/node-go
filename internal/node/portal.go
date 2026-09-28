@@ -314,21 +314,41 @@ func (a *App) handlePortalFacets(w http.ResponseWriter, r *http.Request) {
 	sort.SliceStable(brands, func(i, j int) bool { return brands[i]["label"].(string) < brands[j]["label"].(string) })
 	where, args := f.where(v, "color")
 	colors := []map[string]any{}
-	rs, err := a.DB.Query(ctx, `SELECT v.color_code, COUNT(DISTINCT p.id), MIN(v.rep) FROM products p JOIN variants v ON v.product_id = p.id AND v.visible = 1`+where+` GROUP BY v.color_code ORDER BY v.color_code`, args...)
+	// Count per colour on the covering index, then read one variant per
+	// colour for its name (reading every variant's JSON is what made this
+	// slow on large catalogs).
+	rs, err := a.DB.Query(ctx, `SELECT v.color_code, COUNT(DISTINCT p.id), MIN(v.id) FROM products p JOIN variants v ON v.product_id = p.id AND v.visible = 1`+where+` GROUP BY v.color_code ORDER BY v.color_code`, args...)
 	if err == nil {
+		var sample []any
 		for rs.Next() {
-			var code, rep string
+			var code, vid string
 			var n int
-			if rs.Scan(&code, &n, &rep) == nil {
-				vv := renderVariant(rep, "")
-				item := map[string]any{"value": code, "count": n}
-				if vv.Color.Name != nil {
-					item["label"] = vv.Color.Name
-				}
-				colors = append(colors, item)
+			if rs.Scan(&code, &n, &vid) == nil {
+				colors = append(colors, map[string]any{"value": code, "count": n})
+				sample = append(sample, vid)
 			}
 		}
 		rs.Close()
+		names := map[string]LocalizedText{}
+		for i := 0; i < len(sample); i += 500 {
+			chunk := sample[i:min(i+500, len(sample))]
+			vr, err := a.DB.Query(ctx, `SELECT color_code, rep FROM variants WHERE id IN `+db.In(len(chunk)), chunk...)
+			if err != nil {
+				break
+			}
+			for vr.Next() {
+				var code, rep string
+				if vr.Scan(&code, &rep) == nil {
+					names[code] = renderVariant(rep, "").Color.Name
+				}
+			}
+			vr.Close()
+		}
+		for _, c := range colors {
+			if nm := names[c["value"].(string)]; nm != nil {
+				c["label"] = nm
+			}
+		}
 	}
 	writeJSON(w, 200, map[string]any{"brands": brands, "item_types": facet("p.item_type", "item_type"), "colors": colors,
 		"seasons": facet("p.season", "season"), "collections": facet("p.collection", "collection"), "target_groups": facet("p.target_group", "target_group")})
