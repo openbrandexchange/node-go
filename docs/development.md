@@ -29,7 +29,7 @@ CI (`.github/workflows/ci.yml`) runs all of these on every push and pull request
 | tests (PostgreSQL) | `OBX_TEST_DATABASE_URL=postgres://obx:obx@127.0.0.1:5432/obx?sslmode=disable go test ./internal/node` |
 | race detector | `go test -race ./internal/...` (slow: the SQLite driver is pure Go) |
 | 25 languages complete | `go test ./ui` |
-| vulnerabilities | `go run golang.org/x/vuln/cmd/govulncheck@v1.1.4 ./...`; `cd e2e && npm audit --omit=dev` |
+| vulnerabilities | `go run golang.org/x/vuln/cmd/govulncheck@v1.8.0 ./...`; `cd e2e && npm audit --omit=dev` |
 | dependency licences | `scripts/check-licenses.sh` |
 | conformance | `(cd conformance && go test ./...)` in-process; CI also runs the `obx-conformance` binary against a running `node-go serve` (with `--rate-limit-test`) |
 | browser tests with axe | `e2e/run.sh` |

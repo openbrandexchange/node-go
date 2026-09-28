@@ -22,7 +22,7 @@ git clone https://github.com/openbrandexchange/node-go && cd node-go
 docker compose -f docker-compose.local.yml up
 ```
 
-Or with Go 1.26:
+Or with Go 1.26 or newer (it fetches the exact toolchain of `go.mod` itself):
 
 ```sh
 go run . serve
@@ -37,7 +37,7 @@ go run . import --csv testdata/spec/kestrel/products.csv \
   --assets testdata/spec/kestrel/assets.csv --images testdata/spec/kestrel/images
 ```
 
-To see the retailer side, click **View as retailer**, or invite yourself under **Retailers**: with the local setup, e-mails are not sent but written to the output, including the invitation link.
+To see the retailer side, click **View as retailer**, or invite yourself under **Retailers**. Without an e-mail server nothing is sent: the admin shows the invitation link to copy, and the Docker try-out also writes the whole e-mail to the output (`OBX_MAIL_LOG_BODIES=true`).
 
 Everything is stored in `./data` with Go, or in the Docker volume `obx-local-data`.
 
@@ -48,12 +48,14 @@ Each option is one command; the guides explain domain names, e-mail and backups.
 | Where | Command | Guide |
 |---|---|---|
 | Google Cloud Run | `./deploy/cloudrun.sh` | [docs/hosting/cloud-run.md](docs/hosting/cloud-run.md) |
-| Your own server with Docker (automatic HTTPS) | `OBX_DOMAIN=images.yourbrand.com docker compose up -d` | [docs/hosting/docker.md](docs/hosting/docker.md) |
+| Your own server with Docker (automatic HTTPS) | `DOMAIN=images.yourbrand.com ADMIN_EMAIL=you@yourbrand.com docker compose up -d` | [docs/hosting/docker.md](docs/hosting/docker.md) |
 | Fly.io | `./deploy/fly.sh your-portal` | [docs/hosting/fly.md](docs/hosting/fly.md) |
 | Railway or Render | deploy this repository (the config files are included) | [docs/hosting/railway-render.md](docs/hosting/railway-render.md) |
 | A Linux server without Docker | `sudo ./deploy/install-linux.sh --domain images.yourbrand.com --with-caddy` | [docs/hosting/linux.md](docs/hosting/linux.md) |
 
-Settings are environment variables with sensible defaults: see [docs/configuration.md](docs/configuration.md). Storage can be local disk (default), any S3-compatible bucket (AWS S3, Cloudflare R2, MinIO) or Google Cloud Storage; the database SQLite (default) or PostgreSQL.
+Settings are environment variables with sensible defaults: see [docs/configuration.md](docs/configuration.md). Storage can be local disk (default), any S3-compatible bucket (AWS S3, Cloudflare R2, MinIO) or Google Cloud Storage; the database SQLite (default, continuously backed up with Litestream if you like) or PostgreSQL.
+
+Running it for real: [docs/operations.md](docs/operations.md) (health checks, logs, metrics, backups and restores, retention, the audit log, personal data), [docs/upgrading.md](docs/upgrading.md), [docs/security.md](docs/security.md), [docs/performance.md](docs/performance.md) (tested with 10 000 products), and a [privacy-notice template](docs/privacy-notice-template.md) for your retailers.
 
 ## Publish automatically
 
@@ -68,31 +70,38 @@ The spreadsheet format is one row per size, and images are named `{style}_{colou
 ## For developers
 
 ```sh
-go test ./...                      # unit and HTTP integration tests (SQLite)
-e2e/run.sh                         # the admin and portal in a headless browser against a fresh node
-OBX_TEST_DATABASE_URL=postgres://… go test ./internal/node   # the same on PostgreSQL
+go test ./...                      # unit and HTTP integration tests (SQLite), incl. the 25-language check
+e2e/run.sh                         # the admin and portal in a headless browser, axe on every screen
 (cd conformance && go test ./...)  # the OBX conformance suite from obx-go (needs ../obx-go)
+scripts/test-docker.sh             # the Docker image, a Litestream restore and a backup restore
 ```
 
-- `internal/node`: the node (protocol, ingest, admin + portal API, imports, jobs, exports, webhooks, statistics, e-mail).
+Everything CI runs, how to release and how to add a migration: [docs/development.md](docs/development.md). Contributions are welcome under the Developer Certificate of Origin: [CONTRIBUTING.md](CONTRIBUTING.md), [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md).
+
+- `internal/node`: the node (protocol, ingest, admin + portal API, imports, jobs, exports, webhooks, statistics, e-mail, audit log, backups).
 - `internal/importfmt`: the canonical CSV and file-name parser; `internal/imaging`: pure-Go renditions.
 - `ui/dist`: the web interface, vendored from [admin-ui](https://github.com/openbrandexchange/admin-ui) with `scripts/update-ui.sh` (`BUILD=1` rebuilds admin-ui first).
-- API contracts: the [OBX spec](https://github.com/openbrandexchange/spec) (`openapi/*.yaml`). Implementation decisions: [NOTES.md](NOTES.md).
+- API contracts: the [OBX spec](https://github.com/openbrandexchange/spec) (`openapi/*.yaml`). Implementation decisions: [NOTES.md](NOTES.md). Changes: [CHANGELOG.md](CHANGELOG.md).
 
-The CLI:
+The command line:
 
 ```
 node-go serve                                   start the portal
 node-go import --csv FILE [--assets FILE] [--images DIR|ZIP] [--package ZIP] [--mode mirror] [--dry-run]
 node-go admin reset-password --email ADDRESS    prints a one-time link (or --password-stdin)
 node-go admin create-ingest-token --name NAME   prints an automatic upload key
-node-go healthcheck | version
+node-go admin audit-log [--limit N]             the latest admin actions
+node-go admin personal-data --email ADDRESS     everything stored about a person (or --retailer ID)
+node-go backup --to DIR | restore --from DIR    consistent backups (see docs/operations.md)
+node-go check-config | healthcheck | version
 ```
 
-Security problems: please report them privately through a GitHub security advisory on this repository.
+Security problems: please report them privately to **security@openbrandexchange.com** or through a GitHub security advisory on this repository ([SECURITY.md](SECURITY.md)). Other questions: hello@openbrandexchange.com.
 
 ## License
 
-[GNU Affero General Public License v3.0](LICENSE). You may run, change and host it freely; if you offer a changed version to others over a network, share your changes under the same licence. The spec and fixtures in `testdata/spec` are CC-BY-4.0.
+[GNU Affero General Public License v3.0](LICENSE) (AGPL-3.0-only). You may run, change and host it freely; if you offer a changed version to others over a network, share your changes under the same licence. The embedded admin-ui is Apache-2.0; the spec fixtures in `testdata/spec` are CC-BY-4.0. See [NOTICE](NOTICE).
+
+An initiative of Richard Lindhout · Open Brand Exchange Foundation (in formation). The project will be transferred to the foundation, a Dutch stichting, once it is set up ([governance](https://github.com/openbrandexchange/spec/blob/main/docs/governance.md)).
 
 <sub>Works with Open Brand Exchange</sub>
