@@ -151,35 +151,39 @@ jobs:
         ports: ["5432:5432"]
         options: --health-cmd "pg_isready -U obx" --health-interval 5s --health-timeout 5s --health-retries 10
     steps:
-      - name: Skip without access to obx-go
-        if: env.OBX_READ_TOKEN == ''
-        run: echo "::notice::OBX_READ_TOKEN is not set; the conformance suite is skipped (see docs/development.md)."
+      - name: Access to obx-go (the OBX_READ_TOKEN secret while it is private; none once it is public)
+        run: |
+          if [ -n "$OBX_READ_TOKEN" ] || GIT_TERMINAL_PROMPT=0 git ls-remote --heads https://github.com/openbrandexchange/obx-go >/dev/null 2>&1; then
+            echo "OBX_ACCESS=yes" >> "$GITHUB_ENV"
+          else
+            echo "::notice::openbrandexchange/obx-go is private and OBX_READ_TOKEN is not set; the conformance suite is skipped."
+          fi
       - uses: actions/checkout@v7
-        if: env.OBX_READ_TOKEN != ''
+        if: env.OBX_ACCESS == 'yes'
         with:
           path: node-go
       - uses: actions/checkout@v7
-        if: env.OBX_READ_TOKEN != ''
+        if: env.OBX_ACCESS == 'yes'
         with:
           repository: openbrandexchange/obx-go
-          token: ${{ secrets.OBX_READ_TOKEN }}
+          token: ${{ secrets.OBX_READ_TOKEN || github.token }}
           path: obx-go
       - uses: actions/setup-go@v7
-        if: env.OBX_READ_TOKEN != ''
+        if: env.OBX_ACCESS == 'yes'
         with:
           go-version-file: node-go/go.mod
       - name: Conformance in-process (SQLite)
-        if: env.OBX_READ_TOKEN != ''
+        if: env.OBX_ACCESS == 'yes'
         working-directory: node-go/conformance
         run: go test -count=1 -v ./...
       - name: Conformance in-process (PostgreSQL)
-        if: env.OBX_READ_TOKEN != ''
+        if: env.OBX_ACCESS == 'yes'
         working-directory: node-go/conformance
         env:
           OBX_TEST_DATABASE_URL: postgres://obx:obx@127.0.0.1:5432/obx?sslmode=disable
         run: go test -count=1 ./...
       - name: obx-conformance all against a running node-go
-        if: env.OBX_READ_TOKEN != ''
+        if: env.OBX_ACCESS == 'yes'
         run: |
           set -eu
           (cd node-go && go build -o "$RUNNER_TEMP/node-go" .)
@@ -189,7 +193,7 @@ jobs:
           for _ in $(seq 1 30); do curl -fs http://127.0.0.1:18490/readyz >/dev/null && break; sleep 1; done
           "$RUNNER_TEMP/obx-conformance" all --url http://127.0.0.1:18490 --setup-code CI-CONF-CODE --rate-limit-test --format markdown | tee "$GITHUB_STEP_SUMMARY"
       - uses: actions/upload-artifact@v7
-        if: failure() && env.OBX_READ_TOKEN != ''
+        if: failure() && env.OBX_ACCESS == 'yes'
         with:
           name: conformance-node-log
           path: ${{ runner.temp }}/node.log
