@@ -401,7 +401,8 @@ func (a *App) adminSourceTest(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		out["message"] = err.Error()
 	} else {
-		out["message"] = "Connected; found " + itoa(len(files)) + " files."
+		// No message on success: the UI says "Connected, N files found" in the
+		// reader's language, and an English line under it only repeats that.
 		list := []any{}
 		for i, f := range files {
 			if i == 100 {

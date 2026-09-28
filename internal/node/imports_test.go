@@ -200,7 +200,8 @@ func TestImports(t *testing.T) {
 			"config":      map[string]any{"url": remote.URL + "/products.csv"},
 			"credentials": map[string]any{"headers": map[string]any{"Authorization": "Bearer remote-secret"}}})
 		test := k.admin.must(200, "POST", "/admin/api/import-sources/"+src["id"].(string)+"/test", nil)
-		if test["ok"] != true {
+		// A successful test carries no English message next to the UI's own translated line.
+		if test["ok"] != true || test["message"] != nil || len(test["files"].([]any)) != 1 {
 			t.Fatalf("test %v", test)
 		}
 		run := k.admin.must(202, "POST", "/admin/api/import-sources/"+src["id"].(string)+"/run", nil)
