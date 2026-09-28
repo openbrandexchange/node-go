@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"strings"
 	"testing"
+	"testing/fstest"
 
 	"github.com/openbrandexchange/node-go/internal/safehttp"
 )
@@ -418,5 +419,37 @@ func TestCSVFormulaEscaping(t *testing.T) {
 		if got := csvSafe(in); got != want {
 			t.Errorf("csvSafe(%q) = %q, want %q", in, got, want)
 		}
+	}
+}
+
+func TestUIServing(t *testing.T) {
+	n := newTestNode(t)
+	n.app.UI = fstest.MapFS{
+		"index.html":      {Data: []byte("<!doctype html><title>portal</title>")},
+		"assets/app.js":   {Data: []byte("console.log(1)")},
+		"locales/nl.json": {Data: []byte(`{"email":{"invite":{"subject":"Uw account voor {portal}"}}}`)},
+	}
+	n.app.locales = newLocaleCache(n.app.UI)
+	c := n.client()
+	for _, p := range []string{"/", "/login", "/invite/abc", "/products/prd_1"} {
+		r := c.do("GET", p, nil, "Accept", "text/html")
+		if r.Status != 200 || !strings.Contains(string(r.Body), "portal") || r.Header.Get("Content-Security-Policy") == "" || r.Header.Get("X-Frame-Options") != "DENY" {
+			t.Errorf("%s: %d %v", p, r.Status, r.Header)
+		}
+	}
+	if r := c.do("GET", "/assets/app.js", nil); r.Status != 200 || !strings.Contains(r.Header.Get("Cache-Control"), "immutable") {
+		t.Errorf("asset: %d %v", r.Status, r.Header)
+	}
+	if r := c.do("GET", "/assets/missing.js", nil); r.Status != 404 {
+		t.Errorf("missing asset: %d", r.Status)
+	}
+	if r := c.do("GET", "/.well-known/other", nil, "Accept", "text/html"); r.Status != 404 {
+		t.Errorf("well-known: %d", r.Status)
+	}
+	if got := n.app.text("nl-NL", "email.invite.subject"); got != "Uw account voor {portal}" {
+		t.Errorf("locale text: %q", got)
+	}
+	if got := n.app.text("de", "email.invite.subject"); got != builtinEmail["email.invite.subject"] {
+		t.Errorf("fallback text: %q", got)
 	}
 }

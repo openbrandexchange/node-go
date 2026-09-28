@@ -268,7 +268,7 @@ func (a *App) serveUI(w http.ResponseWriter, r *http.Request) {
 		failP(w, "method_not_allowed", "Only GET is supported here.")
 		return
 	}
-	if a.UI == nil {
+	if a.UI == nil || strings.HasPrefix(r.URL.Path, "/.well-known/") {
 		http.NotFound(w, r)
 		return
 	}
