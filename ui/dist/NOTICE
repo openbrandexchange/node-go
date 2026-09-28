@@ -1,0 +1,15 @@
+Open Brand Exchange admin UI (admin-ui)
+Copyright 2026 Richard Lindhout and the Open Brand Exchange contributors
+
+An initiative of Richard Lindhout, to be transferred to the Open Brand Exchange
+Foundation (in formation), a Dutch foundation (stichting) that is being set up.
+Contact: hello@openbrandexchange.com
+
+This product is licensed under the Apache License, Version 2.0 (see LICENSE).
+
+Built copies (dist/) include third-party software; their licences and notices
+are listed in dist/THIRD-PARTY-LICENSES.txt.
+
+The mock mode (npm run mock, not part of dist/) uses the fictional Kestrel
+Outfitters fixtures of the Open Brand Exchange specification
+(https://github.com/openbrandexchange/spec), licensed under CC-BY-4.0.
