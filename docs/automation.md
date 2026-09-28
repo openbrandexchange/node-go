@@ -18,7 +18,7 @@ node-go admin create-ingest-token --name "Nightly PIM export"
 ## The quickest start: a spreadsheet and a folder of photos
 
 1. Download the template in the admin (**Imports → Download template**) or copy `testdata/spec/kestrel/products.csv`: one row per size, the product columns repeated on every row.
-2. Name photos `{style}_{colour}_{position}.jpg`, for example `KO-1001_NVY_1.jpg`; add `_back`, `_model`, `_detail` … to say what the photo shows.
+2. Name photos `{style}_{colour}_{position}.jpg`, for example `KO-1001_NVY_1.jpg`; add `_back`, `_model`, `_detail` … to say what the photo shows. A photo that belongs to every colour of the style uses `ALL` as the colour: `KO-1001_ALL_5_detail.jpg`.
 3. Upload both in **Imports**, or run from any computer:
 
    ```sh
@@ -47,4 +47,4 @@ Choose **Mirror** to also take products offline that are no longer in the file. 
 
 - Upload API: `/obx/v1/ingest` ([ingest.md](https://github.com/openbrandexchange/spec/blob/main/docs/ingest.md), [obx-ingest.yaml](https://github.com/openbrandexchange/spec/blob/main/openapi/obx-ingest.yaml)).
 - This portal renders web, square and thumbnail images itself (`renditions.server_generated: true`): clients only upload originals.
-- Writes are idempotent and keyed by your own ids: product = style number, variant = EAN, image = `{style}_{colour}_{position}`.
+- Writes are idempotent and keyed by your own ids: product = style number, variant = EAN, image = `{style}_{colour}_{position}` (`{style}_ALL_{position}` for an image of every colour).

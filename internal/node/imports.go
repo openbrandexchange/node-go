@@ -613,13 +613,14 @@ func (im *importer) imageDoc(base string, ar *assetRowInfo) (*productPlan, map[s
 	if color != "" {
 		spelled, ok := plan.colors[strings.ToLower(color)]
 		switch {
+		case strings.EqualFold(color, colourlessCode) && (n != nil && strings.EqualFold(n.Color, color)):
+			// {style}_ALL_{position}: an image for every colour of the style.
+			// ALL is reserved in file names (import-format.md "all colours");
+			// a colour really coded ALL is reached through assets.csv.
+			color = ""
 		case ok:
 			colorOut = spelled
 			color = spelled
-		case strings.EqualFold(color, colourlessCode):
-			// {style}_ALL_{position}: an image for every colour of the style
-			// (a real colour code ALL wins over this meaning).
-			color = ""
 		default:
 			return nil, nil, &cellErr{"", "unknown_parent", fmt.Sprintf("colour %s of style %s is not in the catalog", color, plan.style), color}
 		}
