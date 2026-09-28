@@ -55,6 +55,9 @@ func newTestNode(t *testing.T) *testNode {
 		SecretKey: []byte("test-secret-key-that-is-long-enough-1234567890"), SetupCode: testSetupCode,
 		AllowPrivateURLs: true, Workers: 1, LogFormat: "text", ChangeRetentionDays: 400, MailFrom: "no-reply@example.test",
 	}
+	if ep := os.Getenv("OBX_TEST_S3_ENDPOINT"); ep != "" && os.Getenv("OBX_TEST_S3_BLOBS") != "" {
+		cfg.BlobURL = "s3://obx-test/" + strings.ToLower(ids.New("n")[2:]) + "?path_style=true&region=us-east-1&endpoint=" + url.QueryEscape(ep)
+	}
 	if pg := os.Getenv("OBX_TEST_DATABASE_URL"); pg != "" {
 		// One schema per test node on a shared Postgres server.
 		schema := "t_" + strings.ToLower(ids.New("s")[2:])

@@ -67,7 +67,7 @@ func Load() (*Config, error) {
 		return nil, err
 	}
 	c.DataDir = abs
-	c.PublicURL = strings.TrimRight(env("OBX_PUBLIC_URL", fmt.Sprintf("http://localhost:%d", c.Port)), "/")
+	c.PublicURL = strings.TrimRight(env("OBX_PUBLIC_URL", platformURL(c.Port)), "/")
 	u, err := url.Parse(c.PublicURL)
 	if err != nil || (u.Scheme != "http" && u.Scheme != "https") || u.Host == "" {
 		return nil, fmt.Errorf("OBX_PUBLIC_URL must be an absolute http(s) URL, got %q", c.PublicURL)
@@ -124,6 +124,20 @@ func (c *Config) Secure() bool { return strings.HasPrefix(c.PublicURL, "https://
 func (c *Config) Host() string {
 	u, _ := url.Parse(c.PublicURL)
 	return u.Host
+}
+
+// platformURL guesses the public URL on hosts that announce it.
+func platformURL(port int) string {
+	if u := os.Getenv("RENDER_EXTERNAL_URL"); u != "" {
+		return u
+	}
+	if d := os.Getenv("RAILWAY_PUBLIC_DOMAIN"); d != "" {
+		return "https://" + d
+	}
+	if a := os.Getenv("FLY_APP_NAME"); a != "" {
+		return "https://" + a + ".fly.dev"
+	}
+	return fmt.Sprintf("http://localhost:%d", port)
 }
 
 func env(k, def string) string {

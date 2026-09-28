@@ -24,6 +24,7 @@ import (
 	"strings"
 	"syscall"
 	"time"
+	_ "time/tzdata" // schedules use IANA time zones; images may lack zoneinfo
 
 	"github.com/openbrandexchange/node-go/internal/config"
 	"github.com/openbrandexchange/node-go/internal/node"

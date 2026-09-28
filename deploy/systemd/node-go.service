@@ -1,0 +1,26 @@
+[Unit]
+Description=Brand portal (Open Brand Exchange, node-go)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+User=obx
+Group=obx
+EnvironmentFile=/etc/node-go/node-go.env
+ExecStart=/usr/local/bin/node-go serve
+Restart=on-failure
+RestartSec=3
+# Hardening
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+ReadWritePaths=/var/lib/node-go
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictSUIDSGID=true
+LockPersonality=true
+
+[Install]
+WantedBy=multi-user.target

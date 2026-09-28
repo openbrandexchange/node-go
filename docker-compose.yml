@@ -1,0 +1,47 @@
+# Brand portal with automatic HTTPS (Caddy + Let's Encrypt).
+#
+#   1. Point a DNS record for your domain at this server (ports 80 and 443 open).
+#   2. OBX_DOMAIN=images.yourbrand.com docker compose up -d
+#   3. docker compose logs node | grep "setup code"   → open https://images.yourbrand.com
+#
+# For a quick local try without a domain: docker compose -f docker-compose.local.yml up
+
+services:
+  node:
+    build: .
+    image: obx-node-go:local
+    restart: unless-stopped
+    environment:
+      OBX_PUBLIC_URL: https://${OBX_DOMAIN:?set OBX_DOMAIN, e.g. images.yourbrand.com}
+      OBX_TRUST_PROXY: "true"
+      OBX_SECRET_KEY: ${OBX_SECRET_KEY:-}
+      OBX_SETUP_CODE: ${OBX_SETUP_CODE:-}
+      OBX_SMTP_URL: ${OBX_SMTP_URL:-}
+      OBX_MAIL_FROM: ${OBX_MAIL_FROM:-}
+      OBX_DATABASE_URL: ${OBX_DATABASE_URL:-}
+      OBX_BLOB_URL: ${OBX_BLOB_URL:-}
+    volumes:
+      - obx-data:/data
+    expose:
+      - "8080"
+
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    depends_on:
+      - node
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    environment:
+      OBX_DOMAIN: ${OBX_DOMAIN}
+    volumes:
+      - ./deploy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+      - caddy-config:/config
+
+volumes:
+  obx-data:
+  caddy-data:
+  caddy-config:

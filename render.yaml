@@ -1,0 +1,18 @@
+# Render Blueprint: New → Blueprint → pick this repository (docs/hosting/railway-render.md).
+services:
+  - type: web
+    name: brand-portal
+    runtime: docker
+    plan: starter
+    healthCheckPath: /healthz
+    disk:
+      name: obx-data
+      mountPath: /data
+      sizeGB: 10
+    envVars:
+      - key: OBX_SECRET_KEY
+        generateValue: true
+      - key: OBX_TRUST_PROXY
+        value: "true"
+      - key: OBX_DATA_DIR
+        value: /data

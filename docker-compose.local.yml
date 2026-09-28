@@ -1,0 +1,15 @@
+# Try the portal on your own computer: docker compose -f docker-compose.local.yml up
+# Then open http://localhost:8080 and use the setup code printed in the output.
+services:
+  node:
+    build: .
+    image: obx-node-go:local
+    ports:
+      - "8080:8080"
+    environment:
+      OBX_PUBLIC_URL: http://localhost:8080
+      OBX_MAIL_LOG_BODIES: "true"
+    volumes:
+      - obx-local-data:/data
+volumes:
+  obx-local-data:
