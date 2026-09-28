@@ -48,7 +48,7 @@ The node does **not** use obx-go's types at runtime: it needs exact control over
 
 ## E-mail and languages
 
-24. E-mail texts come from the vendored admin-ui locale files `ui/dist/locales/<lang>.json` (keys `email.<kind>.subject|body`, `email.greeting`, `email.footer`; placeholders `{portal}`, `{brand}`, `{name}`, `{link}`, `{retailer}`, `{contact}`, `{reason}`, `{files}`, `{expires_days}`), with built-in English fallbacks. See [docs/languages-and-email.md](docs/languages-and-email.md). The local word for the portal name ("Beeldbank", "Händlerportal", "Espace revendeurs", …) is built in for the 25 languages until the glossary provides it.
+24. E-mail texts are the `email.*` groups of the vendored admin-ui locale files `ui/dist/locales/<lang>.json` (invite, accessRequestReceived, accessRequestNew, accessApproved, accessRejected, zipReady, passwordReset; `{{placeholders}}`), composed into plain text in a fixed order, with built-in English copies as fallback. There is one invite text for buyers and colleagues. See [docs/languages-and-email.md](docs/languages-and-email.md). The local word of the portal name comes from `glossary.portal` in the same files (built-in list as fallback).
 25. Links in e-mails assume these admin-ui routes: `/invite/{token}`, `/reset-password/{token}`, `/login`, `/downloads` (background downloads) and `/admin/access-requests/{id}`.
 
 ## Hosting
