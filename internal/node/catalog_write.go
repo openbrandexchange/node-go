@@ -274,9 +274,13 @@ func (w *writer) prepare(kind, ext string, doc map[string]any, existing *row) (*
 				d.ColorCode = &c
 			}
 		}
-		// rights / provenance: keep only present keys; normalise timestamps.
+		// rights / provenance: keep only the fields that differ from the
+		// defaults (so a record read with defaults applied and written back
+		// is unchanged); normalise timestamps.
 		if raw, ok := doc["rights"].(map[string]any); ok {
 			d.Rights = map[string]json.RawMessage{}
+			defaults := map[string]json.RawMessage{}
+			_ = json.Unmarshal(mustJSON(w.settings.Defaults.Rights), &defaults)
 			for k, v := range raw {
 				if strings.HasPrefix(k, "x-") {
 					continue
@@ -288,7 +292,14 @@ func (w *writer) prepare(kind, ext string, doc map[string]any, existing *row) (*
 					}
 					v = s
 				}
-				d.Rights[k] = mustJSON(normalizeNumbers(v))
+				val := mustJSON(normalizeNumbers(v))
+				if def, ok := defaults[k]; ok && string(def) == string(val) {
+					continue
+				}
+				d.Rights[k] = val
+			}
+			if len(d.Rights) == 0 {
+				d.Rights = nil
 			}
 			if lic, _ := raw["license"].(string); lic == "custom" {
 				if lt, _ := raw["license_text"].(string); strings.TrimSpace(lt) == "" {
@@ -299,11 +310,25 @@ func (w *writer) prepare(kind, ext string, doc map[string]any, existing *row) (*
 			d.Rights = nil
 		}
 		if raw, ok := doc["provenance"].(map[string]any); ok {
+			aiGen, _ := raw["ai_generated"].(bool)
+			defSource := "photo"
+			if aiGen {
+				defSource = "generated"
+			}
+			defaults := map[string]string{"ai_generated": "false", "ai_edited": "false", "c2pa": `"none"`, "c2pa_manifest_url": "null", "generator": "null", "source": `"` + defSource + `"`}
 			d.Provenance = map[string]json.RawMessage{}
 			for k, v := range raw {
-				if !strings.HasPrefix(k, "x-") {
-					d.Provenance[k] = mustJSON(v)
+				if strings.HasPrefix(k, "x-") {
+					continue
 				}
+				val := mustJSON(v)
+				if defaults[k] == string(val) {
+					continue
+				}
+				d.Provenance[k] = val
+			}
+			if len(d.Provenance) == 0 {
+				d.Provenance = nil
 			}
 		} else {
 			d.Provenance = nil
@@ -315,9 +340,15 @@ func (w *writer) prepare(kind, ext string, doc map[string]any, existing *row) (*
 			d.Files = cur.Files
 		} else if d.Files != nil {
 			for name, ref := range d.Files {
-				if !blobExists(w.ctx, w.tx, ref.SHA256) {
+				var bw, bh *int
+				if err := w.tx.QueryRow(w.ctx, `SELECT width, height FROM blobs WHERE sha256 = ?`, ref.SHA256).Scan(&bw, &bh); err != nil {
 					return nil, problem.New("blob_missing", "File %s (%s) has not been uploaded.", name, ref.SHA256).Field("/files/"+name+"/sha256", "blob_missing", "unknown sha256")
 				}
+				if bw != nil && bh != nil {
+					// The node knows the dimensions from the file itself.
+					ref.Width, ref.Height = nil, nil
+				}
+				d.Files[name] = ref
 			}
 			if len(d.Files) == 0 {
 				d.Files = nil

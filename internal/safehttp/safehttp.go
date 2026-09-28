@@ -67,10 +67,21 @@ func IsPublicAddr(ip netip.Addr) bool {
 	return true
 }
 
-func (p Policy) control(_, address string, _ syscall.RawConn) error {
-	if p.AllowPrivate {
-		return nil
+// neverAllowed are refused even in development mode: link-local (cloud
+// metadata endpoints), multicast and unspecified addresses.
+func neverAllowed(ip netip.Addr) bool {
+	ip = ip.Unmap()
+	return ip.IsLinkLocalUnicast() || ip.IsLinkLocalMulticast() || ip.IsMulticast() || ip.IsUnspecified() || ip.IsInterfaceLocalMulticast()
+}
+
+func (p Policy) allowed(ip netip.Addr) bool {
+	if neverAllowed(ip) {
+		return false
 	}
+	return p.AllowPrivate || IsPublicAddr(ip)
+}
+
+func (p Policy) control(_, address string, _ syscall.RawConn) error {
 	host, _, err := net.SplitHostPort(address)
 	if err != nil {
 		return err
@@ -79,7 +90,7 @@ func (p Policy) control(_, address string, _ syscall.RawConn) error {
 	if err != nil {
 		return fmt.Errorf("%w: cannot parse %s", ErrUnsafe, host)
 	}
-	if !IsPublicAddr(ip) {
+	if !p.allowed(ip) {
 		return fmt.Errorf("%w: %s is a private, loopback or link-local address", ErrUnsafe, ip)
 	}
 	return nil
@@ -115,14 +126,15 @@ func (p Policy) CheckURL(ctx context.Context, raw string, schemes ...string) err
 
 // CheckHost resolves host and refuses it when any address is not public.
 func (p Policy) CheckHost(ctx context.Context, host string) error {
-	if p.AllowPrivate {
-		return nil
-	}
+	host = strings.TrimSuffix(strings.TrimPrefix(host, "["), "]")
 	if ip, err := netip.ParseAddr(host); err == nil {
-		if !IsPublicAddr(ip) {
+		if !p.allowed(ip) {
 			return fmt.Errorf("%w: %s is a private, loopback or link-local address", ErrUnsafe, ip)
 		}
 		return nil
+	}
+	if p.AllowPrivate {
+		return nil // resolved addresses are still checked when dialling
 	}
 	if strings.EqualFold(host, "localhost") || strings.HasSuffix(strings.ToLower(host), ".localhost") {
 		return fmt.Errorf("%w: localhost is not allowed", ErrUnsafe)
@@ -134,7 +146,7 @@ func (p Policy) CheckHost(ctx context.Context, host string) error {
 		return fmt.Errorf("%w: cannot resolve %s", ErrUnsafe, host)
 	}
 	for _, a := range addrs {
-		if !IsPublicAddr(a) {
+		if !p.allowed(a) {
 			return fmt.Errorf("%w: %s resolves to a private, loopback or link-local address", ErrUnsafe, host)
 		}
 	}
