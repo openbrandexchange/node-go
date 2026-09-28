@@ -25,6 +25,15 @@ sudo journalctl -u node-go -f
 sudo -u obx env $(sudo cat /etc/node-go/node-go.env | xargs) node-go admin reset-password --email you@yourbrand.com
 ```
 
-Updating: `git pull && sudo ./deploy/install-linux.sh --domain images.yourbrand.com` (keeps the env file and data).
+Updating: `git pull && sudo ./deploy/install-linux.sh --domain images.yourbrand.com` (keeps the env file and data), or download the release archive for your platform (`node-go_<version>_linux_amd64.tar.gz`, verify it with `sha256sum -c checksums.txt`) and pass `--binary`. See [upgrading.md](../upgrading.md).
+
+Backups: a nightly `node-go backup` from cron, copied off the server:
+
+```sh
+# /etc/cron.d/node-go-backup
+15 3 * * * root sh -c 'set -a; . /etc/node-go/node-go.env; exec runuser -u obx -- /usr/local/bin/node-go backup --to /var/lib/node-go/backups/'"$(date +\%F)" >/dev/null
+```
+
+Restore and more: [operations.md](../operations.md#backups). The service unit gives running requests 25 seconds on stop, limits memory to 75 % of the machine and runs with a read-only system (`ProtectSystem=strict`).
 
 Behind another reverse proxy (nginx, Apache, a load balancer): proxy to `127.0.0.1:8080`, allow request bodies up to 2 GB and long timeouts for zip downloads, and keep `OBX_TRUST_PROXY=true`.
