@@ -492,3 +492,31 @@ func TestDeleteMyAccount(t *testing.T) {
 		t.Fatalf("export of a deleted account: %d", r.Status)
 	}
 }
+
+// An import interrupted by a shutdown runs again after the restart and
+// gives the same result as an uninterrupted one (jobs are idempotent).
+func TestInterruptedImportResumes(t *testing.T) {
+	n := newTestNode(t)
+	admin := n.setup()
+	if n.app.DB.Dialect != db.SQLite {
+		t.Skip("with PostgreSQL the lease expiry resumes jobs")
+	}
+	body, ct := multipartBody(t, n.kestrelFiles(), nil)
+	run := admin.must(202, "POST", "/admin/api/imports", body, "Content-Type", ct)
+	ctx := context.Background()
+	// The process died while the job ran: status running, lease far ahead.
+	_, _ = n.app.DB.Exec(ctx, `UPDATE jobs SET status = 'running', attempts = 1, lease_until = ? WHERE id = ?`, db.Fmt(time.Now().Add(time.Hour)), run["id"])
+	if got := n.app.resumeInterruptedJobs(ctx); got != 1 {
+		t.Fatalf("resumed %d jobs", got)
+	}
+	n.app.RunJobsNow(ctx)
+	done := admin.must(200, "GET", "/admin/api/imports/"+run["id"].(string), nil)
+	if done["status"] != "succeeded" || done["counts"].(map[string]any)["errors"].(float64) != 0 {
+		t.Fatalf("resumed import: %v", done)
+	}
+	var products int
+	_ = n.app.DB.QueryRow(ctx, `SELECT COUNT(*) FROM products WHERE visible = 1`).Scan(&products)
+	if products != 8 {
+		t.Fatalf("visible products after the resumed import: %d", products)
+	}
+}

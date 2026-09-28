@@ -298,13 +298,7 @@ func (a *App) serveUI(w http.ResponseWriter, r *http.Request) {
 // instance, so jobs that were running when the previous process stopped are
 // queued again right away (every job kind is safe to run again).
 func (a *App) Start() {
-	if a.DB.Dialect == db.SQLite {
-		if res, err := a.DB.Exec(context.Background(), `UPDATE jobs SET status = 'queued', lease_until = NULL WHERE status = 'running'`); err == nil {
-			if n, _ := res.RowsAffected(); n > 0 {
-				a.Log.Info("resuming jobs interrupted by the last shutdown", "jobs", n)
-			}
-		}
-	}
+	a.resumeInterruptedJobs(context.Background())
 	for i := 0; i < a.Cfg.Workers; i++ {
 		a.wg.Add(1)
 		go a.workerLoop()
@@ -314,6 +308,24 @@ func (a *App) Start() {
 	go a.webhookLoop()
 	go a.housekeepingLoop()
 	a.renderSweep(context.Background())
+}
+
+// resumeInterruptedJobs queues jobs again that were running when the last
+// process stopped. Only with SQLite, where this process is the only one;
+// with PostgreSQL an expired lease hands the job to any instance.
+func (a *App) resumeInterruptedJobs(ctx context.Context) int64 {
+	if a.DB.Dialect != db.SQLite {
+		return 0
+	}
+	res, err := a.DB.Exec(ctx, `UPDATE jobs SET status = 'queued', lease_until = NULL WHERE status = 'running'`)
+	if err != nil {
+		return 0
+	}
+	n, _ := res.RowsAffected()
+	if n > 0 {
+		a.Log.Info("resuming jobs interrupted by the last shutdown", "jobs", n)
+	}
+	return n
 }
 
 // Stop stops the background workers (running jobs finish their step).
