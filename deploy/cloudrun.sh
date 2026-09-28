@@ -36,7 +36,10 @@ command -v "$GCLOUD" >/dev/null || { echo "Install the Google Cloud CLI first: h
 g() { "$GCLOUD" "$@"; }
 
 PROJECT="${PROJECT:-$(g config get-value project 2>/dev/null || true)}"
-[ -n "$PROJECT" ] && [ "$PROJECT" != "(unset)" ] || { echo "Set PROJECT=<project-id> or run: gcloud config set project <project-id>" >&2; exit 1; }
+if [ -z "$PROJECT" ] || [ "$PROJECT" = "(unset)" ]; then
+  echo "Set PROJECT=<project-id> or run: gcloud config set project <project-id>" >&2
+  exit 1
+fi
 REGION="${REGION:-europe-west4}"
 SERVICE="${SERVICE:-brand-portal}"
 BUCKET="${BUCKET:-${PROJECT}-${SERVICE}}"
