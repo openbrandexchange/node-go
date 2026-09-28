@@ -13,116 +13,114 @@ import (
 )
 
 // auditEntry is one row of the audit log: who changed what, when, with
-// which outcome. It never stores request bodies, secrets or passwords.
+// which outcome. It never stores request bodies, secrets or passwords, and
+// no IP addresses. The JSON shape (GET /admin/api/audit-log) is the one the
+// other OBX portals use.
 type auditEntry struct {
-	ActorType  string // user | cli | system
+	ActorType  string // user | anonymous | cli
 	ActorID    string
+	ActorName  string
 	ActorEmail string
+	ActorRole  string
 	Action     string // e.g. retailers.update, session.login
+	Method     string
+	Route      string // route pattern, e.g. /admin/api/retailers/{id}
 	TargetType string
 	TargetID   string
 	Status     int
 	Details    map[string]any
 }
 
+func (e *auditEntry) actor(u *userRow) {
+	if u == nil {
+		return
+	}
+	e.ActorType, e.ActorID, e.ActorName, e.ActorEmail, e.ActorRole = "user", u.ID, u.Name, u.Email, u.Role
+}
+
 // audit writes an entry; failures are logged, never returned (the audit
 // log must not break the action itself).
 func (a *App) audit(ctx context.Context, e auditEntry) {
 	if e.ActorType == "" {
-		e.ActorType = "user"
+		e.ActorType = "anonymous"
+	}
+	if e.Status == 0 {
+		e.Status = 200
 	}
 	var details any
 	if len(e.Details) > 0 {
 		details = string(mustJSON(e.Details))
 	}
-	var status any
-	if e.Status != 0 {
-		status = e.Status
-	}
-	_, err := a.DB.Exec(ctx, `INSERT INTO audit_log (id, at, actor_type, actor_id, actor_email, action, target_type, target_id, status, request_id, details) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-		ids.New("aud"), a.nowStr(), e.ActorType, nullIfEmpty(e.ActorID), nullIfEmpty(e.ActorEmail), e.Action,
-		nullIfEmpty(e.TargetType), nullIfEmpty(e.TargetID), status, nullIfEmpty(RequestID(ctx)), details)
+	_, err := a.DB.Exec(ctx, `INSERT INTO audit_log (id, at, actor_type, actor_id, actor_name, actor_email, actor_role, action, method, route, target_type, target_id, status, request_id, details) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+		ids.New("aud"), a.nowStr(), e.ActorType, nullIfEmpty(e.ActorID), nullIfEmpty(e.ActorName), nullIfEmpty(e.ActorEmail), nullIfEmpty(e.ActorRole),
+		e.Action, e.Method, e.Route, nullIfEmpty(e.TargetType), nullIfEmpty(e.TargetID), e.Status, nullIfEmpty(RequestID(ctx)), details)
 	if err != nil {
 		a.Log.ErrorContext(ctx, "audit log write failed", "action", e.Action, "error", err)
 	}
 }
 
-// Audit records an action done outside HTTP (command line).
+// Audit records an action done on the command line.
 func (a *App) Audit(ctx context.Context, action, targetType, targetID string) {
-	a.audit(ctx, auditEntry{ActorType: "cli", Action: action, TargetType: targetType, TargetID: targetID})
+	a.audit(ctx, auditEntry{ActorType: "cli", Action: action, Method: "CLI", Route: "node-go " + action, TargetType: targetType, TargetID: targetID})
 }
 
-// notAudited are writes that change only the caller's own working state.
-var notAudited = map[string]bool{
-	"/admin/api/portal/selection":     true,
-	"/admin/api/portal/gtin-lookup":   true,
-	"/admin/api/portal/download-jobs": true,
-	"/admin/api/session/login":        true, // audited explicitly with the outcome
-}
+// notAudited are requests that change only the caller's own working state
+// (retailers' browsing and downloads are download statistics), plus login,
+// which is audited explicitly with its outcome.
+var notAudited = regexp.MustCompile(`^/admin/api/(portal/(selection|download-jobs|gtin-lookup)|password/forgot|session/login)`)
 
 var wildcardRe = regexp.MustCompile(`\{([a-z0-9_]+)\$?\}`)
 
-// auditable reports whether an admin API request is recorded.
+// auditable reports whether an admin API request is recorded: every write,
+// and reads that export personal data.
 func auditable(r *http.Request) bool {
-	if r.Method == http.MethodGet || r.Method == http.MethodHead || r.Method == http.MethodOptions {
+	_, p, _ := strings.Cut(r.Pattern, " ")
+	if p == "" || notAudited.MatchString(p) {
 		return false
 	}
-	_, p, _ := strings.Cut(r.Pattern, " ")
-	return p != "" && !notAudited[p]
+	switch r.Method {
+	case http.MethodGet, http.MethodHead:
+		return strings.HasSuffix(p, "/export")
+	case http.MethodOptions:
+		return false
+	}
+	return true
 }
 
 // auditAction turns a route pattern into a stable action name:
 // "PATCH /admin/api/retailers/{id}" → "retailers.update",
-// "POST /admin/api/access-requests/{id}/approve" → "access-requests.approve".
+// "POST /admin/api/access-requests/{id}/approve" → "access-requests.approve",
+// "GET /admin/api/retailers/{id}/export" → "retailers.export".
 func auditAction(method, pattern string) (action, targetType string) {
-	p := strings.TrimPrefix(pattern, "/admin/api/")
+	p := strings.Trim(strings.TrimPrefix(pattern, "/admin/api"), "/")
 	segs := strings.Split(p, "/")
-	var nouns []string
-	verb := ""
-	for i, s := range segs {
-		if strings.HasPrefix(s, "{") {
-			continue
-		}
-		if i == len(segs)-1 && i > 0 && strings.HasPrefix(segs[i-1], "{") && method == http.MethodPost {
-			verb = s
-			continue
-		}
-		nouns = append(nouns, s)
-	}
-	switch p {
-	case "session/logout":
-		return "session.logout", "user"
-	case "password/forgot":
-		return "password.forgot", "user"
-	case "password/reset":
-		return "password.reset", "user"
-	case "setup":
-		return "setup.complete", "node"
-	case "me":
-		return "me.update", "user"
-	}
-	if verb == "" {
-		switch method {
-		case http.MethodPost:
-			verb = "create"
-		case http.MethodPut:
-			verb = "set"
-		case http.MethodPatch:
-			verb = "update"
-		case http.MethodDelete:
-			verb = "delete"
-		default:
-			verb = strings.ToLower(method)
+	var plain []string
+	for _, s := range segs {
+		if !strings.HasPrefix(s, "{") {
+			plain = append(plain, s)
 		}
 	}
-	if len(nouns) > 0 {
-		targetType = nouns[0]
-		if targetType == "catalog" && len(nouns) > 1 {
-			targetType = nouns[1]
+	if len(plain) > 0 {
+		targetType = plain[0]
+		if targetType == "catalog" && len(plain) > 1 {
+			targetType = plain[1]
 		}
 		targetType = strings.TrimSuffix(targetType, "s")
 	}
-	return strings.Join(append(nouns, verb), "."), targetType
+	special := map[string]string{"session/login": "session.login", "session/logout": "session.logout", "setup": "setup.complete",
+		"password/reset": "password.reset", "password/forgot": "password.forgot"}
+	if s, ok := special[strings.Join(plain, "/")]; ok {
+		return s, "user"
+	}
+	n := len(segs)
+	if n >= 2 && !strings.HasPrefix(segs[n-1], "{") && strings.HasPrefix(segs[n-2], "{") {
+		return strings.Join(append(plain[:len(plain)-1:len(plain)-1], segs[n-1]), "."), targetType
+	}
+	verb := map[string]string{"POST": "create", "PUT": "update", "PATCH": "update", "DELETE": "delete", "GET": "read", "HEAD": "read"}[method]
+	if verb == "" {
+		verb = strings.ToLower(method)
+	}
+	return strings.Join(append(plain, verb), "."), targetType
 }
 
 // auditTarget is the first path wildcard value; one-time tokens are never
@@ -139,47 +137,53 @@ func auditTarget(r *http.Request) string {
 	return ""
 }
 
-// auditRequest records a finished admin API write.
+// auditRequest records a finished admin API request.
 func (a *App) auditRequest(r *http.Request, s *session, status int) {
 	_, p, _ := strings.Cut(r.Pattern, " ")
 	action, targetType := auditAction(r.Method, p)
-	e := auditEntry{Action: action, TargetType: targetType, TargetID: auditTarget(r), Status: status}
+	e := auditEntry{Action: action, Method: r.Method, Route: p, TargetType: targetType, TargetID: auditTarget(r), Status: status}
 	if s != nil {
-		e.ActorID, e.ActorEmail = s.User.ID, s.User.Email
-	} else {
-		e.ActorType = "anonymous"
+		e.actor(s.User)
 	}
 	a.audit(r.Context(), e)
 }
 
-// handleAuditLog lists the audit log, newest first (admin only).
+// handleAuditLog lists the audit log, newest first (admin only). Filters:
+// action, actor_id, target_id, outcome=succeeded|failed.
 func (a *App) handleAuditLog(w http.ResponseWriter, r *http.Request) {
-	limit, p := limitParam(r, 50, 500)
+	limit, p := limitParam(r, 50, 200)
 	if p != nil {
 		problem.Write(w, p)
 		return
 	}
-	var cur struct {
-		At string `json:"at"`
-		ID string `json:"id"`
+	q := r.URL.Query()
+	where := []string{"1 = 1"}
+	var args []any
+	for _, f := range []string{"action", "actor_id", "target_id"} {
+		if v := q.Get(f); v != "" {
+			where = append(where, f+" = ?")
+			args = append(args, v)
+		}
 	}
-	where, args := "", []any{}
-	if c := r.URL.Query().Get("cursor"); c != "" {
+	switch q.Get("outcome") {
+	case "failed":
+		where = append(where, "status >= 400")
+	case "succeeded":
+		where = append(where, "status < 400")
+	}
+	if c := q.Get("cursor"); c != "" {
+		var cur struct {
+			At string `json:"at"`
+			ID string `json:"id"`
+		}
 		if !a.decodeCursor("audit", c, &cur) {
 			failP(w, "cursor_invalid", "The cursor is not valid.")
 			return
 		}
-		where, args = `WHERE at < ? OR (at = ? AND id < ?)`, []any{cur.At, cur.At, cur.ID}
+		where = append(where, "(at < ? OR (at = ? AND id < ?))")
+		args = append(args, cur.At, cur.At, cur.ID)
 	}
-	if actor := r.URL.Query().Get("actor_id"); actor != "" {
-		if where == "" {
-			where = "WHERE actor_id = ?"
-		} else {
-			where = "WHERE (" + strings.TrimPrefix(where, "WHERE ") + ") AND actor_id = ?"
-		}
-		args = append(args, actor)
-	}
-	items, err := a.auditRows(r.Context(), where+` ORDER BY at DESC, id DESC LIMIT ?`, append(args, limit+1)...)
+	items, err := a.auditRows(r.Context(), `WHERE `+strings.Join(where, " AND ")+` ORDER BY at DESC, id DESC LIMIT ?`, append(args, limit+1)...)
 	if err != nil {
 		a.fail(w, r, err)
 		return
@@ -194,24 +198,23 @@ func (a *App) handleAuditLog(w http.ResponseWriter, r *http.Request) {
 }
 
 func (a *App) auditRows(ctx context.Context, tail string, args ...any) ([]map[string]any, error) {
-	rs, err := a.DB.Query(ctx, `SELECT id, at, actor_type, actor_id, actor_email, action, target_type, target_id, status, request_id, details FROM audit_log `+tail, args...)
+	rs, err := a.DB.Query(ctx, `SELECT id, at, actor_type, actor_id, actor_name, actor_email, actor_role, action, method, route, target_type, target_id, status, request_id, details FROM audit_log `+tail, args...)
 	if err != nil {
 		return nil, err
 	}
 	defer rs.Close()
 	items := []map[string]any{}
 	for rs.Next() {
-		var id, at, actorType, action string
-		var actorID, email, tt, tid, rid, details sql.NullString
-		var status sql.NullInt64
-		if err := rs.Scan(&id, &at, &actorType, &actorID, &email, &action, &tt, &tid, &status, &rid, &details); err != nil {
+		var id, at, actorType, action, method, route string
+		var actorID, name, email, role, tt, tid, rid, details sql.NullString
+		var status int
+		if err := rs.Scan(&id, &at, &actorType, &actorID, &name, &email, &role, &action, &method, &route, &tt, &tid, &status, &rid, &details); err != nil {
 			return nil, err
 		}
-		it := map[string]any{"id": id, "at": at, "actor": map[string]any{"type": actorType, "id": nullStr(actorID), "email": nullStr(email)},
-			"action": action, "target": map[string]any{"type": nullStr(tt), "id": nullStr(tid)}, "status": nil, "request_id": nullStr(rid), "details": nil}
-		if status.Valid {
-			it["status"] = status.Int64
-		}
+		it := map[string]any{"id": id, "at": at,
+			"actor":  map[string]any{"type": actorType, "id": nullStr(actorID), "name": nullStr(name), "role": nullStr(role), "email": nullStr(email)},
+			"action": action, "method": method, "route": route, "target_type": nullStr(tt), "target_id": nullStr(tid),
+			"status": status, "succeeded": status < 400, "request_id": nullStr(rid), "ip": nil, "details": nil}
 		if details.Valid {
 			var d any
 			if json.Unmarshal([]byte(details.String), &d) == nil {

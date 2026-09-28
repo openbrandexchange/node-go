@@ -147,10 +147,14 @@ CREATE INDEX products_visible_style ON products(visible, style_number, id);
 CREATE INDEX variants_visible_color ON variants(visible, color_code, product_id, id);
 
 CREATE TABLE audit_log (
-  id TEXT PRIMARY KEY, at TEXT NOT NULL, actor_type TEXT NOT NULL, actor_id TEXT, actor_email TEXT,
-  action TEXT NOT NULL, target_type TEXT, target_id TEXT, status INTEGER, request_id TEXT, details TEXT);
+  id TEXT PRIMARY KEY, at TEXT NOT NULL, actor_type TEXT NOT NULL, actor_id TEXT, actor_name TEXT, actor_email TEXT,
+  actor_role TEXT, action TEXT NOT NULL, method TEXT NOT NULL, route TEXT NOT NULL, target_type TEXT, target_id TEXT,
+  status INTEGER NOT NULL, request_id TEXT, details TEXT);
 CREATE INDEX audit_log_at ON audit_log(at);
-CREATE INDEX audit_log_actor ON audit_log(actor_id);
+CREATE INDEX audit_log_actor ON audit_log(actor_id, at);
+CREATE INDEX audit_log_action ON audit_log(action, at);
+CREATE INDEX access_requests_retailer ON access_requests(retailer_id);
+CREATE INDEX access_requests_decided ON access_requests(status, decided_at);
 
 CREATE TABLE mail_outbox (
   id TEXT PRIMARY KEY, recipient TEXT NOT NULL, subject TEXT NOT NULL, body_enc TEXT NOT NULL, kind TEXT NOT NULL,

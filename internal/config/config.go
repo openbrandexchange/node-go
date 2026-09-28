@@ -43,13 +43,12 @@ type Config struct {
 	CustomDomainHelp    string // OBX_CUSTOM_DOMAIN_HELP (Markdown shown in settings)
 	TestRateLimit       int    // OBX_TEST_RATE_LIMIT: per-minute API limit override (conformance)
 	ChangeRetentionDays int    // OBX_CHANGE_RETENTION_DAYS (>= 90)
-	// Retention of personal and operational records (days).
-	StatsRetentionDays         int // OBX_STATS_RETENTION_DAYS: download statistics
-	AuditRetentionDays         int // OBX_AUDIT_RETENTION_DAYS: audit log of admin actions
-	AccessRequestRetentionDays int // OBX_ACCESS_REQUEST_RETENTION_DAYS: rejected access requests
-	JobRetentionDays           int // OBX_JOB_RETENTION_DAYS: finished jobs, batch results, downloads
-	WebhookLogRetentionDays    int // OBX_WEBHOOK_LOG_RETENTION_DAYS: webhook delivery log
-	ShutdownDelaySeconds       int // OBX_SHUTDOWN_DELAY: seconds /readyz reports 503 before the server stops
+	// Retention of operational records (days). Personal and usage data
+	// (download statistics, audit log, access requests) follow the brand's
+	// own retention settings in the admin.
+	JobRetentionDays        int // OBX_JOB_RETENTION_DAYS: finished jobs, batch results, downloads
+	WebhookLogRetentionDays int // OBX_WEBHOOK_LOG_RETENTION_DAYS: webhook delivery log
+	ShutdownDelaySeconds    int // OBX_SHUTDOWN_DELAY: seconds /readyz reports 503 before the server stops
 }
 
 // Known lists every variable the node reads; others starting with OBX_ are
@@ -60,8 +59,7 @@ var Known = map[string]bool{
 	"OBX_MAIL_FROM": true, "OBX_MAIL_LOG_BODIES": true, "OBX_WORKERS": true, "OBX_TRUST_PROXY": true,
 	"OBX_LOG_FORMAT": true, "OBX_LOG_LEVEL": true, "OBX_ACCESS_LOG": true, "OBX_METRICS": true,
 	"OBX_METRICS_TOKEN": true, "OBX_CUSTOM_DOMAIN_HELP": true, "OBX_TEST_RATE_LIMIT": true,
-	"OBX_CHANGE_RETENTION_DAYS": true, "OBX_STATS_RETENTION_DAYS": true, "OBX_AUDIT_RETENTION_DAYS": true,
-	"OBX_ACCESS_REQUEST_RETENTION_DAYS": true, "OBX_JOB_RETENTION_DAYS": true, "OBX_WEBHOOK_LOG_RETENTION_DAYS": true,
+	"OBX_CHANGE_RETENTION_DAYS": true, "OBX_JOB_RETENTION_DAYS": true, "OBX_WEBHOOK_LOG_RETENTION_DAYS": true,
 	"OBX_SHUTDOWN_DELAY": true, "OBX_S3_ACCESS_KEY_ID": true, "OBX_S3_SECRET_ACCESS_KEY": true,
 	// Read by the command-line tools and tests, not by the server.
 	"OBX_URL": true, "OBX_TOKEN": true, "OBX_TEST_DATABASE_URL": true, "OBX_TEST_LOG": true,
@@ -122,9 +120,6 @@ func Load() (*Config, error) {
 	c.Workers = c.intVar(&p, "OBX_WORKERS", 2, 1, 64)
 	c.TestRateLimit = c.intVar(&p, "OBX_TEST_RATE_LIMIT", 0, 0, 1000000)
 	c.ChangeRetentionDays = c.intVar(&p, "OBX_CHANGE_RETENTION_DAYS", 400, 90, 36500)
-	c.StatsRetentionDays = c.intVar(&p, "OBX_STATS_RETENTION_DAYS", 365, 1, 36500)
-	c.AuditRetentionDays = c.intVar(&p, "OBX_AUDIT_RETENTION_DAYS", 365, 30, 36500)
-	c.AccessRequestRetentionDays = c.intVar(&p, "OBX_ACCESS_REQUEST_RETENTION_DAYS", 180, 1, 36500)
 	c.JobRetentionDays = c.intVar(&p, "OBX_JOB_RETENTION_DAYS", 30, 8, 36500)
 	c.WebhookLogRetentionDays = c.intVar(&p, "OBX_WEBHOOK_LOG_RETENTION_DAYS", 8, 1, 365)
 	c.ShutdownDelaySeconds = c.intVar(&p, "OBX_SHUTDOWN_DELAY", 0, 0, 60)
@@ -214,9 +209,6 @@ func (c *Config) ApplyDefaults() {
 	}
 	def(&c.Workers, 2)
 	def(&c.ChangeRetentionDays, 400)
-	def(&c.StatsRetentionDays, 365)
-	def(&c.AuditRetentionDays, 365)
-	def(&c.AccessRequestRetentionDays, 180)
 	def(&c.JobRetentionDays, 30)
 	def(&c.WebhookLogRetentionDays, 8)
 }

@@ -212,8 +212,10 @@ func (a *App) routes(m *http.ServeMux) {
 	m.HandleFunc("GET /readyz", a.handleReadyz)
 	m.HandleFunc("GET /metrics", a.handleMetrics)
 	m.HandleFunc("GET /admin/api/audit-log", adm(a.handleAuditLog))
-	m.HandleFunc("GET /admin/api/retailers/{id}/personal-data", adm(a.handleRetailerPersonalData))
-	m.HandleFunc("GET /admin/api/me/personal-data", anyUser(a.handleMyPersonalData))
+	m.HandleFunc("GET /admin/api/retailers/{id}/export", adm(a.handleRetailerExport))
+	m.HandleFunc("GET /admin/api/users/{id}/export", adm(a.handleUserExport))
+	m.HandleFunc("GET /admin/api/me/export", anyUser(a.handleMyExport))
+	m.HandleFunc("DELETE /admin/api/me", anyUser(a.handleMeDelete))
 
 	// Catch-alls: API paths answer problem+json; everything else is the UI.
 	m.HandleFunc("/obx/", func(w http.ResponseWriter, r *http.Request) { a.apiFallback(m, w, r) })
@@ -391,11 +393,12 @@ func (a *App) cleanup(ctx context.Context) {
 	_, _ = a.DB.Exec(ctx, `DELETE FROM idempotency WHERE created_at < ?`, db.Fmt(a.now().Add(-25*time.Hour)))
 	days := func(n int) string { return db.Fmt(a.now().AddDate(0, 0, -n)) }
 	_, _ = a.DB.Exec(ctx, `DELETE FROM webhook_deliveries WHERE created_at < ? AND status <> 'pending'`, days(a.Cfg.WebhookLogRetentionDays))
-	_, _ = a.DB.Exec(ctx, `DELETE FROM audit_log WHERE at < ?`, days(a.Cfg.AuditRetentionDays))
+	ret := a.Settings(ctx).Retention
+	_, _ = a.DB.Exec(ctx, `DELETE FROM audit_log WHERE at < ?`, days(ret.AuditLogDays))
 	_, _ = a.DB.Exec(ctx, `DELETE FROM mail_outbox WHERE status <> 'pending' AND created_at < ?`, days(7))
-	// Rejected access requests hold contact details of people who never
-	// became customers.
-	_, _ = a.DB.Exec(ctx, `DELETE FROM access_requests WHERE status = 'rejected' AND decided_at < ?`, days(a.Cfg.AccessRequestRetentionDays))
+	// Decided access requests hold contact details (people who were
+	// rejected never became customers; approved ones have an account now).
+	_, _ = a.DB.Exec(ctx, `DELETE FROM access_requests WHERE status <> 'pending' AND COALESCE(decided_at, created_at) < ?`, days(ret.AccessRequestsDays))
 	rs, err := a.DB.Query(ctx, `SELECT id FROM uploads WHERE status = 'open' AND expires_at < ?`, now)
 	if err == nil {
 		var list []string
@@ -436,7 +439,8 @@ func (a *App) cleanup(ctx context.Context) {
 	old := days(a.Cfg.JobRetentionDays)
 	_, _ = a.DB.Exec(ctx, `DELETE FROM job_items WHERE job_id IN (SELECT id FROM jobs WHERE created_at < ? AND kind IN ('batch', 'export', 'download'))`, old)
 	_, _ = a.DB.Exec(ctx, `DELETE FROM jobs WHERE created_at < ? AND kind IN ('batch', 'export', 'download')`, old)
-	// Download statistics keep IPs nowhere; events are kept
-	// OBX_STATS_RETENTION_DAYS.
-	_, _ = a.DB.Exec(ctx, `DELETE FROM download_events WHERE at < ?`, days(a.Cfg.StatsRetentionDays))
+	// Download statistics keep IPs nowhere; events are kept as long as the
+	// brand's retention setting, the person's name at most 400 days.
+	_, _ = a.DB.Exec(ctx, `DELETE FROM download_events WHERE at < ?`, days(ret.DownloadEventsDays))
+	_, _ = a.DB.Exec(ctx, `UPDATE download_events SET actor_id = NULL, actor_name = NULL WHERE at < ? AND actor_name IS NOT NULL AND actor_type = 'user'`, days(min(400, ret.DownloadEventsDays)))
 }

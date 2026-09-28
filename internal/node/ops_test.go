@@ -129,20 +129,25 @@ func TestAuditLog(t *testing.T) {
 		actions = append(actions, m["action"].(string))
 		byAction[m["action"].(string)] = m
 	}
-	for _, want := range []string{"setup.complete", "retailers.create", "retailers.update", "users.invites.create", "session.login_failed"} {
+	for _, want := range []string{"setup.complete", "retailers.create", "retailers.update", "users.invites.create", "session.login"} {
 		if byAction[want] == nil {
 			t.Errorf("audit log lacks %s: %v", want, actions)
 		}
 	}
 	upd := byAction["retailers.update"]
-	if upd["target"].(map[string]any)["id"] != ret["id"] || upd["actor"].(map[string]any)["email"] != adminEmail || upd["status"].(float64) != 200 {
+	if upd["target_id"] != ret["id"] || upd["actor"].(map[string]any)["email"] != adminEmail || upd["actor"].(map[string]any)["role"] != "admin" ||
+		upd["status"].(float64) != 200 || upd["succeeded"] != true || upd["route"] != "/admin/api/retailers/{id}" || upd["method"] != "PATCH" {
 		t.Errorf("retailers.update entry: %v", upd)
 	}
 	if upd["request_id"] == nil {
 		t.Error("audit entry without request id")
 	}
-	if f := byAction["session.login_failed"]; f["details"].(map[string]any)["reason"] != "invalid_credentials" {
-		t.Errorf("failed login entry: %v", f)
+	failed := admin.must(200, "GET", "/admin/api/audit-log?action=session.login&outcome=failed", nil)["items"].([]any)
+	if len(failed) != 1 || failed[0].(map[string]any)["details"].(map[string]any)["reason"] != "invalid_credentials" || failed[0].(map[string]any)["status"].(float64) != 401 {
+		t.Errorf("failed login entries: %v", failed)
+	}
+	if byTarget := admin.must(200, "GET", "/admin/api/audit-log?target_id="+ret["id"].(string), nil)["items"].([]any); len(byTarget) != 1 {
+		t.Errorf("entries for the retailer: %d", len(byTarget))
 	}
 	// Newest first, paged with a cursor.
 	p1 := admin.must(200, "GET", "/admin/api/audit-log?limit=2", nil)
@@ -178,19 +183,20 @@ func TestPersonalDataExportAndDeletion(t *testing.T) {
 	admin.must(201, "POST", "/admin/api/api-clients", map[string]any{"retailer_id": rid, "name": "Privacy PIM"})
 
 	// The person downloads everything stored about her.
-	r := u.do("GET", "/admin/api/me/personal-data", nil)
+	r := u.do("GET", "/admin/api/me/export", nil)
 	if r.Status != 200 || !strings.Contains(r.Header.Get("Content-Disposition"), "attachment") {
 		t.Fatalf("my data: %d %s", r.Status, r.Body)
 	}
 	mine := r.JSON(t)
-	if mine["account"].(map[string]any)["email"] != "pia@privacy.example" {
+	if mine["format"] != "obx-personal-data-export/1" || mine["user"].(map[string]any)["email"] != "pia@privacy.example" ||
+		mine["retailer"].(map[string]any)["name"] != "Privacy Store" || mine["controller"].(map[string]any)["name"] != "Kestrel Outfitters" {
 		t.Fatalf("my data: %v", mine)
 	}
 	if strings.Contains(string(r.Body), "password_hash") || strings.Contains(string(r.Body), "$argon2") || strings.Contains(string(r.Body), "$2a$") {
 		t.Fatal("password hash in export")
 	}
 	// The brand exports the whole retailer.
-	all := admin.must(200, "GET", "/admin/api/retailers/"+rid+"/personal-data", nil)
+	all := admin.must(200, "GET", "/admin/api/retailers/"+rid+"/export", nil)
 	if all["retailer"].(map[string]any)["name"] != "Privacy Store" || len(all["users"].([]any)) != 1 || len(all["api_clients"].([]any)) != 1 {
 		t.Fatalf("retailer export: %v", all)
 	}
@@ -198,7 +204,7 @@ func TestPersonalDataExportAndDeletion(t *testing.T) {
 	if strings.Contains(string(raw), "obxs_") || strings.Contains(string(raw), "secret_hash") {
 		t.Fatal("secret in retailer export")
 	}
-	if r := u.do("GET", "/admin/api/retailers/"+rid+"/personal-data", nil); r.Status != 403 {
+	if r := u.do("GET", "/admin/api/retailers/"+rid+"/export", nil); r.Status != 403 {
 		t.Fatalf("retailer user reads company export: %d", r.Status)
 	}
 
@@ -214,8 +220,12 @@ func TestPersonalDataExportAndDeletion(t *testing.T) {
 	if users != 0 || clients != 0 || emails != 0 {
 		t.Fatalf("left after deletion: users=%d clients=%d audit emails=%d", users, clients, emails)
 	}
-	if r := admin.do("GET", "/admin/api/retailers/"+rid+"/personal-data", nil); r.Status != 404 {
+	if r := admin.do("GET", "/admin/api/retailers/"+rid+"/export", nil); r.Status != 404 {
 		t.Fatalf("export after deletion: %d", r.Status)
+	}
+	exports := admin.must(200, "GET", "/admin/api/audit-log?action=retailers.export", nil)["items"].([]any)
+	if len(exports) != 2 { // the export and the one after deletion (404)
+		t.Fatalf("exports in the audit log: %v", exports)
 	}
 }
 
@@ -227,10 +237,18 @@ func TestRetention(t *testing.T) {
 	recent := db.Fmt(time.Now().AddDate(0, 0, -10))
 	for _, at := range []string{old, recent} {
 		_, _ = n.app.DB.Exec(ctx, `INSERT INTO download_events (id, at, kind, actor_type, files) VALUES (?, ?, 'image', 'user', 1)`, "dl"+at, at)
-		_, _ = n.app.DB.Exec(ctx, `INSERT INTO audit_log (id, at, actor_type, action) VALUES (?, ?, 'user', 'x')`, "au"+at, at)
+		_, _ = n.app.DB.Exec(ctx, `INSERT INTO audit_log (id, at, actor_type, action, method, route, status) VALUES (?, ?, 'user', 'x', 'POST', '/x', 200)`, "au"+at, at)
 		_, _ = n.app.DB.Exec(ctx, `INSERT INTO access_requests (id, status, token_hash, retailer, contact, access, created_at, decided_at) VALUES (?, 'rejected', 'h', '{}', '{}', '[]', ?, ?)`, "ar"+at, at, at)
 	}
-	n.app.Cfg.StatsRetentionDays = 30
+	admin := n.client()
+	admin.login(adminEmail, adminPassword)
+	if r := admin.do("PATCH", "/admin/api/settings", map[string]any{"retention": map[string]any{"download_events_days": 5}}); r.Status != 422 {
+		t.Fatalf("retention below 30 days: %d %s", r.Status, r.Body)
+	}
+	set := admin.must(200, "PATCH", "/admin/api/settings", map[string]any{"retention": map[string]any{"download_events_days": 30}})
+	if ret := set["retention"].(map[string]any); ret["download_events_days"].(float64) != 30 || ret["audit_log_days"].(float64) != 365 || ret["access_requests_days"].(float64) != 365 {
+		t.Fatalf("retention settings: %v", ret)
+	}
 	n.app.cleanup(ctx)
 	count := func(table string) int {
 		var c int
@@ -240,13 +258,15 @@ func TestRetention(t *testing.T) {
 	if got := count("download_events"); got != 1 {
 		t.Errorf("download events after 30-day retention: %d", got)
 	}
-	if got := count("audit_log"); got < 1 || got > 2 { // setup.complete + recent
-		t.Errorf("audit log after 365-day retention: %d", got)
+	var oldAudit int
+	_ = n.app.DB.QueryRow(ctx, `SELECT COUNT(*) FROM audit_log WHERE at < ?`, db.Fmt(time.Now().AddDate(0, 0, -365))).Scan(&oldAudit)
+	if oldAudit != 0 || count("audit_log") < 2 {
+		t.Errorf("audit log after 365-day retention: %d old, %d in total", oldAudit, count("audit_log"))
 	}
 	var ar int
 	_ = n.app.DB.QueryRow(ctx, `SELECT COUNT(*) FROM access_requests WHERE status = 'rejected'`).Scan(&ar)
 	if ar != 1 {
-		t.Errorf("rejected access requests after 180 days: %d", ar)
+		t.Errorf("decided access requests after 365 days: %d", ar)
 	}
 }
 
@@ -434,5 +454,34 @@ func TestLoginRateLimitCountsFailuresOnly(t *testing.T) {
 	r := c.do("POST", "/admin/api/session/login", map[string]any{"email": adminEmail, "password": adminPassword})
 	if r.Status != 429 || r.Header.Get("Retry-After") == "" {
 		t.Fatalf("after 10 failures: %d %v", r.Status, r.Header)
+	}
+}
+
+// A retailer's person deletes their own account; an administrator cannot.
+func TestDeleteMyAccount(t *testing.T) {
+	n := newTestNode(t)
+	admin := n.setup()
+	ret := admin.must(201, "POST", "/admin/api/retailers", map[string]any{"name": "Leaving Store"})
+	inv := admin.must(201, "POST", "/admin/api/users/invites", map[string]any{"email": "lea@leaving.example", "name": "Lea", "role": "retailer", "retailer_id": ret["id"]})
+	link := inv["invite_url"].(string)
+	u := n.client()
+	u.session()
+	m := u.must(200, "POST", "/admin/api/invites/"+link[strings.LastIndex(link, "/")+1:]+"/accept", map[string]any{"password": "leas secure password"})
+	u.csrf = m["csrf_token"].(string)
+	uid := inv["user"].(map[string]any)["id"].(string)
+	if r := admin.do("DELETE", "/admin/api/me", nil); r.Status != 403 {
+		t.Fatalf("admin deletes itself: %d", r.Status)
+	}
+	u.must(204, "DELETE", "/admin/api/me", nil)
+	if r := u.do("GET", "/admin/api/portal/products", nil); r.Status != 401 {
+		t.Fatalf("session after deletion: %d", r.Status)
+	}
+	var n2 int
+	_ = n.app.DB.QueryRow(context.Background(), `SELECT COUNT(*) FROM users WHERE id = ?`, uid).Scan(&n2)
+	if n2 != 0 {
+		t.Fatal("account still there")
+	}
+	if r := admin.do("GET", "/admin/api/users/"+uid+"/export", nil); r.Status != 404 {
+		t.Fatalf("export of a deleted account: %d", r.Status)
 	}
 }

@@ -38,6 +38,13 @@ type Settings struct {
 		Rights       Rights `json:"rights"`
 		IngestStatus string `json:"ingest_status"`
 	} `json:"defaults"`
+	// Retention of personal and usage data, in days (the same settings as
+	// the other OBX portals; docs/operations.md#personal-data-gdpr).
+	Retention struct {
+		DownloadEventsDays int `json:"download_events_days"`
+		AuditLogDays       int `json:"audit_log_days"`
+		AccessRequestsDays int `json:"access_requests_days"`
+	} `json:"retention"`
 	// LogoSHA is the blob hash of the uploaded logo (internal).
 	LogoSHA string `json:"logo_sha,omitempty"`
 	// LogoType is the logo media type (internal).
@@ -58,8 +65,17 @@ func defaultSettings() *Settings {
 	s.Portal.DefaultLanguage = "en"
 	s.Defaults.Rights = DefaultRights()
 	s.Defaults.IngestStatus = "published"
+	s.Retention.DownloadEventsDays = 730
+	s.Retention.AuditLogDays = 365
+	s.Retention.AccessRequestsDays = 365
 	return s
 }
+
+// Retention limits (days) a brand can choose.
+const (
+	minRetentionDays = 30
+	maxRetentionDays = 3650
+)
 
 // Languages returns the content languages (first = default).
 func (s *Settings) ContentLanguages() []string {

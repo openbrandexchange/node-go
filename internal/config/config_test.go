@@ -27,7 +27,7 @@ func TestDefaults(t *testing.T) {
 	if c.Port != 8080 || c.PublicURL != "http://localhost:8080" || c.Workers != 2 || !c.AccessLog || c.Metrics {
 		t.Fatalf("defaults: %+v", c)
 	}
-	if c.StatsRetentionDays != 365 || c.AuditRetentionDays != 365 || c.AccessRequestRetentionDays != 180 || c.JobRetentionDays != 30 {
+	if c.JobRetentionDays != 30 || c.WebhookLogRetentionDays != 8 || c.ShutdownDelaySeconds != 0 {
 		t.Fatalf("retention defaults: %+v", c)
 	}
 	if !strings.HasPrefix(c.DatabaseURL, "sqlite:") || !strings.HasPrefix(c.BlobURL, "file://") || c.MailFrom != "no-reply@localhost" {
@@ -51,7 +51,7 @@ func TestAllProblemsReported(t *testing.T) {
 		"PORT": "eighty", "OBX_WORKERS": "0", "OBX_TRUST_PROXY": "maybe", "OBX_LOG_FORMAT": "xml",
 		"OBX_PUBLIC_URL": "images.kestrel.example", "OBX_DATABASE_URL": "mysql://u:hunter2@db/obx",
 		"OBX_BLOB_URL": "ftp://files", "OBX_SMTP_URL": "http://mail", "OBX_MAIL_FROM": "Portal <p@x.example>",
-		"OBX_SECRET_KEY": "short", "OBX_AUDIT_RETENTION_DAYS": "7",
+		"OBX_SECRET_KEY": "short", "OBX_JOB_RETENTION_DAYS": "7",
 	} {
 		t.Setenv(k, v)
 	}
@@ -61,7 +61,7 @@ func TestAllProblemsReported(t *testing.T) {
 	}
 	msg := err.Error()
 	for _, want := range []string{"PORT", "OBX_WORKERS", "OBX_TRUST_PROXY", "OBX_LOG_FORMAT", "OBX_PUBLIC_URL", "OBX_DATABASE_URL",
-		"OBX_BLOB_URL", "OBX_SMTP_URL", "OBX_MAIL_FROM", "OBX_SECRET_KEY", "OBX_AUDIT_RETENTION_DAYS", "11 problem"} {
+		"OBX_BLOB_URL", "OBX_SMTP_URL", "OBX_MAIL_FROM", "OBX_SECRET_KEY", "OBX_JOB_RETENTION_DAYS", "11 problem"} {
 		if !strings.Contains(msg, want) {
 			t.Errorf("message does not mention %s:\n%s", want, msg)
 		}

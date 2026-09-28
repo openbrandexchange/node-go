@@ -312,7 +312,7 @@ func (a *App) adminRetailerDelete(w http.ResponseWriter, r *http.Request) {
 		stmts := []string{
 			`DELETE FROM sessions WHERE user_id IN (SELECT id FROM users WHERE retailer_id = ?)`,
 			`DELETE FROM mail_outbox WHERE recipient IN (SELECT email FROM users WHERE retailer_id = ?)`,
-			`UPDATE audit_log SET actor_email = NULL WHERE actor_id IN (SELECT id FROM users WHERE retailer_id = ?)`,
+			`UPDATE audit_log SET actor_name = NULL, actor_email = NULL WHERE actor_id IN (SELECT id FROM users WHERE retailer_id = ?)`,
 			`DELETE FROM job_items WHERE job_id IN (SELECT id FROM jobs WHERE kind = 'download' AND owner_type = 'user' AND owner_id IN (SELECT id FROM users WHERE retailer_id = ?))`,
 			`DELETE FROM jobs WHERE kind = 'download' AND owner_type = 'user' AND owner_id IN (SELECT id FROM users WHERE retailer_id = ?)`,
 			`DELETE FROM access_requests WHERE retailer_id = ?`,
@@ -587,19 +587,7 @@ func (a *App) adminUserDelete(w http.ResponseWriter, r *http.Request) {
 		problem.Write(w, p)
 		return
 	}
-	a.endSessions(ctx, a.DB, u.ID, "")
-	downloads := a.userDownloadIDs(ctx, `owner_id = ?`, u.ID)
-	for _, q := range []string{
-		`UPDATE download_events SET actor_id = NULL, actor_name = NULL WHERE actor_id = ?`,
-		`UPDATE audit_log SET actor_email = NULL WHERE actor_id = ?`,
-		`DELETE FROM job_items WHERE job_id IN (SELECT id FROM jobs WHERE kind = 'download' AND owner_type = 'user' AND owner_id = ?)`,
-		`DELETE FROM jobs WHERE kind = 'download' AND owner_type = 'user' AND owner_id = ?`,
-	} {
-		_, _ = a.DB.Exec(ctx, q, u.ID)
-	}
-	_, _ = a.DB.Exec(ctx, `DELETE FROM mail_outbox WHERE recipient = ?`, u.Email)
-	_, _ = a.DB.Exec(ctx, `DELETE FROM users WHERE id = ?`, u.ID)
-	a.deleteDownloadFiles(ctx, downloads)
+	a.eraseUser(ctx, u)
 	w.WriteHeader(204)
 }
 

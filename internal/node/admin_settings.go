@@ -3,6 +3,7 @@ package node
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"strings"
 
@@ -108,6 +109,15 @@ func (a *App) applySettingsPatch(cur *Settings, patch map[string]any) (*Settings
 	}
 	if next.Defaults.Rights.License == "custom" && strings.TrimSpace(deref(next.Defaults.Rights.LicenseText)) == "" {
 		p.Field("/defaults/rights/license_text", "validation_failed", "required for a custom licence")
+	}
+	for _, r := range []struct {
+		ptr string
+		v   int
+	}{{"/retention/download_events_days", next.Retention.DownloadEventsDays}, {"/retention/audit_log_days", next.Retention.AuditLogDays},
+		{"/retention/access_requests_days", next.Retention.AccessRequestsDays}} {
+		if r.v < minRetentionDays || r.v > maxRetentionDays {
+			p.Field(r.ptr, "validation_failed", fmt.Sprintf("between %d and %d days", minRetentionDays, maxRetentionDays))
+		}
 	}
 	if len(p.Errors) > 0 {
 		return nil, p

@@ -264,7 +264,7 @@ func (a *App) handleLogin(w http.ResponseWriter, r *http.Request) {
 	failed := func(code string) {
 		a.countFailure(ipKey, 10, 15*time.Minute)
 		a.countFailure(emailKey, 10, 15*time.Minute)
-		e := auditEntry{ActorType: "anonymous", Action: "session.login_failed", TargetType: "user", Status: 401, Details: map[string]any{"reason": code}}
+		e := auditEntry{Action: "session.login", Method: "POST", Route: "/admin/api/session/login", TargetType: "user", Status: 401, Details: map[string]any{"reason": code}}
 		if u != nil {
 			e.TargetID = u.ID
 		}
@@ -302,7 +302,9 @@ func (a *App) handleLogin(w http.ResponseWriter, r *http.Request) {
 		a.fail(w, r, err)
 		return
 	}
-	a.audit(ctx, auditEntry{ActorID: u.ID, ActorEmail: u.Email, Action: "session.login", TargetType: "user", TargetID: u.ID, Status: 200})
+	e := auditEntry{Action: "session.login", Method: "POST", Route: "/admin/api/session/login", TargetType: "user", TargetID: u.ID, Status: 200}
+	e.actor(u)
+	a.audit(ctx, e)
 	writeJSON(w, 200, a.sessionJSON(ctx, &session{User: u, CSRF: csrf}, csrf))
 }
 
