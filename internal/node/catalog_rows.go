@@ -201,19 +201,50 @@ func (a *App) record(ctx context.Context, q db.Querier, r *row) *IngestRecord {
 		_ = json.Unmarshal([]byte(r.Data), &d)
 		data["rights"] = a.effectiveRights(ctx, d.Rights)
 		data["provenance"] = effectiveProvenance(d.Provenance)
-		if d.Files == nil {
-			data["files"] = map[string]any{}
-		}
+		data["files"] = a.currentFiles(ctx, q, d.Files)
 	}
 	rec := &IngestRecord{Kind: r.Kind, ID: r.ID, ExternalID: r.ExternalID, Status: r.Status,
 		Visibility: a.visibilityOf(ctx, q, r), ETag: r.ETag, CreatedAt: r.CreatedAt, UpdatedAt: r.RecordUpdatedAt, Data: data}
 	if r.Kind == KindAsset {
-		rec.MissingFiles = a.missingFiles(ctx, q, r)
-		if rec.MissingFiles == nil {
-			rec.MissingFiles = []string{}
+		missing := a.missingFiles(ctx, q, r)
+		if missing == nil {
+			missing = []string{}
 		}
+		rec.MissingFiles = &missing
 	}
 	return rec
+}
+
+// currentFiles lists every current blob of an asset (IngestRecord.data.files):
+// the files the brand referenced, completed with their dimensions, plus the
+// renditions the node made itself.
+func (a *App) currentFiles(ctx context.Context, q db.Querier, own map[string]FileRef) map[string]FileRef {
+	files := map[string]FileRef{}
+	for n, f := range own {
+		if f.Width == nil || f.Height == nil {
+			var wd, ht sql.NullInt64
+			if q.QueryRow(ctx, `SELECT width, height FROM blobs WHERE sha256 = ?`, f.SHA256).Scan(&wd, &ht) == nil && wd.Valid && ht.Valid {
+				w, h := int(wd.Int64), int(ht.Int64)
+				f.Width, f.Height = &w, &h
+			}
+		}
+		files[n] = f
+	}
+	orig, ok := files["original"]
+	if !ok {
+		return files
+	}
+	for _, n := range DerivedRenditions {
+		if _, ok := files[n]; ok {
+			continue
+		}
+		var sha string
+		var wd, ht int
+		if q.QueryRow(ctx, `SELECT sha256, width, height FROM renditions WHERE original_sha = ? AND name = ?`, orig.SHA256, n).Scan(&sha, &wd, &ht) == nil {
+			files[n] = FileRef{SHA256: sha, Width: &wd, Height: &ht}
+		}
+	}
+	return files
 }
 
 // effectiveRights merges the node default rights with the asset's own fields.

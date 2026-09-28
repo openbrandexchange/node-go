@@ -315,6 +315,24 @@ func TestIngestFilesAndValidation(t *testing.T) {
 		if rec["visibility"] != "visible" {
 			t.Errorf("asset should be visible after server rendering: %v", rec)
 		}
+		// data.files lists every current blob with its dimensions, the
+		// node's own renditions included; missing_files is [] once complete.
+		files, _ := rec["data"].(map[string]any)["files"].(map[string]any)
+		for _, n := range []string{"original", "web", "square", "thumb"} {
+			f, _ := files[n].(map[string]any)
+			if f == nil || f["sha256"] == nil || f["width"] == nil || f["height"] == nil {
+				t.Errorf("data.files.%s should have sha256, width and height: %v", n, files[n])
+			}
+		}
+		if orig, _ := files["original"].(map[string]any); orig != nil && (orig["sha256"] != sha || orig["width"] != float64(1200) || orig["height"] != float64(1500)) {
+			t.Errorf("original: %v", orig)
+		}
+		if mf, ok := rec["missing_files"].([]any); !ok || len(mf) != 0 {
+			t.Errorf("missing_files should be [] for a complete asset, got %#v", rec["missing_files"])
+		}
+		if prod := ing.must(200, "GET", "/obx/v1/ingest/products/V-1", nil); prod["missing_files"] != nil {
+			t.Errorf("missing_files is for assets only: %v", prod["missing_files"])
+		}
 		r = ing.do("PUT", "/obx/v1/ingest/products/V-1", map[string]any{"style_number": "V-1", "name": map[string]any{"en": "x"}}, "If-Match", `"nope"`)
 		if r.Status != 412 {
 			t.Errorf("if-match: %d", r.Status)

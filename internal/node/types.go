@@ -302,7 +302,7 @@ type IngestRecord struct {
 	CreatedAt    string         `json:"created_at"`
 	UpdatedAt    string         `json:"updated_at"`
 	Data         map[string]any `json:"data"`
-	MissingFiles []string       `json:"missing_files,omitempty"`
+	MissingFiles *[]string      `json:"missing_files,omitempty"` // assets only; [] when complete
 }
 
 func strPtr(s string) *string { return &s }
