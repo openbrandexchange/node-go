@@ -5,6 +5,7 @@ import (
 	"bytes"
 	"context"
 	"encoding/csv"
+	"io"
 	"net/http"
 	"slices"
 	"strings"
@@ -372,11 +373,22 @@ func TestPortal(t *testing.T) {
 			t.Fatal(err)
 		}
 		names := map[string]bool{}
+		var assetsCSV []byte
 		for _, f := range z.File {
 			names[f.Name] = true
+			if f.Name == "assets.csv" {
+				rc, _ := f.Open()
+				assetsCSV, _ = io.ReadAll(rc)
+				rc.Close()
+			}
 		}
-		if !names["KO-1001/KO-1001_NVY_1_front_web.jpg"] || !names["KO-1005/KO-1005_COG_3_inside_web.jpg"] || len(names) != 7 {
+		if !names["KO-1001/KO-1001_NVY_1_front_web.jpg"] || !names["KO-1005/KO-1005_COG_3_inside_web.jpg"] || len(names) != 7+1 {
 			t.Fatalf("zip entries %v", names)
+		}
+		// The rights, embargo and AI provenance travel with the files (import-format.md §2.3).
+		arows, err := csv.NewReader(bytes.NewReader(assetsCSV)).ReadAll()
+		if err != nil || len(arows) != 1+7 || arows[0][0] != "file" || arows[1][0] != "KO-1001_NVY_1_front_web.jpg" {
+			t.Fatalf("assets.csv: %v %v", err, arows)
 		}
 		pz := u.do("GET", "/admin/api/portal/products/"+ids[0]+"/download.zip", nil)
 		if pz.Status != 200 {
@@ -410,7 +422,7 @@ func TestPortal(t *testing.T) {
 		}
 		f := u.do("GET", st["file_url"].(string), nil)
 		z, err := zip.NewReader(bytes.NewReader(f.Body), int64(len(f.Body)))
-		if err != nil || len(z.File) != 8 { // 7 images + data.csv
+		if err != nil || len(z.File) != 9 { // 7 images + assets.csv + data.csv
 			t.Fatalf("download zip: %v, %d files", err, len(z.File))
 		}
 		other := k.client()

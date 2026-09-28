@@ -241,6 +241,10 @@ type zipFile struct {
 	SHA256 string
 	Bytes  int64
 	Meta   map[string]any
+	// Asset and Style describe an image of a portal download, for its
+	// assets.csv (import-format.md §2.3); nil for other files.
+	Asset *Asset
+	Style string
 }
 
 // zipBuilder writes zip parts of at most maxBytes to temp files.

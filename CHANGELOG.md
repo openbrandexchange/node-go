@@ -32,6 +32,10 @@ are always forward-only and applied automatically on start.
   images alone, or with an assets.csv that has no row for them, keep their embargo, credit, alt
   text and AI label, also when those were set in the admin. Before, every such import reset them
   to the defaults, which lifted embargoes.
+- Every zip a retailer downloads (one product, the selection, a background download) holds an
+  `assets.csv` with one row per image: its usage rights, embargo and AI provenance in the import
+  format's columns (spec import-format.md §2.3). Before, a zip held only the files, so a shop could
+  publish an embargoed image without seeing the embargo.
 - A column that a products.csv does not have leaves that field of an existing product or variant as
   it is (spec import rule 9, per language for texts): a file with only `style_number` and `name:nl`
   changes only the Dutch names. Before, it removed the descriptions, materials, care codes and the

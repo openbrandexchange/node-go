@@ -10,6 +10,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"path"
 	"regexp"
 	"sort"
 	"strconv"
@@ -95,6 +96,7 @@ func (a *App) writeZip(ctx context.Context, w io.Writer, files []zipFile, extra 
 	zw := zip.NewWriter(w)
 	seen := map[string]bool{}
 	var total int64
+	var written []zipFile
 	for _, f := range files {
 		p := f.Path
 		for i := 2; seen[p]; i++ {
@@ -120,6 +122,14 @@ func (a *App) writeZip(ctx context.Context, w io.Writer, files []zipFile, extra 
 			return 0, 0, err
 		}
 		total += n
+		f.Path = p
+		written = append(written, f)
+	}
+	if rows := downloadAssetsCSV(written); rows != nil {
+		if extra == nil {
+			extra = map[string][]byte{}
+		}
+		extra["assets.csv"] = rows
 	}
 	names := make([]string, 0, len(extra))
 	for k := range extra {
@@ -159,7 +169,7 @@ func (a *App) zipFilesFor(ctx context.Context, v *Viewer, productIDs []string, v
 				if folders {
 					path = safeZipSegment(p.StyleNumber) + "/" + name
 				}
-				out = append(out, zipFile{Path: path, SHA256: rend.SHA256, Bytes: rend.Bytes})
+				out = append(out, zipFile{Path: path, SHA256: rend.SHA256, Bytes: rend.Bytes, Asset: as, Style: p.StyleNumber})
 			}
 		}
 	}
@@ -236,6 +246,68 @@ func (a *App) handleSelectionZip(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	a.logDownload(ctx, downloadEvent{Kind: "selection_zip", Viewer: v, Variant: variant, Files: n, Bytes: total})
+}
+
+// downloadAssetsCSV builds the assets.csv of a portal download
+// (import-format.md §2.3): one row per image in the zip with its effective
+// rights, embargo and AI provenance, in the import format's columns, so they
+// travel with the files. nil when the zip has no images.
+func downloadAssetsCSV(files []zipFile) []byte {
+	var images []zipFile
+	langSet := map[string]bool{}
+	for _, f := range files {
+		if f.Asset == nil {
+			continue
+		}
+		images = append(images, f)
+		for l := range f.Asset.AltText {
+			langSet[l] = true
+		}
+	}
+	if len(images) == 0 {
+		return nil
+	}
+	langs := make([]string, 0, len(langSet))
+	for l := range langSet {
+		langs = append(langs, l)
+	}
+	sort.Strings(langs)
+	header := []string{"file", "style_number", "color_code", "position", "role", "view"}
+	for _, l := range langs {
+		header = append(header, "alt_text:"+l)
+	}
+	header = append(header, "license", "license_text", "channels", "territories", "embargo_until", "expires_at", "credit",
+		"model_release", "ai_generated", "ai_edited", "source", "c2pa", "generator")
+	str := func(p *string) string {
+		if p == nil {
+			return ""
+		}
+		return *p
+	}
+	var buf bytes.Buffer
+	cw := csv.NewWriter(&buf)
+	_ = cw.Write(header)
+	for _, f := range images {
+		as := f.Asset
+		row := []string{path.Base(f.Path), f.Style, str(as.ColorCode), strconv.Itoa(as.Position), as.Role, str(as.View)}
+		for _, l := range langs {
+			row = append(row, as.AltText[l])
+		}
+		release := ""
+		if as.Rights.ModelRelease != nil {
+			release = strconv.FormatBool(*as.Rights.ModelRelease)
+		}
+		row = append(row, as.Rights.License, str(as.Rights.LicenseText), strings.Join(as.Rights.Channels, "|"),
+			strings.Join(as.Rights.Territories, "|"), str(as.Rights.EmbargoUntil), str(as.Rights.ExpiresAt), str(as.Rights.Credit),
+			release, strconv.FormatBool(as.Provenance.AIGenerated), strconv.FormatBool(as.Provenance.AIEdited),
+			as.Provenance.Source, as.Provenance.C2PA, str(as.Provenance.Generator))
+		for i, c := range row {
+			row[i] = csvSafe(c)
+		}
+		_ = cw.Write(row)
+	}
+	cw.Flush()
+	return buf.Bytes()
 }
 
 // ---- CSV export --------------------------------------------------------------------------
@@ -652,6 +724,8 @@ func (a *App) runDownloadJob(jc *jobContext) (any, error) {
 	}
 	b := &zipBuilder{a: a, ctx: ctx, max: 1 << 62}
 	defer b.cleanup()
+	var written []zipFile
+	b.onEntry = func(_ int, f zipFile) { written = append(written, f) }
 	total := len(files)
 	for i, f := range files {
 		if err := b.add(f); err != nil {
@@ -659,6 +733,11 @@ func (a *App) runDownloadJob(jc *jobContext) (any, error) {
 		}
 		if i%20 == 0 {
 			jc.progress(i, &total)
+		}
+	}
+	if rows := downloadAssetsCSV(written); rows != nil {
+		if err := b.addBytes("assets.csv", rows); err != nil {
+			return nil, err
 		}
 	}
 	if p.IncludeDataCSV && a.Settings(ctx).Portal.AllowArticleDataExport {
