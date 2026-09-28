@@ -276,3 +276,14 @@ test('a Dutch retailer sees the portal as a Beeldbank', async ({ page }) => {
   await page.screenshot({ path: 'screenshots/15-portal-nl.png' })
   expect(problems).toEqual([])
 })
+
+test('the example zip from the README imports on its own', async ({ page }) => {
+  const problems = watch(page)
+  await logIn(page, admin)
+  await page.getByRole('link', { name: 'Imports' }).first().click()
+  await page.getByTestId('import-file-input').setInputFiles(['../testdata/kestrel-example.zip'])
+  await expect(page.getByText('27 images')).toBeVisible()
+  await page.getByRole('button', { name: 'Start import' }).click()
+  await expect(page.getByText('Everything was imported without problems.')).toBeVisible({ timeout: 90_000 })
+  expect(problems).toEqual([])
+})

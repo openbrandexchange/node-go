@@ -28,14 +28,18 @@ Or with Go 1.26:
 go run . serve
 ```
 
-Open <http://localhost:8080>. The output shows a **setup code**; enter it in the setup wizard together with your company name and your own password (there is never a default password). Then import the example catalog:
+Open <http://localhost:8080>. The output shows a line like `First-run setup: open http://localhost:8080 and enter this setup code: 55GX-FKYX-E5HK`; enter that code in the setup wizard together with your company name and your own password (there is never a default password).
+
+Then add the example catalog of the fictional brand Kestrel Outfitters. In the admin, go to **Imports → Choose files**, pick `testdata/kestrel-example.zip` (the spreadsheet and 27 images in one zip) and click **Start import**. Or, when you started with Go:
 
 ```sh
 go run . import --csv testdata/spec/kestrel/products.csv \
   --assets testdata/spec/kestrel/assets.csv --images testdata/spec/kestrel/images
 ```
 
-Everything is stored in `./data` (a SQLite database and the image files).
+To see the retailer side, click **View as retailer**, or invite yourself under **Retailers**: with the local setup, e-mails are not sent but written to the output, including the invitation link.
+
+Everything is stored in `./data` with Go, or in the Docker volume `obx-local-data`.
 
 ## Put it online
 
@@ -65,13 +69,14 @@ The spreadsheet format is one row per size, and images are named `{style}_{colou
 
 ```sh
 go test ./...                      # unit and HTTP integration tests (SQLite)
+e2e/run.sh                         # the admin and portal in a headless browser against a fresh node
 OBX_TEST_DATABASE_URL=postgres://… go test ./internal/node   # the same on PostgreSQL
 (cd conformance && go test ./...)  # the OBX conformance suite from obx-go (needs ../obx-go)
 ```
 
 - `internal/node`: the node (protocol, ingest, admin + portal API, imports, jobs, exports, webhooks, statistics, e-mail).
 - `internal/importfmt`: the canonical CSV and file-name parser; `internal/imaging`: pure-Go renditions.
-- `ui/dist`: the web interface, vendored from [admin-ui](https://github.com/openbrandexchange/admin-ui) with `scripts/update-ui.sh`.
+- `ui/dist`: the web interface, vendored from [admin-ui](https://github.com/openbrandexchange/admin-ui) with `scripts/update-ui.sh` (`BUILD=1` rebuilds admin-ui first).
 - API contracts: the [OBX spec](https://github.com/openbrandexchange/spec) (`openapi/*.yaml`). Implementation decisions: [NOTES.md](NOTES.md).
 
 The CLI:
