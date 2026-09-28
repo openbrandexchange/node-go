@@ -16,7 +16,7 @@ ARG TARGETARCH=amd64
 RUN CGO_ENABLED=0 GOOS=$TARGETOS GOARCH=$TARGETARCH go build -trimpath \
       -ldflags "-s -w -X github.com/openbrandexchange/node-go/internal/node.Version=${VERSION}" -o /out/node-go .
 
-FROM --platform=$BUILDPLATFORM alpine:3.22@sha256:5291449c3df73caf6ed85e649dec1b9e818b39a5d8c871e97afc13e9cd5e8fa8 AS litestream
+FROM --platform=$BUILDPLATFORM alpine:3.24@sha256:294b683cb724975bec92580e1e685676bd4b50bda910ddb8c51d4cabeaec77e6 AS litestream
 ARG TARGETARCH=amd64
 ARG LITESTREAM_VERSION=0.3.13
 # sha256 of the release archives (verified when this version was pinned).
@@ -28,7 +28,7 @@ RUN apk add --no-cache curl && \
     echo "${sum}  /tmp/litestream.tgz" | sha256sum -c - && \
     tar -xzf /tmp/litestream.tgz -C /usr/local/bin litestream
 
-FROM alpine:3.22@sha256:5291449c3df73caf6ed85e649dec1b9e818b39a5d8c871e97afc13e9cd5e8fa8
+FROM alpine:3.24@sha256:294b683cb724975bec92580e1e685676bd4b50bda910ddb8c51d4cabeaec77e6
 ARG VERSION=dev
 LABEL org.opencontainers.image.title="node-go" \
       org.opencontainers.image.description="Open Brand Exchange brand portal: Portal for Google Cloud & Docker" \
