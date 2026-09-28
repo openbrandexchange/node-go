@@ -24,8 +24,18 @@ function watch(page: Page, allow: RegExp[] = []) {
   return problems
 }
 
+// Every page runs under the node's real Content-Security-Policy; a violation fails the test,
+// so a node that tightens (or loosens) its policy against what admin-ui needs is caught here.
+const cspViolations: string[] = []
 test.beforeEach(async ({ page }) => {
+  cspViolations.length = 0
+  page.on('console', (m) => {
+    if (m.type() === 'error' && /Content Security Policy/i.test(m.text())) cspViolations.push(m.text())
+  })
   await page.addInitScript(() => localStorage.setItem('obx.lang', 'en'))
+})
+test.afterEach(() => {
+  expect(cspViolations).toEqual([])
 })
 
 test('first-run wizard creates the brand and the admin account', async ({ page }) => {

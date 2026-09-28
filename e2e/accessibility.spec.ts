@@ -9,8 +9,18 @@ const admin = { email: 'admin@kestrel.example', password: 'kestrel-admin-2026!' 
 const retailer = { email: 'buyer@harbour.example', password: 'harbour-shop-2026!' }
 
 
+// Every page runs under the node's real Content-Security-Policy; a violation fails the test,
+// so a node that tightens (or loosens) its policy against what admin-ui needs is caught here.
+const cspViolations: string[] = []
 test.beforeEach(async ({ page }) => {
+  cspViolations.length = 0
+  page.on('console', (m) => {
+    if (m.type() === 'error' && /Content Security Policy/i.test(m.text())) cspViolations.push(m.text())
+  })
   await page.addInitScript(() => localStorage.setItem('obx.lang', 'en'))
+})
+test.afterEach(() => {
+  expect(cspViolations).toEqual([])
 })
 
 async function logIn(page: Page, who: { email: string; password: string }) {
