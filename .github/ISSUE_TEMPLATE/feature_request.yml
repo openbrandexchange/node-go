@@ -1,0 +1,21 @@
+name: Idea or feature request
+description: Something the portal should do
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What are you trying to do?
+      description: Describe the situation of the brand or retailer, not only the solution.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: What would help?
+  - type: checkboxes
+    id: protocol
+    attributes:
+      label: Protocol
+      options:
+        - label: This changes what the protocol sends or accepts (then it starts as a proposal in openbrandexchange/spec).

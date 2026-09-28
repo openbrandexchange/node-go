@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Report a security problem
+    url: mailto:security@openbrandexchange.com
+    about: Never in a public issue. See SECURITY.md.
+  - name: Protocol questions and proposals
+    url: https://github.com/openbrandexchange/spec/issues
+    about: Changes to the Open Brand Exchange protocol itself.

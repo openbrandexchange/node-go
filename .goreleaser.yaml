@@ -1,0 +1,70 @@
+# GoReleaser: node-go binaries for Linux, macOS and Windows (amd64, arm64),
+# with checksums and an SBOM per archive. Runs only from the release
+# workflow when a maintainer pushes a version tag (vX.Y.Z); locally:
+#   goreleaser release --snapshot --clean      (archives in dist/)
+# The Docker images are built by the release workflow (buildx, multi-arch).
+version: 2
+project_name: node-go
+
+before:
+  hooks:
+    - go mod download
+    - ./scripts/check-licenses.sh --save build/third-party-licenses
+
+builds:
+  - id: node-go
+    main: .
+    binary: node-go
+    env: [CGO_ENABLED=0]
+    goos: [linux, darwin, windows]
+    goarch: [amd64, arm64]
+    flags: [-trimpath]
+    mod_timestamp: "{{ .CommitTimestamp }}"
+    ldflags:
+      - -s -w -X github.com/openbrandexchange/node-go/internal/node.Version={{ .Version }}
+
+archives:
+  - id: node-go
+    ids: [node-go]
+    name_template: "node-go_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+    formats: [tar.gz]
+    format_overrides:
+      - goos: windows
+        formats: [zip]
+    files:
+      - LICENSE
+      - NOTICE
+      - README.md
+      - CHANGELOG.md
+      - SECURITY.md
+      - docs/**/*
+      - deploy/Caddyfile
+      - deploy/install-linux.sh
+      - deploy/systemd/*
+      - src: build/third-party-licenses/**/*
+        dst: third-party-licenses
+
+checksum:
+  name_template: checksums.txt
+  algorithm: sha256
+
+sboms:
+  - id: archives
+    artifacts: archive
+
+snapshot:
+  version_template: "{{ incpatch .Version }}-snapshot"
+
+changelog:
+  # Release notes come from CHANGELOG.md (the release workflow passes them).
+  disable: true
+
+release:
+  github:
+    owner: openbrandexchange
+    name: node-go
+  draft: true
+  prerelease: auto
+  footer: |
+    Docker image: `ghcr.io/openbrandexchange/node-go:{{ .Version }}` (linux/amd64, linux/arm64).
+    Verify downloads with `sha256sum -c checksums.txt`.

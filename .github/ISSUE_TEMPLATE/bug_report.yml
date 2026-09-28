@@ -1,0 +1,55 @@
+name: Bug report
+description: Something in the portal does not work as it should
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Security problems: do **not** file an issue. E-mail security@openbrandexchange.com (see SECURITY.md).
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened, and what did you expect?
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: "1. Open Imports\n2. Upload …\n3. …"
+    validations:
+      required: true
+  - type: dropdown
+    id: hosting
+    attributes:
+      label: Where does the portal run?
+      options:
+        - Google Cloud Run (deploy/cloudrun.sh)
+        - Docker Compose with Caddy
+        - Docker (other)
+        - Fly.io
+        - Railway or Render
+        - Linux server with systemd
+        - go run / from source
+        - Other
+    validations:
+      required: true
+  - type: dropdown
+    id: database
+    attributes:
+      label: Database
+      options: [SQLite (default), PostgreSQL]
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      description: "`node-go version`, or `version` in GET /readyz."
+      placeholder: "0.1.0"
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Log lines
+      description: The JSON log lines around the problem (they carry a request_id). Remove e-mail addresses and keys.
+      render: text
