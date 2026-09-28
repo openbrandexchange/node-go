@@ -140,6 +140,115 @@ type importer struct {
 	extra    map[string]*productPlan // image-only products (from the node)
 	extraOrd []string
 	progress func(done, total int)
+	// present lists the columns of products.csv (import rule 9).
+	present presentColumns
+}
+
+// presentColumns says which columns a products.csv has, by canonical name:
+// plain columns, the languages of each text column (the plain one is the
+// import's default language) and the attr:<key> columns.
+type presentColumns struct {
+	plain map[string]bool
+	langs map[string]map[string]bool
+	attrs map[string]bool
+}
+
+func columnsOf(header []string, defaultLang string) presentColumns {
+	p := presentColumns{plain: map[string]bool{}, langs: map[string]map[string]bool{}, attrs: map[string]bool{}}
+	for _, base := range []string{"name", "description", "color_name"} {
+		p.langs[base] = map[string]bool{}
+	}
+	for _, h := range header {
+		base, lang, tagged := strings.Cut(h, ":")
+		switch {
+		case base == "attr" && tagged:
+			p.attrs[lang] = true
+		case tagged:
+			if l, ok := p.langs[base]; ok {
+				l[lang] = true
+			}
+		default:
+			p.plain[h] = true
+			if l, ok := p.langs[h]; ok {
+				l[defaultLang] = true
+			}
+		}
+	}
+	return p
+}
+
+// columnField maps a field of the stored write model to its products.csv
+// column: texts are kept per language, attributes per key.
+type columnField struct {
+	path, column string
+	text, attrs  bool
+}
+
+var productColumnFields = []columnField{
+	{path: "name", column: "name", text: true}, {path: "description", column: "description", text: true},
+	{path: "item_type", column: "item_type"}, {path: "target_group", column: "target_group"},
+	{path: "season", column: "season"}, {path: "collection", column: "collection"},
+	{path: "gpc_brick", column: "gpc_brick"}, {path: "materials", column: "materials"}, {path: "care", column: "care"},
+	{path: "country_of_origin", column: "country_of_origin"}, {path: "dpp_url", column: "dpp_url"},
+	{path: "attributes", attrs: true},
+}
+
+var variantColumnFields = []columnField{
+	{path: "gtin", column: "gtin"}, {path: "sku", column: "sku"}, {path: "size", column: "size"},
+	{path: "size_system", column: "size_system"}, {path: "color.name", column: "color_name", text: true},
+	{path: "color.supplier_color", column: "supplier_color"},
+}
+
+// keepAbsentColumns applies import-format.md rule 9 to a product or variant
+// the node already has: a field whose column the file does not have keeps its
+// stored value (texts per language, attributes per key); an empty cell in a
+// column the file has still removes the value.
+func keepAbsentColumns(doc map[string]any, stored string, fields []columnField, present presentColumns) map[string]any {
+	old := map[string]any{}
+	dec := json.NewDecoder(strings.NewReader(stored))
+	dec.UseNumber()
+	if dec.Decode(&old) != nil {
+		return doc
+	}
+	out := cloneDoc(doc)
+	for _, f := range fields {
+		parent, oldParent, key := out, old, f.path
+		if head, rest, nested := strings.Cut(f.path, "."); nested {
+			p, _ := out[head].(map[string]any)
+			op, _ := old[head].(map[string]any)
+			if p == nil || op == nil {
+				continue
+			}
+			parent, oldParent, key = p, op, rest
+		}
+		was, ok := oldParent[key]
+		if !ok || was == nil {
+			continue
+		}
+		switch {
+		case f.attrs || f.text:
+			oldMap, _ := was.(map[string]any)
+			now, _ := parent[key].(map[string]any)
+			if now == nil {
+				now = map[string]any{}
+			}
+			for k, v := range oldMap {
+				_, stated := now[k]
+				absent := (f.attrs && !present.attrs[k]) || (f.text && !present.langs[f.column][k])
+				if !stated && absent {
+					now[k] = v
+				}
+			}
+			if len(now) > 0 {
+				parent[key] = now
+			}
+		default:
+			if _, stated := parent[key]; !stated && !present.plain[f.column] {
+				parent[key] = was
+			}
+		}
+	}
+	return out
 }
 
 func (im *importer) add(file string, row int, col, code, detail, value string, warning bool) {
@@ -229,6 +338,7 @@ func (im *importer) parseProducts(data []byte) *problem.Problem {
 		im.add("products.csv", 0, c, "validation_failed", fmt.Sprintf("unknown column %q ignored", c), "", true)
 	}
 	im.counts.Rows = len(t.Rows)
+	im.present = columnsOf(t.Header, im.lang)
 	variantCols := []string{"gtin", "variant_id", "sku", "color_code", "size"}
 	for _, row := range t.Rows {
 		style := row.Get("style_number")
@@ -860,6 +970,11 @@ func (im *importer) applyPlan(w *writer, plan *productPlan) error {
 		}
 		doc := cloneDoc(plan.doc)
 		doc["brand_external_id"] = bext
+		if existing, err := loadRow(w.ctx, w.tx, KindProduct, plan.ext); err != nil {
+			return err
+		} else if existing != nil {
+			doc = keepAbsentColumns(doc, existing.Data, productColumnFields, im.present)
+		}
 		res, prob := w.Upsert(KindProduct, plan.ext, doc, "")
 		if prob != nil {
 			if prob.ObxError == "internal_error" {
@@ -871,13 +986,19 @@ func (im *importer) applyPlan(w *writer, plan *productPlan) error {
 		}
 		im.count(res.Result)
 		for _, v := range plan.variants {
-			res, prob := w.Upsert(KindVariant, v.ext, v.doc, "")
+			vdoc := v.doc
+			if existing, err := loadRow(w.ctx, w.tx, KindVariant, v.ext); err != nil {
+				return err
+			} else if existing != nil {
+				vdoc = keepAbsentColumns(vdoc, existing.Data, variantColumnFields, im.present)
+			}
+			res, prob := w.Upsert(KindVariant, v.ext, vdoc, "")
 			if prob != nil {
 				if prob.ObxError == "internal_error" {
 					return prob
 				}
 				val := ""
-				if g, ok := v.doc["gtin"].(string); ok && (prob.ObxError == "invalid_gtin" || prob.ObxError == "gtin_conflict") {
+				if g, ok := vdoc["gtin"].(string); ok && (prob.ObxError == "invalid_gtin" || prob.ObxError == "gtin_conflict") {
 					val = g
 				}
 				im.add("products.csv", v.row, problemColumn(prob), prob.ObxError, problemDetail(prob), val, false)

@@ -105,6 +105,29 @@ func TestImports(t *testing.T) {
 		}
 	})
 
+	t.Run("a column the file does not have keeps the field; an empty cell removes it (import rule 9)", func(t *testing.T) {
+		csv := "brand,style_number,name:en\nKestrel,KO-1001,Merino Crew Sweater\n"
+		c := counts(k.runImport(k.admin, map[string][]string{"csv": {writeTemp(t, "products.csv", []byte(csv))}}, nil))
+		if c["updated"].(float64) != 0 || c["unchanged"].(float64) != 1 {
+			t.Fatalf("a file with only the name changed the product: %v", c)
+		}
+		rec := k.admin.must(200, "GET", "/admin/api/catalog/products/KO-1001", nil)["record"].(map[string]any)["data"].(map[string]any)
+		if rec["name"].(map[string]any)["nl"] != "Merino trui met ronde hals" || rec["description"] == nil || rec["materials"] == nil || rec["care"] == nil {
+			t.Fatalf("KO-1001 lost fields whose columns the file did not have: %v", rec)
+		}
+		csv = "brand,style_number,name:en,season\nKestrel,KO-1001,Merino Crew Sweater,\n"
+		c = counts(k.runImport(k.admin, map[string][]string{"csv": {writeTemp(t, "products.csv", []byte(csv))}}, nil))
+		if c["updated"].(float64) != 1 {
+			t.Fatalf("an empty season cell: %v", c)
+		}
+		rec = k.admin.must(200, "GET", "/admin/api/catalog/products/KO-1001", nil)["record"].(map[string]any)["data"].(map[string]any)
+		if rec["season"] != nil || rec["collection"] == nil {
+			t.Fatalf("the empty cell must remove the season and keep the rest: %v", rec)
+		}
+		// Back to the fixture for the other subtests.
+		k.runImport(k.admin, k.kestrelFiles(), nil)
+	})
+
 	t.Run("package zip and images manifest give the same result", func(t *testing.T) {
 		dir := filepath.Join(specDir(t), "kestrel")
 		files := map[string][]byte{}
