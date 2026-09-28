@@ -111,15 +111,19 @@ func Render(original []byte) ([]Rendition, error) {
 	if Sniff(original) == "image/jpeg" {
 		src = applyOrientation(src, jpegOrientation(original))
 	}
-	// web: flatten on white, longest side <= 2000, never upscaled.
-	ww, wh := fit(src.Bounds().Dx(), src.Bounds().Dy(), WebMax)
-	web := image.NewRGBA(image.Rect(0, 0, ww, wh))
-	draw.Draw(web, web.Bounds(), image.NewUniform(color.White), image.Point{}, draw.Src)
-	if ww == src.Bounds().Dx() && wh == src.Bounds().Dy() {
-		draw.Draw(web, web.Bounds(), src, src.Bounds().Min, draw.Over)
-	} else {
-		draw.CatmullRom.Scale(web, web.Bounds(), src, src.Bounds(), draw.Over, nil)
+	// Flatten on white into an RGBA image (fast paths for the scalers).
+	sb := src.Bounds()
+	flat := image.NewRGBA(image.Rect(0, 0, sb.Dx(), sb.Dy()))
+	switch src.(type) {
+	case *image.YCbCr, *image.Gray, *image.CMYK:
+		draw.Draw(flat, flat.Bounds(), src, sb.Min, draw.Src) // opaque
+	default:
+		draw.Draw(flat, flat.Bounds(), image.NewUniform(color.White), image.Point{}, draw.Src)
+		draw.Draw(flat, flat.Bounds(), src, sb.Min, draw.Over)
 	}
+	// web: longest side <= 2000, never upscaled.
+	ww, wh := fit(sb.Dx(), sb.Dy(), WebMax)
+	web := resize(flat, ww, wh)
 	// square: web centred on a white square whose side is web's longest side.
 	side := max(ww, wh)
 	sq := image.NewRGBA(image.Rect(0, 0, side, side))
@@ -128,13 +132,8 @@ func Render(original []byte) ([]Rendition, error) {
 	draw.Draw(sq, image.Rectangle{Min: off, Max: off.Add(image.Pt(ww, wh))}, web, image.Point{}, draw.Src)
 	// thumb: longest side <= 600 (from web; web already has the original
 	// aspect ratio), never upscaled.
-	tw, th := fit(src.Bounds().Dx(), src.Bounds().Dy(), ThumbMax)
-	thumb := image.NewRGBA(image.Rect(0, 0, tw, th))
-	if tw == ww && th == wh {
-		draw.Draw(thumb, thumb.Bounds(), web, image.Point{}, draw.Src)
-	} else {
-		draw.CatmullRom.Scale(thumb, thumb.Bounds(), web, web.Bounds(), draw.Src, nil)
-	}
+	tw, th := fit(sb.Dx(), sb.Dy(), ThumbMax)
+	thumb := resize(web, tw, th)
 	var out []Rendition
 	for _, r := range []struct {
 		name string
@@ -147,6 +146,39 @@ func Render(original []byte) ([]Rendition, error) {
 		out = append(out, Rendition{Name: r.name, Data: buf.Bytes(), Width: r.img.Bounds().Dx(), Height: r.img.Bounds().Dy()})
 	}
 	return out, nil
+}
+
+// resize scales src to w×h: box-halving while the image is more than twice
+// the target (fast, no aliasing), then Catmull-Rom for the final step.
+func resize(src *image.RGBA, w, h int) *image.RGBA {
+	if src.Bounds().Dx() == w && src.Bounds().Dy() == h {
+		return src
+	}
+	for src.Bounds().Dx() >= 2*w && src.Bounds().Dy() >= 2*h {
+		src = halve(src)
+	}
+	dst := image.NewRGBA(image.Rect(0, 0, w, h))
+	draw.CatmullRom.Scale(dst, dst.Bounds(), src, src.Bounds(), draw.Src, nil)
+	return dst
+}
+
+// halve averages 2×2 blocks.
+func halve(src *image.RGBA) *image.RGBA {
+	w, h := src.Bounds().Dx()/2, src.Bounds().Dy()/2
+	dst := image.NewRGBA(image.Rect(0, 0, w, h))
+	sp, dp := src.Pix, dst.Pix
+	for y := 0; y < h; y++ {
+		r0 := (2 * y) * src.Stride
+		r1 := r0 + src.Stride
+		d := y * dst.Stride
+		for x := 0; x < w; x++ {
+			a, b := r0+8*x, r1+8*x
+			for c := 0; c < 4; c++ {
+				dp[d+4*x+c] = uint8((uint16(sp[a+c]) + uint16(sp[a+4+c]) + uint16(sp[b+c]) + uint16(sp[b+4+c]) + 2) / 4)
+			}
+		}
+	}
+	return dst
 }
 
 // fit scales (w,h) so the longest side is at most limit, never upscaling.
