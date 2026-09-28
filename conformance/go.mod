@@ -2,6 +2,8 @@ module github.com/openbrandexchange/node-go/conformance
 
 go 1.26.0
 
+toolchain go1.26.8
+
 require (
 	github.com/openbrandexchange/node-go v0.0.0
 	github.com/openbrandexchange/obx-go v0.0.0

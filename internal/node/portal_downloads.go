@@ -270,9 +270,6 @@ func formatMaterials(ms []MaterialPart) string {
 func (a *App) buildCSV(ctx context.Context, v *Viewer, productIDs []string, delimiter rune) ([]byte, error) {
 	langs := a.Settings(ctx).ContentLanguages()
 	names := a.brandNames(ctx)
-	type item struct {
-		p *Product
-	}
 	var products []*Product
 	full := &Viewer{Kind: v.Kind, RetailerID: v.RetailerID, BrandIDs: v.BrandIDs, OriginalAllowed: true}
 	for i := 0; i < len(productIDs); i += 100 {

@@ -63,8 +63,6 @@ func (t *ingestToken) status(now time.Time) string {
 	return "active"
 }
 
-type ingestCtxKey struct{}
-
 // ingestAPI authenticates an ingest call and checks scope.
 func (a *App) ingestAPI(scope string, h func(http.ResponseWriter, *http.Request, *ingestToken)) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {

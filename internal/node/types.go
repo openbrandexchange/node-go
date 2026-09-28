@@ -314,13 +314,6 @@ func deref(s *string) string {
 	return *s
 }
 
-func nonEmptyPtr(s string) *string {
-	if s == "" {
-		return nil
-	}
-	return &s
-}
-
 func mustJSON(v any) []byte {
 	b, err := json.Marshal(v)
 	if err != nil {

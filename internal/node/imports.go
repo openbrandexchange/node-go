@@ -217,8 +217,6 @@ func problemDetail(p *problem.Problem) string {
 
 // ---- parsing products.csv -------------------------------------------------------
 
-var productCols = []string{"brand", "style_number", "item_type", "target_group", "season", "collection", "gpc_brick", "materials", "care", "country_of_origin", "dpp_url", "status"}
-
 func (im *importer) parseProducts(data []byte) *problem.Problem {
 	t, err := importfmt.ParseCSV(data)
 	if err != nil {
