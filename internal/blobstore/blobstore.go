@@ -84,6 +84,9 @@ func NewLocal(root string) (*Local, error) {
 	return &Local{root: abs}, nil
 }
 
+// Root is the directory the files live in.
+func (l *Local) Root() string { return l.root }
+
 func (l *Local) path(key string) (string, error) {
 	clean := filepath.Clean("/" + key)
 	if strings.Contains(key, "..") || clean == "/" {

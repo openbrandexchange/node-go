@@ -84,6 +84,19 @@ func Open(url string) (*DB, error) {
 	return nil, fmt.Errorf("unsupported database URL (use sqlite:///path/obx.db or postgres://...)")
 }
 
+// SQLitePath returns the file of a sqlite: URL ("" for other databases and
+// in-memory SQLite).
+func SQLitePath(url string) string {
+	if !strings.HasPrefix(url, "sqlite:") {
+		return ""
+	}
+	path := strings.TrimPrefix(strings.TrimPrefix(url, "sqlite:"), "//")
+	if path == ":memory:" {
+		return ""
+	}
+	return path
+}
+
 func (d *DB) ping() error {
 	ctx, cancel := context.WithTimeout(context.Background(), 20*time.Second)
 	defer cancel()

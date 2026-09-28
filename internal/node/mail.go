@@ -17,6 +17,7 @@ import (
 	"time"
 
 	"github.com/openbrandexchange/node-go/internal/config"
+	"github.com/openbrandexchange/node-go/internal/db"
 	"github.com/openbrandexchange/node-go/internal/ids"
 )
 
@@ -312,11 +313,72 @@ func (a *App) text(lang, key string) string {
 // A line whose placeholders are not all filled in is left out.
 func (a *App) sendMail(ctx context.Context, to, lang, kind string, vars map[string]string) bool {
 	subject, body := a.renderMail(ctx, lang, kind, vars)
-	if err := a.Mail.Send(ctx, to, subject, body); err != nil {
-		a.Log.Warn("e-mail could not be sent", "kind", kind, "error", err)
+	sctx, cancel := context.WithTimeout(context.WithoutCancel(ctx), 30*time.Second)
+	defer cancel()
+	if err := a.Mail.Send(sctx, to, subject, body); err != nil {
+		a.Log.WarnContext(ctx, "e-mail could not be sent; it will be retried", "kind", kind, "error", err)
+		a.queueMail(ctx, to, subject, body, kind, err)
 		return false
 	}
 	return a.Mail.Configured()
+}
+
+// mailBackoff is the wait before each retry of a failed e-mail; after the
+// last one the e-mail is given up (and logged as an error).
+var mailBackoff = []time.Duration{time.Minute, 5 * time.Minute, 15 * time.Minute, time.Hour, 3 * time.Hour, 6 * time.Hour, 12 * time.Hour}
+
+// queueMail stores a failed e-mail for retries. The body holds one-time
+// links, so it is stored encrypted and removed once sent or given up.
+func (a *App) queueMail(ctx context.Context, to, subject, body, kind string, cause error) {
+	enc, err := a.Keys.Encrypt([]byte(body))
+	if err != nil {
+		return
+	}
+	_, err = a.DB.Exec(context.WithoutCancel(ctx), `INSERT INTO mail_outbox (id, recipient, subject, body_enc, kind, status, attempts, next_attempt_at, last_error, created_at) VALUES (?, ?, ?, ?, ?, 'pending', 1, ?, ?, ?)`,
+		ids.New("mal"), to, subject, enc, kind, db.Fmt(a.now().Add(mailBackoff[0])), truncate(cause.Error(), 500), a.nowStr())
+	if err != nil {
+		a.Log.ErrorContext(ctx, "e-mail could not be queued for a retry", "kind", kind, "error", err)
+	}
+}
+
+// retryMail sends due e-mails from the outbox (housekeeping).
+func (a *App) retryMail(ctx context.Context) {
+	rs, err := a.DB.Query(ctx, `SELECT id, recipient, subject, body_enc, kind, attempts FROM mail_outbox WHERE status = 'pending' AND next_attempt_at <= ? ORDER BY next_attempt_at LIMIT 20`, a.nowStr())
+	if err != nil {
+		return
+	}
+	type item struct {
+		id, to, subject, body, kind string
+		attempts                    int
+	}
+	var due []item
+	for rs.Next() {
+		var it item
+		if rs.Scan(&it.id, &it.to, &it.subject, &it.body, &it.kind, &it.attempts) == nil {
+			due = append(due, it)
+		}
+	}
+	rs.Close()
+	for _, it := range due {
+		body, err := a.Keys.Decrypt(it.body)
+		if err == nil {
+			sctx, cancel := context.WithTimeout(ctx, 30*time.Second)
+			err = a.Mail.Send(sctx, it.to, it.subject, string(body))
+			cancel()
+		}
+		if err == nil {
+			_, _ = a.DB.Exec(ctx, `UPDATE mail_outbox SET status = 'sent', body_enc = '', sent_at = ?, last_error = NULL WHERE id = ?`, a.nowStr(), it.id)
+			a.Log.Info("e-mail sent after a retry", "kind", it.kind, "attempts", it.attempts+1)
+			continue
+		}
+		if it.attempts >= len(mailBackoff) {
+			_, _ = a.DB.Exec(ctx, `UPDATE mail_outbox SET status = 'failed', body_enc = '', attempts = attempts + 1, last_error = ? WHERE id = ?`, truncate(err.Error(), 500), it.id)
+			a.Log.Error("e-mail given up after retries", "kind", it.kind, "attempts", it.attempts+1, "error", err)
+			continue
+		}
+		_, _ = a.DB.Exec(ctx, `UPDATE mail_outbox SET attempts = attempts + 1, next_attempt_at = ?, last_error = ? WHERE id = ?`,
+			db.Fmt(a.now().Add(mailBackoff[it.attempts])), truncate(err.Error(), 500), it.id)
+	}
 }
 
 func (a *App) renderMail(ctx context.Context, lang, kind string, vars map[string]string) (subject, body string) {

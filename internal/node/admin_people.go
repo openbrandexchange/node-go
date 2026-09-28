@@ -303,9 +303,19 @@ func (a *App) adminRetailerDelete(w http.ResponseWriter, r *http.Request) {
 		failP(w, "not_found", "Retailer not found.")
 		return
 	}
+	downloads := a.userDownloadIDs(ctx, `owner_id IN (SELECT id FROM users WHERE retailer_id = ?)`, ret.ID)
 	err = a.DB.WriteTx(ctx, func(tx *db.Tx) error {
+		// Everything personal goes: accounts, keys, webhooks, access
+		// requests, prepared downloads, pending e-mails. Download statistics
+		// keep the company name but lose the people; audit entries keep the
+		// action but lose the e-mail address.
 		stmts := []string{
 			`DELETE FROM sessions WHERE user_id IN (SELECT id FROM users WHERE retailer_id = ?)`,
+			`DELETE FROM mail_outbox WHERE recipient IN (SELECT email FROM users WHERE retailer_id = ?)`,
+			`UPDATE audit_log SET actor_email = NULL WHERE actor_id IN (SELECT id FROM users WHERE retailer_id = ?)`,
+			`DELETE FROM job_items WHERE job_id IN (SELECT id FROM jobs WHERE kind = 'download' AND owner_type = 'user' AND owner_id IN (SELECT id FROM users WHERE retailer_id = ?))`,
+			`DELETE FROM jobs WHERE kind = 'download' AND owner_type = 'user' AND owner_id IN (SELECT id FROM users WHERE retailer_id = ?)`,
+			`DELETE FROM access_requests WHERE retailer_id = ?`,
 			`DELETE FROM webhook_deliveries WHERE webhook_id IN (SELECT id FROM webhooks WHERE owner_type = 'client' AND owner_id IN (SELECT id FROM api_clients WHERE retailer_id = ?))`,
 			`DELETE FROM webhooks WHERE owner_type = 'client' AND owner_id IN (SELECT id FROM api_clients WHERE retailer_id = ?)`,
 			`DELETE FROM api_clients WHERE retailer_id = ?`,
@@ -324,7 +334,31 @@ func (a *App) adminRetailerDelete(w http.ResponseWriter, r *http.Request) {
 		a.fail(w, r, err)
 		return
 	}
+	a.deleteDownloadFiles(ctx, downloads)
 	w.WriteHeader(204)
+}
+
+// userDownloadIDs lists prepared download zips of users matching where.
+func (a *App) userDownloadIDs(ctx context.Context, where string, args ...any) []string {
+	var out []string
+	rs, err := a.DB.Query(ctx, `SELECT id FROM jobs WHERE kind = 'download' AND owner_type = 'user' AND `+where, args...)
+	if err != nil {
+		return nil
+	}
+	defer rs.Close()
+	for rs.Next() {
+		var id string
+		if rs.Scan(&id) == nil {
+			out = append(out, id)
+		}
+	}
+	return out
+}
+
+func (a *App) deleteDownloadFiles(ctx context.Context, jobIDs []string) {
+	for _, id := range jobIDs {
+		_ = a.Store.Delete(ctx, "downloads/"+id+".zip")
+	}
 }
 
 // ---- users and invites -------------------------------------------------------------------
@@ -554,8 +588,18 @@ func (a *App) adminUserDelete(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	a.endSessions(ctx, a.DB, u.ID, "")
-	_, _ = a.DB.Exec(ctx, `UPDATE download_events SET actor_id = NULL, actor_name = NULL WHERE actor_id = ?`, u.ID)
+	downloads := a.userDownloadIDs(ctx, `owner_id = ?`, u.ID)
+	for _, q := range []string{
+		`UPDATE download_events SET actor_id = NULL, actor_name = NULL WHERE actor_id = ?`,
+		`UPDATE audit_log SET actor_email = NULL WHERE actor_id = ?`,
+		`DELETE FROM job_items WHERE job_id IN (SELECT id FROM jobs WHERE kind = 'download' AND owner_type = 'user' AND owner_id = ?)`,
+		`DELETE FROM jobs WHERE kind = 'download' AND owner_type = 'user' AND owner_id = ?`,
+	} {
+		_, _ = a.DB.Exec(ctx, q, u.ID)
+	}
+	_, _ = a.DB.Exec(ctx, `DELETE FROM mail_outbox WHERE recipient = ?`, u.Email)
 	_, _ = a.DB.Exec(ctx, `DELETE FROM users WHERE id = ?`, u.ID)
+	a.deleteDownloadFiles(ctx, downloads)
 	w.WriteHeader(204)
 }
 

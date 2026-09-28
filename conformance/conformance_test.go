@@ -15,6 +15,7 @@ import (
 
 	"github.com/openbrandexchange/node-go/internal/config"
 	"github.com/openbrandexchange/node-go/internal/node"
+	"github.com/openbrandexchange/node-go/ui"
 	"github.com/openbrandexchange/obx-go/conformance"
 )
 
@@ -32,7 +33,7 @@ func TestConformance(t *testing.T) {
 		cfg.DatabaseURL = pg
 	}
 	log := slog.New(slog.NewTextHandler(io.Discard, nil))
-	app, err := node.New(context.Background(), cfg, nil, log)
+	app, err := node.New(context.Background(), cfg, ui.FS(), log)
 	if err != nil {
 		t.Fatal(err)
 	}

@@ -259,16 +259,26 @@ func (a *App) handleLogin(w http.ResponseWriter, r *http.Request) {
 		a.fail(w, r, err)
 		return
 	}
+	failed := func(code string) {
+		e := auditEntry{ActorType: "anonymous", Action: "session.login_failed", TargetType: "user", Status: 401, Details: map[string]any{"reason": code}}
+		if u != nil {
+			e.TargetID = u.ID
+		}
+		a.audit(ctx, e)
+	}
 	if u == nil || u.PasswordHash == nil || len(body.Password) > 200 {
 		secure.DummyPasswordCheck(body.Password)
+		failed("invalid_credentials")
 		failP(w, "invalid_credentials", "The e-mail address or password is not correct.")
 		return
 	}
 	if !secure.CheckPassword(*u.PasswordHash, body.Password) {
+		failed("invalid_credentials")
 		failP(w, "invalid_credentials", "The e-mail address or password is not correct.")
 		return
 	}
 	if u.Status == "blocked" {
+		failed("account_blocked")
 		failP(w, "account_blocked", "This account is blocked.")
 		return
 	}
@@ -288,6 +298,7 @@ func (a *App) handleLogin(w http.ResponseWriter, r *http.Request) {
 		a.fail(w, r, err)
 		return
 	}
+	a.audit(ctx, auditEntry{ActorID: u.ID, ActorEmail: u.Email, Action: "session.login", TargetType: "user", TargetID: u.ID, Status: 200})
 	writeJSON(w, 200, a.sessionJSON(ctx, &session{User: u, CSRF: csrf}, csrf))
 }
 

@@ -558,6 +558,11 @@ func (im *importer) planImages(images []*imageSource, assetRows map[string]*asse
 	}
 }
 
+// colourlessCode stands for "all colours" in image file names and asset
+// external ids: KO-1001_ALL_1.jpg is an image of the style, not of one
+// colour (docs/import-format.md).
+const colourlessCode = "ALL"
+
 func (im *importer) imageDoc(base string, ar *assetRowInfo) (*productPlan, map[string]any, *cellErr) {
 	n, perr := importfmt.ParseImageName(base)
 	style, color, pos, role, view := "", "", 0, "", ""
@@ -609,11 +614,17 @@ func (im *importer) imageDoc(base string, ar *assetRowInfo) (*productPlan, map[s
 	var colorOut any
 	if color != "" {
 		spelled, ok := plan.colors[strings.ToLower(color)]
-		if !ok {
+		switch {
+		case ok:
+			colorOut = spelled
+			color = spelled
+		case strings.EqualFold(color, colourlessCode):
+			// {style}_ALL_{position}: an image for every colour of the style
+			// (a real colour code ALL wins over this meaning).
+			color = ""
+		default:
 			return nil, nil, &cellErr{"", "unknown_parent", fmt.Sprintf("colour %s of style %s is not in the catalog", color, plan.style), color}
 		}
-		colorOut = spelled
-		color = spelled
 	}
 	doc["color_code"] = colorOut
 	if role == "" {
@@ -623,10 +634,10 @@ func (im *importer) imageDoc(base string, ar *assetRowInfo) (*productPlan, map[s
 	if view != "" {
 		doc["view"] = view
 	}
-	ext := plan.style + "_" + color + "_" + strconv.Itoa(pos)
 	if color == "" {
-		ext = plan.style + "_" + strconv.Itoa(pos)
+		color = colourlessCode
 	}
+	ext := plan.style + "_" + color + "_" + strconv.Itoa(pos)
 	if ar != nil {
 		if v := r.Get("asset_id"); v != "" {
 			ext = v

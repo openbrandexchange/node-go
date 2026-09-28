@@ -182,7 +182,14 @@ func (a *App) adminAPI(role string, h http.HandlerFunc) http.HandlerFunc {
 		if s != nil {
 			ctx = context.WithValue(ctx, sessionKey, s)
 		}
-		h(w, r.WithContext(ctx))
+		r = r.WithContext(ctx)
+		if auditable(r) {
+			rec := &statusRecorder{ResponseWriter: w, status: 200}
+			h(rec, r)
+			a.auditRequest(r, s, rec.status)
+			return
+		}
+		h(w, r)
 	}
 }
 

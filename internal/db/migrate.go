@@ -138,9 +138,42 @@ CREATE INDEX download_events_retailer ON download_events(retailer_id, at);
 CREATE TABLE idempotency (scope TEXT NOT NULL, key TEXT NOT NULL, request_hash TEXT NOT NULL, status INTEGER NOT NULL,
   body TEXT NOT NULL, created_at TEXT NOT NULL, PRIMARY KEY (scope, key));
 `,
+	// 2: audit log, e-mail outbox with retries, indexes for the portal's
+	// per-product reads and its style-number order (docs/performance.md)
+	`
+CREATE INDEX variants_product_visible ON variants(product_id, visible, external_id);
+CREATE INDEX assets_product_visible ON assets(product_id, visible);
+CREATE INDEX products_visible_style ON products(visible, style_number, id);
+CREATE INDEX variants_visible_color ON variants(visible, color_code, product_id, id);
+
+CREATE TABLE audit_log (
+  id TEXT PRIMARY KEY, at TEXT NOT NULL, actor_type TEXT NOT NULL, actor_id TEXT, actor_email TEXT,
+  action TEXT NOT NULL, target_type TEXT, target_id TEXT, status INTEGER, request_id TEXT, details TEXT);
+CREATE INDEX audit_log_at ON audit_log(at);
+CREATE INDEX audit_log_actor ON audit_log(actor_id);
+
+CREATE TABLE mail_outbox (
+  id TEXT PRIMARY KEY, recipient TEXT NOT NULL, subject TEXT NOT NULL, body_enc TEXT NOT NULL, kind TEXT NOT NULL,
+  status TEXT NOT NULL, attempts INTEGER NOT NULL DEFAULT 0, next_attempt_at TEXT NOT NULL, last_error TEXT,
+  created_at TEXT NOT NULL, sent_at TEXT);
+CREATE INDEX mail_outbox_due ON mail_outbox(status, next_attempt_at);
+`,
 }
 
-// Migrate applies pending migrations.
+// SchemaVersion is the newest schema this binary knows.
+func SchemaVersion() int { return len(migrations) }
+
+// ErrSchemaTooNew means the database was migrated by a newer release.
+type ErrSchemaTooNew struct{ Database, Binary int }
+
+func (e *ErrSchemaTooNew) Error() string {
+	return fmt.Sprintf("the database has schema version %d but this node-go knows only up to %d: it was upgraded by a newer release. "+
+		"Run that release (or newer) again; to go back to this version, restore the backup made before the upgrade (docs/operations.md)", e.Database, e.Binary)
+}
+
+// Migrate applies pending migrations. Migrations only move forward: each
+// runs once, in its own transaction, and a database newer than this binary
+// is refused instead of being used with the wrong schema.
 func (d *DB) Migrate(ctx context.Context) error {
 	if _, err := d.SQL.ExecContext(ctx, `CREATE TABLE IF NOT EXISTS schema_migrations (version INTEGER PRIMARY KEY, applied_at TEXT NOT NULL)`); err != nil {
 		return err
@@ -148,6 +181,9 @@ func (d *DB) Migrate(ctx context.Context) error {
 	var current int
 	if err := d.SQL.QueryRowContext(ctx, `SELECT COALESCE(MAX(version),0) FROM schema_migrations`).Scan(&current); err != nil {
 		return err
+	}
+	if current > len(migrations) {
+		return &ErrSchemaTooNew{Database: current, Binary: len(migrations)}
 	}
 	for i := current; i < len(migrations); i++ {
 		ddl := migrations[i]
