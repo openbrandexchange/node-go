@@ -262,8 +262,8 @@ func TestAccessRequestsAndRetailers(t *testing.T) {
 			t.Fatalf("metadata address: %d %s", r.Status, r.Body)
 		}
 		src := admin.must(201, "POST", "/admin/api/import-sources", map[string]any{"name": "Nightly bucket", "kind": "s3",
-			"schedule": map[string]any{"frequency": "daily", "time": "02:30", "timezone": "Europe/Amsterdam"},
-			"config":   map[string]any{"region": "eu-west-1", "bucket": "kestrel-exports", "prefix": "obx/"},
+			"schedule":    map[string]any{"frequency": "daily", "time": "02:30", "timezone": "Europe/Amsterdam"},
+			"config":      map[string]any{"region": "eu-west-1", "bucket": "kestrel-exports", "prefix": "obx/"},
 			"credentials": map[string]any{"access_key_id": "AKIAFAKE", "secret_access_key": "super-secret-value"}})
 		validate(t, "ImportSource", src)
 		body := string(mustJSON(src))
