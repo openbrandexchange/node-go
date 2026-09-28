@@ -6,6 +6,7 @@ import (
 	"context"
 	"encoding/csv"
 	"net/http"
+	"slices"
 	"strings"
 	"testing"
 	"testing/fstest"
@@ -474,5 +475,45 @@ func TestUIServing(t *testing.T) {
 	_, body = n.app.renderMail(context.Background(), "en", mailAccessRejected, map[string]string{"reason": ""})
 	if strings.Contains(body, "Explanation") || !strings.Contains(body, "Hello,") {
 		t.Errorf("rejected body:\n%s", body)
+	}
+}
+
+// A setup code copied from a log or typed over from a phone works in any case,
+// with spaces instead of dashes, or without its dashes.
+func TestSetupCodeTypedLoosely(t *testing.T) {
+	for _, typed := range []string{" test setup code ", "Test-Setup-Code"} {
+		n := newTestNode(t)
+		c := n.client()
+		c.session()
+		c.must(201, "POST", "/admin/api/setup", map[string]any{"setup_code": typed,
+			"company": map[string]any{"name": "Kestrel Outfitters", "default_language": "en"},
+			"admin":   map[string]any{"name": "Ada", "email": "ada@kestrel.example", "password": "a long enough password"}})
+	}
+	for typed, want := range map[string]string{"k7qx 9m2p vt4c": "K7QX-9M2P-VT4C", "K7QX9M2PVT4C": "K7QX-9M2P-VT4C", " k7qx-9m2p-vt4c": "K7QX-9M2P-VT4C"} {
+		found := false
+		for _, c := range setupCodeCandidates(typed) {
+			found = found || c == want
+		}
+		if !found {
+			t.Errorf("%q does not match the generated code %s: %v", typed, want, setupCodeCandidates(typed))
+		}
+	}
+	if slices.Contains(setupCodeCandidates("K7QX-9M2P-VT4"), "K7QX-9M2P-VT4C") {
+		t.Error("a code with a character missing must not match")
+	}
+}
+
+func TestMailTextFullStops(t *testing.T) {
+	vars := map[string]string{"brand": "Kestrel Outfitters B.V.", "portal": "Beeldbank"}
+	for in, want := range map[string]string{
+		"Bedankt voor je aanvraag bij {{brand}}.": "Bedankt voor je aanvraag bij Kestrel Outfitters B.V.",
+		"{{brand}}. Tot ziens.":                   "Kestrel Outfitters B.V. Tot ziens.",
+		"{{portal}}.":                             "Beeldbank.",
+		"{{brand}}, {{missing}}.":                 "Kestrel Outfitters B.V., {{missing}}.",
+		"{brand}!":                                "Kestrel Outfitters B.V.!",
+	} {
+		if got := interpolate(in, vars); got != want {
+			t.Errorf("interpolate(%q) = %q, want %q", in, got, want)
+		}
 	}
 }

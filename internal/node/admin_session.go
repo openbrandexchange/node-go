@@ -98,8 +98,13 @@ func (a *App) handleSetup(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	want, _ := getMeta(ctx, a.DB, "setup_code_hash")
-	code := strings.ToUpper(strings.TrimSpace(body.SetupCode))
-	if want == "" || !(secure.Equal(want, secure.HashToken(body.SetupCode)) || secure.Equal(want, secure.HashToken(code))) {
+	matched := false
+	for _, c := range setupCodeCandidates(body.SetupCode) {
+		if want != "" && secure.Equal(want, secure.HashToken(c)) {
+			matched = true
+		}
+	}
+	if !matched {
 		failP(w, "forbidden", "The setup code is not correct. You find it in the node's log.")
 		return
 	}
@@ -561,4 +566,23 @@ func (a *App) handleMe(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	writeJSON(w, 200, a.sessionJSON(ctx, s, s.CSRF))
+}
+
+// setupCodeCandidates lists the ways a typed setup code may be meant: as typed,
+// in capitals, with spaces instead of dashes, or without the dashes of a
+// generated code ("k7qx 9m2p vt4c" and "K7QX9M2PVT4C" both mean "K7QX-9M2P-VT4C").
+// People copy the code from a log or read it aloud, so the form should not matter.
+func setupCodeCandidates(typed string) []string {
+	up := strings.ToUpper(strings.TrimSpace(typed))
+	out := []string{typed, up, strings.Join(strings.Fields(up), "-")}
+	var alnum strings.Builder
+	for _, r := range up {
+		if (r >= 'A' && r <= 'Z') || (r >= '0' && r <= '9') {
+			alnum.WriteRune(r)
+		}
+	}
+	if s := alnum.String(); len(s) == 12 {
+		out = append(out, s[0:4]+"-"+s[4:8]+"-"+s[8:12])
+	}
+	return out
 }
