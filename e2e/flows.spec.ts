@@ -173,6 +173,24 @@ test('the brand creates an API key for a retailer and allows self-service keys',
   expect(problems).toEqual([])
 })
 
+test('an invitation to a shop in Germany is written in German', async ({ page }) => {
+  const problems = watch(page)
+  await logIn(page, admin)
+  await page.getByRole('link', { name: 'Retailers' }).first().click()
+  await page.getByRole('link', { name: 'Add retailer' }).first().click()
+  await page.getByLabel('Shop or company name').fill('Modehaus Adler')
+  await page.getByLabel('Country').selectOption('DE')
+  await page.getByRole('button', { name: 'Add retailer' }).click()
+  // The language of the e-mail follows the shop's country; the brand admin works in English.
+  await expect(page.getByLabel('Language of the email')).toHaveValue('de')
+  await page.getByLabel('Email address').fill('jana@adler.example')
+  await page.getByRole('button', { name: 'Invite', exact: true }).click()
+  await expect(page.getByText(/Send this link to jana@adler.example yourself/)).toBeVisible()
+  const { readFile } = await import('node:fs/promises')
+  await expect.poll(async () => (await readFile(NODE_LOG, 'utf8')).split('\n').find((l) => l.includes('jana@adler.example') && l.includes('lädt Sie')) ?? '').not.toBe('')
+  expect(problems).toEqual([])
+})
+
 test('the retailer creates an API key for their software', async ({ page }) => {
   const problems = watch(page)
   await logIn(page, retailer)

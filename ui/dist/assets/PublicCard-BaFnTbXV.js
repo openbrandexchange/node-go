@@ -1,0 +1,1 @@
+import{j as s}from"./index-BlLdxFJA.js";function i({title:t,intro:e,children:a}){return s.jsxs("div",{className:"card space-y-5 p-6 sm:p-8",children:[s.jsxs("div",{className:"space-y-1.5",children:[s.jsx("h1",{className:"text-xl font-semibold tracking-tight",children:t}),e&&s.jsx("p",{className:"text-sm text-stone-600",children:e})]}),a]})}export{i as P};

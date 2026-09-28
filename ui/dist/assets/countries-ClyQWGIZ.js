@@ -1,1 +1,0 @@
-const E=["AT","BE","BG","HR","CY","CZ","DK","EE","FI","FR","DE","GR","HU","IE","IT","LV","LT","LU","MT","NL","PL","PT","RO","SK","SI","ES","SE","IS","LI","NO","CH","GB","AD","MC","SM","AL","BA","ME","MK","RS","TR","UA","US","CA","AU","JP"];export{E as C};
