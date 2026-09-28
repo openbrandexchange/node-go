@@ -7,6 +7,17 @@ are always forward-only and applied automatically on start.
 
 ## [Unreleased]
 
+### Changed
+
+- The web interface is admin-ui 0.1.1 (commit cbadb55).
+- The web interface is served under admin-ui's strict Content-Security-Policy: no inline styles and
+  no fonts from other hosts.
+
+### Fixed
+
+- A missing file under `/assets/` or `/locales/` is a 404, also when the browser accepts HTML, so a
+  tab left open during an upgrade reloads once instead of reading the start page as code.
+
 ## [0.1.0] - 2026-09-28
 
 First release. Implements Open Brand Exchange protocol 0.1 (read API, ingest API, node admin and
