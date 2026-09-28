@@ -350,6 +350,13 @@ func TestBackupAndRestore(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+	if k.app.DB.Dialect != db.SQLite {
+		// PostgreSQL is backed up with pg_dump; the manifest says so.
+		if !strings.Contains(m.Database, "pg_dump") || m.Files != "blobs" {
+			t.Fatalf("manifest on PostgreSQL: %+v", m)
+		}
+		t.Skip("restore of the SQLite file is tested on SQLite")
+	}
 	if m.Database != "obx.db" || m.Files != "blobs" || m.FileCount == 0 {
 		t.Fatalf("manifest: %+v", m)
 	}
