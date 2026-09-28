@@ -333,6 +333,11 @@ func TestIngestFilesAndValidation(t *testing.T) {
 		if prod := ing.must(200, "GET", "/obx/v1/ingest/products/V-1", nil); prod["missing_files"] != nil {
 			t.Errorf("missing_files is for assets only: %v", prod["missing_files"])
 		}
+		// Writing back what GET returned (defaults and the node's own
+		// renditions spelled out) changes nothing.
+		if back := ing.must(200, "PUT", "/obx/v1/ingest/assets/V-1_BLK_1", rec["data"]); back["result"] != "unchanged" {
+			t.Errorf("GET then PUT of the same data: %v", back["result"])
+		}
 		r = ing.do("PUT", "/obx/v1/ingest/products/V-1", map[string]any{"style_number": "V-1", "name": map[string]any{"en": "x"}}, "If-Match", `"nope"`)
 		if r.Status != 412 {
 			t.Errorf("if-match: %d", r.Status)

@@ -350,6 +350,20 @@ func (w *writer) prepare(kind, ext string, doc map[string]any, existing *row) (*
 				}
 				d.Files[name] = ref
 			}
+			// The record lists the renditions the node made itself; sending
+			// them back is not a client-supplied rendition (round trip).
+			if orig, ok := d.Files["original"]; ok {
+				for _, n := range DerivedRenditions {
+					ref, ok := d.Files[n]
+					if !ok {
+						continue
+					}
+					var own string
+					if w.tx.QueryRow(w.ctx, `SELECT sha256 FROM renditions WHERE original_sha = ? AND name = ?`, orig.SHA256, n).Scan(&own) == nil && own == ref.SHA256 {
+						delete(d.Files, n)
+					}
+				}
+			}
 			if len(d.Files) == 0 {
 				d.Files = nil
 			}
