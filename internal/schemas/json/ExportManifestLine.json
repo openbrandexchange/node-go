@@ -162,7 +162,7 @@
         },
         "path": {
           "type": "string",
-          "description": "Path inside the zip part: <style_number>/<rendition>/<filename>.",
+          "description": "Path inside the zip part: `<style_number>/<rendition>/<filename>`.",
           "maxLength": 1024
         },
         "bytes": {

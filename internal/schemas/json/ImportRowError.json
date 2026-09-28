@@ -14,7 +14,7 @@
         "integer",
         "null"
       ],
-      "description": "1-based data row (header = row 0); null for image files.",
+      "description": "1-based data row; null for header, file-level and image-file problems.",
       "minimum": 1
     },
     "column": {

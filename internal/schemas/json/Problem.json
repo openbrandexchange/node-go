@@ -7,7 +7,7 @@
   "properties": {
     "type": {
       "type": "string",
-      "description": "URI identifying the problem type: https://openbrandexchange.com/errors/<obx_error>.",
+      "description": "URI identifying the problem type: `https://openbrandexchange.com/errors/<obx_error>`.",
       "format": "uri"
     },
     "title": {

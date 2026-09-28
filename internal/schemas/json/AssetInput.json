@@ -3,7 +3,7 @@
   "$id": "https://openbrandexchange.com/schemas/v0.1/AssetInput.json",
   "type": "object",
   "title": "AssetInput",
-  "description": "Ingest write model for an asset. Key: external_id (path); filename-pattern convention = <style>_<color>_<position>.",
+  "description": "Ingest write model for an asset. Key: external_id (path); filename-pattern convention = `<style>_<color>_<position>`.",
   "properties": {
     "product_external_id": {
       "$ref": "Common.json#/$defs/ExternalId"
@@ -53,7 +53,7 @@
         "string",
         "null"
       ],
-      "description": "Download filename; default <external_id>.<ext>.",
+      "description": "Download filename; default `<external_id>.<ext>`.",
       "maxLength": 255
     },
     "alt_text": {

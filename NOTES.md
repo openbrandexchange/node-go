@@ -1,6 +1,6 @@
 # Implementation notes (node-go)
 
-Decisions taken where the [spec](https://github.com/openbrandexchange/spec) (v0.1.0-draft, fixtures synced from commit in `testdata/spec/SPEC_COMMIT`) left room, and extensions the shared admin-ui may rely on. Each is the simplest reading; challenge them with an issue.
+Decisions taken where the [spec](https://github.com/openbrandexchange/spec) (v0.1.0, fixtures synced from commit in `testdata/spec/SPEC_COMMIT`) left room, and extensions the shared admin-ui may rely on. Each is the simplest reading; challenge them with an issue.
 
 ## Status
 

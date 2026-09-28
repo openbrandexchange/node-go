@@ -26,7 +26,7 @@ import (
 // Software and Version identify this implementation in discovery.
 const (
 	Software    = "obx-node-go"
-	SpecVersion = "0.1.0-draft"
+	SpecVersion = "0.1.0"
 	OBXVersion  = "0.1"
 )
 

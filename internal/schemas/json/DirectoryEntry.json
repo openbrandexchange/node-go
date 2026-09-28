@@ -17,7 +17,7 @@
     },
     "discovery_url": {
       "$ref": "Common.json#/$defs/Url",
-      "description": "https://<host>/.well-known/obx"
+      "description": "`https://<host>/.well-known/obx`"
     },
     "website": {
       "anyOf": [

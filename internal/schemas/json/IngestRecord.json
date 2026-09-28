@@ -42,7 +42,7 @@
     },
     "data": {
       "type": "object",
-      "description": "The stored write model (BrandInput/ProductInput/VariantInput/AssetInput) with defaults applied. For assets 'files' lists the current blobs."
+      "description": "The stored write model (BrandInput/ProductInput/VariantInput/AssetInput) with defaults applied. For assets: `rights` is the full effective Rights object (node default rights merged with the fields the brand sent), `provenance` the full Provenance with its defaults, and `files` lists every current blob (original and web/square/thumb, including renditions the node made itself) with sha256, width and height."
     },
     "missing_files": {
       "type": [
@@ -52,7 +52,7 @@
       "items": {
         "$ref": "Common.json#/$defs/RenditionName"
       },
-      "description": "Assets only: files still required before the asset becomes visible."
+      "description": "Present for assets only (an empty array when nothing is missing); omitted for brands, products and variants. Files still required before the asset becomes visible."
     }
   },
   "required": [
