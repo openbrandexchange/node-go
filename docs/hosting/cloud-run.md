@@ -20,6 +20,8 @@ git clone https://github.com/openbrandexchange/node-go && cd node-go
 ./deploy/cloudrun.sh
 ```
 
+Want to see first what it will do? `DRY_RUN=1 ./deploy/cloudrun.sh` prints every `gcloud` command a real run executes and changes nothing; it works without the Google Cloud CLI too.
+
 That is the whole deployment. It takes a few minutes the first time (Cloud Build builds the image) and ends with:
 
 ```

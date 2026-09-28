@@ -29,11 +29,30 @@
 #   SMTP_URL, MAIL_FROM  e-mail (stored as a secret / plain setting)
 #   ALWAYS_ON  1 (default) keeps one instance running so scheduled imports,
 #              webhooks and background downloads run on time; 0 scales to zero.
+#   DRY_RUN    1 prints the gcloud commands a real run would execute and
+#              changes nothing (no Google Cloud CLI or account needed).
 set -euo pipefail
 
 GCLOUD="${GCLOUD:-gcloud}"
-command -v "$GCLOUD" >/dev/null || { echo "Install the Google Cloud CLI first: https://cloud.google.com/sdk/docs/install (or use Cloud Shell)" >&2; exit 1; }
-g() { "$GCLOUD" "$@"; }
+DRY_RUN="${DRY_RUN:-0}"
+if [ "$DRY_RUN" = "1" ]; then
+  echo "Dry run: nothing is created or changed. These are the commands a real run executes:"
+  # Prints each command (to stderr, so values the script reads stay clean) and
+  # answers the few questions the script asks as if nothing exists yet.
+  g() {
+    { printf '  gcloud'; printf ' %s' "$@"; printf '\n'; } >&2
+    case " $* " in
+      *" config get-value project "*) { command -v "$GCLOUD" >/dev/null && "$GCLOUD" config get-value project 2>/dev/null; } || echo "your-project-id" ;;
+      *" projects describe "*) echo "PROJECT_NUMBER" ;;
+      *" secrets versions access "*) echo "(the code is shown here after a real run)" ;;
+      *" secrets create "*|*" secrets versions add "*) cat >/dev/null ;;
+      *" describe "*) return 1 ;;
+    esac
+  }
+else
+  command -v "$GCLOUD" >/dev/null || { echo "Install the Google Cloud CLI first: https://cloud.google.com/sdk/docs/install (or use Cloud Shell). To only see what this script would do: DRY_RUN=1 $0" >&2; exit 1; }
+  g() { "$GCLOUD" "$@"; }
+fi
 
 PROJECT="${PROJECT:-$(g config get-value project 2>/dev/null || true)}"
 if [ -z "$PROJECT" ] || [ "$PROJECT" = "(unset)" ]; then
@@ -138,6 +157,10 @@ g run deploy "$SERVICE" --project "$PROJECT" --region "$REGION" --source "$HERE"
   --set-env-vars "$ENV_VARS" --set-secrets "$SECRETS" "${EXTRA[@]}"
 
 echo
+if [ "$DRY_RUN" = "1" ]; then
+  echo "Dry run finished: nothing was created or changed. Run it again without DRY_RUN=1 to deploy."
+  exit 0
+fi
 echo "Your brand portal runs at: ${RUN_URL}"
 [ "$PUBLIC_URL" = "$RUN_URL" ] || echo "Public address (after the domain mapping below): ${PUBLIC_URL}"
 echo "First-run setup code:      $(g secrets versions access latest --secret "${SERVICE}-setup-code" --project "$PROJECT")"

@@ -39,6 +39,14 @@ run() { # name, env...
   grep -q "Your brand portal runs at: https://brand-portal-123456789012.europe-west4.run.app" "$WORK/$name.out" \
     || { echo "FAIL $name: unexpected output"; cat "$WORK/$name.out"; exit 1; }
 }
+# DRY_RUN=1 needs no gcloud at all, calls nothing, prints the deploy command
+# and never prints a secret value.
+dry="$(DRY_RUN=1 GCLOUD="$WORK/no-gcloud" PROJECT=demo-project SMTP_URL='smtp://u:very-secret@smtp.example:587' "$HERE/deploy/cloudrun.sh" 2>&1)" \
+  || { echo "FAIL dry run: exit $?"; echo "$dry"; exit 1; }
+echo "$dry" | grep -q "gcloud run deploy brand-portal --project demo-project" || { echo "FAIL dry run: no deploy command"; echo "$dry"; exit 1; }
+echo "$dry" | grep -q "nothing was created or changed" || { echo "FAIL dry run: no closing line"; exit 1; }
+if echo "$dry" | grep -q "very-secret"; then echo "FAIL dry run: printed a secret"; exit 1; fi
+
 run first
 run update SHIM_EXISTS=1 DOMAIN=images.kestrel.example DATABASE_URL='postgres://p:x@/db?host=/cloudsql/demo-project:europe-west4:db' \
   CLOUDSQL_INSTANCE=demo-project:europe-west4:db SMTP_URL='smtp://u:p@smtp.example:587' MAIL_FROM=portal@kestrel.example ALWAYS_ON=0 MEMORY=4Gi

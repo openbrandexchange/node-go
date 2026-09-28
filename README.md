@@ -41,13 +41,15 @@ To see the retailer side, click **View as retailer**, or invite yourself under *
 
 Everything is stored in `./data` with Go, or in the Docker volume `obx-local-data`.
 
+A scheduled import only fetches from `https://` addresses outside your own network. To try one on your own computer, against a file served from it or a local SFTP or MinIO server, start the portal with `OBX_ALLOW_PRIVATE_URLS=true` (for example under `environment:` in `docker-compose.local.yml`) and use `http://host.docker.internal:<port>/…` as the address. Never set it on a real server.
+
 ## Put it online
 
 Each option is one command; the guides explain domain names, e-mail and backups.
 
 | Where | Command | Guide |
 |---|---|---|
-| Google Cloud Run | `./deploy/cloudrun.sh` | [docs/hosting/cloud-run.md](docs/hosting/cloud-run.md) |
+| Google Cloud Run | `./deploy/cloudrun.sh` (`DRY_RUN=1` first to only see the commands) | [docs/hosting/cloud-run.md](docs/hosting/cloud-run.md) |
 | Your own server with Docker (automatic HTTPS) | `DOMAIN=images.yourbrand.com ADMIN_EMAIL=you@yourbrand.com docker compose up -d` | [docs/hosting/docker.md](docs/hosting/docker.md) |
 | Fly.io | `./deploy/fly.sh your-portal` | [docs/hosting/fly.md](docs/hosting/fly.md) |
 | Railway or Render | deploy this repository (the config files are included) | [docs/hosting/railway-render.md](docs/hosting/railway-render.md) |

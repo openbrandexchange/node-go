@@ -7,6 +7,11 @@ are always forward-only and applied automatically on start.
 
 ## [Unreleased]
 
+### Added
+
+- `DRY_RUN=1 ./deploy/cloudrun.sh` prints the `gcloud` commands a real run executes and changes
+  nothing; it works without the Google Cloud CLI.
+
 ### Changed
 
 - The web interface is admin-ui 0.1.1 (commit cbadb55).
@@ -14,6 +19,11 @@ are always forward-only and applied automatically on start.
   no fonts from other hosts.
 
 ### Fixed
+
+- The setup code is accepted in lowercase, with spaces instead of dashes, or without dashes.
+- E-mails no longer show a double full stop after a company name that ends in one ("B.V..").
+- A successful connection test of a scheduled import no longer adds an English line under the
+  translated result.
 
 - A missing file under `/assets/` or `/locales/` is a 404, also when the browser accepts HTML, so a
   tab left open during an upgrade reloads once instead of reading the start page as code.
