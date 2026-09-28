@@ -20,7 +20,7 @@ func (a *App) Handler() http.Handler {
 	a.routes(mux)
 	var h http.Handler = mux
 	h = a.middleware(mux, h)
-	return a.logRequests(a.recoverPanics(h))
+	return withRequestID(a.logRequests(a.recoverPanics(h)))
 }
 
 // recoverPanics turns a handler panic into a 500 problem.
@@ -31,7 +31,7 @@ func (a *App) recoverPanics(next http.Handler) http.Handler {
 				if v == http.ErrAbortHandler {
 					panic(v)
 				}
-				a.Log.Error("panic", "method", r.Method, "path", r.URL.Path, "panic", v, "stack", string(debug.Stack()))
+				a.Log.ErrorContext(r.Context(), "panic", "method", r.Method, "path", r.URL.Path, "panic", v, "stack", string(debug.Stack()))
 				problem.Write(w, problem.New("internal_error", "An unexpected error occurred."))
 			}
 		}()
@@ -208,14 +208,12 @@ func (a *App) routes(m *http.ServeMux) {
 	m.HandleFunc("POST /admin/api/portal/api-clients/{id}/rotate", anyUser(a.handlePortalClientRotate))
 	m.HandleFunc("DELETE /admin/api/portal/api-clients/{id}", anyUser(a.handlePortalClientRevoke))
 
-	m.HandleFunc("GET /healthz", func(w http.ResponseWriter, r *http.Request) {
-		if err := a.DB.SQL.PingContext(r.Context()); err != nil {
-			http.Error(w, "database unavailable", 503)
-			return
-		}
-		w.Header().Set("Content-Type", "text/plain")
-		_, _ = w.Write([]byte("ok\n"))
-	})
+	m.HandleFunc("GET /healthz", a.handleHealthz)
+	m.HandleFunc("GET /readyz", a.handleReadyz)
+	m.HandleFunc("GET /metrics", a.handleMetrics)
+	m.HandleFunc("GET /admin/api/audit-log", adm(a.handleAuditLog))
+	m.HandleFunc("GET /admin/api/retailers/{id}/personal-data", adm(a.handleRetailerPersonalData))
+	m.HandleFunc("GET /admin/api/me/personal-data", anyUser(a.handleMyPersonalData))
 
 	// Catch-alls: API paths answer problem+json; everything else is the UI.
 	m.HandleFunc("/obx/", func(w http.ResponseWriter, r *http.Request) { a.apiFallback(m, w, r) })
@@ -243,20 +241,16 @@ func (a *App) apiFallback(m *http.ServeMux, w http.ResponseWriter, r *http.Reque
 func (a *App) middleware(_ *http.ServeMux, next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		h := w.Header()
-		h.Set("X-Content-Type-Options", "nosniff")
-		h.Set("Referrer-Policy", "strict-origin-when-cross-origin")
 		p := r.URL.Path
 		isProtocol := strings.HasPrefix(p, "/obx/") || p == "/.well-known/obx"
+		isUI := !isProtocol && !strings.HasPrefix(p, "/admin/api/") && !quietPaths[p]
+		a.securityHeaders(h, isUI)
 		if isProtocol {
 			h.Set("OBX-Version", OBXVersion)
 			if !a.SetupDone(r.Context()) {
 				problem.Write(w, problem.New("setup_required", "This node has not been set up yet.").WithStatus(503))
 				return
 			}
-		}
-		if !isProtocol && !strings.HasPrefix(p, "/admin/api/") {
-			h.Set("X-Frame-Options", "DENY")
-			h.Set("Content-Security-Policy", "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'")
 		}
 		next.ServeHTTP(w, r)
 	})
@@ -298,8 +292,17 @@ func (a *App) serveUI(w http.ResponseWriter, r *http.Request) {
 	_, _ = w.Write(b)
 }
 
-// Start launches the background workers.
+// Start launches the background workers. With SQLite the node is the only
+// instance, so jobs that were running when the previous process stopped are
+// queued again right away (every job kind is safe to run again).
 func (a *App) Start() {
+	if a.DB.Dialect == db.SQLite {
+		if res, err := a.DB.Exec(context.Background(), `UPDATE jobs SET status = 'queued', lease_until = NULL WHERE status = 'running'`); err == nil {
+			if n, _ := res.RowsAffected(); n > 0 {
+				a.Log.Info("resuming jobs interrupted by the last shutdown", "jobs", n)
+			}
+		}
+	}
 	for i := 0; i < a.Cfg.Workers; i++ {
 		a.wg.Add(1)
 		go a.workerLoop()
@@ -337,12 +340,17 @@ func (a *App) housekeepingLoop() {
 		n++
 		a.scheduleDue(ctx)
 		a.expireAssets(ctx)
+		a.retryMail(ctx)
 		if n%10 == 1 {
 			a.renderSweep(ctx)
 			a.cleanup(ctx)
 		}
 		if n%120 == 1 {
 			a.pruneChanges(ctx)
+			if a.DB.Dialect == db.SQLite {
+				// Keeps the query planner's statistics current (cheap).
+				_, _ = a.DB.Exec(ctx, `PRAGMA optimize`)
+			}
 		}
 	}
 }
@@ -381,7 +389,13 @@ func (a *App) cleanup(ctx context.Context) {
 	now := a.nowStr()
 	_, _ = a.DB.Exec(ctx, `DELETE FROM sessions WHERE expires_at < ?`, now)
 	_, _ = a.DB.Exec(ctx, `DELETE FROM idempotency WHERE created_at < ?`, db.Fmt(a.now().Add(-25*time.Hour)))
-	_, _ = a.DB.Exec(ctx, `DELETE FROM webhook_deliveries WHERE created_at < ? AND status <> 'pending'`, db.Fmt(a.now().Add(-8*24*time.Hour)))
+	days := func(n int) string { return db.Fmt(a.now().AddDate(0, 0, -n)) }
+	_, _ = a.DB.Exec(ctx, `DELETE FROM webhook_deliveries WHERE created_at < ? AND status <> 'pending'`, days(a.Cfg.WebhookLogRetentionDays))
+	_, _ = a.DB.Exec(ctx, `DELETE FROM audit_log WHERE at < ?`, days(a.Cfg.AuditRetentionDays))
+	_, _ = a.DB.Exec(ctx, `DELETE FROM mail_outbox WHERE status <> 'pending' AND created_at < ?`, days(7))
+	// Rejected access requests hold contact details of people who never
+	// became customers.
+	_, _ = a.DB.Exec(ctx, `DELETE FROM access_requests WHERE status = 'rejected' AND decided_at < ?`, days(a.Cfg.AccessRequestRetentionDays))
 	rs, err := a.DB.Query(ctx, `SELECT id FROM uploads WHERE status = 'open' AND expires_at < ?`, now)
 	if err == nil {
 		var list []string
@@ -417,10 +431,12 @@ func (a *App) cleanup(ctx context.Context) {
 			_, _ = a.DB.Exec(ctx, `UPDATE jobs SET status = 'expired' WHERE id = ?`, x.id)
 		}
 	}
-	// Jobs and their items are kept 30 days.
-	old := db.Fmt(a.now().Add(-30 * 24 * time.Hour))
+	// Finished jobs and their items (batch results, import errors) are kept
+	// OBX_JOB_RETENTION_DAYS.
+	old := days(a.Cfg.JobRetentionDays)
 	_, _ = a.DB.Exec(ctx, `DELETE FROM job_items WHERE job_id IN (SELECT id FROM jobs WHERE created_at < ? AND kind IN ('batch', 'export', 'download'))`, old)
 	_, _ = a.DB.Exec(ctx, `DELETE FROM jobs WHERE created_at < ? AND kind IN ('batch', 'export', 'download')`, old)
-	// Download statistics keep IPs nowhere; events are kept for a year.
-	_, _ = a.DB.Exec(ctx, `DELETE FROM download_events WHERE at < ?`, db.Fmt(a.now().AddDate(-1, 0, -7)))
+	// Download statistics keep IPs nowhere; events are kept
+	// OBX_STATS_RETENTION_DAYS.
+	_, _ = a.DB.Exec(ctx, `DELETE FROM download_events WHERE at < ?`, days(a.Cfg.StatsRetentionDays))
 }

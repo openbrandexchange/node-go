@@ -47,7 +47,9 @@ type App struct {
 	settingsMu sync.RWMutex
 	settings   *Settings
 	setupDone  atomic.Bool
+	draining   atomic.Bool
 	nodeID     string
+	metrics    *metrics
 
 	limiter *rateLimiter
 	wake    chan struct{} // job workers
@@ -63,6 +65,7 @@ type App struct {
 
 // New opens the database and blob store, migrates, and prepares the node.
 func New(ctx context.Context, cfg *config.Config, ui fs.FS, log *slog.Logger) (*App, error) {
+	cfg.ApplyDefaults()
 	d, err := db.Open(cfg.DatabaseURL)
 	if err != nil {
 		return nil, err
@@ -90,6 +93,7 @@ func New(ctx context.Context, cfg *config.Config, ui fs.FS, log *slog.Logger) (*
 		renderQ: make(chan string, 1024),
 		stop:    make(chan struct{}),
 		Now:     time.Now,
+		metrics: newMetrics(),
 	}
 	a.locales = newLocaleCache(ui)
 	a.Mail = newMailer(cfg, log)

@@ -6,7 +6,6 @@ import (
 	"encoding/json"
 	"errors"
 	"io"
-	"log/slog"
 	"mime"
 	"net"
 	"net/http"
@@ -37,7 +36,7 @@ func writeJSON(w http.ResponseWriter, status int, v any) {
 func (a *App) fail(w http.ResponseWriter, r *http.Request, err error) {
 	var p *problem.Problem
 	if !errors.As(err, &p) {
-		a.Log.Error("request failed", "method", r.Method, "path", r.URL.Path, "error", err)
+		a.Log.ErrorContext(r.Context(), "request failed", "method", r.Method, "path", r.URL.Path, "error", err)
 		p = problem.New("internal_error", "An unexpected error occurred.")
 	}
 	problem.Write(w, p)
@@ -240,32 +239,38 @@ func urlPathEscape(s string) string {
 	return b.String()
 }
 
-// statusRecorder captures the response status for access logs.
+// statusRecorder captures the response status and size for access logs,
+// metrics and the audit log.
 type statusRecorder struct {
 	http.ResponseWriter
 	status int
+	bytes  int64
+	wrote  bool
 }
 
 func (s *statusRecorder) WriteHeader(code int) {
-	s.status = code
+	if !s.wrote {
+		s.status = code
+		s.wrote = true
+	}
 	s.ResponseWriter.WriteHeader(code)
 }
 
-func (s *statusRecorder) Unwrap() http.ResponseWriter { return s.ResponseWriter }
-
-// logRequests logs method, path (never the query string: it may hold
-// signatures) and status.
-func (a *App) logRequests(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		rec := &statusRecorder{ResponseWriter: w, status: 200}
-		next.ServeHTTP(rec, r)
-		lvl := slog.LevelDebug
-		if rec.status >= 500 {
-			lvl = slog.LevelError
-		}
-		a.Log.Log(r.Context(), lvl, "http", "method", r.Method, "path", r.URL.Path, "status", rec.status)
-	})
+func (s *statusRecorder) Write(b []byte) (int, error) {
+	s.wrote = true
+	n, err := s.ResponseWriter.Write(b)
+	s.bytes += int64(n)
+	return n, err
 }
+
+// Flush keeps streaming responses (zips, exports) streaming.
+func (s *statusRecorder) Flush() {
+	if f, ok := s.ResponseWriter.(http.Flusher); ok {
+		f.Flush()
+	}
+}
+
+func (s *statusRecorder) Unwrap() http.ResponseWriter { return s.ResponseWriter }
 
 func errorsAs(err error, p **problem.Problem) bool { return errors.As(err, p) }
 

@@ -6,6 +6,8 @@
 //	node-go import --csv products.csv --images dir  import from local files
 //	node-go admin reset-password --email you@example.com
 //	node-go admin create-ingest-token --name "Nightly PIM sync"
+//	node-go backup --to DIR | restore --from DIR    backups
+//	node-go check-config                            validate the configuration
 //	node-go healthcheck                             exit 0 when the node answers
 //	node-go version
 package main
@@ -13,6 +15,7 @@ package main
 import (
 	"bufio"
 	"context"
+	"encoding/json"
 	"errors"
 	"flag"
 	"fmt"
@@ -46,6 +49,12 @@ Usage:
       --dry-run             check everything, change nothing
   node-go admin reset-password --email ADDRESS [--password-stdin]
   node-go admin create-ingest-token --name NAME [--scopes ingest:read,ingest:write] [--brands a,b]
+  node-go admin audit-log [--limit N]    Print the latest admin actions
+  node-go admin personal-data (--email ADDRESS | --retailer ID)
+                                         Print everything stored about a person or retailer (JSON)
+  node-go backup --to DIR                Consistent copy of the database, files and secret key
+  node-go restore --from DIR [--force]   Restore a backup made with "backup" (node must be stopped)
+  node-go check-config                   Validate the configuration and exit
   node-go healthcheck                    Exit 0 when the local node answers /healthz
   node-go version
 `)
@@ -66,6 +75,12 @@ func main() {
 		err = admin(os.Args[2:])
 	case "healthcheck":
 		err = healthcheck()
+	case "check-config":
+		err = checkConfig()
+	case "backup":
+		err = runBackup(os.Args[2:])
+	case "restore":
+		err = runRestore(os.Args[2:])
 	case "version", "--version", "-v":
 		fmt.Println("node-go", node.Version)
 	case "help", "--help", "-h":
@@ -91,10 +106,11 @@ func newLogger(cfg *config.Config) *slog.Logger {
 		lvl = slog.LevelError
 	}
 	opts := &slog.HandlerOptions{Level: lvl}
+	var h slog.Handler = slog.NewTextHandler(os.Stderr, opts)
 	if cfg.LogFormat == "json" {
-		return slog.New(slog.NewJSONHandler(os.Stderr, opts))
+		h = slog.NewJSONHandler(os.Stderr, opts)
 	}
-	return slog.New(slog.NewTextHandler(os.Stderr, opts))
+	return slog.New(node.LogHandler(h)).With("service", "node-go")
 }
 
 func open(ctx context.Context) (*node.App, error) {
@@ -102,7 +118,12 @@ func open(ctx context.Context) (*node.App, error) {
 	if err != nil {
 		return nil, err
 	}
-	return node.New(ctx, cfg, ui.FS(), newLogger(cfg))
+	log := newLogger(cfg)
+	slog.SetDefault(log)
+	for _, w := range cfg.Warnings() {
+		log.Warn(w)
+	}
+	return node.New(ctx, cfg, ui.FS(), log)
 }
 
 func serve() error {
@@ -119,6 +140,8 @@ func serve() error {
 		Handler:           app.Handler(),
 		ReadHeaderTimeout: 20 * time.Second,
 		IdleTimeout:       120 * time.Second,
+		MaxHeaderBytes:    64 << 10,
+		ErrorLog:          slog.NewLogLogger(app.Log.Handler(), slog.LevelWarn),
 	}
 	errc := make(chan error, 1)
 	go func() { errc <- srv.ListenAndServe() }()
@@ -129,12 +152,21 @@ func serve() error {
 			return err
 		}
 	case <-ctx.Done():
-		app.Log.Info("shutting down")
+		stop()
+		app.SetDraining()
+		if d := app.Cfg.ShutdownDelaySeconds; d > 0 {
+			app.Log.Info("shutting down: readiness off, waiting for the load balancer", "seconds", d)
+			time.Sleep(time.Duration(d) * time.Second)
+		}
+		app.Log.Info("shutting down: finishing running requests (at most 25 s)")
 		sctx, cancel := context.WithTimeout(context.Background(), 25*time.Second)
 		defer cancel()
-		_ = srv.Shutdown(sctx)
+		if err := srv.Shutdown(sctx); err != nil {
+			app.Log.Warn("requests were still running at shutdown", "error", err)
+		}
 	}
 	app.Stop()
+	app.Log.Info("stopped")
 	return nil
 }
 
@@ -206,6 +238,7 @@ func admin(args []string) error {
 			if err := app.SetPassword(ctx, *email, strings.TrimRight(pw, "\r\n")); err != nil {
 				return err
 			}
+			app.Audit(ctx, "password.set", "user", *email)
 			fmt.Println("Password changed; all sessions of this account were ended.")
 			return nil
 		}
@@ -213,6 +246,7 @@ func admin(args []string) error {
 		if err != nil {
 			return err
 		}
+		app.Audit(ctx, "password.reset-link", "user", *email)
 		fmt.Println("Open this link within one hour to choose a new password (works once):")
 		fmt.Println(link)
 		return nil
@@ -240,13 +274,129 @@ func admin(args []string) error {
 		if p != nil {
 			return p
 		}
+		app.Audit(ctx, "ingest-tokens.create", "ingest-token", *name)
 		fmt.Println("Token (shown once; store it as OBX_TOKEN in your automation):")
 		fmt.Println(secret)
 		fmt.Println("OBX_URL=" + app.Cfg.PublicURL)
 		return nil
+	case "audit-log":
+		fs := flag.NewFlagSet("audit-log", flag.ContinueOnError)
+		limit := fs.Int("limit", 50, "number of entries")
+		if err := fs.Parse(args[1:]); err != nil {
+			return err
+		}
+		app, err := open(ctx)
+		if err != nil {
+			return err
+		}
+		defer app.Close()
+		items, err := app.AuditLog(ctx, *limit)
+		if err != nil {
+			return err
+		}
+		for _, it := range items {
+			actor := it["actor"].(map[string]any)
+			who := fmt.Sprint(actor["type"])
+			if e, ok := actor["email"].(*string); ok && e != nil {
+				who = *e
+			}
+			target := it["target"].(map[string]any)
+			tgt := ""
+			if id, ok := target["id"].(*string); ok && id != nil {
+				tgt = " " + *id
+			}
+			fmt.Printf("%s  %-28s %s%s (%v)\n", it["at"], it["action"], who, tgt, it["status"])
+		}
+		return nil
+	case "personal-data":
+		fs := flag.NewFlagSet("personal-data", flag.ContinueOnError)
+		email := fs.String("email", "", "account e-mail")
+		retailer := fs.String("retailer", "", "retailer id")
+		if err := fs.Parse(args[1:]); err != nil {
+			return err
+		}
+		if (*email == "") == (*retailer == "") {
+			return errors.New("pass either --email or --retailer")
+		}
+		app, err := open(ctx)
+		if err != nil {
+			return err
+		}
+		defer app.Close()
+		data, err := app.PersonalData(ctx, *email, *retailer)
+		if err != nil {
+			return err
+		}
+		enc := json.NewEncoder(os.Stdout)
+		enc.SetIndent("", "  ")
+		app.Audit(ctx, "personal-data.export", map[bool]string{true: "retailer", false: "user"}[*retailer != ""], *email+*retailer)
+		return enc.Encode(data)
 	}
 	usage()
 	return fmt.Errorf("unknown admin command %q", args[0])
+}
+
+func runBackup(args []string) error {
+	fs := flag.NewFlagSet("backup", flag.ContinueOnError)
+	to := fs.String("to", "", "new, empty directory for the backup")
+	if err := fs.Parse(args); err != nil {
+		return err
+	}
+	if *to == "" {
+		return errors.New("--to is required, for example: node-go backup --to /backups/obx-$(date +%F)")
+	}
+	ctx := context.Background()
+	app, err := open(ctx)
+	if err != nil {
+		return err
+	}
+	defer app.Close()
+	m, err := app.Backup(ctx, *to)
+	if err != nil {
+		return err
+	}
+	fmt.Printf("Backup written to %s (schema %d, %d files)\n  database:   %s\n  files:      %s\n  secret key: %s\n",
+		*to, m.SchemaVersion, m.FileCount, m.Database, m.Files, m.SecretKey)
+	return nil
+}
+
+func runRestore(args []string) error {
+	fs := flag.NewFlagSet("restore", flag.ContinueOnError)
+	from := fs.String("from", "", "backup directory made with node-go backup")
+	force := fs.Bool("force", false, "replace an existing database")
+	if err := fs.Parse(args); err != nil {
+		return err
+	}
+	if *from == "" {
+		return errors.New("--from is required")
+	}
+	cfg, err := config.Load()
+	if err != nil {
+		return err
+	}
+	m, err := node.Restore(cfg, *from, *force)
+	if err != nil {
+		return err
+	}
+	fmt.Printf("Restored the backup of %s (node %s). Start the node with: node-go serve\n", m.CreatedAt, m.NodeID)
+	return nil
+}
+
+func checkConfig() error {
+	cfg, err := config.Load()
+	if err != nil {
+		return err
+	}
+	for _, w := range cfg.Warnings() {
+		fmt.Println("warning:", w)
+	}
+	fmt.Println("The configuration is valid.")
+	fmt.Println("  public address:", cfg.PublicURL)
+	fmt.Println("  data directory:", cfg.DataDir)
+	fmt.Println("  database:      ", strings.SplitN(cfg.DatabaseURL, ":", 2)[0])
+	fmt.Println("  files:         ", strings.SplitN(cfg.BlobURL, ":", 2)[0])
+	fmt.Println("  e-mail:        ", map[bool]string{true: "SMTP", false: "not sent (written to the log)"}[cfg.SMTPURL != ""])
+	return nil
 }
 
 func healthcheck() error {
