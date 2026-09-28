@@ -71,6 +71,40 @@ func TestImports(t *testing.T) {
 		}
 	})
 
+	t.Run("an import without assets.csv keeps what the images have (import rule 8)", func(t *testing.T) {
+		k.admin.must(200, "PATCH", "/admin/api/catalog/assets/KO-1001_NVY_1", map[string]any{"rights": map[string]any{"credit": "Photo: Test Studio"}})
+		defer k.admin.must(200, "PATCH", "/admin/api/catalog/assets/KO-1001_NVY_1", map[string]any{"rights": map[string]any{"credit": nil}})
+		files := k.kestrelFiles()
+		delete(files, "assets_csv")
+		c := counts(k.runImport(k.admin, files, nil))
+		if c["created"].(float64) != 0 || c["updated"].(float64) != 0 || c["errors"].(float64) != 0 {
+			t.Fatalf("import without assets.csv changed images: %v", c)
+		}
+		data := func(product, asset string) map[string]any {
+			rec := k.admin.must(200, "GET", "/admin/api/catalog/products/"+product, nil)
+			for _, a := range rec["assets"].([]any) {
+				rec := a.(map[string]any)["record"].(map[string]any)
+				if rec["external_id"] == asset {
+					return rec["data"].(map[string]any)
+				}
+			}
+			t.Fatalf("%s has no image %s", product, asset)
+			return nil
+		}
+		d := data("KO-1002", "KO-1002_BLK_2")
+		rights := d["rights"].(map[string]any)
+		if e, _ := rights["embargo_until"].(string); !strings.HasPrefix(e, "2030-01-01") || rights["credit"] != "Photo: Kestrel Studio" {
+			t.Errorf("KO-1002_BLK_2 lost its embargo or credit: %v", rights)
+		}
+		d = data("KO-1003", "KO-1003_RST_3")
+		if d["provenance"].(map[string]any)["ai_generated"] != true || d["alt_text"].(map[string]any)["nl"] == nil {
+			t.Errorf("KO-1003_RST_3 lost its AI label or alt text: %v %v", d["provenance"], d["alt_text"])
+		}
+		if credit := data("KO-1001", "KO-1001_NVY_1")["rights"].(map[string]any)["credit"]; credit != "Photo: Test Studio" {
+			t.Errorf("KO-1001_NVY_1 lost the credit set in the admin: %v", credit)
+		}
+	})
+
 	t.Run("package zip and images manifest give the same result", func(t *testing.T) {
 		dir := filepath.Join(specDir(t), "kestrel")
 		files := map[string][]byte{}

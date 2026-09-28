@@ -899,7 +899,13 @@ func (im *importer) applyPlan(w *writer, plan *productPlan) error {
 		}
 	}
 	for _, ip := range plan.images {
-		res, prob := w.Upsert(KindAsset, ip.ext, ip.doc, "")
+		doc := ip.doc
+		if existing, err := loadRow(w.ctx, w.tx, KindAsset, ip.ext); err != nil {
+			return err
+		} else if existing != nil {
+			doc = keepImageFacts(doc, existing.Data)
+		}
+		res, prob := w.Upsert(KindAsset, ip.ext, doc, "")
 		if prob != nil {
 			if prob.ObxError == "internal_error" {
 				return prob
@@ -911,6 +917,39 @@ func (im *importer) applyPlan(w *writer, plan *productPlan) error {
 	}
 	w.positionExclude = nil
 	return nil
+}
+
+// keepImageFacts applies import-format.md rule 8 to an image the node
+// already has: alt text (per language), rights and provenance fields the
+// import does not state keep their stored values (the file name and the
+// assets.csv row still decide the file, product, colour, position, role and
+// view; a PUT without status keeps the stored status anyway). A nightly
+// import of the images alone therefore never lifts an embargo or clears an
+// AI label set in the admin.
+func keepImageFacts(doc map[string]any, stored string) map[string]any {
+	prev := map[string]any{}
+	dec := json.NewDecoder(strings.NewReader(stored))
+	dec.UseNumber()
+	if dec.Decode(&prev) != nil {
+		return doc
+	}
+	out := cloneDoc(doc)
+	for _, k := range []string{"alt_text", "rights", "provenance"} {
+		old, _ := prev[k].(map[string]any)
+		if len(old) == 0 {
+			continue
+		}
+		merged := map[string]any{}
+		for f, v := range old {
+			merged[f] = v
+		}
+		stated, _ := out[k].(map[string]any)
+		for f, v := range stated {
+			merged[f] = v
+		}
+		out[k] = merged
+	}
+	return out
 }
 
 func cloneDoc(m map[string]any) map[string]any {

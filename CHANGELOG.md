@@ -26,9 +26,15 @@ are always forward-only and applied automatically on start.
 - E-mails no longer show a double full stop after a company name that ends in one ("B.V..").
 - A successful connection test of a scheduled import no longer adds an English line under the
   translated result.
-
 - A missing file under `/assets/` or `/locales/` is a 404, also when the browser accepts HTML, so a
   tab left open during an upgrade reloads once instead of reading the start page as code.
+- An import no longer takes away what it does not state about an image (spec import rule 8): the
+  images alone, or with an assets.csv that has no row for them, keep their embargo, credit, alt
+  text and AI label, also when those were set in the admin. Before, every such import reset them
+  to the defaults, which lifted embargoes.
+- Image names: the rightmost role or view wins (`_back_front` is view front) and `_model_other` is
+  role model with view other, as the spec says; before, such a file was refused.
+- Discovery reports `spec_version` 0.1.0 instead of 0.1.0-draft.
 
 ## [0.1.0] - 2026-09-28
 
