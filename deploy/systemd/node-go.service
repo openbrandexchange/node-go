@@ -10,6 +10,10 @@ EnvironmentFile=/etc/node-go/node-go.env
 ExecStart=/usr/local/bin/node-go serve
 Restart=on-failure
 RestartSec=3
+# Running requests get 25 s to finish on stop; jobs resume after a restart.
+TimeoutStopSec=40
+LimitNOFILE=65536
+MemoryMax=75%
 # Hardening
 NoNewPrivileges=true
 ProtectSystem=strict

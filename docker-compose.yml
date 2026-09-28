@@ -1,10 +1,18 @@
 # Brand portal with automatic HTTPS (Caddy + Let's Encrypt).
 #
 #   1. Point a DNS record for your domain at this server (ports 80 and 443 open).
-#   2. OBX_DOMAIN=images.yourbrand.com docker compose up -d
+#   2. DOMAIN=images.yourbrand.com ADMIN_EMAIL=you@yourbrand.com docker compose up -d
+#      (or put both in a .env file next to this one, see .env.example)
 #   3. docker compose logs node | grep "setup code"   → open https://images.yourbrand.com
 #
+# ADMIN_EMAIL is the address Let's Encrypt writes to about the certificate.
 # For a quick local try without a domain: docker compose -f docker-compose.local.yml up
+
+x-logging: &logging
+  driver: json-file
+  options:
+    max-size: "20m"
+    max-file: "5"
 
 services:
   node:
@@ -12,7 +20,7 @@ services:
     image: obx-node-go:local
     restart: unless-stopped
     environment:
-      OBX_PUBLIC_URL: https://${OBX_DOMAIN:?set OBX_DOMAIN, e.g. images.yourbrand.com}
+      OBX_PUBLIC_URL: https://${DOMAIN:?set DOMAIN, e.g. images.yourbrand.com}
       OBX_TRUST_PROXY: "true"
       OBX_SECRET_KEY: ${OBX_SECRET_KEY:-}
       OBX_SETUP_CODE: ${OBX_SETUP_CODE:-}
@@ -20,26 +28,42 @@ services:
       OBX_MAIL_FROM: ${OBX_MAIL_FROM:-}
       OBX_DATABASE_URL: ${OBX_DATABASE_URL:-}
       OBX_BLOB_URL: ${OBX_BLOB_URL:-}
+      OBX_S3_ACCESS_KEY_ID: ${OBX_S3_ACCESS_KEY_ID:-}
+      OBX_S3_SECRET_ACCESS_KEY: ${OBX_S3_SECRET_ACCESS_KEY:-}
+      OBX_METRICS_TOKEN: ${OBX_METRICS_TOKEN:-}
+      LITESTREAM_REPLICA_URL: ${LITESTREAM_REPLICA_URL:-}
+      LITESTREAM_ACCESS_KEY_ID: ${LITESTREAM_ACCESS_KEY_ID:-}
+      LITESTREAM_SECRET_ACCESS_KEY: ${LITESTREAM_SECRET_ACCESS_KEY:-}
+      OBX_SHUTDOWN_DELAY: "2"
+      GOMEMLIMIT: 768MiB
     volumes:
       - obx-data:/data
     expose:
       - "8080"
+    stop_grace_period: 40s
+    mem_limit: 1g
+    cpus: 2
+    logging: *logging
 
   caddy:
     image: caddy:2-alpine
     restart: unless-stopped
     depends_on:
-      - node
+      node:
+        condition: service_healthy
     ports:
-      - "80:80"
-      - "443:443"
-      - "443:443/udp"
+      - "${HTTP_PORT:-80}:80"
+      - "${HTTPS_PORT:-443}:443"
+      - "${HTTPS_PORT:-443}:443/udp"
     environment:
-      OBX_DOMAIN: ${OBX_DOMAIN}
+      DOMAIN: ${DOMAIN}
+      ADMIN_EMAIL: ${ADMIN_EMAIL:?set ADMIN_EMAIL, the address Let's Encrypt may write to}
     volumes:
       - ./deploy/Caddyfile:/etc/caddy/Caddyfile:ro
       - caddy-data:/data
       - caddy-config:/config
+    mem_limit: 256m
+    logging: *logging
 
 volumes:
   obx-data:

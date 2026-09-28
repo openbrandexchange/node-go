@@ -1,12 +1,25 @@
-{$OBX_DOMAIN} {
+# Caddy in front of node-go (docker-compose.yml): automatic HTTPS for DOMAIN
+# with a Let's Encrypt certificate; ADMIN_EMAIL is the ACME account contact.
+{
+	email {$ADMIN_EMAIL}
+}
+
+{$DOMAIN} {
 	encode zstd gzip
 	request_body {
 		max_size 2GB
 	}
 	reverse_proxy node:8080 {
+		# The node sets X-Request-Id; Caddy passes an incoming one on.
+		health_uri /readyz
+		health_interval 10s
 		transport http {
 			read_timeout 30m
 			write_timeout 30m
 		}
+	}
+	log {
+		output stdout
+		format json
 	}
 }
