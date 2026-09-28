@@ -374,11 +374,11 @@ func (a *App) inviteUser(ctx context.Context, email, name, role string, retailer
 
 func (a *App) sendInvite(ctx context.Context, u *userRow, token string) map[string]any {
 	link := a.Cfg.PublicURL + "/invite/" + token
-	kind := "invite"
-	if u.Role == "admin" {
-		kind = "invite_admin"
+	vars := map[string]string{"name": u.Name, "url": link}
+	if u.InviteExpires != nil {
+		vars["expires"] = mailDate(db.Parse(*u.InviteExpires))
 	}
-	sent := a.sendMail(ctx, u.Email, u.Language, kind, map[string]string{"name": u.Name, "link": link, "expires_days": "7"})
+	sent := a.sendMail(ctx, u.Email, u.Language, mailInvite, vars)
 	return map[string]any{"user": userJSON(u), "invite_url": link, "expires_at": u.InviteExpires, "email_sent": sent}
 }
 

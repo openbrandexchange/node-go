@@ -1,6 +1,6 @@
 // Package ui embeds the built admin-ui (brand admin + retailer portal).
-// The integrate step replaces ui/dist with the admin-ui build output
-// (scripts/vendor-ui.sh); until then a small placeholder page is served.
+// ui/dist is the admin-ui build output, re-copied with
+// (scripts/update-ui.sh).
 package ui
 
 import (

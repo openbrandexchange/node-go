@@ -1,0 +1,11 @@
+{
+  "name": "node-go-e2e",
+  "private": true,
+  "description": "Browser walk-through of the vendored admin-ui against a running node-go",
+  "scripts": {
+    "test": "playwright test"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.63.0"
+  }
+}

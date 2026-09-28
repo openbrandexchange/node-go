@@ -22,8 +22,9 @@ type Settings struct {
 		LogoURL     *string       `json:"logo_url"`
 		AccentColor *string       `json:"accent_color"`
 		WelcomeText LocalizedText `json:"welcome_text"`
-		// PortalName overrides the "<Brand> · <local word>" title (optional).
-		PortalName *string `json:"portal_name"`
+		// PortalName overrides the local word in "<Brand> · <local word>",
+		// per language (optional; same shape as admin-ui expects).
+		PortalName LocalizedText `json:"portal_name"`
 	} `json:"branding"`
 	Portal struct {
 		AccessRequestsEnabled  bool     `json:"access_requests_enabled"`
@@ -153,17 +154,26 @@ func (a *App) SetupDone(ctx context.Context) bool {
 	return false
 }
 
-// PortalName returns "<Brand> · <local word>" for lang (or the override).
+// PortalName returns "<Brand> · <local word>" for lang. The word is the
+// brand's own portal_name (language fallback rule) or the glossary word
+// from the vendored admin-ui locale files.
 func (a *App) PortalName(ctx context.Context, lang string) string {
 	s := a.Settings(ctx)
-	if s.Branding.PortalName != nil && strings.TrimSpace(*s.Branding.PortalName) != "" {
-		return *s.Branding.PortalName
-	}
 	name := s.Branding.DisplayName
 	if name == "" {
 		name = s.Company.Name
 	}
-	return name + " · " + portalWord(lang)
+	word := strings.TrimSpace(s.Branding.PortalName.Pick(lang, s.ContentLanguages()...))
+	if word == "" && a.locales != nil {
+		word = a.locales.get(supportedLang(lang))["glossary.portal"]
+	}
+	if word == "" {
+		word = portalWord(lang)
+	}
+	if name == "" {
+		return word
+	}
+	return name + " · " + word
 }
 
 // portalWord is the local word for the retailer portal (glossary).

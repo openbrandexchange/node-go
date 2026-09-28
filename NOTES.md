@@ -40,7 +40,7 @@ The node does **not** use obx-go's types at runtime: it needs exact control over
 19. **Extensions** (not in `node-admin.yaml`, safe for other nodes to ignore):
     - `GET /admin/api/files/{sha256}?exp&v=a&sig` serves any stored file for signed admin previews (`AdminAsset.renditions` of unpublished assets).
     - `GET /admin/api/public/logo` serves the uploaded logo (`logo_url` points here).
-    - `Settings.branding.portal_name` (and `PublicBranding.portal_name`): optional override of the portal name "<Brand> · <local word>".
+    - `Settings.branding.portal_name` (and `PublicBranding.portal_name`): optional LocalizedText that overrides the local word in "<Brand> · <local word>" (admin-ui NOTES item 2). Without it the word is `glossary.portal` from the vendored locale file.
 20. **Portal lists** are ordered by style number and paged with opaque offset cursors; facets count with every filter except their own dimension.
 21. **Admins in the portal** see everything published, may download originals, and their downloads are not logged.
 22. **Rendition URLs** in the portal and API are signed for one hour and carry the viewer (`v=`), so blocking a retailer stops its links on the next request.

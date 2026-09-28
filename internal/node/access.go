@@ -127,6 +127,11 @@ func (a *App) handleAccessRequestCreate(w http.ResponseWriter, r *http.Request) 
 		return
 	}
 	go a.notifyAccessRequest(context.Background(), id, cleanRet["name"].(string), cleanContact["name"].(string))
+	if to, _ := cleanContact["email"].(string); to != "" {
+		lang, _ := cleanContact["language"].(string)
+		name, _ := cleanContact["name"].(string)
+		go a.sendMail(context.Background(), to, lang, mailAccessRequestReceived, map[string]string{"name": name})
+	}
 	writeJSON(w, 202, map[string]any{"id": id, "status": "pending", "created_at": now, "decided_at": nil, "reason": nil,
 		"request_token": token, "status_url": a.Cfg.PublicURL + "/obx/v1/access-requests/" + id, "portal": nil, "credentials": nil})
 }
@@ -147,8 +152,8 @@ func (a *App) notifyAccessRequest(ctx context.Context, id, retailer, contact str
 	}
 	rs.Close()
 	for _, x := range list {
-		a.sendMail(ctx, x.email, x.lang, "access_request", map[string]string{"name": x.name, "retailer": retailer, "contact": contact,
-			"link": a.Cfg.PublicURL + "/admin/access-requests/" + id})
+		a.sendMail(ctx, x.email, x.lang, mailAccessRequestNew, map[string]string{"name": x.name, "retailer": retailer, "contact": contact,
+			"url": a.Cfg.PublicURL + "/admin/requests"})
 	}
 }
 
@@ -384,7 +389,14 @@ func (a *App) adminAccessApprove(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	if !invited && contactEmail != "" {
-		a.sendMail(ctx, contactEmail, lang, "access_approved", map[string]string{"name": contactName, "link": a.Cfg.PublicURL + "/login"})
+		vars := map[string]string{"name": contactName}
+		if ar.wants("portal") {
+			vars["url"] = a.Cfg.PublicURL + "/login"
+		}
+		if createClient {
+			vars["api"] = "1"
+		}
+		a.sendMail(ctx, contactEmail, lang, mailAccessApproved, vars)
 	}
 	ar, _ = a.loadAccessRequest(ctx, a.DB, ar.ID)
 	ret, _ := a.loadRetailer(ctx, a.DB, retailerID)
@@ -433,7 +445,7 @@ func (a *App) adminAccessReject(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	if email := strField(ar.Contact, "email"); email != "" {
-		a.sendMail(ctx, email, strField(ar.Contact, "language"), "access_rejected", map[string]string{"name": strField(ar.Contact, "name"), "reason": deref(body.Reason)})
+		a.sendMail(ctx, email, strField(ar.Contact, "language"), mailAccessRejected, map[string]string{"name": strField(ar.Contact, "name"), "reason": deref(body.Reason)})
 	}
 	ar, _ = a.loadAccessRequest(ctx, a.DB, ar.ID)
 	writeJSON(w, 200, a.adminAccessRequestJSON(ar))

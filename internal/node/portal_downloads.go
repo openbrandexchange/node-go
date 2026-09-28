@@ -705,6 +705,6 @@ func (a *App) notifyDownloadReady(ctx context.Context, j *jobRow) {
 	if j.Result != nil {
 		_ = json.Unmarshal([]byte(*j.Result), &res)
 	}
-	a.sendMail(ctx, u.Email, u.Language, "zip_ready", map[string]string{"name": u.Name, "files": strconv.Itoa(res.Files),
-		"expires_days": "7", "link": a.Cfg.PublicURL + "/downloads"})
+	a.sendMail(ctx, u.Email, u.Language, mailZipReady, map[string]string{"name": u.Name, "files": strconv.Itoa(res.Files),
+		"expires": mailDate(a.now().Add(7 * 24 * time.Hour)), "url": a.Cfg.PublicURL + "/downloads"})
 }

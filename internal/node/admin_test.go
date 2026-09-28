@@ -3,6 +3,7 @@ package node
 import (
 	"archive/zip"
 	"bytes"
+	"context"
 	"encoding/csv"
 	"net/http"
 	"strings"
@@ -427,7 +428,7 @@ func TestUIServing(t *testing.T) {
 	n.app.UI = fstest.MapFS{
 		"index.html":      {Data: []byte("<!doctype html><title>portal</title>")},
 		"assets/app.js":   {Data: []byte("console.log(1)")},
-		"locales/nl.json": {Data: []byte(`{"email":{"invite":{"subject":"Uw account voor {portal}"}}}`)},
+		"locales/nl.json": {Data: []byte(`{"glossary":{"portal":"Beeldbank"},"email":{"greeting":"Beste {{name}},","invite":{"subject":"{{brand}} nodigt u uit voor {{portal}}","body":"Er staat een account voor u klaar.","button":"Kies uw wachtwoord","expiry":"Geldig tot {{expires}}."}}}`)},
 	}
 	n.app.locales = newLocaleCache(n.app.UI)
 	c := n.client()
@@ -446,10 +447,24 @@ func TestUIServing(t *testing.T) {
 	if r := c.do("GET", "/.well-known/other", nil, "Accept", "text/html"); r.Status != 404 {
 		t.Errorf("well-known: %d", r.Status)
 	}
-	if got := n.app.text("nl-NL", "email.invite.subject"); got != "Uw account voor {portal}" {
+	if got := n.app.text("nl-NL", "email.invite.subject"); got != "{{brand}} nodigt u uit voor {{portal}}" {
 		t.Errorf("locale text: %q", got)
 	}
 	if got := n.app.text("de", "email.invite.subject"); got != builtinEmail["email.invite.subject"] {
 		t.Errorf("fallback text: %q", got)
+	}
+	subject, body := n.app.renderMail(context.Background(), "nl-NL", mailInvite, map[string]string{"name": "Sam", "url": "https://portal.example/invite/abc", "expires": "2026-10-05"})
+	if !strings.HasSuffix(subject, "nodigt u uit voor Beeldbank") {
+		t.Errorf("subject: %q", subject)
+	}
+	for _, want := range []string{"Beste Sam,", "Er staat een account voor u klaar.", "Kies uw wachtwoord:\nhttps://portal.example/invite/abc", "Geldig tot 2026-10-05.", "Kind regards,"} {
+		if !strings.Contains(body, want) {
+			t.Errorf("body lacks %q:\n%s", want, body)
+		}
+	}
+	// A line whose placeholder has no value is left out (no reason given).
+	_, body = n.app.renderMail(context.Background(), "en", mailAccessRejected, map[string]string{"reason": ""})
+	if strings.Contains(body, "Explanation") || !strings.Contains(body, "Hello,") {
+		t.Errorf("rejected body:\n%s", body)
 	}
 }

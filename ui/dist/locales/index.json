@@ -1,0 +1,34 @@
+{
+  "$comment": "UI and e-mail strings for Open Brand Exchange portals. Use the recipient language, then \"en\". Placeholders are {{name}}; plural keys end in _one/_other/… (CLDR categories).",
+  "source": "en",
+  "fallback": [
+    "en"
+  ],
+  "languages": [
+    "bg",
+    "cs",
+    "da",
+    "de",
+    "el",
+    "en",
+    "es",
+    "et",
+    "fi",
+    "fr",
+    "ga",
+    "hr",
+    "hu",
+    "it",
+    "lt",
+    "lv",
+    "mt",
+    "nb",
+    "nl",
+    "pl",
+    "pt",
+    "ro",
+    "sk",
+    "sl",
+    "sv"
+  ]
+}

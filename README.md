@@ -71,7 +71,7 @@ OBX_TEST_DATABASE_URL=postgres://… go test ./internal/node   # the same on Pos
 
 - `internal/node`: the node (protocol, ingest, admin + portal API, imports, jobs, exports, webhooks, statistics, e-mail).
 - `internal/importfmt`: the canonical CSV and file-name parser; `internal/imaging`: pure-Go renditions.
-- `ui/dist`: the web interface, vendored from [admin-ui](https://github.com/openbrandexchange/admin-ui) with `scripts/vendor-ui.sh`.
+- `ui/dist`: the web interface, vendored from [admin-ui](https://github.com/openbrandexchange/admin-ui) with `scripts/update-ui.sh`.
 - API contracts: the [OBX spec](https://github.com/openbrandexchange/spec) (`openapi/*.yaml`). Implementation decisions: [NOTES.md](NOTES.md).
 
 The CLI:

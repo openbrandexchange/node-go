@@ -315,7 +315,7 @@ func (a *App) handleForgot(w http.ResponseWriter, r *http.Request) {
 	if u != nil && u.Status == "active" {
 		token := secure.RandomString(32)
 		_, _ = a.DB.Exec(ctx, `UPDATE users SET reset_hash = ?, reset_expires_at = ? WHERE id = ?`, secure.HashToken(token), db.Fmt(a.now().Add(time.Hour)), u.ID)
-		go a.sendMail(context.Background(), u.Email, u.Language, "password_reset", map[string]string{"name": u.Name, "link": a.Cfg.PublicURL + "/reset-password/" + token})
+		go a.sendMail(context.Background(), u.Email, u.Language, mailPasswordReset, map[string]string{"name": u.Name, "url": a.Cfg.PublicURL + "/reset-password/" + token})
 	}
 	w.WriteHeader(202)
 }
