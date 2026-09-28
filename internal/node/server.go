@@ -279,7 +279,10 @@ func (a *App) serveUI(w http.ResponseWriter, r *http.Request) {
 			http.ServeFileFS(w, r, a.UI, name)
 			return
 		}
-		if path.Ext(name) != "" && !strings.Contains(r.Header.Get("Accept"), "text/html") {
+		// A missing build file is a 404, never index.html: an open tab from an
+		// older version must see that its file is gone (it then reloads once).
+		isBuildFile := strings.HasPrefix(name, "assets/") || strings.HasPrefix(name, "locales/")
+		if isBuildFile || (path.Ext(name) != "" && !strings.Contains(r.Header.Get("Accept"), "text/html")) {
 			http.NotFound(w, r)
 			return
 		}

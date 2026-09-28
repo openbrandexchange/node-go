@@ -441,8 +441,16 @@ func TestUIServing(t *testing.T) {
 	if r := c.do("GET", "/assets/app.js", nil); r.Status != 200 || !strings.Contains(r.Header.Get("Cache-Control"), "immutable") {
 		t.Errorf("asset: %d %v", r.Status, r.Header)
 	}
-	if r := c.do("GET", "/assets/missing.js", nil); r.Status != 404 {
-		t.Errorf("missing asset: %d", r.Status)
+	for _, p := range []string{"/assets/missing.js", "/locales/xx.json"} {
+		for _, accept := range []string{"*/*", "text/html,*/*"} {
+			if r := c.do("GET", p, nil, "Accept", accept); r.Status != 404 {
+				t.Errorf("missing %s (Accept %s): %d", p, accept, r.Status)
+			}
+		}
+	}
+	csp := c.do("GET", "/login", nil, "Accept", "text/html").Header.Get("Content-Security-Policy")
+	if strings.Contains(csp, "unsafe-inline") || strings.Contains(csp, "https:") || !strings.Contains(csp, "style-src 'self';") {
+		t.Errorf("UI CSP is not admin-ui's strict policy: %s", csp)
 	}
 	if r := c.do("GET", "/.well-known/other", nil, "Accept", "text/html"); r.Status != 404 {
 		t.Errorf("well-known: %d", r.Status)

@@ -119,7 +119,10 @@ func routeLabel(r *http.Request) string {
 
 // ---- security headers ---------------------------------------------------------------------
 
-const uiCSP = "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'"
+// uiCSP is the policy admin-ui documents in docs/node-integration.md and runs
+// its own Playwright tests under: no inline styles, nothing from other hosts.
+// Images come from this node only (signed URLs point back here).
+const uiCSP = "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data: blob:; connect-src 'self'; font-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'"
 
 // apiCSP is sent with API responses: they are data, never documents.
 const apiCSP = "default-src 'none'; frame-ancestors 'none'; sandbox"
