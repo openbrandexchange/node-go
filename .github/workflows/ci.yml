@@ -1,0 +1,76 @@
+name: CI
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_USER: obx
+          POSTGRES_PASSWORD: obx
+          POSTGRES_DB: obx
+        ports: ["5432:5432"]
+        options: --health-cmd "pg_isready -U obx" --health-interval 5s --health-timeout 5s --health-retries 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: "1.26"
+      - name: Format
+        run: test -z "$(gofmt -l .)"
+      - name: Vet
+        run: go vet ./...
+      - name: Test (SQLite)
+        run: go test ./...
+      - name: Test (PostgreSQL)
+        env:
+          OBX_TEST_DATABASE_URL: postgres://obx:obx@127.0.0.1:5432/obx?sslmode=disable
+        run: go test ./internal/node
+      - name: Shell scripts
+        run: shellcheck deploy/*.sh scripts/*.sh
+
+  conformance:
+    # Runs the OBX conformance suite from obx-go (a private sibling repository
+    # until it is published). Needs a token with read access in OBX_GO_TOKEN.
+    runs-on: ubuntu-latest
+    env:
+      OBX_GO_TOKEN: ${{ secrets.OBX_GO_TOKEN }}
+    steps:
+      - name: Skip without obx-go access
+        if: env.OBX_GO_TOKEN == ''
+        run: echo "OBX_GO_TOKEN is not set; skipping the conformance suite."
+      - uses: actions/checkout@v4
+        if: env.OBX_GO_TOKEN != ''
+        with:
+          path: node-go
+      - uses: actions/checkout@v4
+        if: env.OBX_GO_TOKEN != ''
+        with:
+          repository: openbrandexchange/obx-go
+          token: ${{ secrets.OBX_GO_TOKEN }}
+          path: obx-go
+      - uses: actions/setup-go@v5
+        if: env.OBX_GO_TOKEN != ''
+        with:
+          go-version: "1.26"
+      - name: Conformance (all profiles)
+        if: env.OBX_GO_TOKEN != ''
+        working-directory: node-go/conformance
+        run: go test -v ./...
+
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build image
+        run: docker build -t node-go:ci .
+      - name: Smoke test
+        run: |
+          docker run -d --name node -p 8080:8080 -e OBX_SETUP_CODE=CI-CODE node-go:ci
+          for i in $(seq 1 30); do curl -fs localhost:8080/healthz && break; sleep 1; done
+          curl -fs localhost:8080/admin/api/setup | grep -q '"required":true'
