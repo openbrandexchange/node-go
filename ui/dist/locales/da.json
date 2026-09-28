@@ -229,7 +229,8 @@
       "import": "Tilføj jeres varer og billeder",
       "look": "Tilføj logo og velkomsttekst",
       "retailer": "Invitér jeres første forhandler",
-      "automate": "Udgiv automatisk fra jeres egne systemer"
+      "automate": "Udgiv automatisk fra jeres egne systemer",
+      "email": "Opsæt e-mail til invitationer og adgangskodelinks"
     },
     "health": "Katalog",
     "products": "Varer",

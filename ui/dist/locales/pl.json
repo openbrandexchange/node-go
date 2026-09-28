@@ -231,7 +231,8 @@
       "import": "Dodaj artykuły i zdjęcia",
       "look": "Dodaj logo i tekst powitalny",
       "retailer": "Zaproś pierwszego sprzedawcę",
-      "automate": "Publikuj automatycznie z własnych systemów"
+      "automate": "Publikuj automatycznie z własnych systemów",
+      "email": "Skonfiguruj e-mail do zaproszeń i linków do hasła"
     },
     "health": "Katalog",
     "products": "Artykuły",

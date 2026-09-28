@@ -230,7 +230,8 @@
       "import": "Pievienojiet preces un fotoattēlus",
       "look": "Pievienojiet logotipu un sveiciena tekstu",
       "retailer": "Uzaiciniet pirmo tirgotāju",
-      "automate": "Publicējiet automātiski no savām sistēmām"
+      "automate": "Publicējiet automātiski no savām sistēmām",
+      "email": "Iestatiet e-pastu ielūgumiem un paroles saitēm"
     },
     "health": "Katalogs",
     "products": "Preces",

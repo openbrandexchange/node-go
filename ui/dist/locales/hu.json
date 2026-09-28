@@ -229,7 +229,8 @@
       "import": "Termékek és fotók hozzáadása",
       "look": "Logó és üdvözlő szöveg hozzáadása",
       "retailer": "Az első viszonteladó meghívása",
-      "automate": "Automatikus közzététel saját rendszereiből"
+      "automate": "Automatikus közzététel saját rendszereiből",
+      "email": "E-mail beállítása a meghívókhoz és a jelszóhivatkozásokhoz"
     },
     "health": "Katalógus",
     "products": "Termékek",

@@ -14,9 +14,9 @@ are always forward-only and applied automatically on start.
 
 ### Changed
 
-- The web interface is admin-ui main (commit fe1a1ad): invitation language, clearer
+- The web interface is admin-ui 0.1.1 (commit dabdcd0): invitation language, clearer
   scheduled-import errors, websites typed without https://, "Show the key" after approving an API
-  key request.
+  key request, and a "Get started" step to set up e-mail while none is configured.
 - The web interface is served under admin-ui's strict Content-Security-Policy: no inline styles and
   no fonts from other hosts.
 

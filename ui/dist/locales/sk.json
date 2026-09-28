@@ -231,7 +231,8 @@
       "import": "Pridajte tovar a fotografie",
       "look": "Pridajte logo a uvítací text",
       "retailer": "Pozvite prvého predajcu",
-      "automate": "Publikujte automaticky zo svojich systémov"
+      "automate": "Publikujte automaticky zo svojich systémov",
+      "email": "Nastavte e-mail pre pozvánky a odkazy na heslo"
     },
     "health": "Katalóg",
     "products": "Tovar",

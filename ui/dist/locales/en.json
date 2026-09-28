@@ -229,7 +229,8 @@
       "import": "Add your articles and images",
       "look": "Add your logo and welcome text",
       "retailer": "Invite your first retailer",
-      "automate": "Publish automatically from your own systems"
+      "automate": "Publish automatically from your own systems",
+      "email": "Set up email for invitations and password links"
     },
     "health": "Catalog",
     "products": "Articles",

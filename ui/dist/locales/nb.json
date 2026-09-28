@@ -229,7 +229,8 @@
       "import": "Legg til varer og bilder",
       "look": "Legg til logo og velkomsttekst",
       "retailer": "Inviter den første forhandleren",
-      "automate": "Publiser automatisk fra egne systemer"
+      "automate": "Publiser automatisk fra egne systemer",
+      "email": "Sett opp e-post for invitasjoner og passordlenker"
     },
     "health": "Katalog",
     "products": "Varer",

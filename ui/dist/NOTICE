@@ -1,11 +1,16 @@
-Open Brand Exchange admin UI (admin-ui)
-Copyright 2026 Richard Lindhout and the Open Brand Exchange contributors
+Open Brand Exchange · admin UI (admin-ui)
+Copyright 2026 Richard Lindhout and contributors
 
-An initiative of Richard Lindhout, to be transferred to the Open Brand Exchange
-Foundation (in formation), a Dutch foundation (stichting) that is being set up.
-Contact: hello@openbrandexchange.com
+An initiative of Richard Lindhout · Open Brand Exchange Foundation (in formation)
+Contact: hello@openbrandexchange.com · Security reports: security@openbrandexchange.com
 
-This product is licensed under the Apache License, Version 2.0 (see LICENSE).
+Licensed under the Apache License, Version 2.0 (see LICENSE).
+
+The copyright of the publisher and the name "Open Brand Exchange" are to be
+transferred to the Open Brand Exchange Foundation, a Dutch stichting that is
+being set up (see https://github.com/openbrandexchange/spec/blob/main/docs/governance.md).
+Contributions by others remain the copyright of their authors and are licensed
+under the same licence (Developer Certificate of Origin, see CONTRIBUTING.md).
 
 Built copies (dist/) include third-party software; their licences and notices
 are listed in dist/THIRD-PARTY-LICENSES.txt.

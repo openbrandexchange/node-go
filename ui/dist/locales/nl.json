@@ -229,7 +229,8 @@
       "import": "Voeg je artikelen en beelden toe",
       "look": "Voeg je logo en welkomsttekst toe",
       "retailer": "Nodig je eerste retailer uit",
-      "automate": "Publiceer automatisch vanuit je eigen systemen"
+      "automate": "Publiceer automatisch vanuit je eigen systemen",
+      "email": "Stel e-mail in voor uitnodigingen en wachtwoordlinks"
     },
     "health": "Catalogus",
     "products": "Artikelen",

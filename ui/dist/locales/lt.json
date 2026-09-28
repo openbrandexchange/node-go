@@ -231,7 +231,8 @@
       "import": "Pridėkite prekių ir nuotraukų",
       "look": "Pridėkite logotipą ir pasveikinimo tekstą",
       "retailer": "Pakvieskite pirmąjį prekybininką",
-      "automate": "Skelbkite automatiškai iš savo sistemų"
+      "automate": "Skelbkite automatiškai iš savo sistemų",
+      "email": "Nustatykite el. paštą kvietimams ir slaptažodžio nuorodoms"
     },
     "health": "Katalogas",
     "products": "Prekės",

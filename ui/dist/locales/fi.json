@@ -229,7 +229,8 @@
       "import": "Lisää tuotteet ja kuvat",
       "look": "Lisää logo ja tervetuloteksti",
       "retailer": "Kutsu ensimmäinen jälleenmyyjä",
-      "automate": "Julkaise automaattisesti omista järjestelmistänne"
+      "automate": "Julkaise automaattisesti omista järjestelmistänne",
+      "email": "Ota sähköposti käyttöön kutsuja ja salasanalinkkejä varten"
     },
     "health": "Luettelo",
     "products": "Tuotteet",

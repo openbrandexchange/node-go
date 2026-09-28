@@ -229,7 +229,8 @@
       "import": "Lisage oma tooted ja pildid",
       "look": "Lisage logo ja tervitustekst",
       "retailer": "Kutsuge esimene edasimüüja",
-      "automate": "Avaldage automaatselt oma süsteemidest"
+      "automate": "Avaldage automaatselt oma süsteemidest",
+      "email": "Seadistage e-post kutsete ja paroolilinkide jaoks"
     },
     "health": "Kataloog",
     "products": "Tooted",

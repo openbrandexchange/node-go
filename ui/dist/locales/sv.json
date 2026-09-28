@@ -229,7 +229,8 @@
       "import": "Lägg till era artiklar och bilder",
       "look": "Lägg till logotyp och välkomsttext",
       "retailer": "Bjud in er första återförsäljare",
-      "automate": "Publicera automatiskt från era egna system"
+      "automate": "Publicera automatiskt från era egna system",
+      "email": "Konfigurera e-post för inbjudningar och lösenordslänkar"
     },
     "health": "Katalog",
     "products": "Artiklar",

@@ -230,7 +230,8 @@
       "import": "Adicione os seus artigos e imagens",
       "look": "Adicione o seu logótipo e um texto de boas-vindas",
       "retailer": "Convide o seu primeiro revendedor",
-      "automate": "Publique automaticamente a partir dos seus sistemas"
+      "automate": "Publique automaticamente a partir dos seus sistemas",
+      "email": "Configure o e-mail para convites e ligações de palavra-passe"
     },
     "health": "Catálogo",
     "products": "Artigos",

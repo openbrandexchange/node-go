@@ -231,7 +231,8 @@
       "import": "Dodajte artikle in fotografije",
       "look": "Dodajte logotip in pozdravno besedilo",
       "retailer": "Povabite prvega trgovca",
-      "automate": "Objavljajte samodejno iz svojih sistemov"
+      "automate": "Objavljajte samodejno iz svojih sistemov",
+      "email": "Nastavite e-pošto za povabila in povezave za geslo"
     },
     "health": "Katalog",
     "products": "Artikli",
