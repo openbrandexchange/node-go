@@ -251,7 +251,9 @@ func (a *App) handleLogin(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	email := normEmail(body.Email)
-	if !a.limit(w, "login-ip:"+a.clientIP(r), 10, 15*time.Minute) || !a.limit(w, "login-email:"+email, 10, 15*time.Minute) {
+	// Failed attempts are limited per address and per account.
+	ipKey, emailKey := "login-ip:"+a.clientIP(r), "login-email:"+email
+	if !a.failureGate(w, ipKey, 10, 15*time.Minute) || !a.failureGate(w, emailKey, 10, 15*time.Minute) {
 		return
 	}
 	u, err := a.loadUser(ctx, a.DB, "email = ?", email)
@@ -260,6 +262,8 @@ func (a *App) handleLogin(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	failed := func(code string) {
+		a.countFailure(ipKey, 10, 15*time.Minute)
+		a.countFailure(emailKey, 10, 15*time.Minute)
 		e := auditEntry{ActorType: "anonymous", Action: "session.login_failed", TargetType: "user", Status: 401, Details: map[string]any{"reason": code}}
 		if u != nil {
 			e.TargetID = u.ID

@@ -415,3 +415,24 @@ func TestColourlessImages(t *testing.T) {
 		t.Fatalf("unknown colour: %v", run)
 	}
 }
+
+// Colleagues behind one office address can all log in; guessing is limited.
+func TestLoginRateLimitCountsFailuresOnly(t *testing.T) {
+	n := newTestNode(t)
+	n.setup()
+	for i := 0; i < 15; i++ {
+		c := n.client()
+		c.login(adminEmail, adminPassword)
+	}
+	c := n.client()
+	c.session()
+	for i := 0; i < 10; i++ {
+		if r := c.do("POST", "/admin/api/session/login", map[string]any{"email": adminEmail, "password": "not the password"}); r.Status != 401 {
+			t.Fatalf("failed attempt %d: %d", i, r.Status)
+		}
+	}
+	r := c.do("POST", "/admin/api/session/login", map[string]any{"email": adminEmail, "password": adminPassword})
+	if r.Status != 429 || r.Header.Get("Retry-After") == "" {
+		t.Fatalf("after 10 failures: %d %v", r.Status, r.Header)
+	}
+}

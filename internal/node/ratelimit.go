@@ -53,6 +53,43 @@ func (l *rateLimiter) allow(key string, limit int, per time.Duration, now time.T
 	return true, limit - w.count, resetIn
 }
 
+// peek reports whether key has used up its window, without counting.
+func (l *rateLimiter) peek(key string, limit int, per time.Duration, now time.Time) (blocked bool, reset int) {
+	l.mu.Lock()
+	defer l.mu.Unlock()
+	w := l.windows[key]
+	if w == nil || now.Sub(w.start) >= per {
+		return false, 0
+	}
+	reset = int((per - now.Sub(w.start)).Seconds())
+	if reset < 1 {
+		reset = 1
+	}
+	return w.count >= limit, reset
+}
+
+// failureGate answers 429 when key already had limit failures in the
+// window. Successful attempts are not counted: only countFailure adds to it,
+// so many colleagues logging in from one office address are not locked out.
+func (a *App) failureGate(w http.ResponseWriter, key string, limit int, per time.Duration) bool {
+	blocked, reset := a.limiter.peek(key, limit, per, time.Now())
+	if blocked {
+		p := problem.New("rate_limited", "Too many failed attempts; try again in %d seconds.", reset)
+		p.RetryAfter = &reset
+		w.Header().Set("RateLimit-Limit", strconv.Itoa(limit))
+		w.Header().Set("RateLimit-Remaining", "0")
+		w.Header().Set("RateLimit-Reset", strconv.Itoa(reset))
+		problem.Write(w, p)
+		return false
+	}
+	return true
+}
+
+// countFailure counts one failed attempt for key.
+func (a *App) countFailure(key string, limit int, per time.Duration) {
+	a.limiter.allow(key, limit, per, time.Now())
+}
+
 // limit applies a rate limit and writes RateLimit-* headers. It returns
 // false (and writes 429) when exceeded.
 func (a *App) limit(w http.ResponseWriter, key string, limit int, per time.Duration) bool {
