@@ -34,7 +34,10 @@ type ImageName struct {
 }
 
 // ParseImageName parses {style}_{color}_{position}[_{qualifier}…].{ext}
-// from the right.
+// from the right (docs/import-format.md §2.1): qualifiers are popped while
+// more than three parts remain (a two-part key such as size_chart first),
+// then applied right to left, each filling only what is still empty, so the
+// rightmost role or view wins. Role and View stay "" when not given.
 func ParseImageName(name string) (*ImageName, error) {
 	base := path.Base(strings.ReplaceAll(name, "\\", "/"))
 	ext := path.Ext(base)
@@ -42,28 +45,25 @@ func ParseImageName(name string) (*ImageName, error) {
 		return nil, fmt.Errorf("%s is not an image file (jpg, png, webp, tif)", base)
 	}
 	parts := strings.Split(strings.TrimSuffix(base, ext), "_")
-	out := &ImageName{}
-	// Pop qualifiers (roles/views) while more than three parts remain.
-	for len(parts) > 3 {
-		last := strings.ToLower(parts[len(parts)-1])
-		// tilted_left / tilted_right / size_chart span two parts.
+	var quals []string // left to right
+	for {
 		if len(parts) > 4 {
-			two := strings.ToLower(parts[len(parts)-2]) + "_" + last
-			if Views[two] || Roles[two] {
-				if !assign(out, two) {
-					break
-				}
+			two := strings.ToLower(parts[len(parts)-2]) + "_" + strings.ToLower(parts[len(parts)-1])
+			if Roles[two] || Views[two] {
+				quals = append([]string{two}, quals...)
 				parts = parts[:len(parts)-2]
 				continue
 			}
 		}
-		if !(Roles[last] || Views[last]) {
-			break
+		if len(parts) > 3 {
+			last := strings.ToLower(parts[len(parts)-1])
+			if Roles[last] || Views[last] {
+				quals = append([]string{last}, quals...)
+				parts = parts[:len(parts)-1]
+				continue
+			}
 		}
-		if !assign(out, last) {
-			break
-		}
-		parts = parts[:len(parts)-1]
+		break
 	}
 	if len(parts) < 3 {
 		return nil, fmt.Errorf("%s does not follow {style}_{color}_{position}.jpg (position missing)", base)
@@ -73,35 +73,51 @@ func ParseImageName(name string) (*ImageName, error) {
 	if err != nil || pos < 1 || pos > 999 || strings.HasPrefix(posStr, "0") || strconv.Itoa(pos) != posStr {
 		return nil, fmt.Errorf("%s does not follow {style}_{color}_{position}.jpg (position must be 1-999)", base)
 	}
-	out.Position = pos
-	out.Color = parts[len(parts)-2]
-	out.Style = strings.Join(parts[:len(parts)-2], "_")
+	out := &ImageName{Position: pos, Color: parts[len(parts)-2], Style: strings.Join(parts[:len(parts)-2], "_")}
 	if out.Style == "" || out.Color == "" {
 		return nil, fmt.Errorf("%s does not follow {style}_{color}_{position}.jpg", base)
 	}
+	out.Role, out.View = roleAndView(quals)
 	return out, nil
 }
 
-// assign sets a qualifier; false when it conflicts with an earlier one.
-func assign(n *ImageName, q string) bool {
-	if q == "detail" {
-		if n.Role == "" {
-			n.Role = "detail"
+// roleAndView applies qualifiers right to left, each filling only what is
+// still empty. "other" is the view when the name also has another role,
+// otherwise the role; "detail" sets both.
+func roleAndView(quals []string) (role, view string) {
+	otherIsView := false
+	for _, q := range quals {
+		if q != "other" && Roles[q] {
+			otherIsView = true
 		}
-		if n.View == "" {
-			n.View = "detail"
+	}
+	for i := len(quals) - 1; i >= 0; i-- {
+		q := quals[i]
+		switch {
+		case q == "detail":
+			if role == "" {
+				role = "detail"
+			}
+			if view == "" {
+				view = "detail"
+			}
+		case q == "other":
+			if otherIsView {
+				if view == "" {
+					view = "other"
+				}
+			} else if role == "" {
+				role = "other"
+			}
+		case Roles[q]:
+			if role == "" {
+				role = q
+			}
+		case view == "":
+			view = q
 		}
-		return true
 	}
-	if Roles[q] && n.Role == "" {
-		n.Role = q
-		return true
-	}
-	if Views[q] && n.View == "" {
-		n.View = q
-		return true
-	}
-	return false
+	return role, view
 }
 
 // Ignored reports whether a package entry is junk that must be skipped.

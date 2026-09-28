@@ -3,6 +3,10 @@ package importfmt
 import (
 	"archive/zip"
 	"bytes"
+	"encoding/json"
+	"os"
+	"strconv"
+	"strings"
 	"testing"
 )
 
@@ -105,4 +109,74 @@ func TestSafeEntry(t *testing.T) {
 	if !Ignored("__MACOSX/._x.jpg") || !Ignored("a/.DS_Store") || Ignored("a/b.jpg") {
 		t.Fatal("ignored files")
 	}
+}
+
+// TestImageNameVectors runs the spec's shared filename test vectors
+// (fixtures/expected/image-filenames.json, synced into testdata/spec).
+func TestImageNameVectors(t *testing.T) {
+	data, err := os.ReadFile("../../testdata/spec/expected/image-filenames.json")
+	if err != nil {
+		t.Fatal(err)
+	}
+	var doc struct {
+		Cases []struct {
+			Name       string  `json:"name"`
+			Style      string  `json:"style"`
+			Color      *string `json:"color"`
+			Position   int     `json:"position"`
+			Role       string  `json:"role"`
+			View       *string `json:"view"`
+			ExternalID string  `json:"external_id"`
+			Error      string  `json:"error"`
+		} `json:"cases"`
+	}
+	if err := json.Unmarshal(data, &doc); err != nil {
+		t.Fatal(err)
+	}
+	if len(doc.Cases) < 20 {
+		t.Fatalf("only %d vectors", len(doc.Cases))
+	}
+	for _, c := range doc.Cases {
+		n, err := ParseImageName(c.Name)
+		if c.Error != "" {
+			if err == nil {
+				t.Errorf("%s: want an error, got %+v", c.Name, n)
+			}
+			continue
+		}
+		if err != nil {
+			t.Errorf("%s: %v", c.Name, err)
+			continue
+		}
+		// What the importer makes of it: ALL means every colour, no role means packshot.
+		var color *string
+		if !strings.EqualFold(n.Color, "ALL") {
+			color = &n.Color
+		}
+		role := n.Role
+		if role == "" {
+			role = "packshot"
+		}
+		var view *string
+		if n.View != "" {
+			view = &n.View
+		}
+		colorPart := "ALL"
+		if color != nil {
+			colorPart = *color
+		}
+		ext := n.Style + "_" + colorPart + "_" + strconv.Itoa(n.Position)
+		if n.Style != c.Style || !sameStr(color, c.Color) || n.Position != c.Position || role != c.Role || !sameStr(view, c.View) || ext != c.ExternalID {
+			t.Errorf("%s: got style %s colour %v position %d role %s view %v id %s", c.Name, n.Style, deref(color), n.Position, role, deref(view), ext)
+		}
+	}
+}
+
+func sameStr(a, b *string) bool { return (a == nil && b == nil) || (a != nil && b != nil && *a == *b) }
+
+func deref(s *string) string {
+	if s == nil {
+		return "null"
+	}
+	return *s
 }

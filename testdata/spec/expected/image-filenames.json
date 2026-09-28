@@ -1,0 +1,28 @@
+{
+  "description": "Test vectors for the image filename rule (docs/import-format.md §2.1). 'color' is the colour part as written (null for ALL in any case), 'external_id' assumes the catalog spells the style and colour as the file does, and 'error' marks names that do not follow the pattern. Every implementation should parse each name to exactly this.",
+  "cases": [
+    { "name": "KO-1001_NVY_1.jpg", "style": "KO-1001", "color": "NVY", "position": 1, "role": "packshot", "view": null, "external_id": "KO-1001_NVY_1" },
+    { "name": "KO-1001_NVY_2_back.jpg", "style": "KO-1001", "color": "NVY", "position": 2, "role": "packshot", "view": "back", "external_id": "KO-1001_NVY_2" },
+    { "name": "KO-1003_RST_3_model.png", "style": "KO-1003", "color": "RST", "position": 3, "role": "model", "view": null, "external_id": "KO-1003_RST_3" },
+    { "name": "AB_12_34_BLK_2_packshot_back.JPG", "style": "AB_12_34", "color": "BLK", "position": 2, "role": "packshot", "view": "back", "external_id": "AB_12_34_BLK_2" },
+    { "name": "KO-1004_IND_3_detail.jpg", "style": "KO-1004", "color": "IND", "position": 3, "role": "detail", "view": "detail", "external_id": "KO-1004_IND_3" },
+    { "name": "KO-1002_BLK_4_model_tilted_left.jpg", "style": "KO-1002", "color": "BLK", "position": 4, "role": "model", "view": "tilted_left", "external_id": "KO-1002_BLK_4" },
+    { "name": "KO-1001_NVY_1_tilted_right.webp", "style": "KO-1001", "color": "NVY", "position": 1, "role": "packshot", "view": "tilted_right", "external_id": "KO-1001_NVY_1" },
+    { "name": "KO-1001_NVY_5_back_front.jpg", "style": "KO-1001", "color": "NVY", "position": 5, "role": "packshot", "view": "front", "external_id": "KO-1001_NVY_5" },
+    { "name": "KO-1001_NVY_6_model_other.jpg", "style": "KO-1001", "color": "NVY", "position": 6, "role": "model", "view": "other", "external_id": "KO-1001_NVY_6" },
+    { "name": "KO-1001_NVY_7_other.jpg", "style": "KO-1001", "color": "NVY", "position": 7, "role": "other", "view": null, "external_id": "KO-1001_NVY_7" },
+    { "name": "KO-1001_NVY_8_ghost_model.jpg", "style": "KO-1001", "color": "NVY", "position": 8, "role": "model", "view": null, "external_id": "KO-1001_NVY_8" },
+    { "name": "KO-1001_NVY_9_FRONT.JPEG", "style": "KO-1001", "color": "NVY", "position": 9, "role": "packshot", "view": "front", "external_id": "KO-1001_NVY_9" },
+    { "name": "KO-1001_NVY_10_size_chart_front.png", "style": "KO-1001", "color": "NVY", "position": 10, "role": "size_chart", "view": "front", "external_id": "KO-1001_NVY_10" },
+    { "name": "KO-1005_all_4_size_chart.png", "style": "KO-1005", "color": null, "position": 4, "role": "size_chart", "view": null, "external_id": "KO-1005_ALL_4" },
+    { "name": "KO-1005_ALL_2_tilted_right.tiff", "style": "KO-1005", "color": null, "position": 2, "role": "packshot", "view": "tilted_right", "external_id": "KO-1005_ALL_2" },
+    { "name": "SKU_MODEL_NVY_1.jpg", "style": "SKU_MODEL", "color": "NVY", "position": 1, "role": "packshot", "view": null, "external_id": "SKU_MODEL_NVY_1" },
+    { "name": "A_B_999.png", "style": "A", "color": "B", "position": 999, "role": "packshot", "view": null, "external_id": "A_B_999" },
+    { "name": "KO-1001_NVY_front.jpg", "error": "validation_failed" },
+    { "name": "KO-1001_NVY_0.jpg", "error": "validation_failed" },
+    { "name": "KO-1001_NVY_012.jpg", "error": "validation_failed" },
+    { "name": "KO-1001_NVY_1000.jpg", "error": "validation_failed" },
+    { "name": "X_1_detail.jpg", "error": "validation_failed" },
+    { "name": "NVY_1.jpg", "error": "validation_failed" }
+  ]
+}
