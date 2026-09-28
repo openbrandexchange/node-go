@@ -5,6 +5,7 @@ import (
 	"crypto/sha256"
 	"encoding/hex"
 	"encoding/json"
+	"fmt"
 	"image"
 	_ "image/jpeg"
 	"net/http"
@@ -382,9 +383,32 @@ func TestKestrelProtocol(t *testing.T) {
 		}
 	})
 
+	t.Run("a new key gets catalog and media scopes; usage:write only when asked for", func(t *testing.T) {
+		ret := k.admin.must(201, "POST", "/admin/api/retailers", map[string]any{"name": "Scope Shop"})
+		def := k.admin.must(201, "POST", "/admin/api/api-clients", map[string]any{"retailer_id": ret["id"], "name": "Scope Shop PIM"})
+		if got := fmt.Sprint(def["client"].(map[string]any)["scopes"]); got != "[catalog:read media:original media:read]" {
+			t.Fatalf("default scopes %s", got)
+		}
+		asked := k.admin.must(201, "POST", "/admin/api/api-clients", map[string]any{"retailer_id": ret["id"], "name": "Scope Shop stats", "scopes": []string{"catalog:read", "usage:write"}})
+		if got := fmt.Sprint(asked["client"].(map[string]any)["scopes"]); got != "[catalog:read usage:write]" {
+			t.Fatalf("requested scopes %s", got)
+		}
+	})
+
 	t.Run("usage appears in stats", func(t *testing.T) {
 		a := k.asset(k.all, "KO-1001_NVY_1")
-		res := k.all.must(202, "POST", "/obx/v1/usage", map[string]any{"events": []any{
+		// Reporting usage needs a key that asked for usage:write.
+		var retailerID string
+		for _, it := range k.admin.must(200, "GET", "/admin/api/retailers", nil)["items"].([]any) {
+			if r := it.(map[string]any); r["name"] == "All Brands Store" {
+				retailerID = r["id"].(string)
+			}
+		}
+		cl := k.admin.must(201, "POST", "/admin/api/api-clients", map[string]any{"retailer_id": retailerID, "name": "Stats reporter",
+			"scopes": []string{"catalog:read", "media:read", "usage:write"}})
+		reporter := k.client()
+		reporter.bearer = k.token(cl["client"].(map[string]any)["client_id"].(string), cl["client_secret"].(string), "")
+		res := reporter.must(202, "POST", "/obx/v1/usage", map[string]any{"events": []any{
 			map[string]any{"asset_id": a["id"], "event": "published", "channel": "webshop", "at": "2026-09-01T10:00:00Z", "count": 3},
 			map[string]any{"asset_id": "ast_unknown", "event": "synced", "at": "2026-09-01T10:00:00Z"},
 		}})

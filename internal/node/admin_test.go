@@ -173,6 +173,29 @@ func TestAccessRequestsAndRetailers(t *testing.T) {
 		}
 	})
 
+	t.Run("renewing an approved key retires the secret waiting for the requester's software", func(t *testing.T) {
+		ar := public.must(202, "POST", "/obx/v1/access-requests", map[string]any{
+			"retailer": map[string]any{"name": "Web Form Shop", "country": "DE"},
+			"contact":  map[string]any{"name": "Wim", "email": "wim@webform.example"},
+			"access":   []string{"api"},
+		})
+		res := admin.must(200, "POST", "/admin/api/access-requests/"+ar["id"].(string)+"/approve", nil)
+		cl := res["api_client"].(map[string]any)
+		// The brand shows the key itself ("Show the key" in the admin): a renewed secret.
+		renewed := admin.must(200, "POST", "/admin/api/api-clients/"+cl["id"].(string)+"/rotate", nil)
+		if s, _ := renewed["client_secret"].(string); !strings.HasPrefix(s, "obxs_") {
+			t.Fatalf("rotate: %v", renewed)
+		}
+		poll := n.client()
+		poll.bearer = ar["request_token"].(string)
+		st := poll.must(200, "GET", "/obx/v1/access-requests/"+ar["id"].(string), nil)
+		validate(t, "AccessRequest", st)
+		creds := st["credentials"].(map[string]any)
+		if creds["client_secret"] != nil || creds["claimed"] != true {
+			t.Fatalf("the waiting secret was still handed out after renewing: %v", creds)
+		}
+	})
+
 	t.Run("reject with reason", func(t *testing.T) {
 		ar := public.must(202, "POST", "/obx/v1/access-requests", map[string]any{
 			"retailer": map[string]any{"name": "Unknown Shop"}, "contact": map[string]any{"name": "Uma", "email": "uma@shop.example"}})

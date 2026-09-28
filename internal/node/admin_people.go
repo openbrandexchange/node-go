@@ -629,11 +629,17 @@ func (a *App) createAPIClient(ctx context.Context, retailerID, name string, scop
 	if name == "" || len(name) > 200 {
 		return nil, "", problem.New("validation_failed", "A name is required.").Field("/name", "validation_failed", "required")
 	}
-	if ret, _ := a.loadRetailer(ctx, a.DB, retailerID); ret == nil {
+	ret, _ := a.loadRetailer(ctx, a.DB, retailerID)
+	if ret == nil {
 		return nil, "", problem.New("validation_failed", "Unknown retailer.").Field("/retailer_id", "validation_failed", "unknown retailer")
 	}
 	if scopes == nil {
-		scopes = append([]string(nil), AllScopes...)
+		// node-admin.yaml ApiClientCreate: catalog:read and media:read, plus media:original when
+		// the retailer may download originals; usage:write only when asked for explicitly.
+		scopes = []string{"catalog:read", "media:read"}
+		if a.originalAllowed(ctx, ret) {
+			scopes = append(scopes, "media:original")
+		}
 	}
 	valid := map[string]bool{}
 	for _, s := range AllScopes {
@@ -731,6 +737,13 @@ func (a *App) rotateClient(w http.ResponseWriter, r *http.Request, retailerID st
 	}
 	secret := secure.Token("obxs_")
 	if _, err := a.DB.Exec(ctx, `UPDATE api_clients SET secret_hash = ?, secret_version = secret_version + 1 WHERE id = ?`, secure.HashToken(secret), c.ID); err != nil {
+		a.fail(w, r, err)
+		return
+	}
+	// A key made on approval waits for the requester's software. Once it is renewed (the brand
+	// hands it over itself, e.g. when the retailer asked on the web form), that waiting secret no
+	// longer works, so a later poll of the access request must not hand it out.
+	if _, err := a.DB.Exec(ctx, `UPDATE access_requests SET claimed = 1, client_secret_enc = NULL WHERE api_client_id = ? AND client_secret_enc IS NOT NULL`, c.ID); err != nil {
 		a.fail(w, r, err)
 		return
 	}

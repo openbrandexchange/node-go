@@ -35,6 +35,12 @@ are always forward-only and applied automatically on start.
 - Image names: the rightmost role or view wins (`_back_front` is view front) and `_model_other` is
   role model with view other, as the spec says; before, such a file was refused.
 - Discovery reports `spec_version` 0.1.0 instead of 0.1.0-draft.
+- A new API key without chosen scopes gets `catalog:read` and `media:read`, plus `media:original`
+  when the retailer may download originals, as the spec says; it got every scope, `usage:write`
+  included.
+- Renewing an API key that was made when approving an access request retires the secret still
+  waiting for the requester's software, so the status address no longer hands out a secret that
+  stopped working ("Show the key" in the admin renews it).
 
 ## [0.1.0] - 2026-09-28
 
