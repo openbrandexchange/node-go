@@ -162,6 +162,13 @@ CREATE TABLE mail_outbox (
   created_at TEXT NOT NULL, sent_at TEXT);
 CREATE INDEX mail_outbox_due ON mail_outbox(status, next_attempt_at);
 `,
+	// 3: spec 0.2 article data. Products and variants keep their write model
+	// as JSON in data, so no column changes; this marks the stored objects
+	// for the one-time rewrite node.App does on start (0.1 fibre keys
+	// normalised, representations with the new properties).
+	`
+INSERT INTO meta (key, value) VALUES ('upgrade_article_data', '0.2');
+`,
 }
 
 // SchemaVersion is the newest schema this binary knows.

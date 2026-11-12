@@ -1,0 +1,345 @@
+{
+  "id": "{{id}}",
+  "external_id": "KO-1010",
+  "brand_id": "{{id}}",
+  "style_number": "KO-1010",
+  "name": {
+    "en": "Leather Chelsea Boot",
+    "nl": "Leren chelsea boot"
+  },
+  "description": {
+    "en": "Chelsea boot in full-grain leather with leather lining and a removable insole.",
+    "nl": "Chelsea boot van volnerf leer met leren voering en uitneembaar voetbed."
+  },
+  "item_type": "shoes",
+  "item_subtype": "ankle_boot",
+  "gpc_brick": null,
+  "target_group": "men",
+  "season": "AW26",
+  "collection": "Highland",
+  "materials": [
+    {
+      "part": "upper",
+      "fibers": [
+        {
+          "fiber": "leather",
+          "percentage": 100
+        }
+      ]
+    },
+    {
+      "part": "lining",
+      "fibers": [
+        {
+          "fiber": "leather",
+          "percentage": 100
+        }
+      ]
+    },
+    {
+      "part": "sole",
+      "fibers": [
+        {
+          "fiber": "rubber",
+          "percentage": 100
+        }
+      ]
+    }
+  ],
+  "contains_animal_origin": null,
+  "footwear_materials": {
+    "upper": "leather",
+    "lining_and_sock": "leather",
+    "outer_sole": "other"
+  },
+  "care": [
+    {
+      "code": "do_not_wash",
+      "text": null
+    },
+    {
+      "code": "do_not_bleach",
+      "text": null
+    },
+    {
+      "code": "do_not_tumble_dry",
+      "text": null
+    },
+    {
+      "code": "do_not_iron",
+      "text": null
+    },
+    {
+      "code": "do_not_dry_clean",
+      "text": null
+    }
+  ],
+  "country_of_origin": "PT",
+  "certifications": [
+    {
+      "scheme": "lwg",
+      "licence_number": "LWG-200-1010",
+      "scope": "material"
+    }
+  ],
+  "dpp_url": null,
+  "features": {
+    "closure": "slip_on",
+    "detachable_parts": [
+      "insole"
+    ]
+  },
+  "attributes": null,
+  "created_at": "{{datetime}}",
+  "updated_at": "{{datetime}}",
+  "variants": [
+    {
+      "id": "{{id}}",
+      "external_id": "2000101001010",
+      "product_id": "{{id}}",
+      "brand_id": "{{id}}",
+      "gtin": "02000101001010",
+      "gtin_original": "2000101001010",
+      "sku": "KO-1010-BRN-41",
+      "color": {
+        "code": "BRN",
+        "name": {
+          "en": "Dark brown",
+          "nl": "Donkerbruin"
+        },
+        "supplier_color": "Espresso",
+        "family": "brown"
+      },
+      "size": "41",
+      "size_length": null,
+      "size_system": "EU",
+      "measurements": {
+        "heel_height_cm": 3.5,
+        "shaft_height_cm": 14
+      },
+      "updated_at": "{{datetime}}"
+    },
+    {
+      "id": "{{id}}",
+      "external_id": "2000101001027",
+      "product_id": "{{id}}",
+      "brand_id": "{{id}}",
+      "gtin": "02000101001027",
+      "gtin_original": "2000101001027",
+      "sku": "KO-1010-BRN-42",
+      "color": {
+        "code": "BRN",
+        "name": {
+          "en": "Dark brown",
+          "nl": "Donkerbruin"
+        },
+        "supplier_color": "Espresso",
+        "family": "brown"
+      },
+      "size": "42",
+      "size_length": null,
+      "size_system": "EU",
+      "measurements": {
+        "heel_height_cm": 3.5,
+        "shaft_height_cm": 14.5
+      },
+      "updated_at": "{{datetime}}"
+    },
+    {
+      "id": "{{id}}",
+      "external_id": "2000101001034",
+      "product_id": "{{id}}",
+      "brand_id": "{{id}}",
+      "gtin": "02000101001034",
+      "gtin_original": "2000101001034",
+      "sku": "KO-1010-BRN-43",
+      "color": {
+        "code": "BRN",
+        "name": {
+          "en": "Dark brown",
+          "nl": "Donkerbruin"
+        },
+        "supplier_color": "Espresso",
+        "family": "brown"
+      },
+      "size": "43",
+      "size_length": null,
+      "size_system": "EU",
+      "measurements": {
+        "heel_height_cm": 3.5,
+        "shaft_height_cm": 15
+      },
+      "updated_at": "{{datetime}}"
+    }
+  ],
+  "assets": [
+    {
+      "id": "{{id}}",
+      "external_id": "KO-1010_BRN_1",
+      "product_id": "{{id}}",
+      "brand_id": "{{id}}",
+      "media_type": "image",
+      "color_code": "BRN",
+      "variant_ids": null,
+      "role": "packshot",
+      "view": "side",
+      "position": 1,
+      "filename": "KO-1010_BRN_1_side.png",
+      "alt_text": null,
+      "content_type": "image/png",
+      "width": 1200,
+      "height": 1500,
+      "bytes": 10928,
+      "sha256": "37e24f8340392d04d3212f9a380a93c46ad12e1eedfe27fac256683816edb641",
+      "rights": {
+        "license": "retailer-use",
+        "license_text": null,
+        "channels": [
+          "webshop",
+          "marketplace",
+          "social"
+        ],
+        "territories": null,
+        "embargo_until": null,
+        "expires_at": null,
+        "credit": null,
+        "model_release": null
+      },
+      "provenance": {
+        "ai_generated": false,
+        "ai_edited": false,
+        "source": "photo",
+        "c2pa": "none",
+        "c2pa_manifest_url": null,
+        "generator": null
+      },
+      "renditions": {
+        "original": {
+          "name": "original",
+          "url": "{{url}}",
+          "url_expires_at": "{{datetime|null}}",
+          "content_type": "image/png",
+          "width": 1200,
+          "height": 1500,
+          "bytes": 10928,
+          "sha256": "37e24f8340392d04d3212f9a380a93c46ad12e1eedfe27fac256683816edb641"
+        },
+        "web": {
+          "name": "web",
+          "url": "{{url}}",
+          "url_expires_at": "{{datetime|null}}",
+          "content_type": "image/jpeg",
+          "width": 1200,
+          "height": 1500,
+          "bytes": "{{int}}",
+          "sha256": "{{sha256}}"
+        },
+        "square": {
+          "name": "square",
+          "url": "{{url}}",
+          "url_expires_at": "{{datetime|null}}",
+          "content_type": "image/jpeg",
+          "width": 1500,
+          "height": 1500,
+          "bytes": "{{int}}",
+          "sha256": "{{sha256}}"
+        },
+        "thumb": {
+          "name": "thumb",
+          "url": "{{url}}",
+          "url_expires_at": "{{datetime|null}}",
+          "content_type": "image/jpeg",
+          "width": 480,
+          "height": 600,
+          "bytes": "{{int}}",
+          "sha256": "{{sha256}}"
+        }
+      },
+      "updated_at": "{{datetime}}"
+    },
+    {
+      "id": "{{id}}",
+      "external_id": "KO-1010_BRN_2",
+      "product_id": "{{id}}",
+      "brand_id": "{{id}}",
+      "media_type": "image",
+      "color_code": "BRN",
+      "variant_ids": null,
+      "role": "packshot",
+      "view": "front",
+      "position": 2,
+      "filename": "KO-1010_BRN_2_front.png",
+      "alt_text": null,
+      "content_type": "image/png",
+      "width": 1200,
+      "height": 1500,
+      "bytes": 11013,
+      "sha256": "b6972b28eba66b81e5a2db7cfbeb893bad03bee7ff39ff65aa83f6d934cf58ce",
+      "rights": {
+        "license": "retailer-use",
+        "license_text": null,
+        "channels": [
+          "webshop",
+          "marketplace",
+          "social"
+        ],
+        "territories": null,
+        "embargo_until": null,
+        "expires_at": null,
+        "credit": null,
+        "model_release": null
+      },
+      "provenance": {
+        "ai_generated": false,
+        "ai_edited": false,
+        "source": "photo",
+        "c2pa": "none",
+        "c2pa_manifest_url": null,
+        "generator": null
+      },
+      "renditions": {
+        "original": {
+          "name": "original",
+          "url": "{{url}}",
+          "url_expires_at": "{{datetime|null}}",
+          "content_type": "image/png",
+          "width": 1200,
+          "height": 1500,
+          "bytes": 11013,
+          "sha256": "b6972b28eba66b81e5a2db7cfbeb893bad03bee7ff39ff65aa83f6d934cf58ce"
+        },
+        "web": {
+          "name": "web",
+          "url": "{{url}}",
+          "url_expires_at": "{{datetime|null}}",
+          "content_type": "image/jpeg",
+          "width": 1200,
+          "height": 1500,
+          "bytes": "{{int}}",
+          "sha256": "{{sha256}}"
+        },
+        "square": {
+          "name": "square",
+          "url": "{{url}}",
+          "url_expires_at": "{{datetime|null}}",
+          "content_type": "image/jpeg",
+          "width": 1500,
+          "height": 1500,
+          "bytes": "{{int}}",
+          "sha256": "{{sha256}}"
+        },
+        "thumb": {
+          "name": "thumb",
+          "url": "{{url}}",
+          "url_expires_at": "{{datetime|null}}",
+          "content_type": "image/jpeg",
+          "width": 480,
+          "height": 600,
+          "bytes": "{{int}}",
+          "sha256": "{{sha256}}"
+        }
+      },
+      "updated_at": "{{datetime}}"
+    }
+  ]
+}

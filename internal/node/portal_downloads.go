@@ -19,6 +19,7 @@ import (
 
 	"github.com/openbrandexchange/node-go/internal/blobstore"
 	"github.com/openbrandexchange/node-go/internal/db"
+	"github.com/openbrandexchange/node-go/internal/importfmt"
 	"github.com/openbrandexchange/node-go/internal/problem"
 )
 
@@ -331,11 +332,59 @@ func formatMaterials(ms []MaterialPart) string {
 	for _, m := range ms {
 		var fs []string
 		for _, f := range m.Fibers {
-			fs = append(fs, strconv.FormatFloat(f.Percentage, 'f', -1, 64)+"% "+f.Fiber)
+			c := strconv.FormatFloat(f.Percentage, 'f', -1, 64) + "% " + f.Fiber
+			if f.Recycled {
+				c += " (recycled)"
+			}
+			if f.Organic {
+				c += " (organic)"
+			}
+			fs = append(fs, c)
 		}
 		parts = append(parts, m.Part+": "+strings.Join(fs, ", "))
 	}
 	return strings.Join(parts, "; ")
+}
+
+func formatFootwear(f *FootwearMaterials) string {
+	if f == nil {
+		return ""
+	}
+	var parts []string
+	for _, p := range []struct {
+		k string
+		v *string
+	}{{"upper", f.Upper}, {"lining_and_sock", f.LiningAndSock}, {"outer_sole", f.OuterSole}} {
+		if p.v != nil {
+			parts = append(parts, p.k+": "+*p.v)
+		}
+	}
+	return strings.Join(parts, "; ")
+}
+
+func formatCertifications(cs []Certification) string {
+	var parts []string
+	for _, c := range cs {
+		s := c.Scheme
+		if c.LicenceNumber != nil {
+			s += ":" + *c.LicenceNumber
+		}
+		if c.Scope == "material" {
+			s += " (material)"
+		}
+		parts = append(parts, s)
+	}
+	return strings.Join(parts, "; ")
+}
+
+func yesNo(b *bool) string {
+	switch {
+	case b == nil:
+		return ""
+	case *b:
+		return "yes"
+	}
+	return "no"
 }
 
 // buildCSV renders canonical CSV rows (one per visible variant).
@@ -351,12 +400,16 @@ func (a *App) buildCSV(ctx context.Context, v *Viewer, productIDs []string, deli
 		}
 		products = append(products, ps...)
 	}
-	attrKeys := map[string]bool{}
+	attrKeys, featureKeys := map[string]bool{}, map[string]bool{}
 	for _, p := range products {
 		for k := range p.Attributes {
 			attrKeys[k] = true
 		}
+		for k := range p.Features {
+			featureKeys[k] = true
+		}
 	}
+	features := importfmt.FeatureColumns(featureKeys)
 	var attrs []string
 	for k := range attrKeys {
 		attrs = append(attrs, k)
@@ -369,7 +422,11 @@ func (a *App) buildCSV(ctx context.Context, v *Viewer, productIDs []string, deli
 	for _, l := range langs {
 		header = append(header, "description:"+l)
 	}
-	header = append(header, "item_type", "target_group", "season", "collection", "gpc_brick", "materials", "care", "country_of_origin", "dpp_url", "status")
+	header = append(header, "item_type", "item_subtype", "target_group", "season", "collection", "gpc_brick", "materials",
+		"contains_animal_origin", "footwear_materials", "care", "country_of_origin", "certifications", "dpp_url", "status")
+	for _, k := range features {
+		header = append(header, "feature:"+k)
+	}
 	for _, k := range attrs {
 		header = append(header, "attr:"+k)
 	}
@@ -377,7 +434,9 @@ func (a *App) buildCSV(ctx context.Context, v *Viewer, productIDs []string, deli
 	for _, l := range langs {
 		header = append(header, "color_name:"+l)
 	}
-	header = append(header, "supplier_color", "size", "size_system", "variant_status", "image_files")
+	header = append(header, "color_family", "supplier_color", "size", "size_length", "size_system")
+	header = append(header, importfmt.MeasurementColumns...)
+	header = append(header, "variant_status", "image_files")
 	var buf bytes.Buffer
 	buf.WriteString("\ufeff")
 	cw := csv.NewWriter(&buf)
@@ -396,8 +455,12 @@ func (a *App) buildCSV(ctx context.Context, v *Viewer, productIDs []string, deli
 		for _, c := range p.Care {
 			care = append(care, c.Code)
 		}
-		base = append(base, deref(p.ItemType), deref(p.TargetGroup), deref(p.Season), deref(p.Collection), deref(p.GPCBrick),
-			formatMaterials(p.Materials), strings.Join(care, "|"), deref(p.CountryOfOrigin), deref(p.DPPURL), "published")
+		base = append(base, deref(p.ItemType), deref(p.ItemSubtype), deref(p.TargetGroup), deref(p.Season), deref(p.Collection), deref(p.GPCBrick),
+			formatMaterials(p.Materials), yesNo(p.ContainsAnimalOrigin), formatFootwear(p.FootwearMaterials), strings.Join(care, "|"),
+			deref(p.CountryOfOrigin), formatCertifications(p.Certifications), deref(p.DPPURL), "published")
+		for _, k := range features {
+			base = append(base, importfmt.FormatFeature(p.Features[k]))
+		}
 		for _, k := range attrs {
 			val := ""
 			if x, ok := p.Attributes[k]; ok && x != nil {
@@ -432,7 +495,11 @@ func (a *App) buildCSV(ctx context.Context, v *Viewer, productIDs []string, deli
 			for range langs {
 				row = append(row, "")
 			}
-			row = append(row, "", "", "", "", strings.Join(filesByColor[""], "|"))
+			row = append(row, "", "", "", "", "")
+			for range importfmt.MeasurementColumns {
+				row = append(row, "")
+			}
+			row = append(row, "", strings.Join(filesByColor[""], "|"))
 			write(row)
 			continue
 		}
@@ -442,7 +509,11 @@ func (a *App) buildCSV(ctx context.Context, v *Viewer, productIDs []string, deli
 				row = append(row, vv.Color.Name[l])
 			}
 			files := append(append([]string{}, filesByColor[vv.Color.Code]...), filesByColor[""]...)
-			row = append(row, deref(vv.Color.SupplierColor), deref(vv.Size), deref(vv.SizeSystem), "published", strings.Join(files, "|"))
+			row = append(row, deref(vv.Color.Family), deref(vv.Color.SupplierColor), deref(vv.Size), deref(vv.SizeLength), deref(vv.SizeSystem))
+			for _, k := range importfmt.MeasurementColumns {
+				row = append(row, vv.Measurements.Cell(k))
+			}
+			row = append(row, "published", strings.Join(files, "|"))
 			write(row)
 		}
 	}

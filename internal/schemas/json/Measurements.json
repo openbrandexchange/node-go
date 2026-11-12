@@ -1,0 +1,89 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openbrandexchange.com/schemas/v0.2/Measurements.json",
+  "title": "Measurements",
+  "description": "Measurements of one variant. Numbers only; the unit is part of the key (cm, kg, l, inch). Only the measurements the brand stated are present; null instead of an empty object. How to measure: docs/protocol.md#measurements.",
+  "type": "object",
+  "properties": {
+    "height_cm": {
+      "type": "number",
+      "exclusiveMinimum": 0,
+      "description": "Vertical, the article standing in normal use. Luggage: outer dimension including wheels, handles and feet. Bags: the body without handles and strap."
+    },
+    "width_cm": {
+      "type": "number",
+      "exclusiveMinimum": 0,
+      "description": "Left to right, seen from the front. Luggage: outer dimension including wheels, handles and feet. Bags: the body."
+    },
+    "depth_cm": {
+      "type": "number",
+      "exclusiveMinimum": 0,
+      "description": "Front to back. Luggage: outer dimension including wheels, handles and feet. Bags: the body."
+    },
+    "weight_kg": {
+      "type": "number",
+      "exclusiveMinimum": 0,
+      "description": "Weight of the article itself, without packaging."
+    },
+    "volume_l": {
+      "type": "number",
+      "exclusiveMinimum": 0,
+      "description": "Volume in litres (luggage, bags)."
+    },
+    "volume_expanded_l": {
+      "type": "number",
+      "exclusiveMinimum": 0,
+      "description": "Volume in litres when expanded (luggage and bags with an expansion zip)."
+    },
+    "handle_drop_cm": {
+      "type": "number",
+      "exclusiveMinimum": 0,
+      "description": "Bags: from the top of the handle to the top of the body, handle held upright."
+    },
+    "strap_length_cm": {
+      "type": "object",
+      "description": "Bags: length of the shoulder strap, shortest and longest setting (equal when not adjustable).",
+      "properties": {
+        "min": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "description": "Shortest setting."
+        },
+        "max": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "description": "Longest setting."
+        }
+      },
+      "required": [
+        "min",
+        "max"
+      ],
+      "additionalProperties": false
+    },
+    "laptop_max_inch": {
+      "type": "number",
+      "exclusiveMinimum": 0,
+      "description": "Largest laptop (screen diagonal in inches) the laptop compartment takes."
+    },
+    "heel_height_cm": {
+      "type": "number",
+      "exclusiveMinimum": 0,
+      "description": "Footwear: height of the heel at the back, measured from the floor."
+    },
+    "shaft_height_cm": {
+      "type": "number",
+      "exclusiveMinimum": 0,
+      "description": "Footwear (boots): height of the shaft, from the top of the insole at the heel to the top of the shaft."
+    },
+    "inseam_cm": {
+      "type": "number",
+      "exclusiveMinimum": 0,
+      "description": "Trousers: inside leg length, from the crotch seam to the hem."
+    }
+  },
+  "additionalProperties": false,
+  "patternProperties": {
+    "^x-[a-z0-9]+-[a-z0-9_-]+$": true
+  }
+}

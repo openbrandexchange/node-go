@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://openbrandexchange.com/schemas/v0.1/Variant.json",
+  "$id": "https://openbrandexchange.com/schemas/v0.2/Variant.json",
   "type": "object",
   "title": "Variant",
   "description": "A sellable colour/size combination of a product.",
@@ -58,6 +58,14 @@
       "description": "Size label, e.g. 'M', '42', '32/34', 'ONE SIZE'.",
       "maxLength": 64
     },
+    "size_length": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Second size where one exists, e.g. the length of jeans (size 32, size_length 34) or the cup of a bra (size 75, size_length B).",
+      "maxLength": 64
+    },
     "size_system": {
       "type": [
         "string",
@@ -65,6 +73,16 @@
       ],
       "description": "Optional size system, e.g. EU, UK, US, INT, FR, IT.",
       "maxLength": 16
+    },
+    "measurements": {
+      "anyOf": [
+        {
+          "$ref": "Measurements.json"
+        },
+        {
+          "type": "null"
+        }
+      ]
     },
     "updated_at": {
       "$ref": "Common.json#/$defs/DateTime"

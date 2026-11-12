@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://openbrandexchange.com/schemas/v0.1/WebhookEvent.json",
+  "$id": "https://openbrandexchange.com/schemas/v0.2/WebhookEvent.json",
   "type": "object",
   "title": "WebhookEvent",
   "description": "Webhook payload. Signed: OBX-Webhook-Signature: v1=<hex HMAC-SHA256(secret, timestamp + '.' + raw_body)>.",

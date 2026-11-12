@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://openbrandexchange.com/schemas/v0.1/Usage.json",
+  "$id": "https://openbrandexchange.com/schemas/v0.2/Usage.json",
   "type": "object",
   "title": "Usage",
   "description": "Body of POST /obx/v1/usage. Organisation-level only: never include personal data.",

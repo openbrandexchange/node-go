@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://openbrandexchange.com/schemas/v0.1/Directory.json",
+  "$id": "https://openbrandexchange.com/schemas/v0.2/Directory.json",
   "type": "object",
   "title": "Directory",
   "description": "directory.json: a public list of OBX nodes (discovery URLs only, no data).",

@@ -13,7 +13,7 @@ fi
 rm -rf "$HERE/internal/schemas/json" "$HERE/testdata/spec"
 mkdir -p "$HERE/internal/schemas/json" "$HERE/testdata/spec"
 cp "$SPEC"/schemas/*.json "$HERE/internal/schemas/json/"
-cp -R "$SPEC/fixtures/kestrel" "$SPEC/fixtures/expected" "$SPEC/fixtures/ingest" "$HERE/testdata/spec/"
+cp -R "$SPEC/fixtures/kestrel" "$SPEC/fixtures/expected" "$SPEC/fixtures/ingest" "$SPEC/fixtures/imports" "$HERE/testdata/spec/"
 mkdir -p "$HERE/testdata/spec/examples"
 cp "$SPEC"/fixtures/examples/*.json "$HERE/testdata/spec/examples/"
 (cd "$SPEC" && git rev-parse HEAD 2>/dev/null || echo unknown) > "$HERE/testdata/spec/SPEC_COMMIT"

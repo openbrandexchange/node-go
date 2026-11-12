@@ -254,9 +254,9 @@ func (a *App) adminAssetOrder(w http.ResponseWriter, r *http.Request) { a.doAsse
 func (a *App) adminPutFile(w http.ResponseWriter, r *http.Request) { a.putFile(w, r, nil) }
 
 // importTemplate is the canonical CSV template with two example rows.
-const importTemplate = "brand,style_number,name:en,name:nl,description:en,description:nl,item_type,target_group,season,collection,materials,care,country_of_origin,gtin,sku,color_code,color_name:en,color_name:nl,size,size_system\r\n" +
-	"Your Brand,ST-1001,Crew neck sweater,Trui met ronde hals,Soft knit sweater.,Zachte gebreide trui.,sweater,unisex,AW26,Essentials,main: 100% merino_wool,wash_30_very_mild|do_not_bleach|dry_flat,PT,2000000000015,ST-1001-NVY-M,NVY,Navy,Marineblauw,M,INT\r\n" +
-	"Your Brand,ST-1001,Crew neck sweater,Trui met ronde hals,Soft knit sweater.,Zachte gebreide trui.,sweater,unisex,AW26,Essentials,main: 100% merino_wool,wash_30_very_mild|do_not_bleach|dry_flat,PT,2000000000022,ST-1001-NVY-L,NVY,Navy,Marineblauw,L,INT\r\n"
+const importTemplate = "brand,style_number,name:en,name:nl,description:en,description:nl,item_type,target_group,season,collection,materials,contains_animal_origin,care,country_of_origin,feature:fit,feature:neckline,gtin,sku,color_code,color_name:en,color_name:nl,color_family,size,size_system,weight_kg\r\n" +
+	"Your Brand,ST-1001,Crew neck sweater,Trui met ronde hals,Soft knit sweater.,Zachte gebreide trui.,sweater,unisex,AW26,Essentials,main: 100% merino_wool,no,wash_30_very_mild|do_not_bleach|dry_flat,PT,regular,crew,2000000000015,ST-1001-NVY-M,NVY,Navy,Marineblauw,blue,M,INT,0.42\r\n" +
+	"Your Brand,ST-1001,Crew neck sweater,Trui met ronde hals,Soft knit sweater.,Zachte gebreide trui.,sweater,unisex,AW26,Essentials,main: 100% merino_wool,no,wash_30_very_mild|do_not_bleach|dry_flat,PT,regular,crew,2000000000022,ST-1001-NVY-L,NVY,Navy,Marineblauw,blue,L,INT,0.46\r\n"
 
 func (a *App) adminImportTemplate(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/csv; charset=utf-8")

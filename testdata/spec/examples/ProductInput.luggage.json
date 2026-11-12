@@ -1,0 +1,43 @@
+{
+  "brand_external_id": "kestrel",
+  "style_number": "KO-1008",
+  "name": {
+    "en": "Hardshell Cabin Spinner",
+    "nl": "Harde handbagagekoffer"
+  },
+  "item_type": "luggage",
+  "item_subtype": "cabin",
+  "target_group": "unisex",
+  "materials": [
+    {
+      "part": "shell",
+      "fibers": [
+        {
+          "fiber": "polypropylene",
+          "percentage": 100
+        }
+      ]
+    },
+    {
+      "part": "lining",
+      "fibers": [
+        {
+          "fiber": "polyester",
+          "percentage": 100,
+          "recycled": true
+        }
+      ]
+    }
+  ],
+  "contains_animal_origin": null,
+  "footwear_materials": null,
+  "country_of_origin": "CN",
+  "certifications": null,
+  "features": {
+    "shell": "hard",
+    "wheels": 4,
+    "lock": "tsa_combination",
+    "expandable": true,
+    "closure": "zip"
+  }
+}

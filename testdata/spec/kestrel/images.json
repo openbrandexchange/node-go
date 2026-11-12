@@ -229,6 +229,86 @@
     "style": "KO-1006",
     "width": 1200
   },
+  "KO-1008_BLK_1_front.png": {
+    "bytes": 12061,
+    "color": "BLK",
+    "height": 1500,
+    "position": 1,
+    "qualifier": "front",
+    "sha256": "53af11efcf7b8a946e9f84f323c6c68c76b917ae34ad68ab2fcd575259937d4f",
+    "style": "KO-1008",
+    "width": 1200
+  },
+  "KO-1008_BLK_2_side.png": {
+    "bytes": 11986,
+    "color": "BLK",
+    "height": 1500,
+    "position": 2,
+    "qualifier": "side",
+    "sha256": "f4d12fddbec31cfd5b289af3af54ee057fe9211f27adc5b76487e5b98f789eaf",
+    "style": "KO-1008",
+    "width": 1200
+  },
+  "KO-1008_BLK_3_inside.png": {
+    "bytes": 12145,
+    "color": "BLK",
+    "height": 1500,
+    "position": 3,
+    "qualifier": "inside",
+    "sha256": "c86c491c4146a7aa5cbdd63c8916247a7cfa8ce056be3d259c9385c0ac218014",
+    "style": "KO-1008",
+    "width": 1200
+  },
+  "KO-1009_CHR_1_front.png": {
+    "bytes": 10999,
+    "color": "CHR",
+    "height": 1500,
+    "position": 1,
+    "qualifier": "front",
+    "sha256": "fecbb97259bbb4ab429af0d65d8f4d47f1f804217e0d325ce1566bf1be2f232b",
+    "style": "KO-1009",
+    "width": 1200
+  },
+  "KO-1009_CHR_2_back.png": {
+    "bytes": 10940,
+    "color": "CHR",
+    "height": 1500,
+    "position": 2,
+    "qualifier": "back",
+    "sha256": "ebf1cc9b9f63d83fd2b9b07e9dbd0f5a27c98bf490d3bca1d0e236b5a8d2724b",
+    "style": "KO-1009",
+    "width": 1200
+  },
+  "KO-1009_CHR_3_inside.png": {
+    "bytes": 11068,
+    "color": "CHR",
+    "height": 1500,
+    "position": 3,
+    "qualifier": "inside",
+    "sha256": "32104963abecedef8cc8f91c6560184acc4a0e422574c938f567ea5f96ccb4ce",
+    "style": "KO-1009",
+    "width": 1200
+  },
+  "KO-1010_BRN_1_side.png": {
+    "bytes": 10928,
+    "color": "BRN",
+    "height": 1500,
+    "position": 1,
+    "qualifier": "side",
+    "sha256": "37e24f8340392d04d3212f9a380a93c46ad12e1eedfe27fac256683816edb641",
+    "style": "KO-1010",
+    "width": 1200
+  },
+  "KO-1010_BRN_2_front.png": {
+    "bytes": 11013,
+    "color": "BRN",
+    "height": 1500,
+    "position": 2,
+    "qualifier": "front",
+    "sha256": "b6972b28eba66b81e5a2db7cfbeb893bad03bee7ff39ff65aa83f6d934cf58ce",
+    "style": "KO-1010",
+    "width": 1200
+  },
   "KT-2001_BLK_1_front.png": {
     "bytes": 12052,
     "color": "BLK",

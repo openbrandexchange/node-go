@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://openbrandexchange.com/schemas/v0.1/VariantInput.json",
+  "$id": "https://openbrandexchange.com/schemas/v0.2/VariantInput.json",
   "type": "object",
   "title": "VariantInput",
   "description": "Ingest write model for a variant. Key: external_id (path); default convention = the GTIN, else `<style>-<color>-<size>`.",
@@ -36,12 +36,29 @@
       ],
       "maxLength": 64
     },
+    "size_length": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "maxLength": 64
+    },
     "size_system": {
       "type": [
         "string",
         "null"
       ],
       "maxLength": 16
+    },
+    "measurements": {
+      "anyOf": [
+        {
+          "$ref": "Measurements.json"
+        },
+        {
+          "type": "null"
+        }
+      ]
     },
     "status": {
       "$ref": "Common.json#/$defs/PublicationStatus"

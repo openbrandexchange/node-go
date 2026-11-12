@@ -516,7 +516,7 @@ func TestInterruptedImportResumes(t *testing.T) {
 	}
 	var products int
 	_ = n.app.DB.QueryRow(ctx, `SELECT COUNT(*) FROM products WHERE visible = 1`).Scan(&products)
-	if products != 8 {
+	if products != 11 {
 		t.Fatalf("visible products after the resumed import: %d", products)
 	}
 }

@@ -27,6 +27,10 @@ type writer struct {
 	// exclude positions of these asset ids from position conflict checks
 	// (an import applying a product colour's positions atomically).
 	positionExclude map[string]bool
+	// silent stores a changed representation of a visible object without a
+	// change entry (the one-time upgrade of objects whose content did not
+	// change, only the shape of their representation).
+	silent bool
 }
 
 func (a *App) newWriter(ctx context.Context, tx *db.Tx) *writer {
@@ -105,22 +109,12 @@ func (w *writer) recompute(r *row) error {
 		var d ProductData
 		_ = json.Unmarshal([]byte(r.Data), &d)
 		visible = visible && w.parentVisible(KindBrand, r.BrandID)
-		rep = Product{ID: r.ID, ExternalID: r.ExternalID, BrandID: r.BrandID, StyleNumber: d.StyleNumber, Name: d.Name,
-			Description: d.Description, ItemType: d.ItemType, GPCBrick: d.GPCBrick, TargetGroup: d.TargetGroup, Season: d.Season,
-			Collection: d.Collection, Materials: d.Materials, Care: d.Care, CountryOfOrigin: d.CountryOfOrigin, DPPURL: d.DPPURL,
-			Attributes: d.Attributes, CreatedAt: r.CreatedAt}
+		rep = productRep(r, &d)
 	case KindVariant:
 		var d VariantData
 		_ = json.Unmarshal([]byte(r.Data), &d)
 		visible = visible && w.parentVisible(KindProduct, r.ProductID)
-		v := Variant{ID: r.ID, ExternalID: r.ExternalID, ProductID: r.ProductID, BrandID: r.BrandID, GTINOriginal: d.GTIN,
-			SKU: d.SKU, Color: d.Color, Size: d.Size, SizeSystem: d.SizeSystem}
-		if d.GTIN != nil {
-			if n, ok := normalizeGTIN(*d.GTIN); ok {
-				v.GTIN = &n
-			}
-		}
-		rep = v
+		rep = variantRep(r, &d)
 	case KindAsset:
 		var d AssetData
 		_ = json.Unmarshal([]byte(r.Data), &d)
@@ -176,6 +170,7 @@ func (w *writer) recompute(r *row) error {
 	repHash := hashHex([]byte(repJSON))
 	updatedAt, lastSeq := r.UpdatedAt, r.LastSeq
 	switch {
+	case w.silent && visible && r.Visible:
 	case visible && (!r.Visible || repHash != r.RepHash):
 		seq, err := w.emit(r.Kind, "upsert", r)
 		if err != nil {
@@ -202,6 +197,28 @@ func (w *writer) recompute(r *row) error {
 	}
 	r.Visible, r.Rep, r.RepHash, r.UpdatedAt, r.LastSeq = visible, repJSON, repHash, updatedAt, lastSeq
 	return err
+}
+
+// productRep is the protocol Product of a stored product (without
+// updated_at, which is set when it is read).
+func productRep(r *row, d *ProductData) Product {
+	return Product{ID: r.ID, ExternalID: r.ExternalID, BrandID: r.BrandID, StyleNumber: d.StyleNumber, Name: d.Name,
+		Description: d.Description, ItemType: d.ItemType, ItemSubtype: d.ItemSubtype, GPCBrick: d.GPCBrick, TargetGroup: d.TargetGroup,
+		Season: d.Season, Collection: d.Collection, Materials: d.Materials, ContainsAnimalOrigin: d.ContainsAnimalOrigin,
+		FootwearMaterials: d.FootwearMaterials, Care: d.Care, CountryOfOrigin: d.CountryOfOrigin, Certifications: d.Certifications,
+		DPPURL: d.DPPURL, Features: d.Features, Attributes: d.Attributes, CreatedAt: r.CreatedAt}
+}
+
+// variantRep is the protocol Variant of a stored variant.
+func variantRep(r *row, d *VariantData) Variant {
+	v := Variant{ID: r.ID, ExternalID: r.ExternalID, ProductID: r.ProductID, BrandID: r.BrandID, GTINOriginal: d.GTIN,
+		SKU: d.SKU, Color: d.Color, Size: d.Size, SizeLength: d.SizeLength, SizeSystem: d.SizeSystem, Measurements: d.Measurements}
+	if d.GTIN != nil {
+		if n, ok := normalizeGTIN(*d.GTIN); ok {
+			v.GTIN = &n
+		}
+	}
+	return v
 }
 
 func expired(expiresAt *string, now time.Time) bool {

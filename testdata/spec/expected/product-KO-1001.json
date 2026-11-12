@@ -12,6 +12,7 @@
     "nl": "Fijngebreide trui met ronde hals van zachte merinowol."
   },
   "item_type": "sweater",
+  "item_subtype": null,
   "gpc_brick": null,
   "target_group": "unisex",
   "season": "AW26",
@@ -27,6 +28,8 @@
       ]
     }
   ],
+  "contains_animal_origin": false,
+  "footwear_materials": null,
   "care": [
     {
       "code": "wash_30_very_mild",
@@ -54,7 +57,19 @@
     }
   ],
   "country_of_origin": "PT",
+  "certifications": [
+    {
+      "scheme": "rws",
+      "licence_number": "CU 200101",
+      "scope": "material"
+    }
+  ],
   "dpp_url": null,
+  "features": {
+    "fit": "regular",
+    "sleeve_length": "long",
+    "neckline": "crew"
+  },
   "attributes": null,
   "created_at": "{{datetime}}",
   "updated_at": "{{datetime}}",
@@ -73,10 +88,13 @@
           "en": "Navy",
           "nl": "Marineblauw"
         },
-        "supplier_color": "Deep Navy"
+        "supplier_color": "Deep Navy",
+        "family": "blue"
       },
       "size": "S",
+      "size_length": null,
       "size_system": "INT",
+      "measurements": null,
       "updated_at": "{{datetime}}"
     },
     {
@@ -93,10 +111,13 @@
           "en": "Navy",
           "nl": "Marineblauw"
         },
-        "supplier_color": "Deep Navy"
+        "supplier_color": "Deep Navy",
+        "family": "blue"
       },
       "size": "M",
+      "size_length": null,
       "size_system": "INT",
+      "measurements": null,
       "updated_at": "{{datetime}}"
     },
     {
@@ -113,10 +134,13 @@
           "en": "Navy",
           "nl": "Marineblauw"
         },
-        "supplier_color": "Deep Navy"
+        "supplier_color": "Deep Navy",
+        "family": "blue"
       },
       "size": "L",
+      "size_length": null,
       "size_system": "INT",
+      "measurements": null,
       "updated_at": "{{datetime}}"
     },
     {
@@ -133,10 +157,13 @@
           "en": "Navy",
           "nl": "Marineblauw"
         },
-        "supplier_color": "Deep Navy"
+        "supplier_color": "Deep Navy",
+        "family": "blue"
       },
       "size": "XL",
+      "size_length": null,
       "size_system": "INT",
+      "measurements": null,
       "updated_at": "{{datetime}}"
     },
     {
@@ -153,10 +180,13 @@
           "en": "Oatmeal",
           "nl": "Havermout"
         },
-        "supplier_color": "Oat Melange"
+        "supplier_color": "Oat Melange",
+        "family": "beige"
       },
       "size": "S",
+      "size_length": null,
       "size_system": "INT",
+      "measurements": null,
       "updated_at": "{{datetime}}"
     },
     {
@@ -173,10 +203,13 @@
           "en": "Oatmeal",
           "nl": "Havermout"
         },
-        "supplier_color": "Oat Melange"
+        "supplier_color": "Oat Melange",
+        "family": "beige"
       },
       "size": "M",
+      "size_length": null,
       "size_system": "INT",
+      "measurements": null,
       "updated_at": "{{datetime}}"
     },
     {
@@ -193,10 +226,13 @@
           "en": "Oatmeal",
           "nl": "Havermout"
         },
-        "supplier_color": "Oat Melange"
+        "supplier_color": "Oat Melange",
+        "family": "beige"
       },
       "size": "L",
+      "size_length": null,
       "size_system": "INT",
+      "measurements": null,
       "updated_at": "{{datetime}}"
     },
     {
@@ -213,10 +249,13 @@
           "en": "Oatmeal",
           "nl": "Havermout"
         },
-        "supplier_color": "Oat Melange"
+        "supplier_color": "Oat Melange",
+        "family": "beige"
       },
       "size": "XL",
+      "size_length": null,
       "size_system": "INT",
+      "measurements": null,
       "updated_at": "{{datetime}}"
     }
   ],

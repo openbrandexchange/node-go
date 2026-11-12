@@ -18,8 +18,8 @@ import (
 
 var knownFields = map[string][]string{
 	KindBrand:   {"name", "logo_url", "website", "description", "status"},
-	KindProduct: {"brand_external_id", "style_number", "name", "description", "item_type", "gpc_brick", "target_group", "season", "collection", "materials", "care", "country_of_origin", "dpp_url", "attributes", "status"},
-	KindVariant: {"product_external_id", "gtin", "sku", "color", "size", "size_system", "status"},
+	KindProduct: {"brand_external_id", "style_number", "name", "description", "item_type", "item_subtype", "gpc_brick", "target_group", "season", "collection", "materials", "contains_animal_origin", "footwear_materials", "care", "country_of_origin", "certifications", "dpp_url", "features", "attributes", "status"},
+	KindVariant: {"product_external_id", "gtin", "sku", "color", "size", "size_length", "size_system", "measurements", "status"},
 	KindAsset:   {"product_external_id", "color_code", "variant_external_ids", "media_type", "role", "view", "position", "filename", "alt_text", "rights", "provenance", "files", "status"},
 }
 
@@ -134,11 +134,13 @@ type prepared struct {
 	productID string
 	cols      map[string]any
 	warnings  []string
+	details   []WarningDetail
 	files     map[string]FileRef
 }
 
 // prepare validates doc for kind and builds the stored write model.
 func (w *writer) prepare(kind, ext string, doc map[string]any, existing *row) (*prepared, *problem.Problem) {
+	prepareArticleInput(kind, doc)
 	if errs := lenientValidate(inputSchema[kind], doc); errs != nil {
 		// Map GTIN pattern failures on variants to invalid_gtin.
 		if kind == KindVariant {
@@ -211,6 +213,21 @@ func (w *writer) prepare(kind, ext string, doc map[string]any, existing *row) (*
 		if d.Attributes != nil {
 			d.Attributes = normalizeNumbers(map[string]any(d.Attributes)).(map[string]any)
 		}
+		// 0.2 article data (ingest.md §3.4): 0.1 fibre keys become the
+		// fibre with its flag; empty features and certifications are null.
+		normalizeMaterials(d.Materials)
+		if len(d.Features) == 0 {
+			d.Features = nil
+		} else {
+			d.Features = normalizeNumbers(map[string]any(d.Features)).(map[string]any)
+		}
+		if len(d.Certifications) == 0 {
+			d.Certifications = nil
+		}
+		p.details = labelWarnings(&d)
+		for _, wd := range p.details {
+			p.warnings = append(p.warnings, wd.Code+": "+wd.Detail)
+		}
 		p.data = string(mustJSON(d))
 		p.brandID = brandID
 	case KindVariant:
@@ -246,6 +263,13 @@ func (w *writer) prepare(kind, ext string, doc map[string]any, existing *row) (*
 			norm = n
 		}
 		d.Color.Code = strings.TrimSpace(d.Color.Code)
+		if d.Measurements.empty() {
+			d.Measurements = nil
+		}
+		if r := d.Measurements; r != nil && r.StrapLengthCM != nil && r.StrapLengthCM.Min > r.StrapLengthCM.Max {
+			return nil, problem.New("validation_failed", "strap_length_cm: min is larger than max.").
+				Field("/measurements/strap_length_cm", "validation_failed", "min must not be larger than max")
+		}
 		p.data = string(mustJSON(d))
 		p.productID, p.brandID = productID, brandID
 		p.cols["gtin"] = norm
@@ -452,6 +476,7 @@ func (w *writer) write(op, kind, ext string, doc map[string]any, ifMatch string)
 		status = *p.status
 	}
 	res.Warnings = p.warnings
+	res.WarningDetails = p.details
 	if existing != nil && existing.Data == p.data && existing.Status == status &&
 		(kind == KindBrand || kind == KindProduct && existing.BrandID == p.brandID || existing.ProductID == p.productID) {
 		res.Result = "unchanged"

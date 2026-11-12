@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://openbrandexchange.com/schemas/v0.1/ExportRequest.json",
+  "$id": "https://openbrandexchange.com/schemas/v0.2/ExportRequest.json",
   "type": "object",
   "title": "ExportRequest",
   "properties": {

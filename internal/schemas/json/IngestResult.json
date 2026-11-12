@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://openbrandexchange.com/schemas/v0.1/IngestResult.json",
+  "$id": "https://openbrandexchange.com/schemas/v0.2/IngestResult.json",
   "type": "object",
   "title": "IngestResult",
   "properties": {
@@ -90,6 +90,38 @@
       "items": {
         "type": "string",
         "maxLength": 1000
+      }
+    },
+    "warning_details": {
+      "type": "array",
+      "description": "Warnings with a stable code (label completeness, docs/import-format.md#label-completeness). Each is also listed as text in warnings. Present only when there are any.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "$ref": "Common.json#/$defs/WarningCode"
+          },
+          "pointer": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "JSON Pointer into the write model, e.g. /materials/0.",
+            "maxLength": 500
+          },
+          "detail": {
+            "type": "string",
+            "maxLength": 1000
+          }
+        },
+        "required": [
+          "code",
+          "detail"
+        ],
+        "additionalProperties": false,
+        "patternProperties": {
+          "^x-[a-z0-9]+-[a-z0-9_-]+$": true
+        }
       }
     }
   },

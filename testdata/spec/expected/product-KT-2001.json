@@ -1,0 +1,319 @@
+{
+  "id": "{{id}}",
+  "external_id": "KT-2001",
+  "brand_id": "{{id}}",
+  "style_number": "KT-2001",
+  "name": {
+    "en": "Trail Running Shorts",
+    "nl": "Trailrunning short"
+  },
+  "description": {
+    "en": "Lightweight running shorts with inner brief.",
+    "nl": "Lichte hardloopshort met binnenbroekje."
+  },
+  "item_type": "shorts",
+  "item_subtype": null,
+  "gpc_brick": null,
+  "target_group": "men",
+  "season": "SS26",
+  "collection": "Trail",
+  "materials": [
+    {
+      "part": "outer",
+      "fibers": [
+        {
+          "fiber": "polyester",
+          "percentage": 100,
+          "recycled": true
+        }
+      ]
+    },
+    {
+      "part": "lining",
+      "fibers": [
+        {
+          "fiber": "polyamide",
+          "percentage": 88
+        },
+        {
+          "fiber": "elastane",
+          "percentage": 12
+        }
+      ]
+    }
+  ],
+  "contains_animal_origin": false,
+  "footwear_materials": null,
+  "care": [
+    {
+      "code": "wash_30",
+      "text": null
+    },
+    {
+      "code": "do_not_bleach",
+      "text": null
+    },
+    {
+      "code": "do_not_tumble_dry",
+      "text": null
+    },
+    {
+      "code": "do_not_iron",
+      "text": null
+    },
+    {
+      "code": "do_not_dry_clean",
+      "text": null
+    }
+  ],
+  "country_of_origin": "VN",
+  "certifications": null,
+  "dpp_url": null,
+  "features": {
+    "fit": "regular"
+  },
+  "attributes": null,
+  "created_at": "{{datetime}}",
+  "updated_at": "{{datetime}}",
+  "variants": [
+    {
+      "id": "{{id}}",
+      "external_id": "2000200101017",
+      "product_id": "{{id}}",
+      "brand_id": "{{id}}",
+      "gtin": "02000200101017",
+      "gtin_original": "2000200101017",
+      "sku": "KT-2001-BLK-S",
+      "color": {
+        "code": "BLK",
+        "name": {
+          "en": "Black",
+          "nl": "Zwart"
+        },
+        "supplier_color": "Jet",
+        "family": "black"
+      },
+      "size": "S",
+      "size_length": null,
+      "size_system": "INT",
+      "measurements": null,
+      "updated_at": "{{datetime}}"
+    },
+    {
+      "id": "{{id}}",
+      "external_id": "2000200101024",
+      "product_id": "{{id}}",
+      "brand_id": "{{id}}",
+      "gtin": "02000200101024",
+      "gtin_original": "2000200101024",
+      "sku": "KT-2001-BLK-M",
+      "color": {
+        "code": "BLK",
+        "name": {
+          "en": "Black",
+          "nl": "Zwart"
+        },
+        "supplier_color": "Jet",
+        "family": "black"
+      },
+      "size": "M",
+      "size_length": null,
+      "size_system": "INT",
+      "measurements": null,
+      "updated_at": "{{datetime}}"
+    },
+    {
+      "id": "{{id}}",
+      "external_id": "2000200101031",
+      "product_id": "{{id}}",
+      "brand_id": "{{id}}",
+      "gtin": "02000200101031",
+      "gtin_original": "2000200101031",
+      "sku": "KT-2001-BLK-L",
+      "color": {
+        "code": "BLK",
+        "name": {
+          "en": "Black",
+          "nl": "Zwart"
+        },
+        "supplier_color": "Jet",
+        "family": "black"
+      },
+      "size": "L",
+      "size_length": null,
+      "size_system": "INT",
+      "measurements": null,
+      "updated_at": "{{datetime}}"
+    }
+  ],
+  "assets": [
+    {
+      "id": "{{id}}",
+      "external_id": "KT-2001_BLK_1",
+      "product_id": "{{id}}",
+      "brand_id": "{{id}}",
+      "media_type": "image",
+      "color_code": "BLK",
+      "variant_ids": null,
+      "role": "packshot",
+      "view": "front",
+      "position": 1,
+      "filename": "KT-2001_BLK_1_front.png",
+      "alt_text": null,
+      "content_type": "image/png",
+      "width": 1200,
+      "height": 1500,
+      "bytes": 12052,
+      "sha256": "69097433c1676fba89026af0790a7a25dabafca57734ff21a78d7f19d9a36cba",
+      "rights": {
+        "license": "retailer-use",
+        "license_text": null,
+        "channels": [
+          "webshop",
+          "marketplace",
+          "social"
+        ],
+        "territories": null,
+        "embargo_until": null,
+        "expires_at": null,
+        "credit": null,
+        "model_release": null
+      },
+      "provenance": {
+        "ai_generated": false,
+        "ai_edited": false,
+        "source": "photo",
+        "c2pa": "none",
+        "c2pa_manifest_url": null,
+        "generator": null
+      },
+      "renditions": {
+        "original": {
+          "name": "original",
+          "url": "{{url}}",
+          "url_expires_at": "{{datetime|null}}",
+          "content_type": "image/png",
+          "width": 1200,
+          "height": 1500,
+          "bytes": 12052,
+          "sha256": "69097433c1676fba89026af0790a7a25dabafca57734ff21a78d7f19d9a36cba"
+        },
+        "web": {
+          "name": "web",
+          "url": "{{url}}",
+          "url_expires_at": "{{datetime|null}}",
+          "content_type": "image/jpeg",
+          "width": 1200,
+          "height": 1500,
+          "bytes": "{{int}}",
+          "sha256": "{{sha256}}"
+        },
+        "square": {
+          "name": "square",
+          "url": "{{url}}",
+          "url_expires_at": "{{datetime|null}}",
+          "content_type": "image/jpeg",
+          "width": 1500,
+          "height": 1500,
+          "bytes": "{{int}}",
+          "sha256": "{{sha256}}"
+        },
+        "thumb": {
+          "name": "thumb",
+          "url": "{{url}}",
+          "url_expires_at": "{{datetime|null}}",
+          "content_type": "image/jpeg",
+          "width": 480,
+          "height": 600,
+          "bytes": "{{int}}",
+          "sha256": "{{sha256}}"
+        }
+      },
+      "updated_at": "{{datetime}}"
+    },
+    {
+      "id": "{{id}}",
+      "external_id": "KT-2001_BLK_2",
+      "product_id": "{{id}}",
+      "brand_id": "{{id}}",
+      "media_type": "image",
+      "color_code": "BLK",
+      "variant_ids": null,
+      "role": "packshot",
+      "view": "back",
+      "position": 2,
+      "filename": "KT-2001_BLK_2_back.png",
+      "alt_text": null,
+      "content_type": "image/png",
+      "width": 1200,
+      "height": 1500,
+      "bytes": 11980,
+      "sha256": "45c241504a5176a1a97378a1c04660fa60c077c8103a2d2c659d1338db456912",
+      "rights": {
+        "license": "retailer-use",
+        "license_text": null,
+        "channels": [
+          "webshop",
+          "marketplace",
+          "social"
+        ],
+        "territories": null,
+        "embargo_until": null,
+        "expires_at": null,
+        "credit": null,
+        "model_release": null
+      },
+      "provenance": {
+        "ai_generated": false,
+        "ai_edited": false,
+        "source": "photo",
+        "c2pa": "none",
+        "c2pa_manifest_url": null,
+        "generator": null
+      },
+      "renditions": {
+        "original": {
+          "name": "original",
+          "url": "{{url}}",
+          "url_expires_at": "{{datetime|null}}",
+          "content_type": "image/png",
+          "width": 1200,
+          "height": 1500,
+          "bytes": 11980,
+          "sha256": "45c241504a5176a1a97378a1c04660fa60c077c8103a2d2c659d1338db456912"
+        },
+        "web": {
+          "name": "web",
+          "url": "{{url}}",
+          "url_expires_at": "{{datetime|null}}",
+          "content_type": "image/jpeg",
+          "width": 1200,
+          "height": 1500,
+          "bytes": "{{int}}",
+          "sha256": "{{sha256}}"
+        },
+        "square": {
+          "name": "square",
+          "url": "{{url}}",
+          "url_expires_at": "{{datetime|null}}",
+          "content_type": "image/jpeg",
+          "width": 1500,
+          "height": 1500,
+          "bytes": "{{int}}",
+          "sha256": "{{sha256}}"
+        },
+        "thumb": {
+          "name": "thumb",
+          "url": "{{url}}",
+          "url_expires_at": "{{datetime|null}}",
+          "content_type": "image/jpeg",
+          "width": 480,
+          "height": 600,
+          "bytes": "{{int}}",
+          "sha256": "{{sha256}}"
+        }
+      },
+      "updated_at": "{{datetime}}"
+    }
+  ]
+}

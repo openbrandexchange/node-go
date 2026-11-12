@@ -1,0 +1,7 @@
+brand,style_number,name:en,item_type,materials,contains_animal_origin,footwear_materials
+Kestrel,KL-8001,Label Test Tee,t_shirt,,no,
+Kestrel,KL-8002,Label Test Scarf,scarf,main: 100% wool,,
+Kestrel,KL-8003,Label Test Sneaker,sneakers,upper: 100% polyester,,
+Kestrel,KL-8004,Label Test Shirt,shirt,"main: 60% cotton, 30% polyester",no,
+Kestrel,KL-8005,Label Test Sandal,sandals,,,upper: leather; lining_and_sock: leather
+Kestrel,KL-8006,Label Test Complete,t_shirt,main: 100% cotton,no,

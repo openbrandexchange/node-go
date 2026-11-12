@@ -77,7 +77,7 @@ test('a CSV plus a zip of images imports the whole catalog', async ({ page }) =>
   await logIn(page, admin)
   await page.getByRole('link', { name: 'Imports' }).first().click()
   await page.getByTestId('import-file-input').setInputFiles([`${FIX}/products.csv`, `${FIX}/assets.csv`, IMAGES_ZIP])
-  await expect(page.getByText('27 images')).toBeVisible()
+  await expect(page.getByText('35 images')).toBeVisible()
   await page.getByRole('button', { name: 'Start import' }).click()
   await expect(page).toHaveURL(/\/admin\/imports\/.+/)
   await expect(page.getByText('Everything was imported without problems.')).toBeVisible({ timeout: 90_000 })
@@ -132,7 +132,7 @@ test('the invited retailer sets a password, browses, pastes EANs and downloads a
 
   const list = page.getByRole('list', { name: 'Articles' })
   await expect(list.getByRole('listitem').first()).toBeVisible()
-  await expect(page.getByText('8 articles')).toBeVisible()
+  await expect(page.getByText('11 articles')).toBeVisible()
   await page.screenshot({ path: 'screenshots/05-portal.png' })
 
   await list.getByRole('listitem').first().getByRole('link').first().click()
@@ -278,9 +278,12 @@ test('a scheduled import fetches the nightly export from a web address', async (
 })
 
 async function expectImagesLoaded(page: Page) {
-  await expect.poll(async () =>
-    page.locator('main img').evaluateAll((imgs) => imgs.length > 0 && imgs.every((i) => (i as HTMLImageElement).complete && (i as HTMLImageElement).naturalWidth > 0)),
-  ).toBe(true)
+  // Images below the fold load lazily (the 0.2 article page puts the label
+  // information above them): scroll each into view before checking it.
+  await expect.poll(async () => {
+    for (const img of await page.locator('main img').all()) await img.scrollIntoViewIfNeeded()
+    return page.locator('main img').evaluateAll((imgs) => imgs.length > 0 && imgs.every((i) => (i as HTMLImageElement).complete && (i as HTMLImageElement).naturalWidth > 0))
+  }).toBe(true)
 }
 
 test('the brand opens an article in the admin and sees its images', async ({ page }) => {
@@ -299,7 +302,7 @@ test('a Dutch retailer sees the portal as a Beeldbank', async ({ page }) => {
   await logIn(page, retailer)
   await page.getByTestId('language-switcher').first().selectOption('nl')
   await expect(page.getByText('Beeldbank').first()).toBeVisible()
-  await expect(page.getByText('8 artikelen')).toBeVisible()
+  await expect(page.getByText('11 artikelen')).toBeVisible()
   await expectImagesLoaded(page)
   await page.screenshot({ path: 'screenshots/15-portal-nl.png' })
   expect(problems).toEqual([])
@@ -310,7 +313,7 @@ test('the example zip from the README imports on its own', async ({ page }) => {
   await logIn(page, admin)
   await page.getByRole('link', { name: 'Imports' }).first().click()
   await page.getByTestId('import-file-input').setInputFiles(['../testdata/kestrel-example.zip'])
-  await expect(page.getByText('27 images')).toBeVisible()
+  await expect(page.getByText('35 images')).toBeVisible()
   await page.getByRole('button', { name: 'Start import' }).click()
   await expect(page.getByText('Everything was imported without problems.')).toBeVisible({ timeout: 90_000 })
   expect(problems).toEqual([])

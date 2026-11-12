@@ -37,12 +37,13 @@ type Row struct {
 func (r Row) Get(col string) string { return r.Values[col] }
 
 var aliases = map[string]string{
-	"style":       "style_number",
-	"ean":         "gtin",
-	"barcode":     "gtin",
-	"colour_code": "color_code",
-	"colour_name": "color_name",
-	"colour":      "color_code",
+	"style":         "style_number",
+	"ean":           "gtin",
+	"barcode":       "gtin",
+	"colour_code":   "color_code",
+	"colour_name":   "color_name",
+	"colour":        "color_code",
+	"colour_family": "color_family",
 }
 
 // NormalizeHeader normalises a column name: case-insensitive, spaces and
@@ -59,8 +60,8 @@ func NormalizeHeader(h string) string {
 		return base
 	}
 	lang = strings.TrimSpace(lang)
-	if base == "attr" {
-		return "attr:" + strings.ToLower(strings.NewReplacer(" ", "_", "-", "_").Replace(lang))
+	if base == "attr" || base == "feature" {
+		return base + ":" + strings.ToLower(strings.NewReplacer(" ", "_", "-", "_").Replace(lang))
 	}
 	return base + ":" + NormalizeLang(lang)
 }
@@ -193,6 +194,11 @@ var KnownColumns = map[string]bool{
 	"country_of_origin": true, "dpp_url": true, "status": true, "variant_id": true, "gtin": true, "sku": true,
 	"color_code": true, "color_name": true, "supplier_color": true, "size": true, "size_system": true,
 	"variant_status": true, "image_files": true,
+	// 0.2 article data (import-format.md §1.6)
+	"item_subtype": true, "contains_animal_origin": true, "footwear_materials": true, "certifications": true,
+	"color_family": true, "size_length": true, "height_cm": true, "width_cm": true, "depth_cm": true, "weight_kg": true,
+	"volume_l": true, "volume_expanded_l": true, "handle_drop_cm": true, "strap_length_cm": true, "laptop_max_inch": true,
+	"heel_height_cm": true, "shaft_height_cm": true, "inseam_cm": true,
 }
 
 // KnownAssetColumns are the assets.csv columns.
@@ -210,7 +216,7 @@ func UnknownColumns(header []string, known map[string]bool) []string {
 	seen := map[string]bool{}
 	for _, h := range header {
 		base, _, _ := strings.Cut(h, ":")
-		if h == "" || known[base] || strings.HasPrefix(h, "attr:") || seen[h] {
+		if h == "" || known[base] || strings.HasPrefix(h, "attr:") || strings.HasPrefix(h, "feature:") || seen[h] {
 			continue
 		}
 		seen[h] = true
@@ -277,10 +283,13 @@ func Slug(s string) string {
 	return strings.Trim(b.String(), "-")
 }
 
-// Fiber is one fibre of a part.
+// Fiber is one fibre of a part, normalised (0.1 keys recycled_<fibre> and
+// organic_<fibre> become the fibre with the flag).
 type Fiber struct {
 	Key        string
 	Percentage float64
+	Recycled   bool
+	Organic    bool
 }
 
 // Part is one material part.
@@ -289,9 +298,15 @@ type Part struct {
 	Fibers []Fiber
 }
 
-var fiberRe = regexp.MustCompile(`^([0-9]+(?:[.,][0-9]+)?)\s*%\s*(.+)$`)
+var (
+	fiberRe = regexp.MustCompile(`^([0-9]+(?:[.,][0-9]+)?)\s*%\s*(.+)$`)
+	flagRe  = regexp.MustCompile(`(?i)\s*\((recycled|organic)\)\s*$`)
+)
 
-// ParseMaterials parses "outer: 65% cotton, 35% polyamide; lining: 100% polyester".
+// ParseMaterials parses "outer: 65% cotton, 35% polyamide; lining: 100%
+// polyester (recycled)". Whether the percentages of a part add up to 100 is
+// a label completeness check of the stored product (import-format.md rule
+// 10), not a parse warning.
 func ParseMaterials(s string) ([]Part, []string, error) {
 	var parts []Part
 	var warnings []string
@@ -310,7 +325,6 @@ func ParseMaterials(s string) ([]Part, []string, error) {
 			return nil, nil, fmt.Errorf("invalid part name %q", name)
 		}
 		part := Part{Name: name}
-		sum := 0.0
 		for _, f := range strings.Split(body, ",") {
 			f = strings.TrimSpace(f)
 			if f == "" {
@@ -324,18 +338,31 @@ func ParseMaterials(s string) ([]Part, []string, error) {
 			if err != nil || pct <= 0 || pct > 100 {
 				return nil, nil, fmt.Errorf("invalid percentage in %q", f)
 			}
-			key := Key(m[2])
+			fib := Fiber{Percentage: pct}
+			rest := m[2]
+			for {
+				fm := flagRe.FindStringSubmatch(rest)
+				if fm == nil {
+					break
+				}
+				if strings.EqualFold(fm[1], "recycled") {
+					fib.Recycled = true
+				} else {
+					fib.Organic = true
+				}
+				rest = rest[:len(rest)-len(fm[0])]
+			}
+			key := Key(rest)
 			if !ValidKey(key) {
 				return nil, nil, fmt.Errorf("invalid fibre %q", m[2])
 			}
-			part.Fibers = append(part.Fibers, Fiber{Key: key, Percentage: pct})
-			sum += pct
+			var rec, org bool
+			fib.Key, rec, org = NormalizeFiber(key)
+			fib.Recycled, fib.Organic = fib.Recycled || rec, fib.Organic || org
+			part.Fibers = append(part.Fibers, fib)
 		}
 		if len(part.Fibers) == 0 {
 			return nil, nil, fmt.Errorf("part %q has no fibres", name)
-		}
-		if sum < 99.5 || sum > 100.5 {
-			warnings = append(warnings, fmt.Sprintf("percentages of %s add up to %g, not 100", name, sum))
 		}
 		parts = append(parts, part)
 	}

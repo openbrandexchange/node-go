@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://openbrandexchange.com/schemas/v0.1/Change.json",
+  "$id": "https://openbrandexchange.com/schemas/v0.2/Change.json",
   "type": "object",
   "title": "Change",
   "description": "One entry of the change feed.",

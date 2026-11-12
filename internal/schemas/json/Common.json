@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://openbrandexchange.com/schemas/v0.1/Common.json",
+  "$id": "https://openbrandexchange.com/schemas/v0.2/Common.json",
   "title": "Common definitions",
   "description": "Shared scalar definitions used by all OBX schemas.",
   "$defs": {
@@ -220,6 +220,16 @@
         "service_unavailable"
       ],
       "description": "Machine-readable OBX error code (see docs/protocol.md#errors). Clients MUST treat unknown codes by HTTP status."
+    },
+    "WarningCode": {
+      "type": "string",
+      "enum": [
+        "fibre_composition_missing",
+        "animal_origin_unknown",
+        "footwear_materials_missing",
+        "fibre_percentages_not_100"
+      ],
+      "description": "Label completeness warning (see docs/import-format.md#label-completeness). Never blocks a write or publishing. Clients MUST ignore unknown codes."
     }
   }
 }

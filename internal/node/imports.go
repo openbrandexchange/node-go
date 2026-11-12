@@ -115,6 +115,7 @@ type productPlan struct {
 	rows     []int
 	variants []variantPlan
 	colors   map[string]string // lower → spelling
+	families map[string]string // colour code → colour family of its first row
 	images   []*imagePlan
 	failed   bool
 }
@@ -145,16 +146,18 @@ type importer struct {
 }
 
 // presentColumns says which columns a products.csv has, by canonical name:
-// plain columns, the languages of each text column (the plain one is the
-// import's default language) and the attr:<key> columns.
+// plain columns (the measurement columns among them), the languages of each
+// text column (the plain one is the import's default language), and the
+// attr:<key> and feature:<key> columns.
 type presentColumns struct {
-	plain map[string]bool
-	langs map[string]map[string]bool
-	attrs map[string]bool
+	plain    map[string]bool
+	langs    map[string]map[string]bool
+	attrs    map[string]bool
+	features map[string]bool
 }
 
 func columnsOf(header []string, defaultLang string) presentColumns {
-	p := presentColumns{plain: map[string]bool{}, langs: map[string]map[string]bool{}, attrs: map[string]bool{}}
+	p := presentColumns{plain: map[string]bool{}, langs: map[string]map[string]bool{}, attrs: map[string]bool{}, features: map[string]bool{}}
 	for _, base := range []string{"name", "description", "color_name"} {
 		p.langs[base] = map[string]bool{}
 	}
@@ -163,6 +166,8 @@ func columnsOf(header []string, defaultLang string) presentColumns {
 		switch {
 		case base == "attr" && tagged:
 			p.attrs[lang] = true
+		case base == "feature" && tagged:
+			p.features[lang] = true
 		case tagged:
 			if l, ok := p.langs[base]; ok {
 				l[lang] = true
@@ -178,31 +183,43 @@ func columnsOf(header []string, defaultLang string) presentColumns {
 }
 
 // columnField maps a field of the stored write model to its products.csv
-// column: texts are kept per language, attributes per key.
+// column: texts are kept per language; attributes, features and
+// measurements per key (keyed says whether the file has the column of a key).
 type columnField struct {
 	path, column string
-	text, attrs  bool
+	text         bool
+	keyed        func(p presentColumns, key string) bool
 }
+
+var (
+	attrColumn        = func(p presentColumns, k string) bool { return p.attrs[k] }
+	featureColumn     = func(p presentColumns, k string) bool { return p.features[k] }
+	measurementColumn = func(p presentColumns, k string) bool { return p.plain[k] }
+)
 
 var productColumnFields = []columnField{
 	{path: "name", column: "name", text: true}, {path: "description", column: "description", text: true},
-	{path: "item_type", column: "item_type"}, {path: "target_group", column: "target_group"},
+	{path: "item_type", column: "item_type"}, {path: "item_subtype", column: "item_subtype"}, {path: "target_group", column: "target_group"},
 	{path: "season", column: "season"}, {path: "collection", column: "collection"},
-	{path: "gpc_brick", column: "gpc_brick"}, {path: "materials", column: "materials"}, {path: "care", column: "care"},
-	{path: "country_of_origin", column: "country_of_origin"}, {path: "dpp_url", column: "dpp_url"},
-	{path: "attributes", attrs: true},
+	{path: "gpc_brick", column: "gpc_brick"}, {path: "materials", column: "materials"},
+	{path: "contains_animal_origin", column: "contains_animal_origin"}, {path: "footwear_materials", column: "footwear_materials"},
+	{path: "care", column: "care"}, {path: "country_of_origin", column: "country_of_origin"},
+	{path: "certifications", column: "certifications"}, {path: "dpp_url", column: "dpp_url"},
+	{path: "features", keyed: featureColumn}, {path: "attributes", keyed: attrColumn},
 }
 
 var variantColumnFields = []columnField{
 	{path: "gtin", column: "gtin"}, {path: "sku", column: "sku"}, {path: "size", column: "size"},
-	{path: "size_system", column: "size_system"}, {path: "color.name", column: "color_name", text: true},
-	{path: "color.supplier_color", column: "supplier_color"},
+	{path: "size_length", column: "size_length"}, {path: "size_system", column: "size_system"},
+	{path: "color.name", column: "color_name", text: true}, {path: "color.family", column: "color_family"},
+	{path: "color.supplier_color", column: "supplier_color"}, {path: "measurements", keyed: measurementColumn},
 }
 
 // keepAbsentColumns applies import-format.md rule 9 to a product or variant
 // the node already has: a field whose column the file does not have keeps its
-// stored value (texts per language, attributes per key); an empty cell in a
-// column the file has still removes the value.
+// stored value (texts per language; attributes, features and measurements
+// per key); an empty cell in a column the file has still removes the value,
+// and when the last feature or measurement is removed the object is null.
 func keepAbsentColumns(doc map[string]any, stored string, fields []columnField, present presentColumns) map[string]any {
 	old := map[string]any{}
 	dec := json.NewDecoder(strings.NewReader(stored))
@@ -226,7 +243,7 @@ func keepAbsentColumns(doc map[string]any, stored string, fields []columnField, 
 			continue
 		}
 		switch {
-		case f.attrs || f.text:
+		case f.keyed != nil || f.text:
 			oldMap, _ := was.(map[string]any)
 			now, _ := parent[key].(map[string]any)
 			if now == nil {
@@ -234,7 +251,7 @@ func keepAbsentColumns(doc map[string]any, stored string, fields []columnField, 
 			}
 			for k, v := range oldMap {
 				_, stated := now[k]
-				absent := (f.attrs && !present.attrs[k]) || (f.text && !present.langs[f.column][k])
+				absent := (f.keyed != nil && !f.keyed(present, k)) || (f.text && !present.langs[f.column][k])
 				if !stated && absent {
 					now[k] = v
 				}
@@ -337,6 +354,21 @@ func (im *importer) parseProducts(data []byte) *problem.Problem {
 	for _, c := range importfmt.UnknownColumns(t.Header, importfmt.KnownColumns) {
 		im.add("products.csv", 0, c, "validation_failed", fmt.Sprintf("unknown column %q ignored", c), "", true)
 	}
+	seenFeature := map[string]bool{}
+	for i, h := range t.Header {
+		key, ok := strings.CutPrefix(h, "feature:")
+		if !ok || seenFeature[h] {
+			continue
+		}
+		seenFeature[h] = true
+		switch {
+		case !importfmt.ValidKey(key):
+			im.add("products.csv", 0, t.Raw[i], "validation_failed", fmt.Sprintf("feature key %q must be lowercase letters, digits and _; column ignored", key), "", true)
+			t.Header[i] = ""
+		case importfmt.FeatureRegistry[key].Type == "":
+			im.add("products.csv", 0, h, "validation_failed", fmt.Sprintf("feature %q is not in the feature registry; its cells are stored as text", key), "", true)
+		}
+	}
 	im.counts.Rows = len(t.Rows)
 	im.present = columnsOf(t.Header, im.lang)
 	variantCols := []string{"gtin", "variant_id", "sku", "color_code", "size"}
@@ -355,20 +387,19 @@ func (im *importer) parseProducts(data []byte) *problem.Problem {
 			continue
 		}
 		plan := im.byExt[ext]
-		if plan == nil {
+		isNew := plan == nil
+		if isNew {
 			doc, perr := im.productDoc(row, t.Header, style)
 			if perr != nil {
 				im.add("products.csv", row.Num, perr.col, perr.code, perr.detail, perr.value, false)
 				continue
 			}
-			plan = &productPlan{ext: ext, style: style, brandRef: row.Get("brand"), doc: doc, first: map[string]string{}, colors: map[string]string{}}
+			plan = &productPlan{ext: ext, style: style, brandRef: row.Get("brand"), doc: doc, first: map[string]string{}, colors: map[string]string{}, families: map[string]string{}}
 			for _, h := range t.Header {
 				if isProductColumn(h) {
 					plan.first[h] = row.Get(h)
 				}
 			}
-			im.byExt[ext] = plan
-			im.plans = append(im.plans, plan)
 		} else {
 			for _, h := range t.Header {
 				if !isProductColumn(h) {
@@ -381,22 +412,36 @@ func (im *importer) parseProducts(data []byte) *problem.Problem {
 				}
 			}
 		}
-		plan.rows = append(plan.rows, row.Num)
 		hasVariant := false
 		for _, c := range variantCols {
 			if row.Get(c) != "" {
 				hasVariant = true
 			}
 		}
-		if !hasVariant {
-			continue
+		var vdoc *variantPlan
+		if hasVariant {
+			var verr *cellErr
+			if vdoc, verr = im.variantDoc(row, t.Header, plan); verr != nil {
+				// The whole row is skipped: a product seen only on rows
+				// with errors is not written either.
+				im.add("products.csv", row.Num, verr.col, verr.code, verr.detail, verr.value, false)
+				continue
+			}
+		} else {
+			for _, c := range append([]string{"color_family", "size_length"}, importfmt.MeasurementColumns...) {
+				if v := row.Get(c); v != "" {
+					im.add("products.csv", row.Num, c, "validation_failed", c+" is ignored on a row without variant columns (gtin, variant_id, sku, color_code or size)", v, true)
+				}
+			}
 		}
-		vdoc, verr := im.variantDoc(row, t.Header, plan)
-		if verr != nil {
-			im.add("products.csv", row.Num, verr.col, verr.code, verr.detail, verr.value, false)
-			continue
+		if isNew {
+			im.byExt[ext] = plan
+			im.plans = append(im.plans, plan)
 		}
-		plan.variants = append(plan.variants, *vdoc)
+		plan.rows = append(plan.rows, row.Num)
+		if vdoc != nil {
+			plan.variants = append(plan.variants, *vdoc)
+		}
 	}
 	return nil
 }
@@ -404,7 +449,8 @@ func (im *importer) parseProducts(data []byte) *problem.Problem {
 func isProductColumn(h string) bool {
 	base, _, _ := strings.Cut(h, ":")
 	switch base {
-	case "brand", "item_type", "target_group", "season", "collection", "gpc_brick", "materials", "care", "country_of_origin", "dpp_url", "status", "name", "description", "attr":
+	case "brand", "item_type", "item_subtype", "target_group", "season", "collection", "gpc_brick", "materials", "contains_animal_origin",
+		"footwear_materials", "care", "country_of_origin", "certifications", "dpp_url", "status", "name", "description", "attr", "feature":
 		return true
 	}
 	return false
@@ -422,7 +468,7 @@ func (im *importer) productDoc(row importfmt.Row, header []string, style string)
 	if d := importfmt.Localized(row, header, "description", im.lang); d != nil {
 		doc["description"] = toAnyMap(d)
 	}
-	for _, c := range []string{"item_type", "target_group"} {
+	for _, c := range []string{"item_type", "item_subtype", "target_group"} {
 		if v := row.Get(c); v != "" {
 			k := importfmt.Key(v)
 			if !importfmt.ValidKey(k) {
@@ -454,11 +500,72 @@ func (im *importer) productDoc(row importfmt.Row, header []string, style string)
 		for _, p := range parts {
 			var fibers []any
 			for _, f := range p.Fibers {
-				fibers = append(fibers, map[string]any{"fiber": f.Key, "percentage": f.Percentage})
+				fib := map[string]any{"fiber": f.Key, "percentage": f.Percentage}
+				if f.Recycled {
+					fib["recycled"] = true
+				}
+				if f.Organic {
+					fib["organic"] = true
+				}
+				fibers = append(fibers, fib)
 			}
 			ms = append(ms, map[string]any{"part": p.Name, "fibers": fibers})
 		}
 		doc["materials"] = ms
+	}
+	if v := row.Get("contains_animal_origin"); v != "" {
+		b, ok := importfmt.ParseBool(v)
+		if !ok {
+			return nil, &cellErr{"contains_animal_origin", "validation_failed", "contains_animal_origin must be yes or no", v}
+		}
+		doc["contains_animal_origin"] = b
+	}
+	if v := row.Get("footwear_materials"); v != "" {
+		f, err := importfmt.ParseFootwearMaterials(v)
+		if err != nil {
+			return nil, &cellErr{"footwear_materials", "validation_failed", "footwear_materials: " + err.Error(), v}
+		}
+		fm := map[string]any{"upper": nil, "lining_and_sock": nil, "outer_sole": nil}
+		for k, x := range map[string]string{"upper": f.Upper, "lining_and_sock": f.LiningAndSock, "outer_sole": f.OuterSole} {
+			if x != "" {
+				fm[k] = x
+			}
+		}
+		doc["footwear_materials"] = fm
+	}
+	if v := row.Get("certifications"); v != "" {
+		cs, err := importfmt.ParseCertifications(v)
+		if err != nil {
+			return nil, &cellErr{"certifications", "validation_failed", "certifications: " + err.Error(), v}
+		}
+		var list []any
+		for _, c := range cs {
+			var lic any
+			if c.Licence != "" {
+				lic = c.Licence
+			}
+			list = append(list, map[string]any{"scheme": c.Scheme, "licence_number": lic, "scope": c.Scope})
+		}
+		doc["certifications"] = list
+	}
+	features := map[string]any{}
+	for _, h := range header {
+		key, ok := strings.CutPrefix(h, "feature:")
+		if !ok {
+			continue
+		}
+		v := row.Get(h)
+		if v == "" {
+			continue
+		}
+		val, err := importfmt.ParseFeature(key, v)
+		if err != nil {
+			return nil, &cellErr{h, "validation_failed", "feature " + key + ": " + err.Error(), v}
+		}
+		features[key] = val
+	}
+	if len(features) > 0 {
+		doc["features"] = features
 	}
 	if v := row.Get("care"); v != "" {
 		codes, warns, err := importfmt.ParseCare(v)
@@ -528,11 +635,41 @@ func (im *importer) variantDoc(row importfmt.Row, header []string, plan *product
 	if v := row.Get("supplier_color"); v != "" {
 		c["supplier_color"] = v
 	}
+	if v := row.Get("color_family"); v != "" {
+		fam, err := importfmt.ParseColorFamily(v)
+		if err != nil {
+			return nil, &cellErr{"color_family", "validation_failed", err.Error(), v}
+		}
+		c["family"] = fam
+	}
 	doc["color"] = c
-	for _, k := range []string{"sku", "size", "size_system"} {
+	for _, k := range []string{"sku", "size", "size_length", "size_system"} {
 		if v := row.Get(k); v != "" {
 			doc[k] = v
 		}
+	}
+	ms := map[string]any{}
+	for _, k := range importfmt.MeasurementColumns {
+		v := row.Get(k)
+		if v == "" {
+			continue
+		}
+		if k == "strap_length_cm" {
+			lo, hi, err := importfmt.ParseStrapLength(v)
+			if err != nil {
+				return nil, &cellErr{k, "validation_failed", k + ": " + err.Error(), v}
+			}
+			ms[k] = map[string]any{"min": lo, "max": hi}
+			continue
+		}
+		n, err := importfmt.ParseMeasurement(v)
+		if err != nil {
+			return nil, &cellErr{k, "validation_failed", k + ": " + err.Error(), v}
+		}
+		ms[k] = n
+	}
+	if len(ms) > 0 {
+		doc["measurements"] = ms
 	}
 	if v := row.Get("variant_status"); v != "" {
 		s := strings.ToLower(v)
@@ -556,6 +693,14 @@ func (im *importer) variantDoc(row importfmt.Row, header []string, plan *product
 		return nil, &cellErr{"variant_id", "validation_failed", "invalid variant id", ext}
 	}
 	plan.colors[strings.ToLower(color)] = color
+	if fam, ok := c["family"].(string); ok {
+		if prev, seen := plan.families[color]; seen && prev != fam {
+			im.add("products.csv", row.Num, "color_family", "validation_failed",
+				fmt.Sprintf("differs from an earlier row of colour %s (%s); every variant of one colour should have the same family", color, prev), fam, true)
+		} else if !seen {
+			plan.families[color] = fam
+		}
+	}
 	return &variantPlan{ext: ext, doc: doc, row: row.Num}, nil
 }
 
@@ -985,6 +1130,11 @@ func (im *importer) applyPlan(w *writer, plan *productPlan) error {
 			return nil
 		}
 		im.count(res.Result)
+		// import-format.md rule 10: the product as stored (the file's
+		// values plus what rule 9 kept), at the product's first row.
+		for _, wd := range res.WarningDetails {
+			im.add("products.csv", plan.rows[0], wd.column, wd.Code, wd.Detail, "", true)
+		}
 		for _, v := range plan.variants {
 			vdoc := v.doc
 			if existing, err := loadRow(w.ctx, w.tx, KindVariant, v.ext); err != nil {

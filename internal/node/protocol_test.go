@@ -78,7 +78,7 @@ func TestKestrelProtocol(t *testing.T) {
 
 	t.Run("discovery", func(t *testing.T) {
 		r := k.client().do("GET", "/.well-known/obx", nil)
-		if r.Status != 200 || r.Header.Get("Access-Control-Allow-Origin") != "*" || r.Header.Get("OBX-Version") != "0.1" {
+		if r.Status != 200 || r.Header.Get("Access-Control-Allow-Origin") != "*" || r.Header.Get("OBX-Version") != "0.2" {
 			t.Fatalf("discovery: %d %v", r.Status, r.Header)
 		}
 		d := r.JSON(t)
@@ -151,7 +151,7 @@ func TestKestrelProtocol(t *testing.T) {
 	})
 
 	t.Run("expected products", func(t *testing.T) {
-		for _, ext := range []string{"KO-1001", "KO-1005"} {
+		for _, ext := range []string{"KO-1001", "KO-1005", "KO-1008", "KO-1009", "KO-1010", "KT-2001"} {
 			p := k.all.must(200, "GET", "/obx/v1/products/"+k.products[ext]["id"].(string), nil)
 			validate(t, "ProductDetail", p)
 			match(t, ext, readFixture(t, "expected/product-"+ext+".json"), p, nil)
@@ -318,7 +318,7 @@ func TestKestrelProtocol(t *testing.T) {
 			}
 			cursor = page["next_cursor"].(string)
 		}
-		if len(seen) != 8 {
+		if len(seen) != 11 {
 			t.Fatalf("paged %d products", len(seen))
 		}
 		id := k.products["KO-1001"]["id"].(string)

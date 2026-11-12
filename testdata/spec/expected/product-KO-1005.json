@@ -12,6 +12,7 @@
     "nl": "Weekendtas van volnerf leer met katoenen voering."
   },
   "item_type": "bag",
+  "item_subtype": "weekender",
   "gpc_brick": null,
   "target_group": "unisex",
   "season": "NOS",
@@ -36,6 +37,8 @@
       ]
     }
   ],
+  "contains_animal_origin": true,
+  "footwear_materials": null,
   "care": [
     {
       "code": "do_not_wash",
@@ -59,7 +62,17 @@
     }
   ],
   "country_of_origin": "IT",
+  "certifications": null,
   "dpp_url": null,
+  "features": {
+    "closure": "zip",
+    "detachable_parts": [
+      "shoulder_strap"
+    ],
+    "adjustable_parts": [
+      "shoulder_strap"
+    ]
+  },
   "attributes": null,
   "created_at": "{{datetime}}",
   "updated_at": "{{datetime}}",
@@ -78,10 +91,24 @@
           "en": "Cognac",
           "nl": "Cognac"
         },
-        "supplier_color": "Saddle"
+        "supplier_color": "Saddle",
+        "family": "brown"
       },
       "size": "ONE SIZE",
+      "size_length": null,
       "size_system": null,
+      "measurements": {
+        "height_cm": 32,
+        "width_cm": 52,
+        "depth_cm": 26,
+        "weight_kg": 1.8,
+        "volume_l": 40,
+        "handle_drop_cm": 20,
+        "strap_length_cm": {
+          "min": 100,
+          "max": 130
+        }
+      },
       "updated_at": "{{datetime}}"
     }
   ],

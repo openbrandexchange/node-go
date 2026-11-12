@@ -1,0 +1,161 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openbrandexchange.com/schemas/v0.2/Features.json",
+  "title": "Features",
+  "description": "Typed product features from the registry in docs/protocol.md#features. Keys of the registry have the type and values listed there; other keys (same key pattern) are allowed and not validated. Only stated features are present; null instead of an empty object.",
+  "type": "object",
+  "properties": {
+    "shell": {
+      "type": "string",
+      "enum": [
+        "hard",
+        "soft",
+        "hybrid"
+      ],
+      "description": "Luggage: construction of the shell."
+    },
+    "wheels": {
+      "type": "integer",
+      "enum": [
+        0,
+        2,
+        4,
+        8
+      ],
+      "description": "Luggage: number of wheels."
+    },
+    "lock": {
+      "type": "string",
+      "enum": [
+        "none",
+        "combination",
+        "tsa_combination",
+        "tsa_key",
+        "key"
+      ],
+      "description": "Luggage, bags: built-in lock."
+    },
+    "expandable": {
+      "type": "boolean",
+      "description": "Luggage, bags: has an expansion zip (volume in measurements.volume_expanded_l)."
+    },
+    "closure": {
+      "type": "string",
+      "enum": [
+        "zip",
+        "magnet",
+        "flap",
+        "buckle",
+        "drawstring",
+        "button",
+        "hook_and_loop",
+        "laces",
+        "slip_on",
+        "open"
+      ],
+      "description": "Bags, shoes, apparel: main closure."
+    },
+    "laptop_compartment": {
+      "type": "boolean",
+      "description": "Bags: has a padded laptop compartment (size in measurements.laptop_max_inch)."
+    },
+    "water_resistance": {
+      "type": "string",
+      "enum": [
+        "none",
+        "water_repellent",
+        "waterproof"
+      ],
+      "description": "All: resistance to water as stated by the brand."
+    },
+    "detachable_parts": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "shoulder_strap",
+          "handle",
+          "lining",
+          "insole",
+          "hood",
+          "belt",
+          "pouch",
+          "wheels"
+        ]
+      },
+      "uniqueItems": true,
+      "description": "All: parts that can be removed by the user."
+    },
+    "adjustable_parts": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "shoulder_strap",
+          "waist",
+          "hem",
+          "cuff"
+        ]
+      },
+      "uniqueItems": true,
+      "description": "All: parts the user can adjust."
+    },
+    "fit": {
+      "type": "string",
+      "enum": [
+        "slim",
+        "regular",
+        "relaxed",
+        "oversized"
+      ],
+      "description": "Apparel: fit."
+    },
+    "sleeve_length": {
+      "type": "string",
+      "enum": [
+        "sleeveless",
+        "short",
+        "three_quarter",
+        "long"
+      ],
+      "description": "Apparel: sleeve length."
+    },
+    "neckline": {
+      "type": "string",
+      "enum": [
+        "crew",
+        "v_neck",
+        "collar",
+        "hood",
+        "turtleneck",
+        "boat",
+        "scoop"
+      ],
+      "description": "Apparel: neckline."
+    }
+  },
+  "propertyNames": {
+    "pattern": "^[a-z][a-z0-9_]{0,63}$"
+  },
+  "additionalProperties": {
+    "anyOf": [
+      {
+        "type": [
+          "string",
+          "number",
+          "boolean"
+        ]
+      },
+      {
+        "type": "array",
+        "items": {
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ]
+        }
+      }
+    ]
+  }
+}

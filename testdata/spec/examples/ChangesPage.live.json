@@ -33,10 +33,13 @@
             "en": "Navy",
             "nl": "Marineblauw"
           },
-          "supplier_color": "Deep Navy"
+          "supplier_color": "Deep Navy",
+          "family": "blue"
         },
         "size": "M",
+        "size_length": null,
         "size_system": "INT",
+        "measurements": null,
         "updated_at": "2026-09-28T10:00:00Z"
       }
     },

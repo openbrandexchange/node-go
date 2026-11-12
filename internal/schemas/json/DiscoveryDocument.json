@@ -1,22 +1,22 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://openbrandexchange.com/schemas/v0.1/DiscoveryDocument.json",
+  "$id": "https://openbrandexchange.com/schemas/v0.2/DiscoveryDocument.json",
   "type": "object",
   "title": "DiscoveryDocument",
   "description": "Served at GET /.well-known/obx on the node's host (also on custom domains).",
   "properties": {
     "obx_version": {
       "type": "string",
-      "description": "Protocol major.minor implemented, e.g. '0.1'.",
+      "description": "Protocol major.minor implemented, e.g. '0.2'.",
       "pattern": "^[0-9]+\\.[0-9]+$"
     },
     "spec_version": {
       "type": "string",
-      "description": "Exact spec version, e.g. '0.1.0'."
+      "description": "Exact spec version, e.g. '0.2.0'."
     },
     "node": {
       "type": "object",
-      "description": "Implementation name/version, e.g. obx-node-go 0.1.0.",
+      "description": "Implementation name/version, e.g. obx-node-go 0.2.0.",
       "properties": {
         "software": {
           "type": "string",

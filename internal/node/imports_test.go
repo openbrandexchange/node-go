@@ -62,7 +62,7 @@ func TestImports(t *testing.T) {
 		_, cursor, _ := drainChanges(t, k.all, "", 500)
 		run := k.runImport(k.admin, k.kestrelFiles(), nil)
 		c := counts(run)
-		if c["created"].(float64) != 0 || c["updated"].(float64) != 0 || c["unchanged"].(float64) != 8+40+27 {
+		if c["created"].(float64) != 0 || c["updated"].(float64) != 0 || c["unchanged"].(float64) != 11+46+35 {
 			t.Fatalf("second import counts %v", c)
 		}
 		ch, _, _ := drainChanges(t, k.all, cursor, 100)
@@ -143,7 +143,7 @@ func TestImports(t *testing.T) {
 		}
 		pkg := writeTemp(t, "package.zip", zipOf(t, files))
 		c := counts(k.runImport(k.admin, map[string][]string{"package": {pkg}}, nil))
-		if c["unchanged"].(float64) != 75 || c["errors"].(float64) != 0 {
+		if c["unchanged"].(float64) != 92 || c["errors"].(float64) != 0 {
 			t.Fatalf("package import %v", c)
 		}
 		fields := map[string]string{"images_manifest": string(mustJSON(manifest))}
@@ -151,7 +151,7 @@ func TestImports(t *testing.T) {
 		run := k.admin.must(202, "POST", "/admin/api/imports", body, "Content-Type", ct)
 		k.app.RunJobsNow(t.Context())
 		c = counts(k.admin.must(200, "GET", "/admin/api/imports/"+run["id"].(string), nil))
-		if c["unchanged"].(float64) != 75 || c["errors"].(float64) != 0 {
+		if c["unchanged"].(float64) != 92 || c["errors"].(float64) != 0 {
 			t.Fatalf("manifest import %v", c)
 		}
 	})
@@ -343,7 +343,7 @@ func TestExportAndWebhooks(t *testing.T) {
 				t.Error("export contains another brand")
 			}
 		}
-		if files != 23 || len(entries) != 23 {
+		if files != 31 || len(entries) != 31 {
 			t.Fatalf("files %d, entries %d", files, len(entries))
 		}
 		// The changes cursor continues incrementally.

@@ -1,13 +1,13 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://openbrandexchange.com/schemas/v0.1/Materials.json",
+  "$id": "https://openbrandexchange.com/schemas/v0.2/Materials.json",
   "type": "array",
   "items": {
     "type": "object",
     "properties": {
       "part": {
         "type": "string",
-        "description": "Garment part. Recommended keys: main, outer, lining, filling, trim, sole, upper, insole. 'main' when the product has one composition.",
+        "description": "Part of the article. Recommended keys: main, outer, lining, filling, padding, trim, pocket_lining, shell (luggage), handle, strap, and for footwear upper, sole, insole. 'main' when the product has one composition. Unknown keys are allowed.",
         "pattern": "^[a-z][a-z0-9_]{0,63}$",
         "examples": [
           "main"
@@ -20,13 +20,21 @@
           "properties": {
             "fiber": {
               "type": "string",
-              "description": "Fibre key, lowercase English (recommended list in docs/import-format.md#fibres), e.g. cotton, organic_cotton, elastane, wool, merino_wool, polyester, recycled_polyester, polyamide, viscose, linen, silk, leather.",
+              "description": "Fibre key: the English textile fibre name of Annex I of Reg. (EU) 1007/2011 in lowercase with _ (linen for flax), e.g. cotton, wool, polyester, polyamide, elastane, viscose, lyocell; recommended list in docs/import-format.md#fibres. Recycled or organic content is a flag, not a fibre: the 0.1 keys `recycled_*` and `organic_*` (e.g. recycled_polyester, organic_cotton) are accepted on input and normalised to the fibre with recycled or organic set.",
               "pattern": "^[a-z][a-z0-9_]{0,63}$"
             },
             "percentage": {
               "type": "number",
               "exclusiveMinimum": 0,
               "maximum": 100
+            },
+            "recycled": {
+              "type": "boolean",
+              "description": "The fibre is recycled. Present only when true."
+            },
+            "organic": {
+              "type": "boolean",
+              "description": "The fibre is organically grown. Present only when true."
             }
           },
           "required": [

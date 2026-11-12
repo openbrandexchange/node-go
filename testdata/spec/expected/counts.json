@@ -1,7 +1,7 @@
 {
   "brands": 2,
-  "products": 8,
-  "variants": 40,
-  "assets": 27,
+  "products": 11,
+  "variants": 46,
+  "assets": 35,
   "note": "Visible objects after importing fixtures/kestrel into a fresh node whose first brand is external_id 'kestrel' (see fixtures/README.md)."
 }

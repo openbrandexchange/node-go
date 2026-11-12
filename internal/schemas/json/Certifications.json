@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openbrandexchange.com/schemas/v0.2/Certifications.json",
+  "title": "Certifications",
+  "description": "Voluntary certifications the brand states for this product (private schemes, not legal requirements). The node passes them on as stated; checking a licence is up to the reader.",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "scheme": {
+        "type": "string",
+        "description": "Open vocabulary; recommended: gots, ocs, grs, rcs, oeko_tex_standard_100, oeko_tex_made_in_green, bluesign, fsc, lwg, rws, rds.",
+        "pattern": "^[a-z][a-z0-9_]{0,63}$"
+      },
+      "licence_number": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "description": "The licence, certificate or label number as issued by the scheme.",
+        "minLength": 1,
+        "maxLength": 200
+      },
+      "scope": {
+        "type": "string",
+        "enum": [
+          "product",
+          "material"
+        ],
+        "description": "product: the finished product is certified; material: a material in it is (the product itself is not)."
+      }
+    },
+    "required": [
+      "scheme",
+      "scope"
+    ],
+    "additionalProperties": false,
+    "patternProperties": {
+      "^x-[a-z0-9]+-[a-z0-9_-]+$": true
+    }
+  }
+}

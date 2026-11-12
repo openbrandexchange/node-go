@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://openbrandexchange.com/schemas/v0.1/ExportManifestLine.json",
+  "$id": "https://openbrandexchange.com/schemas/v0.2/ExportManifestLine.json",
   "title": "ExportManifestLine",
   "description": "One line of an export manifest (NDJSON). First line is 'header'. Consumers MUST ignore unknown line types.",
   "oneOf": [

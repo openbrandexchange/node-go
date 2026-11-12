@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://openbrandexchange.com/schemas/v0.1/ProductInput.json",
+  "$id": "https://openbrandexchange.com/schemas/v0.2/ProductInput.json",
   "type": "object",
   "title": "ProductInput",
   "description": "Ingest write model for a product. Key: external_id (path); when a brand has no separate product id, use the style number.",
@@ -35,6 +35,13 @@
       ]
     },
     "item_type": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "pattern": "^[a-z][a-z0-9_]{0,63}$"
+    },
+    "item_subtype": {
       "type": [
         "string",
         "null"
@@ -79,6 +86,22 @@
         }
       ]
     },
+    "contains_animal_origin": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "footwear_materials": {
+      "anyOf": [
+        {
+          "$ref": "FootwearMaterials.json"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
     "care": {
       "anyOf": [
         {
@@ -99,10 +122,30 @@
         }
       ]
     },
+    "certifications": {
+      "anyOf": [
+        {
+          "$ref": "Certifications.json"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
     "dpp_url": {
       "anyOf": [
         {
           "$ref": "Common.json#/$defs/Url"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "features": {
+      "anyOf": [
+        {
+          "$ref": "Features.json"
         },
         {
           "type": "null"

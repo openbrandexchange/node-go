@@ -54,7 +54,7 @@ func TestS3ImportSource(t *testing.T) {
 	n.app.RunJobsNow(ctx)
 	done := admin.must(200, "GET", "/admin/api/imports/"+run["id"].(string), nil)
 	c := done["counts"].(map[string]any)
-	if done["status"] != "succeeded" || c["errors"].(float64) != 0 || c["created"].(float64) != 1+8+40+27 {
+	if done["status"] != "succeeded" || c["errors"].(float64) != 0 || c["created"].(float64) != 1+11+46+35 {
 		t.Fatalf("%v", done)
 	}
 }

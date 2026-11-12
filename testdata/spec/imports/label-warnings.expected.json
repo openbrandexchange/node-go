@@ -1,0 +1,40 @@
+{
+  "description": "Conformance I-IMP-8. Send label-warnings.csv as the import's products.csv with dry_run: true (mode upsert). The job succeeds, nothing is written (no change entries, KL-8001 to KL-8006 do not exist afterwards), there are no errors, and the ImportRowErrors whose obx_error is one of the four label completeness codes are exactly these, in this order (other warnings are not checked). KL-8006 is complete and gets none.",
+  "warnings": [
+    {
+      "file": "products.csv",
+      "row": 1,
+      "column": "materials",
+      "severity": "warning",
+      "obx_error": "fibre_composition_missing"
+    },
+    {
+      "file": "products.csv",
+      "row": 2,
+      "column": "contains_animal_origin",
+      "severity": "warning",
+      "obx_error": "animal_origin_unknown"
+    },
+    {
+      "file": "products.csv",
+      "row": 3,
+      "column": "footwear_materials",
+      "severity": "warning",
+      "obx_error": "footwear_materials_missing"
+    },
+    {
+      "file": "products.csv",
+      "row": 4,
+      "column": "materials",
+      "severity": "warning",
+      "obx_error": "fibre_percentages_not_100"
+    },
+    {
+      "file": "products.csv",
+      "row": 5,
+      "column": "footwear_materials",
+      "severity": "warning",
+      "obx_error": "footwear_materials_missing"
+    }
+  ]
+}

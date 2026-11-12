@@ -1,0 +1,22 @@
+{
+  "product_external_id": "KO-1008",
+  "gtin": "2000100801017",
+  "sku": "KO-1008-BLK-CABIN",
+  "color": {
+    "code": "BLK",
+    "name": {
+      "en": "Black",
+      "nl": "Zwart"
+    },
+    "family": "black"
+  },
+  "size": "CABIN",
+  "measurements": {
+    "height_cm": 55,
+    "width_cm": 40,
+    "depth_cm": 20,
+    "weight_kg": 2.6,
+    "volume_l": 36,
+    "volume_expanded_l": 42
+  }
+}

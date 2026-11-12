@@ -1,0 +1,394 @@
+{
+  "id": "{{id}}",
+  "external_id": "KO-1008",
+  "brand_id": "{{id}}",
+  "style_number": "KO-1008",
+  "name": {
+    "en": "Hardshell Cabin Spinner",
+    "nl": "Harde handbagagekoffer"
+  },
+  "description": {
+    "en": "Four-wheel hardshell cabin suitcase with TSA lock and expansion zip.",
+    "nl": "Harde handbagagekoffer met vier wielen, TSA-slot en uitbreidingsrits."
+  },
+  "item_type": "luggage",
+  "item_subtype": "cabin",
+  "gpc_brick": null,
+  "target_group": "unisex",
+  "season": "NOS",
+  "collection": "Travel",
+  "materials": [
+    {
+      "part": "shell",
+      "fibers": [
+        {
+          "fiber": "polypropylene",
+          "percentage": 100
+        }
+      ]
+    },
+    {
+      "part": "lining",
+      "fibers": [
+        {
+          "fiber": "polyester",
+          "percentage": 100,
+          "recycled": true
+        }
+      ]
+    }
+  ],
+  "contains_animal_origin": null,
+  "footwear_materials": null,
+  "care": [
+    {
+      "code": "do_not_wash",
+      "text": null
+    },
+    {
+      "code": "do_not_bleach",
+      "text": null
+    },
+    {
+      "code": "do_not_tumble_dry",
+      "text": null
+    },
+    {
+      "code": "do_not_iron",
+      "text": null
+    },
+    {
+      "code": "do_not_dry_clean",
+      "text": null
+    }
+  ],
+  "country_of_origin": "CN",
+  "certifications": null,
+  "dpp_url": null,
+  "features": {
+    "shell": "hard",
+    "wheels": 4,
+    "lock": "tsa_combination",
+    "expandable": true,
+    "closure": "zip"
+  },
+  "attributes": null,
+  "created_at": "{{datetime}}",
+  "updated_at": "{{datetime}}",
+  "variants": [
+    {
+      "id": "{{id}}",
+      "external_id": "2000100801017",
+      "product_id": "{{id}}",
+      "brand_id": "{{id}}",
+      "gtin": "02000100801017",
+      "gtin_original": "2000100801017",
+      "sku": "KO-1008-BLK-CABIN",
+      "color": {
+        "code": "BLK",
+        "name": {
+          "en": "Black",
+          "nl": "Zwart"
+        },
+        "supplier_color": "Jet",
+        "family": "black"
+      },
+      "size": "CABIN",
+      "size_length": null,
+      "size_system": null,
+      "measurements": {
+        "height_cm": 55,
+        "width_cm": 40,
+        "depth_cm": 20,
+        "weight_kg": 2.6,
+        "volume_l": 36,
+        "volume_expanded_l": 42
+      },
+      "updated_at": "{{datetime}}"
+    },
+    {
+      "id": "{{id}}",
+      "external_id": "2000100801024",
+      "product_id": "{{id}}",
+      "brand_id": "{{id}}",
+      "gtin": "02000100801024",
+      "gtin_original": "2000100801024",
+      "sku": "KO-1008-BLK-CABINPLUS",
+      "color": {
+        "code": "BLK",
+        "name": {
+          "en": "Black",
+          "nl": "Zwart"
+        },
+        "supplier_color": "Jet",
+        "family": "black"
+      },
+      "size": "CABIN PLUS",
+      "size_length": null,
+      "size_system": null,
+      "measurements": {
+        "height_cm": 55,
+        "width_cm": 40,
+        "depth_cm": 23,
+        "weight_kg": 2.8,
+        "volume_l": 42,
+        "volume_expanded_l": 48
+      },
+      "updated_at": "{{datetime}}"
+    }
+  ],
+  "assets": [
+    {
+      "id": "{{id}}",
+      "external_id": "KO-1008_BLK_1",
+      "product_id": "{{id}}",
+      "brand_id": "{{id}}",
+      "media_type": "image",
+      "color_code": "BLK",
+      "variant_ids": null,
+      "role": "packshot",
+      "view": "front",
+      "position": 1,
+      "filename": "KO-1008_BLK_1_front.png",
+      "alt_text": null,
+      "content_type": "image/png",
+      "width": 1200,
+      "height": 1500,
+      "bytes": 12061,
+      "sha256": "53af11efcf7b8a946e9f84f323c6c68c76b917ae34ad68ab2fcd575259937d4f",
+      "rights": {
+        "license": "retailer-use",
+        "license_text": null,
+        "channels": [
+          "webshop",
+          "marketplace",
+          "social"
+        ],
+        "territories": null,
+        "embargo_until": null,
+        "expires_at": null,
+        "credit": null,
+        "model_release": null
+      },
+      "provenance": {
+        "ai_generated": false,
+        "ai_edited": false,
+        "source": "photo",
+        "c2pa": "none",
+        "c2pa_manifest_url": null,
+        "generator": null
+      },
+      "renditions": {
+        "original": {
+          "name": "original",
+          "url": "{{url}}",
+          "url_expires_at": "{{datetime|null}}",
+          "content_type": "image/png",
+          "width": 1200,
+          "height": 1500,
+          "bytes": 12061,
+          "sha256": "53af11efcf7b8a946e9f84f323c6c68c76b917ae34ad68ab2fcd575259937d4f"
+        },
+        "web": {
+          "name": "web",
+          "url": "{{url}}",
+          "url_expires_at": "{{datetime|null}}",
+          "content_type": "image/jpeg",
+          "width": 1200,
+          "height": 1500,
+          "bytes": "{{int}}",
+          "sha256": "{{sha256}}"
+        },
+        "square": {
+          "name": "square",
+          "url": "{{url}}",
+          "url_expires_at": "{{datetime|null}}",
+          "content_type": "image/jpeg",
+          "width": 1500,
+          "height": 1500,
+          "bytes": "{{int}}",
+          "sha256": "{{sha256}}"
+        },
+        "thumb": {
+          "name": "thumb",
+          "url": "{{url}}",
+          "url_expires_at": "{{datetime|null}}",
+          "content_type": "image/jpeg",
+          "width": 480,
+          "height": 600,
+          "bytes": "{{int}}",
+          "sha256": "{{sha256}}"
+        }
+      },
+      "updated_at": "{{datetime}}"
+    },
+    {
+      "id": "{{id}}",
+      "external_id": "KO-1008_BLK_2",
+      "product_id": "{{id}}",
+      "brand_id": "{{id}}",
+      "media_type": "image",
+      "color_code": "BLK",
+      "variant_ids": null,
+      "role": "packshot",
+      "view": "side",
+      "position": 2,
+      "filename": "KO-1008_BLK_2_side.png",
+      "alt_text": null,
+      "content_type": "image/png",
+      "width": 1200,
+      "height": 1500,
+      "bytes": 11986,
+      "sha256": "f4d12fddbec31cfd5b289af3af54ee057fe9211f27adc5b76487e5b98f789eaf",
+      "rights": {
+        "license": "retailer-use",
+        "license_text": null,
+        "channels": [
+          "webshop",
+          "marketplace",
+          "social"
+        ],
+        "territories": null,
+        "embargo_until": null,
+        "expires_at": null,
+        "credit": null,
+        "model_release": null
+      },
+      "provenance": {
+        "ai_generated": false,
+        "ai_edited": false,
+        "source": "photo",
+        "c2pa": "none",
+        "c2pa_manifest_url": null,
+        "generator": null
+      },
+      "renditions": {
+        "original": {
+          "name": "original",
+          "url": "{{url}}",
+          "url_expires_at": "{{datetime|null}}",
+          "content_type": "image/png",
+          "width": 1200,
+          "height": 1500,
+          "bytes": 11986,
+          "sha256": "f4d12fddbec31cfd5b289af3af54ee057fe9211f27adc5b76487e5b98f789eaf"
+        },
+        "web": {
+          "name": "web",
+          "url": "{{url}}",
+          "url_expires_at": "{{datetime|null}}",
+          "content_type": "image/jpeg",
+          "width": 1200,
+          "height": 1500,
+          "bytes": "{{int}}",
+          "sha256": "{{sha256}}"
+        },
+        "square": {
+          "name": "square",
+          "url": "{{url}}",
+          "url_expires_at": "{{datetime|null}}",
+          "content_type": "image/jpeg",
+          "width": 1500,
+          "height": 1500,
+          "bytes": "{{int}}",
+          "sha256": "{{sha256}}"
+        },
+        "thumb": {
+          "name": "thumb",
+          "url": "{{url}}",
+          "url_expires_at": "{{datetime|null}}",
+          "content_type": "image/jpeg",
+          "width": 480,
+          "height": 600,
+          "bytes": "{{int}}",
+          "sha256": "{{sha256}}"
+        }
+      },
+      "updated_at": "{{datetime}}"
+    },
+    {
+      "id": "{{id}}",
+      "external_id": "KO-1008_BLK_3",
+      "product_id": "{{id}}",
+      "brand_id": "{{id}}",
+      "media_type": "image",
+      "color_code": "BLK",
+      "variant_ids": null,
+      "role": "packshot",
+      "view": "inside",
+      "position": 3,
+      "filename": "KO-1008_BLK_3_inside.png",
+      "alt_text": null,
+      "content_type": "image/png",
+      "width": 1200,
+      "height": 1500,
+      "bytes": 12145,
+      "sha256": "c86c491c4146a7aa5cbdd63c8916247a7cfa8ce056be3d259c9385c0ac218014",
+      "rights": {
+        "license": "retailer-use",
+        "license_text": null,
+        "channels": [
+          "webshop",
+          "marketplace",
+          "social"
+        ],
+        "territories": null,
+        "embargo_until": null,
+        "expires_at": null,
+        "credit": null,
+        "model_release": null
+      },
+      "provenance": {
+        "ai_generated": false,
+        "ai_edited": false,
+        "source": "photo",
+        "c2pa": "none",
+        "c2pa_manifest_url": null,
+        "generator": null
+      },
+      "renditions": {
+        "original": {
+          "name": "original",
+          "url": "{{url}}",
+          "url_expires_at": "{{datetime|null}}",
+          "content_type": "image/png",
+          "width": 1200,
+          "height": 1500,
+          "bytes": 12145,
+          "sha256": "c86c491c4146a7aa5cbdd63c8916247a7cfa8ce056be3d259c9385c0ac218014"
+        },
+        "web": {
+          "name": "web",
+          "url": "{{url}}",
+          "url_expires_at": "{{datetime|null}}",
+          "content_type": "image/jpeg",
+          "width": 1200,
+          "height": 1500,
+          "bytes": "{{int}}",
+          "sha256": "{{sha256}}"
+        },
+        "square": {
+          "name": "square",
+          "url": "{{url}}",
+          "url_expires_at": "{{datetime|null}}",
+          "content_type": "image/jpeg",
+          "width": 1500,
+          "height": 1500,
+          "bytes": "{{int}}",
+          "sha256": "{{sha256}}"
+        },
+        "thumb": {
+          "name": "thumb",
+          "url": "{{url}}",
+          "url_expires_at": "{{datetime|null}}",
+          "content_type": "image/jpeg",
+          "width": 480,
+          "height": 600,
+          "bytes": "{{int}}",
+          "sha256": "{{sha256}}"
+        }
+      },
+      "updated_at": "{{datetime}}"
+    }
+  ]
+}

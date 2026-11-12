@@ -1,0 +1,379 @@
+{
+  "id": "{{id}}",
+  "external_id": "KO-1009",
+  "brand_id": "{{id}}",
+  "style_number": "KO-1009",
+  "name": {
+    "en": "Commuter Laptop Messenger",
+    "nl": "Laptoptas voor forenzen"
+  },
+  "description": {
+    "en": "Water-repellent messenger with a padded 15.6 inch laptop compartment and a detachable shoulder strap.",
+    "nl": "Waterafstotende schoudertas met gevoerd laptopvak voor 15,6 inch en afneembare schouderband."
+  },
+  "item_type": "bag",
+  "item_subtype": "laptop_bag",
+  "gpc_brick": null,
+  "target_group": "unisex",
+  "season": "NOS",
+  "collection": "Travel",
+  "materials": [
+    {
+      "part": "outer",
+      "fibers": [
+        {
+          "fiber": "polyester",
+          "percentage": 100,
+          "recycled": true
+        }
+      ]
+    },
+    {
+      "part": "lining",
+      "fibers": [
+        {
+          "fiber": "polyamide",
+          "percentage": 100
+        }
+      ]
+    }
+  ],
+  "contains_animal_origin": false,
+  "footwear_materials": null,
+  "care": [
+    {
+      "code": "hand_wash",
+      "text": null
+    },
+    {
+      "code": "do_not_bleach",
+      "text": null
+    },
+    {
+      "code": "do_not_tumble_dry",
+      "text": null
+    },
+    {
+      "code": "do_not_iron",
+      "text": null
+    },
+    {
+      "code": "do_not_dry_clean",
+      "text": null
+    }
+  ],
+  "country_of_origin": "VN",
+  "certifications": [
+    {
+      "scheme": "grs",
+      "licence_number": "CU 200901",
+      "scope": "material"
+    }
+  ],
+  "dpp_url": null,
+  "features": {
+    "closure": "flap",
+    "laptop_compartment": true,
+    "water_resistance": "water_repellent",
+    "detachable_parts": [
+      "shoulder_strap"
+    ],
+    "adjustable_parts": [
+      "shoulder_strap"
+    ]
+  },
+  "attributes": null,
+  "created_at": "{{datetime}}",
+  "updated_at": "{{datetime}}",
+  "variants": [
+    {
+      "id": "{{id}}",
+      "external_id": "2000100901014",
+      "product_id": "{{id}}",
+      "brand_id": "{{id}}",
+      "gtin": "02000100901014",
+      "gtin_original": "2000100901014",
+      "sku": "KO-1009-CHR-ONESIZE",
+      "color": {
+        "code": "CHR",
+        "name": {
+          "en": "Charcoal",
+          "nl": "Antraciet"
+        },
+        "supplier_color": "Slate",
+        "family": "grey"
+      },
+      "size": "ONE SIZE",
+      "size_length": null,
+      "size_system": null,
+      "measurements": {
+        "height_cm": 30,
+        "width_cm": 40,
+        "depth_cm": 12,
+        "weight_kg": 0.9,
+        "volume_l": 14,
+        "handle_drop_cm": 10,
+        "strap_length_cm": {
+          "min": 85,
+          "max": 140
+        },
+        "laptop_max_inch": 15.6
+      },
+      "updated_at": "{{datetime}}"
+    }
+  ],
+  "assets": [
+    {
+      "id": "{{id}}",
+      "external_id": "KO-1009_CHR_1",
+      "product_id": "{{id}}",
+      "brand_id": "{{id}}",
+      "media_type": "image",
+      "color_code": "CHR",
+      "variant_ids": null,
+      "role": "packshot",
+      "view": "front",
+      "position": 1,
+      "filename": "KO-1009_CHR_1_front.png",
+      "alt_text": null,
+      "content_type": "image/png",
+      "width": 1200,
+      "height": 1500,
+      "bytes": 10999,
+      "sha256": "fecbb97259bbb4ab429af0d65d8f4d47f1f804217e0d325ce1566bf1be2f232b",
+      "rights": {
+        "license": "retailer-use",
+        "license_text": null,
+        "channels": [
+          "webshop",
+          "marketplace",
+          "social"
+        ],
+        "territories": null,
+        "embargo_until": null,
+        "expires_at": null,
+        "credit": null,
+        "model_release": null
+      },
+      "provenance": {
+        "ai_generated": false,
+        "ai_edited": false,
+        "source": "photo",
+        "c2pa": "none",
+        "c2pa_manifest_url": null,
+        "generator": null
+      },
+      "renditions": {
+        "original": {
+          "name": "original",
+          "url": "{{url}}",
+          "url_expires_at": "{{datetime|null}}",
+          "content_type": "image/png",
+          "width": 1200,
+          "height": 1500,
+          "bytes": 10999,
+          "sha256": "fecbb97259bbb4ab429af0d65d8f4d47f1f804217e0d325ce1566bf1be2f232b"
+        },
+        "web": {
+          "name": "web",
+          "url": "{{url}}",
+          "url_expires_at": "{{datetime|null}}",
+          "content_type": "image/jpeg",
+          "width": 1200,
+          "height": 1500,
+          "bytes": "{{int}}",
+          "sha256": "{{sha256}}"
+        },
+        "square": {
+          "name": "square",
+          "url": "{{url}}",
+          "url_expires_at": "{{datetime|null}}",
+          "content_type": "image/jpeg",
+          "width": 1500,
+          "height": 1500,
+          "bytes": "{{int}}",
+          "sha256": "{{sha256}}"
+        },
+        "thumb": {
+          "name": "thumb",
+          "url": "{{url}}",
+          "url_expires_at": "{{datetime|null}}",
+          "content_type": "image/jpeg",
+          "width": 480,
+          "height": 600,
+          "bytes": "{{int}}",
+          "sha256": "{{sha256}}"
+        }
+      },
+      "updated_at": "{{datetime}}"
+    },
+    {
+      "id": "{{id}}",
+      "external_id": "KO-1009_CHR_2",
+      "product_id": "{{id}}",
+      "brand_id": "{{id}}",
+      "media_type": "image",
+      "color_code": "CHR",
+      "variant_ids": null,
+      "role": "packshot",
+      "view": "back",
+      "position": 2,
+      "filename": "KO-1009_CHR_2_back.png",
+      "alt_text": null,
+      "content_type": "image/png",
+      "width": 1200,
+      "height": 1500,
+      "bytes": 10940,
+      "sha256": "ebf1cc9b9f63d83fd2b9b07e9dbd0f5a27c98bf490d3bca1d0e236b5a8d2724b",
+      "rights": {
+        "license": "retailer-use",
+        "license_text": null,
+        "channels": [
+          "webshop",
+          "marketplace",
+          "social"
+        ],
+        "territories": null,
+        "embargo_until": null,
+        "expires_at": null,
+        "credit": null,
+        "model_release": null
+      },
+      "provenance": {
+        "ai_generated": false,
+        "ai_edited": false,
+        "source": "photo",
+        "c2pa": "none",
+        "c2pa_manifest_url": null,
+        "generator": null
+      },
+      "renditions": {
+        "original": {
+          "name": "original",
+          "url": "{{url}}",
+          "url_expires_at": "{{datetime|null}}",
+          "content_type": "image/png",
+          "width": 1200,
+          "height": 1500,
+          "bytes": 10940,
+          "sha256": "ebf1cc9b9f63d83fd2b9b07e9dbd0f5a27c98bf490d3bca1d0e236b5a8d2724b"
+        },
+        "web": {
+          "name": "web",
+          "url": "{{url}}",
+          "url_expires_at": "{{datetime|null}}",
+          "content_type": "image/jpeg",
+          "width": 1200,
+          "height": 1500,
+          "bytes": "{{int}}",
+          "sha256": "{{sha256}}"
+        },
+        "square": {
+          "name": "square",
+          "url": "{{url}}",
+          "url_expires_at": "{{datetime|null}}",
+          "content_type": "image/jpeg",
+          "width": 1500,
+          "height": 1500,
+          "bytes": "{{int}}",
+          "sha256": "{{sha256}}"
+        },
+        "thumb": {
+          "name": "thumb",
+          "url": "{{url}}",
+          "url_expires_at": "{{datetime|null}}",
+          "content_type": "image/jpeg",
+          "width": 480,
+          "height": 600,
+          "bytes": "{{int}}",
+          "sha256": "{{sha256}}"
+        }
+      },
+      "updated_at": "{{datetime}}"
+    },
+    {
+      "id": "{{id}}",
+      "external_id": "KO-1009_CHR_3",
+      "product_id": "{{id}}",
+      "brand_id": "{{id}}",
+      "media_type": "image",
+      "color_code": "CHR",
+      "variant_ids": null,
+      "role": "packshot",
+      "view": "inside",
+      "position": 3,
+      "filename": "KO-1009_CHR_3_inside.png",
+      "alt_text": null,
+      "content_type": "image/png",
+      "width": 1200,
+      "height": 1500,
+      "bytes": 11068,
+      "sha256": "32104963abecedef8cc8f91c6560184acc4a0e422574c938f567ea5f96ccb4ce",
+      "rights": {
+        "license": "retailer-use",
+        "license_text": null,
+        "channels": [
+          "webshop",
+          "marketplace",
+          "social"
+        ],
+        "territories": null,
+        "embargo_until": null,
+        "expires_at": null,
+        "credit": null,
+        "model_release": null
+      },
+      "provenance": {
+        "ai_generated": false,
+        "ai_edited": false,
+        "source": "photo",
+        "c2pa": "none",
+        "c2pa_manifest_url": null,
+        "generator": null
+      },
+      "renditions": {
+        "original": {
+          "name": "original",
+          "url": "{{url}}",
+          "url_expires_at": "{{datetime|null}}",
+          "content_type": "image/png",
+          "width": 1200,
+          "height": 1500,
+          "bytes": 11068,
+          "sha256": "32104963abecedef8cc8f91c6560184acc4a0e422574c938f567ea5f96ccb4ce"
+        },
+        "web": {
+          "name": "web",
+          "url": "{{url}}",
+          "url_expires_at": "{{datetime|null}}",
+          "content_type": "image/jpeg",
+          "width": 1200,
+          "height": 1500,
+          "bytes": "{{int}}",
+          "sha256": "{{sha256}}"
+        },
+        "square": {
+          "name": "square",
+          "url": "{{url}}",
+          "url_expires_at": "{{datetime|null}}",
+          "content_type": "image/jpeg",
+          "width": 1500,
+          "height": 1500,
+          "bytes": "{{int}}",
+          "sha256": "{{sha256}}"
+        },
+        "thumb": {
+          "name": "thumb",
+          "url": "{{url}}",
+          "url_expires_at": "{{datetime|null}}",
+          "content_type": "image/jpeg",
+          "width": 480,
+          "height": 600,
+          "bytes": "{{int}}",
+          "sha256": "{{sha256}}"
+        }
+      },
+      "updated_at": "{{datetime}}"
+    }
+  ]
+}

@@ -64,8 +64,17 @@ func TestMaterialsAndCare(t *testing.T) {
 	if err != nil || len(parts) != 2 || parts[0].Name != "outer" || parts[0].Fibers[0].Key != "cotton" || len(warns) != 0 {
 		t.Fatalf("%v %v %v", parts, warns, err)
 	}
-	if _, w, _ := ParseMaterials("90% organic cotton"); len(w) != 1 {
-		t.Fatalf("expected a sum warning")
+	// 0.1 keys and flags give the same normalised fibre; sums are not a parse warning.
+	for _, in := range []string{"90% organic cotton", "90% cotton (organic)", "90% Cotton (Organic)"} {
+		p, w, err := ParseMaterials(in)
+		if err != nil || len(w) != 0 || p[0].Fibers[0] != (Fiber{Key: "cotton", Percentage: 90, Organic: true}) {
+			t.Fatalf("%s: %+v %v %v", in, p, w, err)
+		}
+	}
+	p, _, err := ParseMaterials("outer: 100% polyester (recycled); lining: 100% recycled_polyamide (organic)")
+	if err != nil || p[0].Fibers[0] != (Fiber{Key: "polyester", Percentage: 100, Recycled: true}) ||
+		p[1].Fibers[0] != (Fiber{Key: "polyamide", Percentage: 100, Recycled: true, Organic: true}) {
+		t.Fatalf("%+v %v", p, err)
 	}
 	if _, _, err := ParseMaterials("lots of cotton"); err == nil {
 		t.Fatal("expected an error")
@@ -179,4 +188,69 @@ func deref(s *string) string {
 		return "null"
 	}
 	return *s
+}
+
+func TestArticleDataCells(t *testing.T) {
+	if NormalizeHeader("Feature:Detachable Parts") != "feature:detachable_parts" || NormalizeHeader("Colour Family") != "color_family" {
+		t.Fatal(NormalizeHeader("Feature:Detachable Parts"), NormalizeHeader("Colour Family"))
+	}
+	f, err := ParseFootwearMaterials("upper: Leather; lining_and_sock: coated leather")
+	if err != nil || *f != (Footwear{Upper: "leather", LiningAndSock: "coated_leather"}) {
+		t.Fatal(f, err)
+	}
+	for _, bad := range []string{"upper: plastic", "heel: leather", "upper leather", "upper: leather; upper: other"} {
+		if _, err := ParseFootwearMaterials(bad); err == nil {
+			t.Errorf("%q accepted", bad)
+		}
+	}
+	cs, err := ParseCertifications("GOTS:CU 123456; rws:CU 200101 (material); fsc")
+	if err != nil || len(cs) != 3 || cs[0] != (Certification{"gots", "CU 123456", "product"}) ||
+		cs[1] != (Certification{"rws", "CU 200101", "material"}) || cs[2] != (Certification{"fsc", "", "product"}) {
+		t.Fatal(cs, err)
+	}
+	for in, want := range map[string]float64{"2.6": 2.6, "2,7": 2.7, "55": 55, ".5": 0.5} {
+		if v, err := ParseMeasurement(in); err != nil || v != want {
+			t.Errorf("%s: %v %v", in, v, err)
+		}
+	}
+	for _, bad := range []string{"30 cm", "0", "-2", "1.000,5", "2.6kg", ""} {
+		if _, err := ParseMeasurement(bad); err == nil {
+			t.Errorf("%q accepted", bad)
+		}
+	}
+	if lo, hi, err := ParseStrapLength("80-130"); err != nil || lo != 80 || hi != 130 {
+		t.Fatal(lo, hi, err)
+	}
+	if lo, hi, err := ParseStrapLength("120"); err != nil || lo != 120 || hi != 120 {
+		t.Fatal(lo, hi, err)
+	}
+	if _, _, err := ParseStrapLength("130-80"); err == nil {
+		t.Fatal("min > max accepted")
+	}
+	if v, err := ParseColorFamily("Gray"); err != nil || v != "grey" {
+		t.Fatal(v, err)
+	}
+	if _, err := ParseColorFamily("navy"); err == nil {
+		t.Fatal("navy accepted")
+	}
+	cases := []struct {
+		key, cell string
+		want      string // FormatFeature of the value, "" = error
+	}{
+		{"wheels", "4", "4"}, {"wheels", "3", ""}, {"shell", "Hard", "hard"}, {"lock", "TSA combination", "tsa_combination"},
+		{"expandable", "yes", "yes"}, {"expandable", "maybe", ""}, {"detachable_parts", "shoulder_strap|Lining|lining", "shoulder_strap|lining"},
+		{"detachable_parts", "strap", ""}, {"handle_type", "Padded", "Padded"},
+	}
+	for _, c := range cases {
+		v, err := ParseFeature(c.key, c.cell)
+		if c.want == "" {
+			if err == nil {
+				t.Errorf("%s=%q accepted", c.key, c.cell)
+			}
+			continue
+		}
+		if err != nil || FormatFeature(v) != c.want {
+			t.Errorf("%s=%q: %v %v", c.key, c.cell, v, err)
+		}
+	}
 }

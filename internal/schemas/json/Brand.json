@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://openbrandexchange.com/schemas/v0.1/Brand.json",
+  "$id": "https://openbrandexchange.com/schemas/v0.2/Brand.json",
   "type": "object",
   "title": "Brand",
   "description": "A brand (label) published by this node. One node (one brand company) may publish several brands.",

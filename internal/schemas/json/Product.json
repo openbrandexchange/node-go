@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://openbrandexchange.com/schemas/v0.1/Product.json",
+  "$id": "https://openbrandexchange.com/schemas/v0.2/Product.json",
   "type": "object",
   "title": "Product",
   "description": "A style/model. In /changes entries 'data' holds the product without 'variants' and 'assets'; product endpoints return ProductDetail (with both arrays).",
@@ -38,7 +38,15 @@
         "string",
         "null"
       ],
-      "description": "Open vocabulary; recommended keys in docs/protocol.md#item-types (e.g. t_shirt, sweater, jacket, jeans, bag).",
+      "description": "Open vocabulary; recommended keys in docs/protocol.md#item-types (e.g. t_shirt, sweater, jacket, jeans, bag, luggage).",
+      "pattern": "^[a-z][a-z0-9_]{0,63}$"
+    },
+    "item_subtype": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Open vocabulary, refines item_type; recommended keys per item type in docs/protocol.md#item-subtypes (e.g. cabin, crossbody, ankle_boot).",
       "pattern": "^[a-z][a-z0-9_]{0,63}$"
     },
     "gpc_brick": {
@@ -83,6 +91,23 @@
         }
       ]
     },
+    "contains_animal_origin": {
+      "type": [
+        "boolean",
+        "null"
+      ],
+      "description": "Textile products: true when the product contains non-textile parts of animal origin (Reg. (EU) 1007/2011 Art. 12: the label must then say so); false when it does not; null = not stated."
+    },
+    "footwear_materials": {
+      "anyOf": [
+        {
+          "$ref": "FootwearMaterials.json"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
     "care": {
       "anyOf": [
         {
@@ -103,11 +128,31 @@
         }
       ]
     },
+    "certifications": {
+      "anyOf": [
+        {
+          "$ref": "Certifications.json"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
     "dpp_url": {
       "anyOf": [
         {
           "$ref": "Common.json#/$defs/Url",
           "description": "Link to the product's Digital Product Passport, when one exists."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "features": {
+      "anyOf": [
+        {
+          "$ref": "Features.json"
         },
         {
           "type": "null"

@@ -319,7 +319,7 @@ func TestPortal(t *testing.T) {
 			t.Fatalf("%v", v)
 		}
 		list := u.must(200, "GET", "/admin/api/portal/products?limit=100", nil)
-		if list["total"].(float64) != 6 {
+		if list["total"].(float64) != 9 {
 			t.Fatalf("restricted retailer sees %v products", list["total"])
 		}
 		for _, p := range list["items"].([]any) {

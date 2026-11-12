@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openbrandexchange.com/schemas/v0.2/FootwearMaterials.json",
+  "title": "FootwearMaterials",
+  "description": "Footwear labelling (Directive 94/11/EC): the material of the three parts of a shoe, in the directive's four categories. The value is the material that makes up at least 80 % of the surface of the upper and of the lining and sock, and at least 80 % of the volume of the outer sole. Responses include all three parts; null = not stated.",
+  "type": "object",
+  "properties": {
+    "upper": {
+      "anyOf": [
+        {
+          "type": "string",
+          "enum": [
+            "leather",
+            "coated_leather",
+            "textile",
+            "other"
+          ],
+          "description": "Upper: the outer face of the structural element attached to the outer sole."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "lining_and_sock": {
+      "anyOf": [
+        {
+          "type": "string",
+          "enum": [
+            "leather",
+            "coated_leather",
+            "textile",
+            "other"
+          ],
+          "description": "Lining and sock: the lining of the upper and the sock (insole) that form the inside of the shoe."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "outer_sole": {
+      "anyOf": [
+        {
+          "type": "string",
+          "enum": [
+            "leather",
+            "coated_leather",
+            "textile",
+            "other"
+          ],
+          "description": "Outer sole: the bottom part that touches the ground and is attached to the upper."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  },
+  "additionalProperties": false,
+  "patternProperties": {
+    "^x-[a-z0-9]+-[a-z0-9_-]+$": true
+  }
+}

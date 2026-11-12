@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://openbrandexchange.com/schemas/v0.1/BrandInput.json",
+  "$id": "https://openbrandexchange.com/schemas/v0.2/BrandInput.json",
   "type": "object",
   "title": "BrandInput",
   "description": "Ingest write model for a brand. Key: the brand's external_id (path).",

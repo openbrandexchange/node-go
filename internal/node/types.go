@@ -51,6 +51,8 @@ func (t LocalizedText) Pick(lang string, order ...string) string {
 type Fiber struct {
 	Fiber      string  `json:"fiber"`
 	Percentage float64 `json:"percentage"`
+	Recycled   bool    `json:"recycled,omitempty"`
+	Organic    bool    `json:"organic,omitempty"`
 }
 
 // MaterialPart is the composition of one part.
@@ -70,6 +72,7 @@ type Color struct {
 	Code          string        `json:"code"`
 	Name          LocalizedText `json:"name"`
 	SupplierColor *string       `json:"supplier_color"`
+	Family        *string       `json:"family"`
 }
 
 // ---- stored write models (IngestRecord.data) --------------------------------
@@ -84,30 +87,37 @@ type BrandData struct {
 
 // ProductData is the stored ProductInput (without status).
 type ProductData struct {
-	BrandExternalID string         `json:"brand_external_id"`
-	StyleNumber     string         `json:"style_number"`
-	Name            LocalizedText  `json:"name"`
-	Description     LocalizedText  `json:"description"`
-	ItemType        *string        `json:"item_type"`
-	GPCBrick        *string        `json:"gpc_brick"`
-	TargetGroup     *string        `json:"target_group"`
-	Season          *string        `json:"season"`
-	Collection      *string        `json:"collection"`
-	Materials       []MaterialPart `json:"materials"`
-	Care            []CareItem     `json:"care"`
-	CountryOfOrigin *string        `json:"country_of_origin"`
-	DPPURL          *string        `json:"dpp_url"`
-	Attributes      map[string]any `json:"attributes"`
+	BrandExternalID      string             `json:"brand_external_id"`
+	StyleNumber          string             `json:"style_number"`
+	Name                 LocalizedText      `json:"name"`
+	Description          LocalizedText      `json:"description"`
+	ItemType             *string            `json:"item_type"`
+	ItemSubtype          *string            `json:"item_subtype"`
+	GPCBrick             *string            `json:"gpc_brick"`
+	TargetGroup          *string            `json:"target_group"`
+	Season               *string            `json:"season"`
+	Collection           *string            `json:"collection"`
+	Materials            []MaterialPart     `json:"materials"`
+	ContainsAnimalOrigin *bool              `json:"contains_animal_origin"`
+	FootwearMaterials    *FootwearMaterials `json:"footwear_materials"`
+	Care                 []CareItem         `json:"care"`
+	CountryOfOrigin      *string            `json:"country_of_origin"`
+	Certifications       []Certification    `json:"certifications"`
+	DPPURL               *string            `json:"dpp_url"`
+	Features             Features           `json:"features"`
+	Attributes           map[string]any     `json:"attributes"`
 }
 
 // VariantData is the stored VariantInput (without status).
 type VariantData struct {
-	ProductExternalID string  `json:"product_external_id"`
-	GTIN              *string `json:"gtin"`
-	SKU               *string `json:"sku"`
-	Color             Color   `json:"color"`
-	Size              *string `json:"size"`
-	SizeSystem        *string `json:"size_system"`
+	ProductExternalID string        `json:"product_external_id"`
+	GTIN              *string       `json:"gtin"`
+	SKU               *string       `json:"sku"`
+	Color             Color         `json:"color"`
+	Size              *string       `json:"size"`
+	SizeLength        *string       `json:"size_length"`
+	SizeSystem        *string       `json:"size_system"`
+	Measurements      *Measurements `json:"measurements"`
 }
 
 // FileRef references a blob in AssetData.files.
@@ -149,41 +159,48 @@ type Brand struct {
 
 // Product is the protocol Product (Variants/Assets set = ProductDetail).
 type Product struct {
-	ID              string         `json:"id"`
-	ExternalID      string         `json:"external_id"`
-	BrandID         string         `json:"brand_id"`
-	StyleNumber     string         `json:"style_number"`
-	Name            LocalizedText  `json:"name"`
-	Description     LocalizedText  `json:"description"`
-	ItemType        *string        `json:"item_type"`
-	GPCBrick        *string        `json:"gpc_brick"`
-	TargetGroup     *string        `json:"target_group"`
-	Season          *string        `json:"season"`
-	Collection      *string        `json:"collection"`
-	Materials       []MaterialPart `json:"materials"`
-	Care            []CareItem     `json:"care"`
-	CountryOfOrigin *string        `json:"country_of_origin"`
-	DPPURL          *string        `json:"dpp_url"`
-	Attributes      map[string]any `json:"attributes"`
-	CreatedAt       string         `json:"created_at"`
-	UpdatedAt       string         `json:"updated_at"`
-	Variants        *[]Variant     `json:"variants,omitempty"`
-	Assets          *[]Asset       `json:"assets,omitempty"`
+	ID                   string             `json:"id"`
+	ExternalID           string             `json:"external_id"`
+	BrandID              string             `json:"brand_id"`
+	StyleNumber          string             `json:"style_number"`
+	Name                 LocalizedText      `json:"name"`
+	Description          LocalizedText      `json:"description"`
+	ItemType             *string            `json:"item_type"`
+	ItemSubtype          *string            `json:"item_subtype"`
+	GPCBrick             *string            `json:"gpc_brick"`
+	TargetGroup          *string            `json:"target_group"`
+	Season               *string            `json:"season"`
+	Collection           *string            `json:"collection"`
+	Materials            []MaterialPart     `json:"materials"`
+	ContainsAnimalOrigin *bool              `json:"contains_animal_origin"`
+	FootwearMaterials    *FootwearMaterials `json:"footwear_materials"`
+	Care                 []CareItem         `json:"care"`
+	CountryOfOrigin      *string            `json:"country_of_origin"`
+	Certifications       []Certification    `json:"certifications"`
+	DPPURL               *string            `json:"dpp_url"`
+	Features             Features           `json:"features"`
+	Attributes           map[string]any     `json:"attributes"`
+	CreatedAt            string             `json:"created_at"`
+	UpdatedAt            string             `json:"updated_at"`
+	Variants             *[]Variant         `json:"variants,omitempty"`
+	Assets               *[]Asset           `json:"assets,omitempty"`
 }
 
 // Variant is the protocol Variant.
 type Variant struct {
-	ID           string  `json:"id"`
-	ExternalID   string  `json:"external_id"`
-	ProductID    string  `json:"product_id"`
-	BrandID      string  `json:"brand_id"`
-	GTIN         *string `json:"gtin"`
-	GTINOriginal *string `json:"gtin_original"`
-	SKU          *string `json:"sku"`
-	Color        Color   `json:"color"`
-	Size         *string `json:"size"`
-	SizeSystem   *string `json:"size_system"`
-	UpdatedAt    string  `json:"updated_at"`
+	ID           string        `json:"id"`
+	ExternalID   string        `json:"external_id"`
+	ProductID    string        `json:"product_id"`
+	BrandID      string        `json:"brand_id"`
+	GTIN         *string       `json:"gtin"`
+	GTINOriginal *string       `json:"gtin_original"`
+	SKU          *string       `json:"sku"`
+	Color        Color         `json:"color"`
+	Size         *string       `json:"size"`
+	SizeLength   *string       `json:"size_length"`
+	SizeSystem   *string       `json:"size_system"`
+	Measurements *Measurements `json:"measurements"`
+	UpdatedAt    string        `json:"updated_at"`
 }
 
 // Rights is the effective rights object.
@@ -289,6 +306,9 @@ type IngestResult struct {
 	ETag       *string  `json:"etag"`
 	Error      any      `json:"error"`
 	Warnings   []string `json:"warnings,omitempty"`
+	// WarningDetails are the warnings with a stable code (label
+	// completeness); each is also in Warnings as text.
+	WarningDetails []WarningDetail `json:"warning_details,omitempty"`
 }
 
 // IngestRecord is the GET representation in the ingest API and admin catalog.

@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://openbrandexchange.com/schemas/v0.1/Color.json",
+  "$id": "https://openbrandexchange.com/schemas/v0.2/Color.json",
   "type": "object",
   "title": "Color",
   "properties": {
@@ -27,6 +27,35 @@
       ],
       "description": "Colour name as used in the brand's own systems/labels.",
       "maxLength": 200
+    },
+    "family": {
+      "anyOf": [
+        {
+          "type": "string",
+          "enum": [
+            "black",
+            "white",
+            "grey",
+            "beige",
+            "brown",
+            "red",
+            "pink",
+            "orange",
+            "yellow",
+            "green",
+            "blue",
+            "purple",
+            "gold",
+            "silver",
+            "multicolour",
+            "transparent"
+          ],
+          "description": "Colour family for filters, next to the brand's own colour name. The same for every variant of one colour code."
+        },
+        {
+          "type": "null"
+        }
+      ]
     }
   },
   "required": [

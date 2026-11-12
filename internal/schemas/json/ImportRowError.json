@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://openbrandexchange.com/schemas/v0.1/ImportRowError.json",
+  "$id": "https://openbrandexchange.com/schemas/v0.2/ImportRowError.json",
   "type": "object",
   "title": "ImportRowError",
   "properties": {
@@ -30,10 +30,18 @@
         "error",
         "warning"
       ],
-      "description": "error: row/file skipped. warning: imported with a correction."
+      "description": "error: row/file skipped. warning: imported, with a correction or a label completeness warning."
     },
     "obx_error": {
-      "$ref": "Common.json#/$defs/ErrorCode"
+      "anyOf": [
+        {
+          "$ref": "Common.json#/$defs/ErrorCode"
+        },
+        {
+          "$ref": "Common.json#/$defs/WarningCode"
+        }
+      ],
+      "description": "An error code, or for severity warning also a label completeness warning code."
     },
     "detail": {
       "type": "string",

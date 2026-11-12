@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://openbrandexchange.com/schemas/v0.1/Rights.json",
+  "$id": "https://openbrandexchange.com/schemas/v0.2/Rights.json",
   "type": "object",
   "title": "Rights",
   "properties": {
