@@ -46,13 +46,28 @@ var aliases = map[string]string{
 	"colour_family": "color_family",
 }
 
-// NormalizeHeader normalises a column name: case-insensitive, spaces and
-// '-' become '_', language suffixes (name:de-CH) keep their tag form.
+// headerSpace is the white space of header names (§1.1): space, tab, CR, LF.
+const headerSpace = " \t\r\n"
+
+// TrimHeader trims the white space of §1.1 (space, tab, CR, LF) from a
+// header name.
+func TrimHeader(h string) string { return strings.Trim(h, headerSpace) }
+
+var headerRunRe = regexp.MustCompile(`[ \t\r\n-]+`)
+
+// headerName is the §1.1 normalisation of a name: trimmed, lowercase, each run
+// of white space and '-' one '_'.
+func headerName(h string) string {
+	return headerRunRe.ReplaceAllString(strings.ToLower(TrimHeader(h)), "_")
+}
+
+// NormalizeHeader normalises a column name (§1.1): trimmed, case-insensitive,
+// each run of white space and '-' becomes one '_', language suffixes
+// (name:de-CH) keep their tag form.
 func NormalizeHeader(h string) string {
-	h = strings.TrimSpace(strings.TrimPrefix(h, "\ufeff"))
+	h = TrimHeader(strings.TrimPrefix(h, "\ufeff"))
 	base, lang, hasLang := strings.Cut(h, ":")
-	base = strings.ToLower(strings.TrimSpace(base))
-	base = strings.NewReplacer(" ", "_", "-", "_").Replace(base)
+	base = headerName(base)
 	if a, ok := aliases[base]; ok {
 		base = a
 	}
@@ -61,7 +76,7 @@ func NormalizeHeader(h string) string {
 	}
 	lang = strings.TrimSpace(lang)
 	if base == "attr" || base == "feature" {
-		return base + ":" + strings.ToLower(strings.NewReplacer(" ", "_", "-", "_").Replace(lang))
+		return base + ":" + headerName(lang)
 	}
 	return base + ":" + NormalizeLang(lang)
 }

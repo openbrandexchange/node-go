@@ -43,7 +43,9 @@ type xlsxExpected struct {
 		} `json:"error"`
 	} `json:"cases"`
 	NumberVectors []struct {
-		V, Format, Text string
+		V      string  `json:"v"`
+		Format string  `json:"format"`
+		Text   *string `json:"text"` // null: workbook_invalid
 	} `json:"number_vectors"`
 	DateVectors []struct {
 		V        string  `json:"v"`
@@ -118,7 +120,7 @@ func TestWorkbookFixtures(t *testing.T) {
 	if !reflect.DeepEqual(e.Limits, want) {
 		t.Errorf("limits: spec %v, node %v", e.Limits, want)
 	}
-	if len(e.Cases) < 12 {
+	if len(e.Cases) < 15 {
 		t.Fatalf("only %d cases", len(e.Cases))
 	}
 	for _, c := range e.Cases {
@@ -171,6 +173,12 @@ func TestWorkbookVectors(t *testing.T) {
 	e := loadXLSXExpected(t)
 	for _, v := range e.NumberVectors {
 		got, ok := NumberText(v.V)
+		if v.Text == nil {
+			if ok {
+				t.Errorf("number %s: %s, want workbook_invalid", v.V, got)
+			}
+			continue
+		}
 		if !ok {
 			t.Errorf("number %s: not a number", v.V)
 			continue
@@ -180,8 +188,8 @@ func TestWorkbookVectors(t *testing.T) {
 				got = strings.Repeat("0", w-len(got)) + got
 			}
 		}
-		if got != v.Text {
-			t.Errorf("number %s (%s): %s, want %s", v.V, v.Format, got, v.Text)
+		if got != *v.Text {
+			t.Errorf("number %s (%s): %s, want %s", v.V, v.Format, got, *v.Text)
 		}
 	}
 	for _, v := range e.DateVectors {
@@ -370,5 +378,66 @@ func TestWorkbookLocator(t *testing.T) {
 	}
 	if ColumnLetter(1000) != "ALL" || ColumnLetter(26) != "Z" || ColumnLetter(27) != "AA" || colNumber("ALL") != 1000 {
 		t.Error("column letters")
+	}
+}
+
+// §5.4: a CDATA section is text in <t>, <v> and <f>.
+func TestWorkbookCDATA(t *testing.T) {
+	sheet := `<row r="1"><c r="A1" t="inlineStr"><is><t><![CDATA[style_number]]></t></is></c><c r="B1" t="inlineStr"><is><t>weight_kg</t></is></c><c r="C1" t="inlineStr"><is><t>name:en</t></is></c></row>` +
+		`<row r="2"><c r="A2" t="inlineStr"><is><t>X-<![CDATA[1 & <2>]]></t></is></c><c r="B2"><v><![CDATA[1.50]]></v></c><c r="C2"><f><![CDATA[A1&"x"]]></f></c></row>`
+	data := buildWorkbook(t, sheet, nil)
+	wb, err := ConvertWorkbook(bytes.NewReader(data), int64(len(data)), "products")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if want := [][]string{{"style_number", "weight_kg", "name:en"}, {"", "", ""}}; !reflect.DeepEqual(wb.Rows, want) {
+		t.Errorf("rows %q, want %q", wb.Rows, want)
+	}
+	if len(wb.Errors) != 1 || wb.Errors[0].Value == nil || *wb.Errors[0].Value != `=A1&"x"` {
+		t.Errorf("errors %+v, want the formula from CDATA", wb.Errors)
+	}
+	sheet = strings.Replace(sheet, `<c r="C2"><f><![CDATA[A1&"x"]]></f></c>`, "", 1)
+	data = buildWorkbook(t, sheet, nil)
+	if wb, err = ConvertWorkbook(bytes.NewReader(data), int64(len(data)), "products"); err != nil {
+		t.Fatal(err)
+	}
+	if want := []string{"X-1 & <2>", "1.5", ""}; !reflect.DeepEqual(wb.Rows[1], want) {
+		t.Errorf("row 2 %q, want %q", wb.Rows[1], want)
+	}
+}
+
+// §5.6 step 4: a part read twice (the sheet choice, then the conversion)
+// counts once toward the inflated total.
+func TestWorkbookPartCountedOnce(t *testing.T) {
+	data := buildWorkbook(t, `<row r="1"><c r="A1" t="inlineStr"><is><t>style_number</t></is></c></row>`, nil)
+	p, err := openWorkbookPackage(bytes.NewReader(data), int64(len(data)))
+	if err != nil {
+		t.Fatal(err)
+	}
+	a, _ := p.read("/xl/worksheets/sheet1.xml")
+	n := p.inflated
+	b, _ := p.read("xl/worksheets/sheet1.xml")
+	if p.inflated != n || n != int64(len(a)) || !bytes.Equal(a, b) {
+		t.Errorf("inflated %d after two reads of %d bytes", p.inflated, len(a))
+	}
+}
+
+// §1.1: trimmed (space, tab, CR, LF), case ignored, each run of white space
+// and '-' one '_'; the sheet choice uses the same.
+func TestHeaderNormalisation(t *testing.T) {
+	for in, want := range map[string]string{
+		"Style Number": "style_number", "Style  -  Number": "style_number", " \tStyle\r\nNumber\n": "style_number",
+		"STYLE--NUMBER": "style_number", "Colour Code": "color_code", "Name:NL": "name:nl", "attr:Launch  Date": "attr:launch_date",
+		"  ": "", " style_number": " style_number",
+	} {
+		if got := NormalizeHeader(in); got != want {
+			t.Errorf("NormalizeHeader(%q) = %q, want %q", in, got, want)
+		}
+	}
+	if UnknownColumns([]string{NormalizeHeader(" "), "brand"}, map[string]bool{"brand": true}) != nil {
+		t.Error("an empty header is an unknown column")
+	}
+	if CellLocator(1, "", 5) != "row 1, column E: " || CellLocator(3, "ean", 3) != "row 3, column ean (C): " {
+		t.Error("cell locator")
 	}
 }

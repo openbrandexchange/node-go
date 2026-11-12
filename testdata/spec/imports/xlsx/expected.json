@@ -1,5 +1,5 @@
 {
-  "description": "Conformance I-IMP-9 and I-IMP-10 (optional: nodes that accept Excel workbooks, docs/import-format.md §5). For each workbook: send it as the import's products.xlsx (role products) or assets.xlsx (role assets). rows: the canonical rows the conversion gives, header first; rows[i] is Excel row i + 1, so a row that the conversion empties (a conversion error) or that is empty in the sheet is a row of empty strings. csv: the same rows as canonical CSV text (§5.3). errors / warnings: the ImportRowErrors of the conversion (detail starts with detail_prefix). import_errors: every ImportRowError with severity error of a dry-run import of the workbook on a node that holds fixtures/kestrel, sorted by row then column. error: the workbook-level refusal (one ImportRowError with row null, nothing imported); detail_contains is a hint for humans, not checked by obx-conformance. number_vectors / date_vectors / format_vectors: unit test vectors for §5.4.",
+  "description": "Conformance I-IMP-9 and I-IMP-10 (optional: nodes that accept Excel workbooks, docs/import-format.md §5). For each workbook: send it as the import's products.xlsx (role products) or assets.xlsx (role assets), nothing else unless send says so (send.images_manifest: these files of fixtures/kestrel/images in the images_manifest, by file name and sha256). rows: the canonical rows the conversion gives, header first; rows[i] is Excel row i + 1, so a row that the conversion empties (a conversion error) or that is empty in the sheet is a row of empty strings. csv: the same rows as canonical CSV text (§5.3). errors / warnings: the ImportRowErrors of the conversion (detail starts with detail_prefix). import_errors: every ImportRowError with severity error of a dry-run import of the workbook on a node that holds fixtures/kestrel, sorted by row then column. error: the workbook-level refusal (§5.5: the import run fails with this code in ImportRun.error, nothing is imported, and its results hold this one ImportRowError with row null); detail_contains is a hint for humans, not checked by obx-conformance. number_vectors / date_vectors / format_vectors: unit test vectors for §5.4.",
   "limits": {
     "entries": 1000,
     "totalBytes": 268435456,
@@ -23,7 +23,13 @@
       "file": "assets-template.xlsx",
       "role": "assets",
       "sheet": "Assets",
-      "what": "templates/assets.xlsx as it is: every column of import-format.md 2.3, the rows of fixtures/kestrel/assets.csv.",
+      "what": "templates/assets.xlsx as it is: every column of import-format.md 2.3, the rows of fixtures/kestrel/assets.csv. Sent with the two images its rows name in the images_manifest (alone, each row would be files_missing, §2.2); on a node that holds the fixtures it is all unchanged.",
+      "send": {
+        "images_manifest": [
+          "KO-1002_BLK_2_back.png",
+          "KO-1003_RST_3_model.png"
+        ]
+      },
       "rows": [
         [
           "file",
@@ -97,7 +103,8 @@
       ],
       "csv": "file,style_number,color_code,position,role,view,alt_text:en,alt_text:nl,license,license_text,channels,territories,embargo_until,expires_at,credit,model_release,ai_generated,ai_edited,source,c2pa,generator\r\nKO-1002_BLK_2_back.png,,,,,,,,,,,,2030-01-01T00:00:00Z,,Photo: Kestrel Studio,,,,,,\r\nKO-1003_RST_3_model.png,,,,,,AI-generated image of a model wearing the rust tee,Met AI gegenereerd beeld van een model in het roestkleurige T-shirt,,,,,,,,,true,false,generated,none,fictional-image-model 1.0\r\n",
       "errors": [],
-      "warnings": []
+      "warnings": [],
+      "import_errors": []
     },
     {
       "file": "edge-cases.xlsx",
@@ -298,27 +305,160 @@
       "file": "date1904.xlsx",
       "role": "products",
       "sheet": "products",
-      "what": "The 1904 date system (serial 44620 is 2026-03-01) with a custom date format, and a t=\"d\" cell (ISO date). The sheet name matches Products case-insensitively.",
+      "what": "The 1904 date system (serial 44620 is 2026-03-01, 2957003 is 9999-12-31, the last date) with a custom date format, and a t=\"d\" cell (ISO date). The sheet name matches Products case-insensitively.",
       "rows": [
         [
+          "brand",
           "style_number",
           "name:en",
           "attr:launch_date"
         ],
         [
+          "Kestrel",
           "KX-9101",
           "Date 1904",
           "2026-03-01"
         ],
         [
+          "Kestrel",
           "KX-9102",
           "ISO date cell",
           "2026-03-01"
+        ],
+        [
+          "Kestrel",
+          "KX-9103",
+          "Last 1904 date",
+          "9999-12-31"
         ]
       ],
-      "csv": "style_number,name:en,attr:launch_date\r\nKX-9101,Date 1904,2026-03-01\r\nKX-9102,ISO date cell,2026-03-01\r\n",
+      "csv": "brand,style_number,name:en,attr:launch_date\r\nKestrel,KX-9101,Date 1904,2026-03-01\r\nKestrel,KX-9102,ISO date cell,2026-03-01\r\nKestrel,KX-9103,Last 1904 date,9999-12-31\r\n",
       "errors": [],
-      "warnings": []
+      "warnings": [],
+      "import_errors": []
+    },
+    {
+      "file": "empty-header.xlsx",
+      "role": "products",
+      "sheet": "Export",
+      "what": "The visible sheet Export is found by its key column: B1 is \"  Style - Number \", which §1.1 normalises to style_number (each run of white space and \"-\" is one \"_\"). Row 1: C1 is empty and E1 is #REF! (a conversion error at row 1, column null, locator \"row 1, column E: \"), so columns C and E have no header: their values are ignored with one warning each (\"column C: \", \"column E: \"), and the CSV import gives no unknown-column warning for them. Row 2: a CDATA section is text; serial 2958465 is 9999-12-31. Row 3: #DIV/0! under the empty header C (conversion error, locator \"row 3, column C: \"; row skipped). Row 4: serial 2958466 (10000-01-01) is out of range (conversion error; row skipped).",
+      "rows": [
+        [
+          "Brand",
+          "  Style - Number ",
+          "",
+          "name:en",
+          "",
+          "season",
+          "attr:launch_date"
+        ],
+        [
+          "Kestrel",
+          "KX-9201",
+          "spacer",
+          "Cdata & <Tee>",
+          "x",
+          "SS26",
+          "9999-12-31"
+        ],
+        [
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        [
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ]
+      ],
+      "csv": "Brand,  Style - Number ,,name:en,,season,attr:launch_date\r\nKestrel,KX-9201,spacer,Cdata & <Tee>,x,SS26,9999-12-31\r\n,,,,,,\r\n,,,,,,\r\n",
+      "errors": [
+        {
+          "file": "products.xlsx",
+          "row": 1,
+          "column": null,
+          "severity": "error",
+          "obx_error": "validation_failed",
+          "detail_prefix": "row 1, column E: ",
+          "value": "#REF!"
+        },
+        {
+          "file": "products.xlsx",
+          "row": 3,
+          "column": null,
+          "severity": "error",
+          "obx_error": "validation_failed",
+          "detail_prefix": "row 3, column C: ",
+          "value": "#DIV/0!"
+        },
+        {
+          "file": "products.xlsx",
+          "row": 4,
+          "column": "attr:launch_date",
+          "severity": "error",
+          "obx_error": "validation_failed",
+          "detail_prefix": "row 4, column attr:launch_date (G): ",
+          "value": "2958466"
+        }
+      ],
+      "warnings": [
+        {
+          "file": "products.xlsx",
+          "row": null,
+          "column": null,
+          "severity": "warning",
+          "obx_error": "validation_failed",
+          "detail_prefix": "column C: ",
+          "value": null
+        },
+        {
+          "file": "products.xlsx",
+          "row": null,
+          "column": null,
+          "severity": "warning",
+          "obx_error": "validation_failed",
+          "detail_prefix": "column E: ",
+          "value": null
+        }
+      ],
+      "import_errors": [
+        {
+          "file": "products.xlsx",
+          "row": 1,
+          "column": null,
+          "severity": "error",
+          "obx_error": "validation_failed",
+          "detail_prefix": "row 1, column E: ",
+          "value": "#REF!"
+        },
+        {
+          "file": "products.xlsx",
+          "row": 3,
+          "column": null,
+          "severity": "error",
+          "obx_error": "validation_failed",
+          "detail_prefix": "row 3, column C: ",
+          "value": "#DIV/0!"
+        },
+        {
+          "file": "products.xlsx",
+          "row": 4,
+          "column": "attr:launch_date",
+          "severity": "error",
+          "obx_error": "validation_failed",
+          "detail_prefix": "row 4, column attr:launch_date (G): ",
+          "value": "2958466"
+        }
+      ]
     },
     {
       "file": "macro-enabled.xlsx",
@@ -409,6 +549,32 @@
         "severity": "error",
         "obx_error": "workbook_invalid",
         "detail_contains": "DOCTYPE"
+      }
+    },
+    {
+      "file": "unsafe-before-types.xlsx",
+      "role": "products",
+      "what": "xl/vbaProject.bin and a [Content_Types].xml that is not well-formed: the entry names are checked before [Content_Types].xml is read, so the answer is workbook_unsafe, not workbook_invalid.",
+      "error": {
+        "file": "products.xlsx",
+        "row": null,
+        "column": null,
+        "severity": "error",
+        "obx_error": "workbook_unsafe",
+        "detail_contains": "vbaProject.bin"
+      }
+    },
+    {
+      "file": "number-range.xlsx",
+      "role": "products",
+      "what": "A number cell holding 1E+308, outside Excel's range (1E-308 to below 1E+308).",
+      "error": {
+        "file": "products.xlsx",
+        "row": null,
+        "column": null,
+        "severity": "error",
+        "obx_error": "workbook_invalid",
+        "detail_contains": "1E+308"
       }
     },
     {
@@ -530,6 +696,86 @@
       "v": "42",
       "format": "@",
       "text": "42"
+    },
+    {
+      "v": "9.99999999999999E+307",
+      "format": "General",
+      "text": "99999999999999900000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+    },
+    {
+      "v": "1E+308",
+      "format": "General",
+      "text": null
+    },
+    {
+      "v": "9.999999999999999E+307",
+      "format": "General",
+      "text": null
+    },
+    {
+      "v": "1E-308",
+      "format": "General",
+      "text": "0.00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001"
+    },
+    {
+      "v": "9.9999999999999999E-309",
+      "format": "General",
+      "text": "0.00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001"
+    },
+    {
+      "v": "1E-309",
+      "format": "General",
+      "text": null
+    },
+    {
+      "v": "-1E+308",
+      "format": "General",
+      "text": null
+    },
+    {
+      "v": "0E+99999999999",
+      "format": "General",
+      "text": "0"
+    },
+    {
+      "v": "1E+99999999999",
+      "format": "General",
+      "text": null
+    },
+    {
+      "v": "1E-99999999999",
+      "format": "General",
+      "text": null
+    },
+    {
+      "v": "0.5E+3",
+      "format": "General",
+      "text": "500"
+    },
+    {
+      "v": ".5",
+      "format": "General",
+      "text": "0.5"
+    },
+    {
+      "v": "5.",
+      "format": "General",
+      "text": "5"
+    },
+    {
+      "v": "1,5",
+      "format": "General",
+      "text": null
+    },
+    {
+      "v": "0x10",
+      "format": "General",
+      "text": null
+    },
+    {
+      "v": "Infinity",
+      "format": "General",
+      "text": null
     }
   ],
   "date_vectors": [
@@ -586,6 +832,48 @@
       "kind": "date",
       "date1904": true,
       "text": "1904-01-01"
+    },
+    {
+      "v": "-1",
+      "kind": "date",
+      "date1904": true,
+      "text": null
+    },
+    {
+      "v": "2958465",
+      "kind": "date",
+      "date1904": false,
+      "text": "9999-12-31"
+    },
+    {
+      "v": "2958465.5",
+      "kind": "datetime",
+      "date1904": false,
+      "text": "9999-12-31T12:00:00Z"
+    },
+    {
+      "v": "2958465.999999",
+      "kind": "datetime",
+      "date1904": false,
+      "text": null
+    },
+    {
+      "v": "2958466",
+      "kind": "date",
+      "date1904": false,
+      "text": null
+    },
+    {
+      "v": "2957003",
+      "kind": "date",
+      "date1904": true,
+      "text": "9999-12-31"
+    },
+    {
+      "v": "2957004",
+      "kind": "date",
+      "date1904": true,
+      "text": null
     }
   ],
   "format_vectors": [

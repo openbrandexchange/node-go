@@ -146,10 +146,9 @@ func colNumber(letters string) int {
 	return n
 }
 
-// wbHeaderName is the §1.1 header normalisation used to choose a sheet.
-func wbHeaderName(h string) string {
-	return strings.NewReplacer(" ", "_", "-", "_").Replace(strings.ToLower(strings.TrimSpace(h)))
-}
+// wbHeaderName is the §1.1 header normalisation used to choose a sheet
+// (exactly the CSV one).
+func wbHeaderName(h string) string { return headerName(h) }
 
 var xstringRe = regexp.MustCompile(`_x([0-9A-Fa-f]{4})_`)
 
@@ -178,7 +177,8 @@ var numberRe = regexp.MustCompile(`^([+-]?)(\d*)(?:\.(\d*))?(?:[eE]([+-]?\d+))?$
 // NumberText is the text of a number cell's <v>: the exact decimal value,
 // rounded to 15 significant digits (halves away from zero), without
 // exponent, trailing zeros or a trailing point. ok is false when <v> is not a
-// number.
+// number or, other than 0, outside Excel's range 1E-308 <= |x| < 1E+308 after
+// the rounding (§5.4, numbers, steps 1 to 3).
 func NumberText(lex string) (string, bool) {
 	m := numberRe.FindStringSubmatch(strings.TrimSpace(lex))
 	if m == nil || (m[2] == "" && m[3] == "") {
@@ -188,22 +188,22 @@ func NumberText(lex string) (string, bool) {
 	all := m[2] + m[3]
 	digits := strings.TrimLeft(all, "0")
 	z := len(all) - len(digits)
+	if strings.TrimRight(digits, "0") == "" {
+		return "0", true // zero, whatever its exponent
+	}
 	exp := 0
 	if m[4] != "" {
+		// An exponent of more than 9 digits puts every non-zero number out of range.
+		if len(strings.TrimLeft(strings.TrimLeft(m[4], "+-"), "0")) > 9 {
+			return "", false
+		}
 		e, err := strconv.Atoi(m[4])
-		if err != nil || e > 100000 || e < -100000 {
+		if err != nil {
 			return "", false
 		}
 		exp = e
 	}
 	point := len(m[2]) + exp - z
-	if digits == "" {
-		return "0", true
-	}
-	if point > 400 || point < -400 {
-		// Not a value an IEEE 754 double (and so Excel) can hold.
-		return "", false
-	}
 	if len(digits) > 15 {
 		kept := []byte(digits[:15])
 		if digits[15] >= '5' {
@@ -224,8 +224,9 @@ func NumberText(lex string) (string, bool) {
 		digits = string(kept)
 	}
 	digits = strings.TrimRight(digits, "0")
-	if digits == "" {
-		return "0", true
+	// Excel's range: the leading digit's place 10^(point-1) is from 1E-308 to 1E+307.
+	if point-1 >= 308 || point-1 < -308 {
+		return "", false
 	}
 	var intPart, frac string
 	switch {
@@ -340,12 +341,14 @@ func ZeroPad(code string) int {
 	return 0
 }
 
-// maxSerialDays keeps dates within 9999-12-31 (Excel's last date).
-const maxSerialDays = 2958465
+// maxSerialDays bounds the day count before the date is computed; dates after
+// 9999-12-31 (Excel's last date) are refused from the computed year.
+const maxSerialDays = 2958466
 
 // SerialText turns a date serial number into YYYY-MM-DD (kind date) or
 // YYYY-MM-DDTHH:MM:SSZ (kind datetime). ok is false for serials the rule
-// does not accept (before 1900-03-01, or below 0 in the 1904 system).
+// does not accept (before 1900-03-01, below 0 in the 1904 system, or after
+// 9999-12-31, also when the seconds carry over into 10000-01-01).
 func SerialText(lex, kind string, date1904 bool) (string, bool) {
 	v, err := strconv.ParseFloat(strings.TrimSpace(lex), 64)
 	if err != nil || math.IsInf(v, 0) || math.IsNaN(v) {
@@ -369,6 +372,9 @@ func SerialText(lex, kind string, date1904 bool) (string, bool) {
 		epoch = time.Date(1904, 1, 1, 0, 0, 0, 0, time.UTC)
 	}
 	d := epoch.AddDate(0, 0, days)
+	if d.Year() > 9999 {
+		return "", false
+	}
 	ymd := fmt.Sprintf("%04d-%02d-%02d", d.Year(), int(d.Month()), d.Day())
 	if kind == KindDate {
 		return ymd, true
@@ -455,6 +461,7 @@ type wbPackage struct {
 	entries  []*zip.File
 	byName   map[string]*zip.File
 	inflated int64
+	done     map[*zip.File][]byte // a part read twice counts once (§5.6 step 4)
 }
 
 func openWorkbookPackage(r io.ReaderAt, size int64) (*wbPackage, error) {
@@ -473,7 +480,7 @@ func openWorkbookPackage(r io.ReaderAt, size int64) (*wbPackage, error) {
 	if err != nil && !(errors.Is(err, zip.ErrInsecurePath) && z != nil) {
 		return nil, wbErr(ErrWorkbookInvalid, "the zip cannot be read (%v)", err)
 	}
-	p := &wbPackage{byName: map[string]*zip.File{}}
+	p := &wbPackage{byName: map[string]*zip.File{}, done: map[*zip.File][]byte{}}
 	for _, f := range z.File {
 		if strings.HasSuffix(f.Name, "/") {
 			continue
@@ -510,6 +517,9 @@ func (p *wbPackage) read(name string) ([]byte, error) {
 	if f == nil {
 		return nil, nil
 	}
+	if data, ok := p.done[f]; ok {
+		return data, nil
+	}
 	rc, err := f.Open()
 	if err != nil {
 		return nil, wbErr(ErrWorkbookInvalid, "%s cannot be read (%v)", f.Name, err)
@@ -527,6 +537,10 @@ func (p *wbPackage) read(name string) ([]byte, error) {
 	if err != nil {
 		return nil, wbErr(ErrWorkbookInvalid, "%s cannot be read (%v)", f.Name, err)
 	}
+	if data == nil {
+		data = []byte{}
+	}
+	p.done[f] = data
 	return data, nil
 }
 
@@ -975,16 +989,26 @@ func (cv *converter) value(c *rawCell) (cellResult, error) {
 	if blank {
 		return cellResult{}, nil
 	}
-	f := cv.styles.format(c.s)
-	if kind := DateKind(f.id, f.code, f.hasCode); kind != "" {
-		if t, ok := SerialText(*c.v, kind, cv.date1904); ok {
-			return cellResult{text: t}, nil
-		}
-		return cellResult{isError: true, value: *c.v, reason: "a date outside the range of dates"}, nil
-	}
+	// A date cell holds a number too: one that is not a number, or is outside
+	// Excel's range, is workbook_invalid before it is read as a date.
 	t, ok := NumberText(*c.v)
 	if !ok {
-		return cellResult{}, wbErr(ErrWorkbookInvalid, "a number cell holds %q", *c.v)
+		shown := *c.v
+		if len(shown) > 40 {
+			shown = shown[:40] + "…"
+		}
+		return cellResult{}, wbErr(ErrWorkbookInvalid, "a number cell holds %q, which is not a number Excel can store", shown)
+	}
+	f := cv.styles.format(c.s)
+	if kind := DateKind(f.id, f.code, f.hasCode); kind != "" {
+		if d, ok := SerialText(*c.v, kind, cv.date1904); ok {
+			return cellResult{text: d}, nil
+		}
+		first := "1900-03-01"
+		if cv.date1904 {
+			first = "1904-01-01"
+		}
+		return cellResult{isError: true, value: *c.v, reason: "a date outside " + first + " to 9999-12-31"}, nil
 	}
 	if w := ZeroPad(f.code); w > 0 && f.hasCode && isDigits(t) && len(t) < w {
 		t = strings.Repeat("0", w-len(t)) + t
@@ -1243,7 +1267,7 @@ func ConvertWorkbook(r io.ReaderAt, size int64, role string) (*Workbook, error) 
 	issue := func(rn, cn int, v cellResult) CellIssue {
 		column := ""
 		if rn > 1 {
-			column = strings.TrimSpace(header[cn-1])
+			column = TrimHeader(header[cn-1])
 		}
 		val := v.value
 		var vp *string
@@ -1287,10 +1311,12 @@ func ConvertWorkbook(r io.ReaderAt, size int64, role string) (*Workbook, error) 
 		}
 		out.Rows = append(out.Rows, rec)
 	}
+	// §5.3: values without a header: right of W, or (rows 2 to R) under an
+	// empty header name.
 	stray := map[int]bool{}
-	for _, cells := range values {
+	for rn, cells := range values {
 		for cn := range cells {
-			if cn > width {
+			if cn > width || (rn > 1 && TrimHeader(header[cn-1]) == "") {
 				stray[cn] = true
 			}
 		}
@@ -1332,13 +1358,13 @@ func sortedKeys[V any](m map[int]V) []int {
 }
 
 // CellLocator is the §5.5 locator at the start of a detail about a cell:
-// "row 12, column ean (C): " (column is the header text, trimmed; empty
-// when the column has none).
+// "row 12, column ean (C): " (column is the header text, trimmed), or
+// "row 12, column C: " when the column has no header.
 func CellLocator(row int, column string, col int) string {
-	if column != "" {
-		column += " "
+	if column == "" {
+		return fmt.Sprintf("row %d, column %s: ", row, ColumnLetter(col))
 	}
-	return fmt.Sprintf("row %d, column %s(%s): ", row, column, ColumnLetter(col))
+	return fmt.Sprintf("row %d, column %s (%s): ", row, column, ColumnLetter(col))
 }
 
 // WorkbookLocator is the §5.5 locator for a problem the CSV import of a
@@ -1349,7 +1375,7 @@ func WorkbookLocator(header []string, row int, column string) string {
 	if column != "" {
 		norm := NormalizeHeader(column)
 		for i, h := range header {
-			if strings.TrimSpace(h) == column || NormalizeHeader(h) == norm {
+			if TrimHeader(h) == column || NormalizeHeader(h) == norm {
 				idx = i
 				break
 			}
@@ -1357,9 +1383,9 @@ func WorkbookLocator(header []string, row int, column string) string {
 	}
 	switch {
 	case idx >= 0 && row > 0:
-		return CellLocator(row, strings.TrimSpace(header[idx]), idx+1)
+		return CellLocator(row, TrimHeader(header[idx]), idx+1)
 	case idx >= 0:
-		if h := strings.TrimSpace(header[idx]); h != "" {
+		if h := TrimHeader(header[idx]); h != "" {
 			return fmt.Sprintf("column %s (%s): ", h, ColumnLetter(idx+1))
 		}
 		return fmt.Sprintf("column %s: ", ColumnLetter(idx+1))

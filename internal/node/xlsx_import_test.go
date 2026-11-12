@@ -2,6 +2,8 @@ package node
 
 import (
 	"bytes"
+	"crypto/sha256"
+	"encoding/hex"
 	"encoding/json"
 	"fmt"
 	"mime/multipart"
@@ -32,6 +34,9 @@ type xlsxCase struct {
 	Warnings     []map[string]any `json:"warnings"`
 	ImportErrors []map[string]any `json:"import_errors"`
 	Error        map[string]any   `json:"error"`
+	Send         struct {
+		ImagesManifest []string `json:"images_manifest"`
+	} `json:"send"`
 }
 
 func xlsxCases(t *testing.T) []xlsxCase {
@@ -107,11 +112,30 @@ func TestWorkbookImports(t *testing.T) {
 
 	for _, c := range xlsxCases(t) {
 		t.Run(c.File, func(t *testing.T) {
-			files := map[string][]string{"csv": {xlsxFixture(t, c.File)}}
+			// As expected.json says: the workbook alone, as products.xlsx or
+			// assets.xlsx, plus the images_manifest of send.
+			part := "csv"
 			if c.Role == "assets" {
-				files = map[string][]string{"csv": {filepath.Join(kestrel, "products.csv")}, "assets_csv": {xlsxFixture(t, c.File)}, "images": images}
+				part = "assets_csv"
 			}
-			run := k.runImport(k.admin, files, map[string]any{"dry_run": true})
+			fields := map[string]string{"options": `{"dry_run":true}`}
+			if m := c.Send.ImagesManifest; len(m) > 0 {
+				var manifest []map[string]any
+				for _, f := range m {
+					data, err := os.ReadFile(filepath.Join(kestrel, "images", f))
+					if err != nil {
+						t.Fatal(err)
+					}
+					sum := sha256.Sum256(data)
+					manifest = append(manifest, map[string]any{"file": f, "sha256": hex.EncodeToString(sum[:])})
+				}
+				fields["images_manifest"] = string(mustJSON(manifest))
+			}
+			body, ct := multipartBody(t, map[string][]string{part: {xlsxFixture(t, c.File)}}, fields)
+			started := k.admin.must(202, "POST", "/admin/api/imports", body, "Content-Type", ct)
+			k.app.RunJobsNow(t.Context())
+			run := k.admin.must(200, "GET", "/admin/api/imports/"+started["id"].(string), nil)
+			validate(t, "ImportRun", run)
 			items := k.importItems(k.admin, run["id"].(string))
 			var errs, warns []map[string]any
 			for _, e := range items {
@@ -129,24 +153,17 @@ func TestWorkbookImports(t *testing.T) {
 				if run["status"] != "failed" || run["error"].(map[string]any)["obx_error"] != c.Error["obx_error"] || run["error"].(map[string]any)["status"].(float64) != 422 {
 					t.Errorf("run %v", run)
 				}
-				if cc := counts(run); cc["created"].(float64)+cc["updated"].(float64)+cc["unchanged"].(float64) != 0 {
+				if cc := counts(run); cc["created"].(float64)+cc["updated"].(float64)+cc["unchanged"].(float64) != 0 || cc["errors"].(float64) != 1 {
 					t.Errorf("a refused workbook was imported: %v", cc)
+				}
+				if prev, _ := run["errors_preview"].([]any); len(prev) != 1 || !rowErrorMatches(prev[0].(map[string]any), c.Error) {
+					t.Errorf("errors_preview %v", run["errors_preview"])
 				}
 				return
 			}
 			want := c.ImportErrors
 			if want == nil {
-				// Cases without import_errors (date1904.xlsx) have no brand column;
-				// on this node with two brands that is an error of the CSV import
-				// (brand required), not of the conversion.
-				want = c.Errors
-				var conv []map[string]any
-				for _, e := range errs {
-					if e["column"] != "brand" {
-						conv = append(conv, e)
-					}
-				}
-				errs = conv
+				t.Fatal("every converting case has import_errors")
 			}
 			sortRowErrors(errs)
 			if run["status"] != "succeeded" || len(errs) != len(want) {
@@ -208,6 +225,45 @@ func TestWorkbookImports(t *testing.T) {
 		}
 	})
 
+	t.Run("products.xlsx with one other CSV: the workbook is products, the CSV is not read", func(t *testing.T) {
+		tpl, _ := os.ReadFile(xlsxFixture(t, "products-template.xlsx"))
+		run := k.runImport(k.admin, map[string][]string{"package": {writeTemp(t, "package.zip", zipOf(t, map[string][]byte{
+			"products.xlsx": tpl, "export.csv": []byte("style_number,name:en\nKX-OTHER,Not read\n")}))}}, map[string]any{"dry_run": true})
+		if c := counts(run); run["status"] != "succeeded" || c["errors"].(float64) != 0 || c["unchanged"].(float64) != 11+46 || c["created"].(float64) != 0 {
+			t.Fatalf("%v", run)
+		}
+	})
+
+	t.Run("a refused workbook fails the whole import: nothing of it is written", func(t *testing.T) {
+		bad, _ := os.ReadFile(xlsxFixture(t, "macro-enabled.xlsx"))
+		zf := map[string][]byte{"products.xlsx": bad, "assets.csv": mustRead(t, filepath.Join(kestrel, "assets.csv"))}
+		for _, p := range images {
+			zf["photos/"+filepath.Base(p)] = mustRead(t, p)
+		}
+		ing := k.ingestToken(k.admin)
+		body, ct := multipartBody(t, map[string][]string{"package": {writeTemp(t, "package.zip", zipOf(t, zf))}}, nil)
+		job := ing.must(202, "POST", "/obx/v1/ingest/imports", body, "Content-Type", ct)
+		k.app.RunJobsNow(t.Context())
+		job = ing.must(200, "GET", "/obx/v1/ingest/jobs/"+job["id"].(string), nil)
+		run := job["import_run"].(map[string]any)
+		if job["status"] != "failed" || run["status"] != "failed" || run["error"].(map[string]any)["obx_error"] != "workbook_unsafe" {
+			t.Fatalf("%v", job)
+		}
+		if c := counts(run); c["created"].(float64)+c["updated"].(float64)+c["unchanged"].(float64) != 0 || c["errors"].(float64) != 1 {
+			t.Errorf("counts %v", c)
+		}
+		res := ing.must(200, "GET", "/obx/v1/ingest/jobs/"+job["id"].(string)+"/results?errors_only=true", nil)
+		items, _ := res["items"].([]any)
+		if len(items) != 1 {
+			t.Fatalf("results %v", res)
+		}
+		e := items[0].(map[string]any)
+		if e["file"] != "products.xlsx" || e["row"] != nil || e["column"] != nil || e["obx_error"] != "workbook_unsafe" || e["severity"] != "error" {
+			t.Errorf("result %v", e)
+		}
+		noChanges(t, "a refused workbook with images")
+	})
+
 	t.Run("an Ingest API part without a file name is a workbook by its content type", func(t *testing.T) {
 		ing := k.ingestToken(k.admin)
 		tpl, _ := os.ReadFile(xlsxFixture(t, "products-template.xlsx"))
@@ -250,6 +306,15 @@ func TestWorkbookImports(t *testing.T) {
 		}
 		noChanges(t, "an unchanged scheduled workbook")
 	})
+}
+
+func mustRead(t *testing.T, p string) []byte {
+	t.Helper()
+	b, err := os.ReadFile(p)
+	if err != nil {
+		t.Fatal(err)
+	}
+	return b
 }
 
 // A workbook imported into an empty node writes the same catalog as

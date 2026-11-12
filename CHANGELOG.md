@@ -19,7 +19,12 @@ are always forward-only and applied automatically on start.
 - Error codes `workbook_invalid`, `workbook_unsafe`, `workbook_sheet_missing` and
   `workbook_too_large` (all `422`); `.xls`, `.xlsm`, `.xlsb`, `.ods` and `.numbers` uploads are
   `415 unsupported_media_type`.
-- JSON Schemas and fixtures from spec commit f6acec6 (`testdata/spec/imports/xlsx`).
+- Aligned with node-ts and node-php (spec commit 9219d68): numbers outside Excel's range
+  (1E-308 to below 1E+308) are `workbook_invalid`, a date after 9999-12-31 a conversion error; a
+  column with an empty header gives a warning when it holds values (locator `row 3, column C: `);
+  header names are normalised with each run of white space and `-` as one `_` (CSV too); a part
+  read twice counts once toward the inflated limit.
+- JSON Schemas and fixtures from spec commit 9219d68 (`testdata/spec/imports/xlsx`).
 
 ## [0.2.0] - 2026-11-12
 
