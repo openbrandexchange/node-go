@@ -8,7 +8,7 @@ import (
 	"strings"
 )
 
-// The article data of spec 0.2 (protocol.md §5.9, import-format.md §1.6).
+// The article data of spec 0.2 and 0.3 (protocol.md §5.9, import-format.md §1.6).
 
 // FootwearParts are the three parts of a shoe (Directive 94/11/EC), in
 // label order.
@@ -69,18 +69,25 @@ func contains(list []string, s string) bool {
 	return false
 }
 
-// NormalizeFiber turns a 0.1 fibre key recycled_<fibre> or organic_<fibre>
-// into the fibre and its flags (protocol.md §5.9.1); the prefixes may be
-// combined.
-func NormalizeFiber(key string) (fiber string, recycled, organic bool) {
+// NormalizeMaterial turns a 0.1 fibre key recycled_<fibre> or
+// organic_<fibre> into the material and its qualifier (protocol.md §5.9.1):
+// recycled_polyester → polyester, recycled. A fibre has one qualifier: when
+// the prefixes are combined, the outermost one is the qualifier. qualifier is
+// "" for a key without a prefix.
+func NormalizeMaterial(key string) (material, qualifier string) {
 	for {
+		var q string
 		switch {
 		case strings.HasPrefix(key, "recycled_") && len(key) > len("recycled_"):
-			key, recycled = strings.TrimPrefix(key, "recycled_"), true
+			q = "recycled"
 		case strings.HasPrefix(key, "organic_") && len(key) > len("organic_"):
-			key, organic = strings.TrimPrefix(key, "organic_"), true
+			q = "organic"
 		default:
-			return key, recycled, organic
+			return key, qualifier
+		}
+		key = strings.TrimPrefix(key, q+"_")
+		if qualifier == "" {
+			qualifier = q
 		}
 	}
 }

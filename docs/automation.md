@@ -17,7 +17,7 @@ node-go admin create-ingest-token --name "Nightly PIM export"
 
 ## The quickest start: a spreadsheet and a folder of photos
 
-1. Download the template in the admin (**Imports → Download template**) or copy `testdata/spec/kestrel/products.csv`: one row per size, the product columns repeated on every row. Article data has its own columns (`materials` with `(recycled)`/`(organic)`, `contains_animal_origin`, `footwear_materials`, `certifications`, `item_subtype`, `feature:<key>`, `color_family`, `size_length` and measurement columns such as `weight_kg` or `strap_length_cm`); a column your file does not have leaves that field as it is in the portal.
+1. Download the template in the admin (**Imports → Download template**) or copy `testdata/spec/kestrel/products.csv`: one row per size, the product columns repeated on every row. Article data has its own columns (`materials` with a qualifier such as `(recycled)`, `(organic)` or `(regenerative)`, `contains_animal_origin`, `footwear_materials`, `certifications`, `item_subtype`, `feature:<key>`, `color_family`, `size_length` and measurement columns such as `weight_kg` or `strap_length_cm`); a column your file does not have leaves that field as it is in the portal.
 2. Name photos `{style}_{colour}_{position}.jpg`, for example `KO-1001_NVY_1.jpg`; add `_back`, `_model`, `_detail` … to say what the photo shows. A photo that belongs to every colour of the style uses `ALL` as the colour: `KO-1001_ALL_5_detail.jpg`.
 3. Upload both in **Imports**, or run from any computer:
 

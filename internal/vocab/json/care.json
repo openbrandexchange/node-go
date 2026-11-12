@@ -1,0 +1,478 @@
+{
+  "description": "Care codes with their ISO 3758 category, the symbol code where the fashion data pools have one (GINETEX notation, e.g. 1_C_40), and their names. Label order: washing, bleaching, drying, ironing, professional_care.",
+  "entries": [
+    {
+      "code": "wash_95",
+      "category": "washing",
+      "symbol": "1_A_95",
+      "name": {
+        "en": "Wash at 95 °C",
+        "nl": "Wassen op 95 °C",
+        "de": "Waschen bei 95 °C",
+        "fr": "Lavage à 95 °C"
+      }
+    },
+    {
+      "code": "wash_70",
+      "category": "washing",
+      "symbol": null,
+      "name": {
+        "en": "Wash at 70 °C",
+        "nl": "Wassen op 70 °C",
+        "de": "Waschen bei 70 °C",
+        "fr": "Lavage à 70 °C"
+      }
+    },
+    {
+      "code": "wash_60",
+      "category": "washing",
+      "symbol": "1_B_60",
+      "name": {
+        "en": "Wash at 60 °C",
+        "nl": "Wassen op 60 °C",
+        "de": "Waschen bei 60 °C",
+        "fr": "Lavage à 60 °C"
+      }
+    },
+    {
+      "code": "wash_60_mild",
+      "category": "washing",
+      "symbol": null,
+      "name": {
+        "en": "Wash at 60 °C, mild process",
+        "nl": "Wassen op 60 °C, fijnwas",
+        "de": "Waschen bei 60 °C, Schonwaschgang",
+        "fr": "Lavage à 60 °C, programme délicat"
+      }
+    },
+    {
+      "code": "wash_50",
+      "category": "washing",
+      "symbol": null,
+      "name": {
+        "en": "Wash at 50 °C",
+        "nl": "Wassen op 50 °C",
+        "de": "Waschen bei 50 °C",
+        "fr": "Lavage à 50 °C"
+      }
+    },
+    {
+      "code": "wash_50_mild",
+      "category": "washing",
+      "symbol": null,
+      "name": {
+        "en": "Wash at 50 °C, mild process",
+        "nl": "Wassen op 50 °C, fijnwas",
+        "de": "Waschen bei 50 °C, Schonwaschgang",
+        "fr": "Lavage à 50 °C, programme délicat"
+      }
+    },
+    {
+      "code": "wash_40",
+      "category": "washing",
+      "symbol": "1_C_40",
+      "name": {
+        "en": "Wash at 40 °C",
+        "nl": "Wassen op 40 °C",
+        "de": "Waschen bei 40 °C",
+        "fr": "Lavage à 40 °C"
+      }
+    },
+    {
+      "code": "wash_40_mild",
+      "category": "washing",
+      "symbol": "1_P_40",
+      "name": {
+        "en": "Wash at 40 °C, mild process",
+        "nl": "Wassen op 40 °C, fijnwas",
+        "de": "Waschen bei 40 °C, Schonwaschgang",
+        "fr": "Lavage à 40 °C, programme délicat"
+      }
+    },
+    {
+      "code": "wash_40_very_mild",
+      "category": "washing",
+      "symbol": "1_F_40",
+      "name": {
+        "en": "Wash at 40 °C, very mild process",
+        "nl": "Wassen op 40 °C, zeer fijne was",
+        "de": "Waschen bei 40 °C, Spezialschonwaschgang",
+        "fr": "Lavage à 40 °C, programme très délicat"
+      }
+    },
+    {
+      "code": "wash_30",
+      "category": "washing",
+      "symbol": "1_D_30",
+      "name": {
+        "en": "Wash at 30 °C",
+        "nl": "Wassen op 30 °C",
+        "de": "Waschen bei 30 °C",
+        "fr": "Lavage à 30 °C"
+      }
+    },
+    {
+      "code": "wash_30_mild",
+      "category": "washing",
+      "symbol": "1_P_30",
+      "name": {
+        "en": "Wash at 30 °C, mild process",
+        "nl": "Wassen op 30 °C, fijnwas",
+        "de": "Waschen bei 30 °C, Schonwaschgang",
+        "fr": "Lavage à 30 °C, programme délicat"
+      }
+    },
+    {
+      "code": "wash_30_very_mild",
+      "category": "washing",
+      "symbol": "1_F_30",
+      "name": {
+        "en": "Wash at 30 °C, very mild process",
+        "nl": "Wassen op 30 °C, zeer fijne was",
+        "de": "Waschen bei 30 °C, Spezialschonwaschgang",
+        "fr": "Lavage à 30 °C, programme très délicat"
+      }
+    },
+    {
+      "code": "hand_wash",
+      "category": "washing",
+      "symbol": "1_E",
+      "name": {
+        "en": "Hand wash",
+        "nl": "Handwas",
+        "de": "Handwäsche",
+        "fr": "Lavage à la main"
+      }
+    },
+    {
+      "code": "do_not_wash",
+      "category": "washing",
+      "symbol": "1_X",
+      "name": {
+        "en": "Do not wash",
+        "nl": "Niet wassen",
+        "de": "Nicht waschen",
+        "fr": "Ne pas laver"
+      }
+    },
+    {
+      "code": "bleach_any",
+      "category": "bleaching",
+      "symbol": "2_A",
+      "name": {
+        "en": "Any bleach allowed",
+        "nl": "Bleken toegestaan",
+        "de": "Bleichen erlaubt",
+        "fr": "Tout agent de blanchiment autorisé"
+      }
+    },
+    {
+      "code": "bleach_oxygen_only",
+      "category": "bleaching",
+      "symbol": "2_B",
+      "name": {
+        "en": "Oxygen bleach only, no chlorine",
+        "nl": "Alleen zuurstofbleekmiddel, geen chloor",
+        "de": "Nur Sauerstoffbleiche, kein Chlor",
+        "fr": "Blanchiment à l'oxygène uniquement, sans chlore"
+      }
+    },
+    {
+      "code": "do_not_bleach",
+      "category": "bleaching",
+      "symbol": "2_X",
+      "name": {
+        "en": "Do not bleach",
+        "nl": "Niet bleken",
+        "de": "Nicht bleichen",
+        "fr": "Ne pas blanchir"
+      }
+    },
+    {
+      "code": "tumble_dry_normal",
+      "category": "drying",
+      "symbol": "3_A",
+      "name": {
+        "en": "Tumble dry, normal temperature",
+        "nl": "Trommeldrogen, normale temperatuur",
+        "de": "Trocknen im Wäschetrockner, normale Temperatur",
+        "fr": "Séchage en tambour, température normale"
+      }
+    },
+    {
+      "code": "tumble_dry_low",
+      "category": "drying",
+      "symbol": "3_C",
+      "name": {
+        "en": "Tumble dry, low temperature",
+        "nl": "Trommeldrogen, lage temperatuur",
+        "de": "Trocknen im Wäschetrockner, niedrige Temperatur",
+        "fr": "Séchage en tambour, basse température"
+      }
+    },
+    {
+      "code": "do_not_tumble_dry",
+      "category": "drying",
+      "symbol": "3_X",
+      "name": {
+        "en": "Do not tumble dry",
+        "nl": "Niet in de droger",
+        "de": "Nicht im Wäschetrockner trocknen",
+        "fr": "Ne pas sécher en tambour"
+      }
+    },
+    {
+      "code": "line_dry",
+      "category": "drying",
+      "symbol": "3_L",
+      "name": {
+        "en": "Line dry",
+        "nl": "Hangend drogen",
+        "de": "Auf der Leine trocknen",
+        "fr": "Séchage sur fil"
+      }
+    },
+    {
+      "code": "drip_line_dry",
+      "category": "drying",
+      "symbol": null,
+      "name": {
+        "en": "Drip line dry",
+        "nl": "Druipnat hangend drogen",
+        "de": "Tropfnass auf der Leine trocknen",
+        "fr": "Séchage sur fil sans essorage"
+      }
+    },
+    {
+      "code": "dry_flat",
+      "category": "drying",
+      "symbol": "3_T",
+      "name": {
+        "en": "Dry flat",
+        "nl": "Liggend drogen",
+        "de": "Liegend trocknen",
+        "fr": "Séchage à plat"
+      }
+    },
+    {
+      "code": "drip_dry_flat",
+      "category": "drying",
+      "symbol": null,
+      "name": {
+        "en": "Drip dry flat",
+        "nl": "Druipnat liggend drogen",
+        "de": "Tropfnass liegend trocknen",
+        "fr": "Séchage à plat sans essorage"
+      }
+    },
+    {
+      "code": "line_dry_shade",
+      "category": "drying",
+      "symbol": "3_LS",
+      "name": {
+        "en": "Line dry in the shade",
+        "nl": "Hangend drogen in de schaduw",
+        "de": "Auf der Leine trocknen, im Schatten",
+        "fr": "Séchage sur fil, à l'ombre"
+      }
+    },
+    {
+      "code": "drip_line_dry_shade",
+      "category": "drying",
+      "symbol": null,
+      "name": {
+        "en": "Drip line dry in the shade",
+        "nl": "Druipnat hangend drogen in de schaduw",
+        "de": "Tropfnass auf der Leine trocknen, im Schatten",
+        "fr": "Séchage sur fil sans essorage, à l'ombre"
+      }
+    },
+    {
+      "code": "dry_flat_shade",
+      "category": "drying",
+      "symbol": null,
+      "name": {
+        "en": "Dry flat in the shade",
+        "nl": "Liggend drogen in de schaduw",
+        "de": "Liegend trocknen, im Schatten",
+        "fr": "Séchage à plat, à l'ombre"
+      }
+    },
+    {
+      "code": "drip_dry_flat_shade",
+      "category": "drying",
+      "symbol": null,
+      "name": {
+        "en": "Drip dry flat in the shade",
+        "nl": "Druipnat liggend drogen in de schaduw",
+        "de": "Tropfnass liegend trocknen, im Schatten",
+        "fr": "Séchage à plat sans essorage, à l'ombre"
+      }
+    },
+    {
+      "code": "iron_high",
+      "category": "ironing",
+      "symbol": "4_A",
+      "name": {
+        "en": "Iron at high temperature (max. 200 °C)",
+        "nl": "Strijken op hoge temperatuur (max. 200 °C)",
+        "de": "Bügeln bei hoher Temperatur (max. 200 °C)",
+        "fr": "Repassage à haute température (max. 200 °C)"
+      }
+    },
+    {
+      "code": "iron_medium",
+      "category": "ironing",
+      "symbol": "4_B",
+      "name": {
+        "en": "Iron at medium temperature (max. 150 °C)",
+        "nl": "Strijken op middelhoge temperatuur (max. 150 °C)",
+        "de": "Bügeln bei mittlerer Temperatur (max. 150 °C)",
+        "fr": "Repassage à température moyenne (max. 150 °C)"
+      }
+    },
+    {
+      "code": "iron_low",
+      "category": "ironing",
+      "symbol": "4_C",
+      "name": {
+        "en": "Iron at low temperature (max. 110 °C)",
+        "nl": "Strijken op lage temperatuur (max. 110 °C)",
+        "de": "Bügeln bei niedriger Temperatur (max. 110 °C)",
+        "fr": "Repassage à basse température (max. 110 °C)"
+      }
+    },
+    {
+      "code": "do_not_iron",
+      "category": "ironing",
+      "symbol": "4_X",
+      "name": {
+        "en": "Do not iron",
+        "nl": "Niet strijken",
+        "de": "Nicht bügeln",
+        "fr": "Ne pas repasser"
+      }
+    },
+    {
+      "code": "dry_clean_p",
+      "category": "professional_care",
+      "symbol": "5_P",
+      "name": {
+        "en": "Professional dry cleaning (P)",
+        "nl": "Chemisch reinigen (P)",
+        "de": "Chemische Reinigung (P)",
+        "fr": "Nettoyage à sec professionnel (P)"
+      }
+    },
+    {
+      "code": "dry_clean_p_mild",
+      "category": "professional_care",
+      "symbol": "5_P_M",
+      "name": {
+        "en": "Professional dry cleaning (P), mild process",
+        "nl": "Chemisch reinigen (P), mild proces",
+        "de": "Chemische Reinigung (P), schonender Prozess",
+        "fr": "Nettoyage à sec professionnel (P), procédé doux"
+      }
+    },
+    {
+      "code": "dry_clean_p_very_mild",
+      "category": "professional_care",
+      "symbol": null,
+      "name": {
+        "en": "Professional dry cleaning (P), very mild process",
+        "nl": "Chemisch reinigen (P), zeer mild proces",
+        "de": "Chemische Reinigung (P), sehr schonender Prozess",
+        "fr": "Nettoyage à sec professionnel (P), procédé très doux"
+      }
+    },
+    {
+      "code": "dry_clean_f",
+      "category": "professional_care",
+      "symbol": "5_F",
+      "name": {
+        "en": "Professional dry cleaning (F)",
+        "nl": "Chemisch reinigen (F)",
+        "de": "Chemische Reinigung (F)",
+        "fr": "Nettoyage à sec professionnel (F)"
+      }
+    },
+    {
+      "code": "dry_clean_f_mild",
+      "category": "professional_care",
+      "symbol": "5_F_M",
+      "name": {
+        "en": "Professional dry cleaning (F), mild process",
+        "nl": "Chemisch reinigen (F), mild proces",
+        "de": "Chemische Reinigung (F), schonender Prozess",
+        "fr": "Nettoyage à sec professionnel (F), procédé doux"
+      }
+    },
+    {
+      "code": "dry_clean_f_very_mild",
+      "category": "professional_care",
+      "symbol": null,
+      "name": {
+        "en": "Professional dry cleaning (F), very mild process",
+        "nl": "Chemisch reinigen (F), zeer mild proces",
+        "de": "Chemische Reinigung (F), sehr schonender Prozess",
+        "fr": "Nettoyage à sec professionnel (F), procédé très doux"
+      }
+    },
+    {
+      "code": "do_not_dry_clean",
+      "category": "professional_care",
+      "symbol": "5_X",
+      "name": {
+        "en": "Do not dry clean",
+        "nl": "Niet chemisch reinigen",
+        "de": "Nicht chemisch reinigen",
+        "fr": "Ne pas nettoyer à sec"
+      }
+    },
+    {
+      "code": "wet_clean_w",
+      "category": "professional_care",
+      "symbol": "5_W",
+      "name": {
+        "en": "Professional wet cleaning",
+        "nl": "Professionele natreiniging",
+        "de": "Professionelle Nassreinigung",
+        "fr": "Nettoyage professionnel à l'eau"
+      }
+    },
+    {
+      "code": "wet_clean_w_mild",
+      "category": "professional_care",
+      "symbol": "5_W_M",
+      "name": {
+        "en": "Professional wet cleaning, mild process",
+        "nl": "Professionele natreiniging, mild proces",
+        "de": "Professionelle Nassreinigung, schonender Prozess",
+        "fr": "Nettoyage professionnel à l'eau, procédé doux"
+      }
+    },
+    {
+      "code": "wet_clean_w_very_mild",
+      "category": "professional_care",
+      "symbol": null,
+      "name": {
+        "en": "Professional wet cleaning, very mild process",
+        "nl": "Professionele natreiniging, zeer mild proces",
+        "de": "Professionelle Nassreinigung, sehr schonender Prozess",
+        "fr": "Nettoyage professionnel à l'eau, procédé très doux"
+      }
+    },
+    {
+      "code": "do_not_wet_clean",
+      "category": "professional_care",
+      "symbol": null,
+      "name": {
+        "en": "Do not wet clean",
+        "nl": "Niet professioneel nat reinigen",
+        "de": "Keine professionelle Nassreinigung",
+        "fr": "Ne pas nettoyer à l'eau"
+      }
+    }
+  ]
+}

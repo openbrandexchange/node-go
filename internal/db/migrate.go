@@ -169,6 +169,12 @@ CREATE INDEX mail_outbox_due ON mail_outbox(status, next_attempt_at);
 	`
 INSERT INTO meta (key, value) VALUES ('upgrade_article_data', '0.2');
 `,
+	// 4: spec 0.3 materials and care as terms with names (proposal 0004).
+	// Stored as JSON in products.data, so no column changes; this marks the
+	// products for the one-time rewrite node.App does on start.
+	`
+INSERT INTO meta (key, value) VALUES ('upgrade_terms', '0.3');
+`,
 }
 
 // SchemaVersion is the newest schema this binary knows.

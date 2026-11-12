@@ -1,0 +1,257 @@
+{
+  "description": "Material codes of `materials` with their names: the English textile fibre names of Annex I of Regulation (EU) No 1007/2011 in lowercase with _ (linen for flax), more specific kinds of wool, and the non-textile materials.",
+  "entries": [
+    {
+      "code": "cotton",
+      "name": {
+        "en": "Cotton",
+        "nl": "Katoen",
+        "de": "Baumwolle",
+        "fr": "Coton"
+      }
+    },
+    {
+      "code": "linen",
+      "name": {
+        "en": "Linen",
+        "nl": "Linnen",
+        "de": "Leinen",
+        "fr": "Lin"
+      }
+    },
+    {
+      "code": "hemp",
+      "name": {
+        "en": "Hemp",
+        "nl": "Hennep",
+        "de": "Hanf",
+        "fr": "Chanvre"
+      }
+    },
+    {
+      "code": "silk",
+      "name": {
+        "en": "Silk",
+        "nl": "Zijde",
+        "de": "Seide",
+        "fr": "Soie"
+      }
+    },
+    {
+      "code": "wool",
+      "name": {
+        "en": "Wool",
+        "nl": "Wol",
+        "de": "Wolle",
+        "fr": "Laine"
+      }
+    },
+    {
+      "code": "merino_wool",
+      "name": {
+        "en": "Merino wool",
+        "nl": "Merinowol",
+        "de": "Merinowolle",
+        "fr": "Laine mérinos"
+      }
+    },
+    {
+      "code": "lambswool",
+      "name": {
+        "en": "Lambswool",
+        "nl": "Lamswol",
+        "de": "Lammwolle",
+        "fr": "Laine d'agneau"
+      }
+    },
+    {
+      "code": "cashmere",
+      "name": {
+        "en": "Cashmere",
+        "nl": "Kasjmier",
+        "de": "Kaschmir",
+        "fr": "Cachemire"
+      }
+    },
+    {
+      "code": "alpaca",
+      "name": {
+        "en": "Alpaca",
+        "nl": "Alpaca",
+        "de": "Alpaka",
+        "fr": "Alpaga"
+      }
+    },
+    {
+      "code": "mohair",
+      "name": {
+        "en": "Mohair",
+        "nl": "Mohair",
+        "de": "Mohair",
+        "fr": "Mohair"
+      }
+    },
+    {
+      "code": "viscose",
+      "name": {
+        "en": "Viscose",
+        "nl": "Viscose",
+        "de": "Viskose",
+        "fr": "Viscose"
+      }
+    },
+    {
+      "code": "lyocell",
+      "name": {
+        "en": "Lyocell",
+        "nl": "Lyocell",
+        "de": "Lyocell",
+        "fr": "Lyocell"
+      }
+    },
+    {
+      "code": "modal",
+      "name": {
+        "en": "Modal",
+        "nl": "Modal",
+        "de": "Modal",
+        "fr": "Modal"
+      }
+    },
+    {
+      "code": "cupro",
+      "name": {
+        "en": "Cupro",
+        "nl": "Cupro",
+        "de": "Cupro",
+        "fr": "Cupro"
+      }
+    },
+    {
+      "code": "acetate",
+      "name": {
+        "en": "Acetate",
+        "nl": "Acetaat",
+        "de": "Acetat",
+        "fr": "Acétate"
+      }
+    },
+    {
+      "code": "polyester",
+      "name": {
+        "en": "Polyester",
+        "nl": "Polyester",
+        "de": "Polyester",
+        "fr": "Polyester"
+      }
+    },
+    {
+      "code": "polyamide",
+      "name": {
+        "en": "Polyamide",
+        "nl": "Polyamide",
+        "de": "Polyamid",
+        "fr": "Polyamide"
+      }
+    },
+    {
+      "code": "elastane",
+      "name": {
+        "en": "Elastane",
+        "nl": "Elastaan",
+        "de": "Elastan",
+        "fr": "Élasthanne"
+      }
+    },
+    {
+      "code": "acrylic",
+      "name": {
+        "en": "Acrylic",
+        "nl": "Acryl",
+        "de": "Polyacryl",
+        "fr": "Acrylique"
+      }
+    },
+    {
+      "code": "polypropylene",
+      "name": {
+        "en": "Polypropylene",
+        "nl": "Polypropyleen",
+        "de": "Polypropylen",
+        "fr": "Polypropylène"
+      }
+    },
+    {
+      "code": "polyurethane",
+      "name": {
+        "en": "Polyurethane",
+        "nl": "Polyurethaan",
+        "de": "Polyurethan",
+        "fr": "Polyuréthane"
+      }
+    },
+    {
+      "code": "leather",
+      "name": {
+        "en": "Leather",
+        "nl": "Leer",
+        "de": "Leder",
+        "fr": "Cuir"
+      }
+    },
+    {
+      "code": "suede",
+      "name": {
+        "en": "Suede",
+        "nl": "Suède",
+        "de": "Veloursleder",
+        "fr": "Daim"
+      }
+    },
+    {
+      "code": "down",
+      "name": {
+        "en": "Down",
+        "nl": "Dons",
+        "de": "Daunen",
+        "fr": "Duvet"
+      }
+    },
+    {
+      "code": "feather",
+      "name": {
+        "en": "Feather",
+        "nl": "Veren",
+        "de": "Federn",
+        "fr": "Plumes"
+      }
+    },
+    {
+      "code": "rubber",
+      "name": {
+        "en": "Rubber",
+        "nl": "Rubber",
+        "de": "Gummi",
+        "fr": "Caoutchouc"
+      }
+    },
+    {
+      "code": "metal",
+      "name": {
+        "en": "Metal",
+        "nl": "Metaal",
+        "de": "Metall",
+        "fr": "Métal"
+      }
+    },
+    {
+      "code": "other",
+      "name": {
+        "en": "Other fibres",
+        "nl": "Andere vezels",
+        "de": "Sonstige Fasern",
+        "fr": "Autres fibres"
+      }
+    }
+  ]
+}

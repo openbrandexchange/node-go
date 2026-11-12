@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://openbrandexchange.com/schemas/v0.2/Variant.json",
+  "$id": "https://openbrandexchange.com/schemas/v0.3/Variant.json",
   "type": "object",
   "title": "Variant",
   "description": "A sellable colour/size combination of a product.",

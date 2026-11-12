@@ -19,29 +19,80 @@
   "collection": "Highland",
   "materials": [
     {
-      "part": "upper",
+      "part": {
+        "code": "upper",
+        "name": {
+          "en": "Upper",
+          "nl": "Bovenwerk",
+          "de": "Obermaterial",
+          "fr": "Tige"
+        }
+      },
       "fibers": [
         {
-          "fiber": "leather",
-          "percentage": 100
+          "material": {
+            "code": "leather",
+            "name": {
+              "en": "Leather",
+              "nl": "Leer",
+              "de": "Leder",
+              "fr": "Cuir"
+            }
+          },
+          "percentage": 100,
+          "qualifier": null
         }
       ]
     },
     {
-      "part": "lining",
+      "part": {
+        "code": "lining",
+        "name": {
+          "en": "Lining",
+          "nl": "Voering",
+          "de": "Futter",
+          "fr": "Doublure"
+        }
+      },
       "fibers": [
         {
-          "fiber": "leather",
-          "percentage": 100
+          "material": {
+            "code": "leather",
+            "name": {
+              "en": "Leather",
+              "nl": "Leer",
+              "de": "Leder",
+              "fr": "Cuir"
+            }
+          },
+          "percentage": 100,
+          "qualifier": null
         }
       ]
     },
     {
-      "part": "sole",
+      "part": {
+        "code": "sole",
+        "name": {
+          "en": "Sole",
+          "nl": "Zool",
+          "de": "Sohle",
+          "fr": "Semelle"
+        }
+      },
       "fibers": [
         {
-          "fiber": "rubber",
-          "percentage": 100
+          "material": {
+            "code": "rubber",
+            "name": {
+              "en": "Rubber",
+              "nl": "Rubber",
+              "de": "Gummi",
+              "fr": "Caoutchouc"
+            }
+          },
+          "percentage": 100,
+          "qualifier": null
         }
       ]
     }
@@ -55,22 +106,62 @@
   "care": [
     {
       "code": "do_not_wash",
+      "category": "washing",
+      "symbol": "1_X",
+      "name": {
+        "en": "Do not wash",
+        "nl": "Niet wassen",
+        "de": "Nicht waschen",
+        "fr": "Ne pas laver"
+      },
       "text": null
     },
     {
       "code": "do_not_bleach",
+      "category": "bleaching",
+      "symbol": "2_X",
+      "name": {
+        "en": "Do not bleach",
+        "nl": "Niet bleken",
+        "de": "Nicht bleichen",
+        "fr": "Ne pas blanchir"
+      },
       "text": null
     },
     {
       "code": "do_not_tumble_dry",
+      "category": "drying",
+      "symbol": "3_X",
+      "name": {
+        "en": "Do not tumble dry",
+        "nl": "Niet in de droger",
+        "de": "Nicht im Wäschetrockner trocknen",
+        "fr": "Ne pas sécher en tambour"
+      },
       "text": null
     },
     {
       "code": "do_not_iron",
+      "category": "ironing",
+      "symbol": "4_X",
+      "name": {
+        "en": "Do not iron",
+        "nl": "Niet strijken",
+        "de": "Nicht bügeln",
+        "fr": "Ne pas repasser"
+      },
       "text": null
     },
     {
       "code": "do_not_dry_clean",
+      "category": "professional_care",
+      "symbol": "5_X",
+      "name": {
+        "en": "Do not dry clean",
+        "nl": "Niet chemisch reinigen",
+        "de": "Nicht chemisch reinigen",
+        "fr": "Ne pas nettoyer à sec"
+      },
       "text": null
     }
   ],

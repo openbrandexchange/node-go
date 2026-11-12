@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://openbrandexchange.com/schemas/v0.2/Product.json",
+  "$id": "https://openbrandexchange.com/schemas/v0.3/Product.json",
   "type": "object",
   "title": "Product",
   "description": "A style/model. In /changes entries 'data' holds the product without 'variants' and 'assets'; product endpoints return ProductDetail (with both arrays).",

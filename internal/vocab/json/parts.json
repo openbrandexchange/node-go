@@ -1,0 +1,117 @@
+{
+  "description": "Part codes of `materials` with their names. `main` (the product has one composition) has no name: a label shows its fibres without a heading.",
+  "entries": [
+    {
+      "code": "main",
+      "name": null
+    },
+    {
+      "code": "outer",
+      "name": {
+        "en": "Outer fabric",
+        "nl": "Buitenstof",
+        "de": "Oberstoff",
+        "fr": "Tissu extérieur"
+      }
+    },
+    {
+      "code": "lining",
+      "name": {
+        "en": "Lining",
+        "nl": "Voering",
+        "de": "Futter",
+        "fr": "Doublure"
+      }
+    },
+    {
+      "code": "filling",
+      "name": {
+        "en": "Filling",
+        "nl": "Vulling",
+        "de": "Füllung",
+        "fr": "Garnissage"
+      }
+    },
+    {
+      "code": "padding",
+      "name": {
+        "en": "Padding",
+        "nl": "Opvulling",
+        "de": "Polsterung",
+        "fr": "Rembourrage"
+      }
+    },
+    {
+      "code": "trim",
+      "name": {
+        "en": "Trim",
+        "nl": "Garnering",
+        "de": "Besatz",
+        "fr": "Garniture"
+      }
+    },
+    {
+      "code": "pocket_lining",
+      "name": {
+        "en": "Pocket lining",
+        "nl": "Zakvoering",
+        "de": "Taschenfutter",
+        "fr": "Doublure de poche"
+      }
+    },
+    {
+      "code": "shell",
+      "name": {
+        "en": "Shell",
+        "nl": "Schaal",
+        "de": "Schale",
+        "fr": "Coque"
+      }
+    },
+    {
+      "code": "handle",
+      "name": {
+        "en": "Handle",
+        "nl": "Handvat",
+        "de": "Griff",
+        "fr": "Poignée"
+      }
+    },
+    {
+      "code": "strap",
+      "name": {
+        "en": "Strap",
+        "nl": "Riem",
+        "de": "Riemen",
+        "fr": "Sangle"
+      }
+    },
+    {
+      "code": "upper",
+      "name": {
+        "en": "Upper",
+        "nl": "Bovenwerk",
+        "de": "Obermaterial",
+        "fr": "Tige"
+      }
+    },
+    {
+      "code": "sole",
+      "name": {
+        "en": "Sole",
+        "nl": "Zool",
+        "de": "Sohle",
+        "fr": "Semelle"
+      }
+    },
+    {
+      "code": "insole",
+      "name": {
+        "en": "Insole",
+        "nl": "Binnenzool",
+        "de": "Innensohle",
+        "fr": "Semelle intérieure"
+      }
+    }
+  ]
+}

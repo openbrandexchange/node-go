@@ -1,6 +1,6 @@
 # Implementation notes (node-go)
 
-Decisions taken where the [spec](https://github.com/openbrandexchange/spec) (v0.2.0, fixtures synced from commit in `testdata/spec/SPEC_COMMIT`) left room, and extensions the shared admin-ui may rely on. Each is the simplest reading; challenge them with an issue.
+Decisions taken where the [spec](https://github.com/openbrandexchange/spec) (v0.3.0, fixtures and vocabularies synced from commit in `testdata/spec/SPEC_COMMIT`) left room, and extensions the shared admin-ui may rely on. Each is the simplest reading; challenge them with an issue.
 
 ## Status
 
@@ -39,10 +39,17 @@ The node does **not** use obx-go's types at runtime: it needs exact control over
 ## Article data (spec 0.2)
 
 18a. **Stored as part of the write model.** The 0.2 fields live in the JSON `data` of products and variants like the 0.1 fields; migration 3 only marks the database for a one-time rewrite on start (`upgradeArticleData`): normalised fibre keys give an upsert, objects that only gain the new `null` properties are stored silently (no change entry, `updated_at` kept).
-18b. **Normalisation on write** (Ingest API, admin, imports): `recycled_<fibre>` / `organic_<fibre>` (any fibre, prefixes combinable) become the fibre with its flag; `false` flags are not stored; members of `features` / `measurements` that are `null` count as not stated, and an object left empty is `null`; an empty `certifications` list is `null`. A `footwear_materials` object is kept with all three parts (missing parts `null`).
+18b. **Normalisation on write** (Ingest API, admin, imports): `recycled_<fibre>` / `organic_<fibre>` (any fibre) become the material with that qualifier (see 18f); members of `features` / `measurements` that are `null` count as not stated, and an object left empty is `null`; an empty `certifications` list is `null`. A `footwear_materials` object is kept with all three parts (missing parts `null`).
 18c. **Label completeness warnings** follow obx-go: textile item types (rule 10's list, `bag`, `backpack`, `luggage`) get `fibre_composition_missing`, `animal_origin_unknown` (any fibre ending in `_wool` counts as wool) and `fibre_percentages_not_100` (once per part, tolerance 0.01); footwear item types get `footwear_materials_missing`; other types none. They are reported on `unchanged` writes too, in `warnings` as `"<code>: <detail>"` and in `warning_details` with a JSON Pointer. In imports they are ImportRowErrors at the product's first row with the column of rule 10.
 18d. **Import rows are all or nothing**: a row with an invalid product or variant value is skipped as a whole, so a product that appears only on rows with errors is not written (and not counted). Values in `color_family`, `size_length` or measurement cells of a row without variant columns are ignored with a warning; a different `color_family` on a later row of the same colour is a warning (the first wins). A `feature:<key>` column outside the registry gives one warning per column; a feature key that is not a valid key ignores the column with a warning.
-18e. **CSV export** writes every registry `feature:` column, then the other keys of the exported products (sorted); booleans as `yes`/`no`, lists with `|`, numbers with `.` and without trailing zeros, `strap_length_cm` as `min-max` (one number when equal), certifications with ` (material)` for material scope.
+18e. **CSV export** writes every registry `feature:` column, then the other keys of the exported products (sorted); booleans as `yes`/`no`, lists with `|`, numbers with `.` and without trailing zeros, `strap_length_cm` as `min-max` (one number when equal), certifications with ` (material)` for material scope, materials with codes only (`100% polyester (recycled)`).
+
+## Materials and care as terms (spec 0.3)
+
+18f. **Names are filled on write, from vocabularies embedded in the binary.** `scripts/sync-spec.sh` copies the spec's `vocabularies/*.json` into `internal/vocab/json/` (embedded). On every write path the node stores the canonical 0.3 form in the write model: a known part, material, qualifier or care code gets the vocabulary's name (and for care its category and symbol), whatever was sent; an unknown code keeps the name (category, symbol) that was sent, or `null`; languages with an empty or blank text are left out, and a name with no languages left is `null`. The protocol representation, the Ingest API record and exports therefore show the same terms, and PUTting a record back is `unchanged`. A new vocabulary release reaches already stored products only when they are written again (or by a future one-time rewrite like 18g).
+18g. **Upgrade from 0.2 (migration 4).** On the first start the node rewrites every stored product once (`upgradeTerms`, before `upgradeArticleData`): `part` and `fiber` strings become terms, the flags become the qualifier (`recycled` when a fibre had both flags), care entries get category, symbol and name. Products whose representation changed get an `upsert` in `/changes`.
+18h. **One qualifier per fibre.** In the import grammar a fibre takes one `(<qualifier>)`; two are `validation_failed`, and any bracket text that is a valid key is a qualifier (unknown ones are kept without a name). A 0.1 key `recycled_<fibre>`/`organic_<fibre>` wins over a bracket or a sent `qualifier`; combined prefixes (`recycled_organic_cotton`) keep the outermost one.
+18i. **Label warnings** use the material code (`animal_origin_unknown` for `wool`, `silk`, … and any code ending in `_wool`).
 
 ## Admin + portal API
 

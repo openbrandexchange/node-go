@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://openbrandexchange.com/schemas/v0.2/VariantInput.json",
+  "$id": "https://openbrandexchange.com/schemas/v0.3/VariantInput.json",
   "type": "object",
   "title": "VariantInput",
   "description": "Ingest write model for a variant. Key: external_id (path); default convention = the GTIN, else `<style>-<color>-<size>`.",

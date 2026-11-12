@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://openbrandexchange.com/schemas/v0.2/IngestRecord.json",
+  "$id": "https://openbrandexchange.com/schemas/v0.3/IngestRecord.json",
   "type": "object",
   "title": "IngestRecord",
   "description": "GET representation in the Ingest API (and the admin catalog).",

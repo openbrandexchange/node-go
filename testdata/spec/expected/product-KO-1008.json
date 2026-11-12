@@ -19,21 +19,62 @@
   "collection": "Travel",
   "materials": [
     {
-      "part": "shell",
+      "part": {
+        "code": "shell",
+        "name": {
+          "en": "Shell",
+          "nl": "Schaal",
+          "de": "Schale",
+          "fr": "Coque"
+        }
+      },
       "fibers": [
         {
-          "fiber": "polypropylene",
-          "percentage": 100
+          "material": {
+            "code": "polypropylene",
+            "name": {
+              "en": "Polypropylene",
+              "nl": "Polypropyleen",
+              "de": "Polypropylen",
+              "fr": "Polypropylène"
+            }
+          },
+          "percentage": 100,
+          "qualifier": null
         }
       ]
     },
     {
-      "part": "lining",
+      "part": {
+        "code": "lining",
+        "name": {
+          "en": "Lining",
+          "nl": "Voering",
+          "de": "Futter",
+          "fr": "Doublure"
+        }
+      },
       "fibers": [
         {
-          "fiber": "polyester",
+          "material": {
+            "code": "polyester",
+            "name": {
+              "en": "Polyester",
+              "nl": "Polyester",
+              "de": "Polyester",
+              "fr": "Polyester"
+            }
+          },
           "percentage": 100,
-          "recycled": true
+          "qualifier": {
+            "code": "recycled",
+            "name": {
+              "en": "Recycled",
+              "nl": "Gerecycled",
+              "de": "Recycelt",
+              "fr": "Recyclé"
+            }
+          }
         }
       ]
     }
@@ -43,22 +84,62 @@
   "care": [
     {
       "code": "do_not_wash",
+      "category": "washing",
+      "symbol": "1_X",
+      "name": {
+        "en": "Do not wash",
+        "nl": "Niet wassen",
+        "de": "Nicht waschen",
+        "fr": "Ne pas laver"
+      },
       "text": null
     },
     {
       "code": "do_not_bleach",
+      "category": "bleaching",
+      "symbol": "2_X",
+      "name": {
+        "en": "Do not bleach",
+        "nl": "Niet bleken",
+        "de": "Nicht bleichen",
+        "fr": "Ne pas blanchir"
+      },
       "text": null
     },
     {
       "code": "do_not_tumble_dry",
+      "category": "drying",
+      "symbol": "3_X",
+      "name": {
+        "en": "Do not tumble dry",
+        "nl": "Niet in de droger",
+        "de": "Nicht im Wäschetrockner trocknen",
+        "fr": "Ne pas sécher en tambour"
+      },
       "text": null
     },
     {
       "code": "do_not_iron",
+      "category": "ironing",
+      "symbol": "4_X",
+      "name": {
+        "en": "Do not iron",
+        "nl": "Niet strijken",
+        "de": "Nicht bügeln",
+        "fr": "Ne pas repasser"
+      },
       "text": null
     },
     {
       "code": "do_not_dry_clean",
+      "category": "professional_care",
+      "symbol": "5_X",
+      "name": {
+        "en": "Do not dry clean",
+        "nl": "Niet chemisch reinigen",
+        "de": "Nicht chemisch reinigen",
+        "fr": "Ne pas nettoyer à sec"
+      },
       "text": null
     }
   ],

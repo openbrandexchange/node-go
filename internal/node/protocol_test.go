@@ -78,7 +78,7 @@ func TestKestrelProtocol(t *testing.T) {
 
 	t.Run("discovery", func(t *testing.T) {
 		r := k.client().do("GET", "/.well-known/obx", nil)
-		if r.Status != 200 || r.Header.Get("Access-Control-Allow-Origin") != "*" || r.Header.Get("OBX-Version") != "0.2" {
+		if r.Status != 200 || r.Header.Get("Access-Control-Allow-Origin") != "*" || r.Header.Get("OBX-Version") != "0.3" {
 			t.Fatalf("discovery: %d %v", r.Status, r.Header)
 		}
 		d := r.JSON(t)

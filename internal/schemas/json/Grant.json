@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://openbrandexchange.com/schemas/v0.2/Grant.json",
+  "$id": "https://openbrandexchange.com/schemas/v0.3/Grant.json",
   "type": "object",
   "title": "Grant",
   "description": "What a retailer is allowed to see. Returned by GET /obx/v1/grant and as 'data' of grant changes.",

@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://openbrandexchange.com/schemas/v0.2/ImportSource.json",
+  "$id": "https://openbrandexchange.com/schemas/v0.3/ImportSource.json",
   "type": "object",
   "title": "ImportSource",
   "description": "A scheduled pull import configured in the node admin. Unchanged remote files (same ETag/size+mtime/sha256) are skipped.",

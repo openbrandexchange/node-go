@@ -5,6 +5,44 @@ follows [Semantic Versioning](https://semver.org/): the major version changes wh
 more than replacing the software (see [docs/upgrading.md](docs/upgrading.md)); database migrations
 are always forward-only and applied automatically on start.
 
+## [Unreleased] - 0.3.0
+
+Implements Open Brand Exchange protocol 0.3 (spec 0.3.0, [proposal 0004](https://github.com/openbrandexchange/spec/blob/main/docs/proposals/0004-terms-with-names.md):
+materials and care as terms with names). **Breaking** for retailers' software and Ingest API
+clients (allowed before 1.0); see [docs/upgrading.md](docs/upgrading.md#from-02-to-03).
+
+### Changed (breaking)
+- **`materials`**: `part`, the fibre's `material` and its `qualifier` are terms `{code, name}`
+  with the name per language (`null` for the part `main` and for unknown codes without a name).
+  A fibre is `{"material": {...}, "percentage": 95, "qualifier": {...} | null}`; `fiber` and the
+  flags `recycled`/`organic` are gone; one qualifier per fibre (`organic`, `recycled`,
+  `regenerative` or another code).
+- **`care`**: every entry has `code`, `category`, `symbol`, `name` and `text` (now only the
+  brand's own extra text).
+- `OBX-Version: 0.3`, `spec_version` `0.3.0`, schemas `/schemas/v0.3/`. Only 0.3 is supported:
+  writes in the 0.2 shape are `422 validation_failed`.
+
+### Added
+- The specification's **vocabularies** (parts, materials, qualifiers, care codes with names in
+  en, nl, de, fr, and for care the ISO 3758 category and GINETEX symbol) are embedded in the
+  binary (`internal/vocab`, synced by `scripts/sync-spec.sh`). On every write path (Ingest API,
+  admin, imports) known codes get the vocabulary's names, category and symbol; unknown codes
+  keep what was sent, or `null`. A language without a name is left out, never `""`.
+- Imports: `(<qualifier>)` after a fibre, e.g. `100% wool (regenerative)`; `(recycled)`,
+  `(organic)` and the 0.1 keys `recycled_*`/`organic_*` keep working. Two qualifiers on one
+  fibre are an error. The care code list comes from the vocabulary.
+- **Migration 4** rewrites stored products once on start from the 0.1/0.2 shapes to 0.3 (flags
+  become the qualifier, care entries get category, symbol and name); rewritten products get an
+  `upsert` in `/changes`.
+
+### Changed
+- Label completeness warnings and the article data CSV export use the material and qualifier
+  codes.
+- Fixtures and schemas synced from spec 0.3.0.
+
+### Open
+- Admin screens still are admin-ui 0.2.0; re-vendor admin-ui 0.3 once it is released.
+
 ## [0.2.1] - 2026-11-12
 
 Excel workbooks next to CSV files, following spec import-format.md §5. Passes `obx-conformance all`

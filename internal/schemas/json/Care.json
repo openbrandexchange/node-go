@@ -1,14 +1,57 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://openbrandexchange.com/schemas/v0.2/Care.json",
+  "$id": "https://openbrandexchange.com/schemas/v0.3/Care.json",
+  "title": "Care",
+  "description": "Ordered care instructions (label order: washing, bleaching, drying, ironing, professional_care). For a code in vocabularies/care.json a node returns the vocabulary's category, symbol and name; for another code what it was given, or null.",
   "type": "array",
   "items": {
     "type": "object",
     "properties": {
       "code": {
         "type": "string",
-        "description": "Care instruction key, ISO 3758 aligned (recommended list in docs/import-format.md#care-codes), e.g. wash_30, do_not_bleach, tumble_dry_low, iron_low, dry_clean_p, do_not_dry_clean.",
-        "pattern": "^[a-z][a-z0-9_]{0,63}$"
+        "pattern": "^[a-z][a-z0-9_]{0,63}$",
+        "description": "Care instruction code, ISO 3758 aligned (vocabularies/care.json), e.g. wash_30, do_not_bleach, tumble_dry_low, iron_low, dry_clean_p, do_not_dry_clean."
+      },
+      "category": {
+        "anyOf": [
+          {
+            "type": "string",
+            "enum": [
+              "washing",
+              "bleaching",
+              "drying",
+              "ironing",
+              "professional_care"
+            ]
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "description": "The ISO 3758 symbol group. null = unknown (a code outside the vocabulary)."
+      },
+      "symbol": {
+        "anyOf": [
+          {
+            "type": "string",
+            "pattern": "^[1-5]_[A-Za-z0-9_]{1,30}$"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "description": "The symbol code in GINETEX notation as fashion data pools exchange it (group digit, symbol, temperature: 1_C_40, 2_X, 3_C, 4_B, 5_P), so a consumer can reuse an existing pictogram mapping. null when there is none."
+      },
+      "name": {
+        "anyOf": [
+          {
+            "$ref": "LocalizedText.json"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "description": "The name of the instruction per language, e.g. {\"en\": \"Wash at 30 °C\", \"nl\": \"Wassen op 30 °C\"}."
       },
       "text": {
         "anyOf": [
@@ -18,7 +61,8 @@
           {
             "type": "null"
           }
-        ]
+        ],
+        "description": "Extra text of the brand for this instruction, e.g. \"Wash inside out\"."
       }
     },
     "required": [
@@ -28,7 +72,5 @@
     "patternProperties": {
       "^x-[a-z0-9]+-[a-z0-9_-]+$": true
     }
-  },
-  "title": "Care",
-  "description": "Ordered care instructions."
+  }
 }

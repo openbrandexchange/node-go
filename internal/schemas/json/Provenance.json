@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://openbrandexchange.com/schemas/v0.2/Provenance.json",
+  "$id": "https://openbrandexchange.com/schemas/v0.3/Provenance.json",
   "type": "object",
   "title": "Provenance",
   "description": "Origin of the image, required so AI provenance (EU AI Act art. 50) survives the brand -> retailer -> shop chain.",

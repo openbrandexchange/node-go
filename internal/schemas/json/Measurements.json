@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://openbrandexchange.com/schemas/v0.2/Measurements.json",
+  "$id": "https://openbrandexchange.com/schemas/v0.3/Measurements.json",
   "title": "Measurements",
   "description": "Measurements of one variant. Numbers only; the unit is part of the key (cm, kg, l, inch). Only the measurements the brand stated are present; null instead of an empty object. How to measure: docs/protocol.md#measurements.",
   "type": "object",

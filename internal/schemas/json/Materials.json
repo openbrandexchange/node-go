@@ -1,53 +1,105 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://openbrandexchange.com/schemas/v0.2/Materials.json",
+  "$id": "https://openbrandexchange.com/schemas/v0.3/Materials.json",
+  "title": "Materials",
+  "description": "Fibre composition per part (textile labelling regulation / DPP ready). Parts, materials and qualifiers are terms: a stable `code` and its `name` per language. For a code in the vocabulary of the specification (vocabularies/*.json) a node returns the vocabulary's name; for another code the name it was given, or null. A language without a name is omitted, never an empty string.",
   "type": "array",
+  "$defs": {
+    "term": {
+      "type": "object",
+      "description": "A stable code with its name per language. On write paths `name` may be omitted; responses always include it (null when unknown).",
+      "properties": {
+        "code": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_]{0,63}$"
+        },
+        "name": {
+          "anyOf": [
+            {
+              "$ref": "LocalizedText.json"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "code"
+      ],
+      "additionalProperties": false,
+      "patternProperties": {
+        "^x-[a-z0-9]+-[a-z0-9_-]+$": true
+      }
+    }
+  },
   "items": {
     "type": "object",
     "properties": {
       "part": {
-        "type": "string",
-        "description": "Part of the article. Recommended keys: main, outer, lining, filling, padding, trim, pocket_lining, shell (luggage), handle, strap, and for footwear upper, sole, insole. 'main' when the product has one composition. Unknown keys are allowed.",
-        "pattern": "^[a-z][a-z0-9_]{0,63}$",
+        "allOf": [
+          {
+            "$ref": "#/$defs/term"
+          }
+        ],
+        "description": "Part of the article. Codes in vocabularies/parts.json: main, outer, lining, filling, padding, trim, pocket_lining, shell (luggage), handle, strap, and for footwear upper, sole, insole. 'main' when the product has one composition; its name is null. Unknown codes are allowed.",
         "examples": [
-          "main"
+          {
+            "code": "main",
+            "name": null
+          },
+          {
+            "code": "lining",
+            "name": {
+              "en": "Lining",
+              "nl": "Voering",
+              "de": "Futter",
+              "fr": "Doublure"
+            }
+          }
         ]
       },
       "fibers": {
         "type": "array",
+        "minItems": 1,
+        "description": "Percentages of one part SHOULD sum to 100.",
         "items": {
           "type": "object",
           "properties": {
-            "fiber": {
-              "type": "string",
-              "description": "Fibre key: the English textile fibre name of Annex I of Reg. (EU) 1007/2011 in lowercase with _ (linen for flax), e.g. cotton, wool, polyester, polyamide, elastane, viscose, lyocell; recommended list in docs/import-format.md#fibres. Recycled or organic content is a flag, not a fibre: the 0.1 keys `recycled_*` and `organic_*` (e.g. recycled_polyester, organic_cotton) are accepted on input and normalised to the fibre with recycled or organic set.",
-              "pattern": "^[a-z][a-z0-9_]{0,63}$"
+            "material": {
+              "allOf": [
+                {
+                  "$ref": "#/$defs/term"
+                }
+              ],
+              "description": "Material code: the English textile fibre name of Annex I of Reg. (EU) 1007/2011 in lowercase with _ (linen for flax), e.g. cotton, wool, polyester, polyamide, elastane, viscose, lyocell; the list with names is vocabularies/materials.json. Recycled or organic content is a qualifier, not a material."
             },
             "percentage": {
               "type": "number",
               "exclusiveMinimum": 0,
               "maximum": 100
             },
-            "recycled": {
-              "type": "boolean",
-              "description": "The fibre is recycled. Present only when true."
-            },
-            "organic": {
-              "type": "boolean",
-              "description": "The fibre is organically grown. Present only when true."
+            "qualifier": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/term"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "What the fibre is, apart from which fibre: organic, recycled, regenerative (vocabularies/qualifiers.json; unknown codes are allowed). null = none."
             }
           },
           "required": [
-            "fiber",
+            "material",
             "percentage"
           ],
           "additionalProperties": false,
           "patternProperties": {
             "^x-[a-z0-9]+-[a-z0-9_-]+$": true
           }
-        },
-        "minItems": 1,
-        "description": "Percentages of one part SHOULD sum to 100."
+        }
       }
     },
     "required": [
@@ -58,7 +110,5 @@
     "patternProperties": {
       "^x-[a-z0-9]+-[a-z0-9_-]+$": true
     }
-  },
-  "title": "Materials",
-  "description": "Fibre composition per part (textile labelling regulation / DPP ready)."
+  }
 }

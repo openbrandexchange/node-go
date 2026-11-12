@@ -592,16 +592,14 @@ func (im *importer) productDoc(row importfmt.Row, header []string, style string)
 		for _, p := range parts {
 			var fibers []any
 			for _, f := range p.Fibers {
-				fib := map[string]any{"fiber": f.Key, "percentage": f.Percentage}
-				if f.Recycled {
-					fib["recycled"] = true
-				}
-				if f.Organic {
-					fib["organic"] = true
+				// The file holds codes; the write path adds the names.
+				fib := map[string]any{"material": map[string]any{"code": f.Material}, "percentage": f.Percentage}
+				if f.Qualifier != "" {
+					fib["qualifier"] = map[string]any{"code": f.Qualifier}
 				}
 				fibers = append(fibers, fib)
 			}
-			ms = append(ms, map[string]any{"part": p.Name, "fibers": fibers})
+			ms = append(ms, map[string]any{"part": map[string]any{"code": p.Name}, "fibers": fibers})
 		}
 		doc["materials"] = ms
 	}

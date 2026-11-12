@@ -10,21 +10,31 @@
   "target_group": "unisex",
   "materials": [
     {
-      "part": "shell",
+      "part": {
+        "code": "shell"
+      },
       "fibers": [
         {
-          "fiber": "polypropylene",
+          "material": {
+            "code": "polypropylene"
+          },
           "percentage": 100
         }
       ]
     },
     {
-      "part": "lining",
+      "part": {
+        "code": "lining"
+      },
       "fibers": [
         {
-          "fiber": "polyester",
+          "material": {
+            "code": "polyester"
+          },
           "percentage": 100,
-          "recycled": true
+          "qualifier": {
+            "code": "recycled"
+          }
         }
       ]
     }
