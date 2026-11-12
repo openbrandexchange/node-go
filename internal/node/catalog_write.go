@@ -224,6 +224,10 @@ func (w *writer) prepare(kind, ext string, doc map[string]any, existing *row) (*
 		if len(d.Certifications) == 0 {
 			d.Certifications = nil
 		}
+		// A footwear_materials object without any part stated is null (protocol.md 5.9.2).
+		if f := d.FootwearMaterials; f != nil && f.Upper == nil && f.LiningAndSock == nil && f.OuterSole == nil {
+			d.FootwearMaterials = nil
+		}
 		p.details = labelWarnings(&d)
 		for _, wd := range p.details {
 			p.warnings = append(p.warnings, wd.Code+": "+wd.Detail)
