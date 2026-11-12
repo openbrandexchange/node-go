@@ -65,7 +65,10 @@
     "size": "Größe",
     "sizeSystem": "Größensystem",
     "sku": "SKU",
-    "retailer": "Händler"
+    "retailer": "Händler",
+    "itemSubtype": "Art",
+    "animalOrigin": "Nichttextile Teile tierischen Ursprungs",
+    "secondSize": "Zweite Größe"
   },
   "validate": {
     "required": "Bitte ausfüllen.",
@@ -128,7 +131,11 @@
     "files_missing": "Bilddatei fehlt",
     "validation_failed": "Wert nicht akzeptiert",
     "position_conflict": "Position bereits belegt",
-    "mass_unpublish_refused": "Zu viele Artikel würden offline gehen"
+    "mass_unpublish_refused": "Zu viele Artikel würden offline gehen",
+    "fibre_composition_missing": "Faserzusammensetzung fehlt",
+    "animal_origin_unknown": "Tierischer Ursprung nicht angegeben",
+    "footwear_materials_missing": "Schuhmaterialien fehlen",
+    "fibre_percentages_not_100": "Prozentsätze ergeben nicht 100 %"
   },
   "login": {
     "title": "Anmelden bei {{portal}}",
@@ -355,7 +362,33 @@
     "deleteHint": "Beim Löschen wird der Artikel mit allen Größen und Bildern entfernt. Um ihn vorübergehend auszublenden, schalten Sie stattdessen „Veröffentlicht“ aus.",
     "delete": "Artikel löschen",
     "deleteTitle": "{{style}} löschen?",
-    "deleteBody": "Damit werden der Artikel, seine Größen und Bilder entfernt. Die Software der Händler erfährt, dass er weg ist. Das kann nicht rückgängig gemacht werden."
+    "deleteBody": "Damit werden der Artikel, seine Größen und Bilder entfernt. Die Software der Händler erfährt, dass er weg ist. Das kann nicht rückgängig gemacht werden.",
+    "materialsFlags": "Ergänzen Sie (recycled) oder (organic) hinter einer Faser, wenn es zutrifft: „100% polyester (recycled)“.",
+    "animalOriginHint": "Zum Beispiel ein Lederpatch, ein Pelzbesatz oder Hornknöpfe. Wenn ja, muss es auf dem Etikett stehen.",
+    "footwearHint": "Pflicht auf dem Schuhetikett: das Material, aus dem jedes Teil überwiegend besteht (mindestens 80 %).",
+    "certificationsHint": "Optional. Siegel und Lizenznummer, etwa „gots:CU 123456“; ergänzen Sie (material), wenn nur ein Material zertifiziert ist.",
+    "certificationsInvalid": "„{{entry}}“ konnten wir nicht lesen. Verwenden Sie Siegel:Lizenznummer, etwa gots:CU 123456.",
+    "labelHint": "So sehen Händler es auf der Artikelseite und im Download ihrer Artikeldaten.",
+    "labelEmpty": "Noch keine Etikettangaben. Ergänzen Sie unten Material und Pflegehinweise.",
+    "secondSizeHint": "Wenn es eine gibt: die Länge bei Jeans (32/34) oder die Cupgröße beim BH (75/B).",
+    "colourFamilyHint": "Hilft Händlern, nach Farbe zu filtern, zusätzlich zu Ihrem eigenen Farbnamen.",
+    "measurementsHint": "Nur Zahlen. Koffer: Außenmaß inklusive Rollen und Griffe. Taschen: der Korpus ohne Henkel und Riemen.",
+    "numberInvalid": "Geben Sie eine Zahl ein, etwa 2,6.",
+    "strapInvalid": "Geben Sie die kürzeste und längste Länge ein, etwa 80-130.",
+    "measure": {
+      "height_cm": "Höhe (cm)",
+      "width_cm": "Breite (cm)",
+      "depth_cm": "Tiefe (cm)",
+      "weight_kg": "Gewicht (kg)",
+      "volume_l": "Volumen (l)",
+      "volume_expanded_l": "Volumen erweitert (l)",
+      "handle_drop_cm": "Henkelhöhe (cm)",
+      "strap_length_cm": "Riemenlänge (cm)",
+      "laptop_max_inch": "Laptop bis (Zoll)",
+      "heel_height_cm": "Absatzhöhe (cm)",
+      "shaft_height_cm": "Schafthöhe (cm)",
+      "inseam_cm": "Innenbeinlänge (cm)"
+    }
   },
   "imports": {
     "title": "Importe",
@@ -1151,7 +1184,8 @@
       "eyewear": "Brillen",
       "accessory": "Accessoire",
       "home": "Wohnen",
-      "generic_product": "Sonstiges Produkt"
+      "generic_product": "Sonstiges Produkt",
+      "luggage": "Koffer"
     },
     "part": {
       "main": "Obermaterial",
@@ -1161,7 +1195,12 @@
       "trim": "Besatz",
       "sole": "Sohle",
       "upper": "Schaft",
-      "insole": "Innensohle"
+      "insole": "Innensohle",
+      "padding": "Polsterung",
+      "pocket_lining": "Taschenfutter",
+      "shell": "Schale",
+      "handle": "Griff",
+      "strap": "Riemen"
     },
     "fibre": {
       "cotton": "Baumwolle",
@@ -1241,6 +1280,131 @@
       "wet_clean_w_mild": "Professionelle Nassreinigung, schonend",
       "wet_clean_w_very_mild": "Professionelle Nassreinigung, sehr schonend",
       "do_not_wet_clean": "Keine professionelle Nassreinigung"
+    },
+    "itemSubtype": {
+      "handbag": "Handtasche",
+      "shoulder_bag": "Schultertasche",
+      "crossbody": "Umhängetasche",
+      "tote": "Shopper",
+      "clutch": "Clutch",
+      "belt_bag": "Gürteltasche",
+      "backpack": "Rucksack",
+      "laptop_bag": "Laptoptasche",
+      "briefcase": "Aktentasche",
+      "weekender": "Weekender",
+      "toiletry_bag": "Kulturbeutel",
+      "wallet": "Geldbörse",
+      "card_holder": "Kartenetui",
+      "underseat": "Underseat-Tasche",
+      "cabin": "Handgepäckgröße",
+      "check_in_medium": "Aufgabegepäck, mittel",
+      "check_in_large": "Aufgabegepäck, groß",
+      "pilot_case": "Pilotenkoffer",
+      "garment_bag": "Kleidersack",
+      "duffel": "Reisetasche",
+      "sneaker": "Sneaker",
+      "running": "Laufschuh",
+      "hiking": "Wanderschuh",
+      "lace_up": "Schnürschuh",
+      "loafer": "Loafer",
+      "pump": "Pumps",
+      "sandal": "Sandale",
+      "slipper": "Hausschuh",
+      "ankle_boot": "Stiefelette",
+      "boot": "Stiefel",
+      "knee_boot": "Kniehoher Stiefel"
+    },
+    "footwearMaterial": {
+      "leather": "Leder",
+      "coated_leather": "Beschichtetes Leder",
+      "textile": "Textil",
+      "other": "Sonstiges Material"
+    },
+    "colourFamily": {
+      "black": "Schwarz",
+      "white": "Weiß",
+      "grey": "Grau",
+      "beige": "Beige",
+      "brown": "Braun",
+      "red": "Rot",
+      "pink": "Rosa",
+      "orange": "Orange",
+      "yellow": "Gelb",
+      "green": "Grün",
+      "blue": "Blau",
+      "purple": "Lila",
+      "gold": "Gold",
+      "silver": "Silber",
+      "multicolour": "Mehrfarbig",
+      "transparent": "Transparent"
+    },
+    "feature": {
+      "shell": {
+        "hard": "Hartschale",
+        "soft": "Weichgepäck",
+        "hybrid": "Hybrid"
+      },
+      "lock": {
+        "none": "Keins",
+        "combination": "Zahlenschloss",
+        "tsa_combination": "TSA-Zahlenschloss",
+        "tsa_key": "TSA-Schlüsselschloss",
+        "key": "Schlüsselschloss"
+      },
+      "closure": {
+        "zip": "Reißverschluss",
+        "magnet": "Magnet",
+        "flap": "Überschlag",
+        "buckle": "Schnalle",
+        "drawstring": "Kordelzug",
+        "button": "Knopf",
+        "hook_and_loop": "Klettverschluss",
+        "laces": "Schnürsenkel",
+        "slip_on": "Zum Hineinschlüpfen",
+        "open": "Offen"
+      },
+      "water_resistance": {
+        "none": "Keiner",
+        "water_repellent": "Wasserabweisend",
+        "waterproof": "Wasserdicht"
+      },
+      "detachable_parts": {
+        "shoulder_strap": "Schulterriemen",
+        "handle": "Griff",
+        "lining": "Futter",
+        "insole": "Innensohle",
+        "hood": "Kapuze",
+        "belt": "Gürtel",
+        "pouch": "Täschchen",
+        "wheels": "Rollen"
+      },
+      "adjustable_parts": {
+        "shoulder_strap": "Schulterriemen",
+        "waist": "Bund",
+        "hem": "Saum",
+        "cuff": "Bündchen"
+      },
+      "fit": {
+        "slim": "Schmal",
+        "regular": "Normal",
+        "relaxed": "Locker",
+        "oversized": "Oversized"
+      },
+      "sleeve_length": {
+        "sleeveless": "Ärmellos",
+        "short": "Kurz",
+        "three_quarter": "Dreiviertel",
+        "long": "Lang"
+      },
+      "neckline": {
+        "crew": "Rundhals",
+        "v_neck": "V-Ausschnitt",
+        "collar": "Kragen",
+        "hood": "Kapuze",
+        "turtleneck": "Rollkragen",
+        "boat": "U-Boot-Ausschnitt",
+        "scoop": "Weiter Rundhals"
+      }
     }
   },
   "email": {
@@ -1303,5 +1467,76 @@
     "notFoundTitle": "Seite nicht gefunden",
     "notFound": "Diese Adresse gibt es nicht (mehr).",
     "home": "Zur Startseite"
+  },
+  "article": {
+    "label": "Etikettangaben",
+    "composition": "Zusammensetzung",
+    "recycled": "recycelt",
+    "organic": "bio",
+    "animalOrigin": "Enthält nichttextile Teile tierischen Ursprungs",
+    "footwear": "Schuhmaterialien",
+    "footwearPart": {
+      "upper": "Obermaterial",
+      "lining_and_sock": "Futter und Decksohle",
+      "outer_sole": "Laufsohle"
+    },
+    "certifications": "Zertifizierungen",
+    "certScope": {
+      "product": "der Artikel ist zertifiziert",
+      "material": "ein Material ist zertifiziert"
+    },
+    "certNote": "Laut Angabe der Marke. Zertifizierungen sind freiwillig.",
+    "features": "Eigenschaften",
+    "measurements": "Maße",
+    "colourFamily": "Farbfamilie",
+    "dimensions": "H × B × T",
+    "weight": "Gewicht",
+    "volume": "Volumen",
+    "volumeExpanded": "{{volume}} erweitert",
+    "handleDrop": "Henkelhöhe",
+    "strapLength": "Riemenlänge",
+    "laptop": "Laptop",
+    "laptopUpTo": "bis {{size}}",
+    "heelHeight": "Absatzhöhe",
+    "shaftHeight": "Schafthöhe",
+    "inseam": "Innenbeinlänge",
+    "yes": "Ja",
+    "no": "Nein",
+    "notStated": "Nicht angegeben",
+    "feature": {
+      "shell": "Schale",
+      "wheels": "Rollen",
+      "lock": "Schloss",
+      "expandable": "Erweiterbar",
+      "closure": "Verschluss",
+      "laptop_compartment": "Laptopfach",
+      "water_resistance": "Wasserschutz",
+      "detachable_parts": "Abnehmbar",
+      "adjustable_parts": "Verstellbar",
+      "fit": "Passform",
+      "sleeve_length": "Ärmellänge",
+      "neckline": "Ausschnitt"
+    }
+  },
+  "labelWarning": {
+    "title": "Etikettangaben unvollständig",
+    "intro": "Das sind Warnungen, keine Fehler: Die Artikel werden wie gewohnt importiert und veröffentlicht. Ergänzen Sie die Angaben in Ihrer Datei oder beim Artikel, denn das EU-Recht verlangt sie auf dem Etikett und in Ihrem Angebot.",
+    "badge": "Etikett",
+    "fibre_composition_missing": {
+      "why": "Die Faserzusammensetzung fehlt. Sie muss auf dem Etikett eines Textilerzeugnisses stehen und vor dem Kauf angezeigt werden, auch online. Für Taschen und Koffer gilt das, wenn sie zu mindestens 80 % aus Textil bestehen.",
+      "law": "Verordnung (EU) Nr. 1007/2011, Art. 9, 11 und 16 Abs. 1"
+    },
+    "animal_origin_unknown": {
+      "why": "Das Material enthält Leder, Wolle, Seide, Daunen oder ein anderes Material tierischen Ursprungs. Geben Sie an, ob der Artikel nichttextile Teile tierischen Ursprungs enthält (ja oder nein); wenn ja, muss es auf dem Etikett stehen.",
+      "law": "Verordnung (EU) Nr. 1007/2011, Art. 12"
+    },
+    "footwear_materials_missing": {
+      "why": "Die Materialien von Obermaterial, Futter und Decksohle sowie Laufsohle fehlen oder sind unvollständig. Sie müssen auf dem Etikett von Schuhen stehen.",
+      "law": "Richtlinie 94/11/EG"
+    },
+    "fibre_percentages_not_100": {
+      "why": "Die Prozentsätze dieses Teils ergeben nicht 100 %. Die Zusammensetzung wird als Anteil am gesamten Fasergewicht angegeben.",
+      "law": "Verordnung (EU) Nr. 1007/2011, Art. 9 und 11"
+    }
   }
 }

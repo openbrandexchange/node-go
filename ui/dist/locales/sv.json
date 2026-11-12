@@ -65,7 +65,10 @@
     "size": "Storlek",
     "sizeSystem": "Storlekssystem",
     "sku": "SKU",
-    "retailer": "Återförsäljare"
+    "retailer": "Återförsäljare",
+    "itemSubtype": "Sort",
+    "animalOrigin": "Delar av animaliskt ursprung som inte är textilier",
+    "secondSize": "Andra storlek"
   },
   "validate": {
     "required": "Fyll i detta.",
@@ -128,7 +131,11 @@
     "files_missing": "Bildfil saknas",
     "validation_failed": "Värdet godtogs inte",
     "position_conflict": "Positionen är redan upptagen",
-    "mass_unpublish_refused": "För många artiklar skulle gå offline"
+    "mass_unpublish_refused": "För många artiklar skulle gå offline",
+    "fibre_composition_missing": "Fibersammansättning saknas",
+    "animal_origin_unknown": "Animaliskt ursprung inte angivet",
+    "footwear_materials_missing": "Skomaterial saknas",
+    "fibre_percentages_not_100": "Procentsatserna blir inte 100 %"
   },
   "login": {
     "title": "Logga in på {{portal}}",
@@ -355,7 +362,33 @@
     "deleteHint": "Att ta bort artikeln tar bort alla storlekar och bilder. Vill du dölja den tillfälligt stänger du av Publicerad i stället.",
     "delete": "Ta bort artikel",
     "deleteTitle": "Ta bort {{style}}?",
-    "deleteBody": "Artikeln, dess storlekar och bilder tas bort. Återförsäljarnas system får veta att den är borta. Det går inte att ångra."
+    "deleteBody": "Artikeln, dess storlekar och bilder tas bort. Återförsäljarnas system får veta att den är borta. Det går inte att ångra.",
+    "materialsFlags": "Lägg till (recycled) eller (organic) efter en fiber där det gäller: ”100% polyester (recycled)”.",
+    "animalOriginHint": "Till exempel en läderlapp, en pälskant eller hornknappar. Finns sådana måste det stå på etiketten.",
+    "footwearHint": "Krävs på skoetiketten: materialet som utgör största delen av varje del (minst 80 %).",
+    "certificationsHint": "Valfritt. System och licensnummer, till exempel ”gots:CU 123456”; lägg till (material) när bara ett material är certifierat.",
+    "certificationsInvalid": "Vi kunde inte läsa ”{{entry}}”. Använd system:licensnummer, till exempel gots:CU 123456.",
+    "labelHint": "Så som återförsäljare ser det på artikelsidan och i nedladdningen av artikeldata.",
+    "labelEmpty": "Ingen etikettinformation än. Lägg till material och skötselråd nedan.",
+    "secondSizeHint": "Där det finns: längden på jeans (32/34) eller kupan på en behå (75/B).",
+    "colourFamilyHint": "Hjälper återförsäljare att filtrera på färg, utöver ert eget färgnamn.",
+    "measurementsHint": "Bara siffror. Resväskor: yttermått inklusive hjul och handtag. Väskor: själva väskan utan handtag och rem.",
+    "numberInvalid": "Ange ett tal, till exempel 2,6.",
+    "strapInvalid": "Ange kortaste och längsta längd, till exempel 80-130.",
+    "measure": {
+      "height_cm": "Höjd (cm)",
+      "width_cm": "Bredd (cm)",
+      "depth_cm": "Djup (cm)",
+      "weight_kg": "Vikt (kg)",
+      "volume_l": "Volym (l)",
+      "volume_expanded_l": "Volym expanderad (l)",
+      "handle_drop_cm": "Handtagshöjd (cm)",
+      "strap_length_cm": "Remlängd (cm)",
+      "laptop_max_inch": "Laptop upp till (tum)",
+      "heel_height_cm": "Klackhöjd (cm)",
+      "shaft_height_cm": "Skafthöjd (cm)",
+      "inseam_cm": "Innerbenslängd (cm)"
+    }
   },
   "imports": {
     "title": "Importer",
@@ -1151,7 +1184,8 @@
       "eyewear": "Glasögon",
       "accessory": "Accessoar",
       "home": "Hem",
-      "generic_product": "Annan produkt"
+      "generic_product": "Annan produkt",
+      "luggage": "Resväskor"
     },
     "part": {
       "main": "Huvudmaterial",
@@ -1161,7 +1195,12 @@
       "trim": "Detaljer",
       "sole": "Sula",
       "upper": "Ovandel",
-      "insole": "Innersula"
+      "insole": "Innersula",
+      "padding": "Vaddering",
+      "pocket_lining": "Fickfoder",
+      "shell": "Skal",
+      "handle": "Handtag",
+      "strap": "Rem"
     },
     "fibre": {
       "cotton": "bomull",
@@ -1241,6 +1280,131 @@
       "wet_clean_w_mild": "Professionell våttvätt, skonsam",
       "wet_clean_w_very_mild": "Professionell våttvätt, mycket skonsam",
       "do_not_wet_clean": "Tål inte professionell våttvätt"
+    },
+    "itemSubtype": {
+      "handbag": "Handväska",
+      "shoulder_bag": "Axelväska",
+      "crossbody": "Crossbodyväska",
+      "tote": "Toteväska",
+      "clutch": "Kuvertväska",
+      "belt_bag": "Midjeväska",
+      "backpack": "Ryggsäck",
+      "laptop_bag": "Datorväska",
+      "briefcase": "Portfölj",
+      "weekender": "Weekendbag",
+      "toiletry_bag": "Necessär",
+      "wallet": "Plånbok",
+      "card_holder": "Korthållare",
+      "underseat": "Underseat-väska",
+      "cabin": "Kabinstorlek",
+      "check_in_medium": "Incheckning, mellan",
+      "check_in_large": "Incheckning, stor",
+      "pilot_case": "Pilotväska",
+      "garment_bag": "Klädpåse",
+      "duffel": "Duffelbag",
+      "sneaker": "Sneaker",
+      "running": "Löparsko",
+      "hiking": "Vandringssko",
+      "lace_up": "Snörsko",
+      "loafer": "Loafer",
+      "pump": "Pumps",
+      "sandal": "Sandal",
+      "slipper": "Toffel",
+      "ankle_boot": "Boots",
+      "boot": "Känga",
+      "knee_boot": "Knähög stövel"
+    },
+    "footwearMaterial": {
+      "leather": "Läder",
+      "coated_leather": "Bestruket läder",
+      "textile": "Textil",
+      "other": "Annat material"
+    },
+    "colourFamily": {
+      "black": "Svart",
+      "white": "Vit",
+      "grey": "Grå",
+      "beige": "Beige",
+      "brown": "Brun",
+      "red": "Röd",
+      "pink": "Rosa",
+      "orange": "Orange",
+      "yellow": "Gul",
+      "green": "Grön",
+      "blue": "Blå",
+      "purple": "Lila",
+      "gold": "Guld",
+      "silver": "Silver",
+      "multicolour": "Flerfärgad",
+      "transparent": "Transparent"
+    },
+    "feature": {
+      "shell": {
+        "hard": "Hårt skal",
+        "soft": "Mjukt skal",
+        "hybrid": "Hybrid"
+      },
+      "lock": {
+        "none": "Inget",
+        "combination": "Kodlås",
+        "tsa_combination": "TSA-kodlås",
+        "tsa_key": "TSA-nyckellås",
+        "key": "Nyckellås"
+      },
+      "closure": {
+        "zip": "Dragkedja",
+        "magnet": "Magnet",
+        "flap": "Flik",
+        "buckle": "Spänne",
+        "drawstring": "Dragsko",
+        "button": "Knapp",
+        "hook_and_loop": "Kardborre",
+        "laces": "Snörning",
+        "slip_on": "Slip-on",
+        "open": "Öppen"
+      },
+      "water_resistance": {
+        "none": "Ingen",
+        "water_repellent": "Vattenavvisande",
+        "waterproof": "Vattentät"
+      },
+      "detachable_parts": {
+        "shoulder_strap": "axelrem",
+        "handle": "handtag",
+        "lining": "foder",
+        "insole": "innersula",
+        "hood": "luva",
+        "belt": "skärp",
+        "pouch": "fodral",
+        "wheels": "hjul"
+      },
+      "adjustable_parts": {
+        "shoulder_strap": "axelrem",
+        "waist": "midja",
+        "hem": "fåll",
+        "cuff": "ärmslut"
+      },
+      "fit": {
+        "slim": "Slim",
+        "regular": "Regular",
+        "relaxed": "Ledig",
+        "oversized": "Oversize"
+      },
+      "sleeve_length": {
+        "sleeveless": "Ärmlös",
+        "short": "Kort",
+        "three_quarter": "Trekvartslång",
+        "long": "Lång"
+      },
+      "neckline": {
+        "crew": "Rund hals",
+        "v_neck": "V-ringning",
+        "collar": "Krage",
+        "hood": "Luva",
+        "turtleneck": "Polokrage",
+        "boat": "Båtringning",
+        "scoop": "Djup rund ringning"
+      }
     }
   },
   "email": {
@@ -1303,5 +1467,76 @@
     "notFoundTitle": "Sidan hittades inte",
     "notFound": "Den här adressen finns inte (längre).",
     "home": "Gå till startsidan"
+  },
+  "article": {
+    "label": "Etikettinformation",
+    "composition": "Materialsammansättning",
+    "recycled": "återvunnen",
+    "organic": "ekologisk",
+    "animalOrigin": "Innehåller delar av animaliskt ursprung som inte är textilier",
+    "footwear": "Skomaterial",
+    "footwearPart": {
+      "upper": "Ovandel",
+      "lining_and_sock": "Foder och bindsula",
+      "outer_sole": "Yttersula"
+    },
+    "certifications": "Certifieringar",
+    "certScope": {
+      "product": "artikeln är certifierad",
+      "material": "ett material är certifierat"
+    },
+    "certNote": "Enligt varumärket. Certifieringar är frivilliga.",
+    "features": "Egenskaper",
+    "measurements": "Mått",
+    "colourFamily": "Färggrupp",
+    "dimensions": "H × B × D",
+    "weight": "Vikt",
+    "volume": "Volym",
+    "volumeExpanded": "{{volume}} expanderad",
+    "handleDrop": "Handtagshöjd",
+    "strapLength": "Remlängd",
+    "laptop": "Laptop",
+    "laptopUpTo": "upp till {{size}}",
+    "heelHeight": "Klackhöjd",
+    "shaftHeight": "Skafthöjd",
+    "inseam": "Innerbenslängd",
+    "yes": "Ja",
+    "no": "Nej",
+    "notStated": "Inte angivet",
+    "feature": {
+      "shell": "Skal",
+      "wheels": "Hjul",
+      "lock": "Lås",
+      "expandable": "Expanderbar",
+      "closure": "Stängning",
+      "laptop_compartment": "Laptopfack",
+      "water_resistance": "Vattentålighet",
+      "detachable_parts": "Avtagbar",
+      "adjustable_parts": "Justerbar",
+      "fit": "Passform",
+      "sleeve_length": "Ärmlängd",
+      "neckline": "Halsringning"
+    }
+  },
+  "labelWarning": {
+    "title": "Ofullständig etikettinformation",
+    "intro": "Det här är varningar, inte fel: artiklarna importeras och publiceras som vanligt. Komplettera informationen i er fil eller på artikeln, eftersom EU-lagstiftningen kräver den på etiketten och i ert erbjudande.",
+    "badge": "Etikett",
+    "fibre_composition_missing": {
+      "why": "Fibersammansättningen saknas. Den måste stå på etiketten till en textilprodukt och visas före köpet, även på nätet. För väskor och resväskor gäller det när de består av minst 80 % textil.",
+      "law": "Förordning (EU) nr 1007/2011, art. 9, 11 och 16.1"
+    },
+    "animal_origin_unknown": {
+      "why": "Materialen innehåller läder, ull, siden, dun eller ett annat material av animaliskt ursprung. Ange om artikeln innehåller delar av animaliskt ursprung som inte är textilier (ja eller nej); gör den det måste det stå på etiketten.",
+      "law": "Förordning (EU) nr 1007/2011, art. 12"
+    },
+    "footwear_materials_missing": {
+      "why": "Materialen för ovandel, foder och bindsula samt yttersula saknas eller är ofullständiga. De måste stå på skons etikett.",
+      "law": "Direktiv 94/11/EG"
+    },
+    "fibre_percentages_not_100": {
+      "why": "Procentsatserna för den här delen blir inte 100 %. Sammansättningen anges som andel av fibrernas totala vikt.",
+      "law": "Förordning (EU) nr 1007/2011, art. 9 och 11"
+    }
   }
 }

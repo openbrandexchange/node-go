@@ -65,7 +65,10 @@
     "size": "Size",
     "sizeSystem": "Size system",
     "sku": "SKU",
-    "retailer": "Retailer"
+    "retailer": "Retailer",
+    "itemSubtype": "Kind",
+    "animalOrigin": "Non-textile parts of animal origin",
+    "secondSize": "Second size"
   },
   "validate": {
     "required": "Please fill this in.",
@@ -128,7 +131,11 @@
     "files_missing": "Image file missing",
     "validation_failed": "Value not accepted",
     "position_conflict": "Position already taken",
-    "mass_unpublish_refused": "Too many articles would go offline"
+    "mass_unpublish_refused": "Too many articles would go offline",
+    "fibre_composition_missing": "Fibre composition missing",
+    "animal_origin_unknown": "Animal origin not stated",
+    "footwear_materials_missing": "Footwear materials missing",
+    "fibre_percentages_not_100": "Percentages do not add up to 100%"
   },
   "login": {
     "title": "Log in to {{portal}}",
@@ -355,7 +362,33 @@
     "deleteHint": "Deleting removes the article with all its sizes and images. To hide it temporarily, switch off Published instead.",
     "delete": "Delete article",
     "deleteTitle": "Delete {{style}}?",
-    "deleteBody": "This removes the article, its sizes and its images. Retailers' software will be told it is gone. This cannot be undone."
+    "deleteBody": "This removes the article, its sizes and its images. Retailers' software will be told it is gone. This cannot be undone.",
+    "materialsFlags": "Add (recycled) or (organic) after a fibre where it applies: “100% polyester (recycled)”.",
+    "animalOriginHint": "For example a leather patch, a fur trim or horn buttons. When there are, the label must say so.",
+    "footwearHint": "Required on shoe labels: the material that makes up most of each part (at least 80%).",
+    "certificationsHint": "Optional. Scheme and licence number, like “gots:CU 123456”; add (material) when only a material is certified.",
+    "certificationsInvalid": "We could not read “{{entry}}”. Use scheme:licence number, like gots:CU 123456.",
+    "labelHint": "As retailers see it on the article page and in their article data download.",
+    "labelEmpty": "No label information yet. Add the materials and care instructions below.",
+    "secondSizeHint": "Where there is one: the length of jeans (32/34) or the cup of a bra (75/B).",
+    "colourFamilyHint": "Helps retailers filter by colour, next to your own colour name.",
+    "measurementsHint": "Numbers only. Luggage: outside size including wheels and handles. Bags: the body without handles and strap.",
+    "numberInvalid": "Enter a number, like 2.6.",
+    "strapInvalid": "Enter the shortest and longest length, like 80-130.",
+    "measure": {
+      "height_cm": "Height (cm)",
+      "width_cm": "Width (cm)",
+      "depth_cm": "Depth (cm)",
+      "weight_kg": "Weight (kg)",
+      "volume_l": "Volume (l)",
+      "volume_expanded_l": "Volume expanded (l)",
+      "handle_drop_cm": "Handle drop (cm)",
+      "strap_length_cm": "Strap length (cm)",
+      "laptop_max_inch": "Laptop up to (inch)",
+      "heel_height_cm": "Heel height (cm)",
+      "shaft_height_cm": "Shaft height (cm)",
+      "inseam_cm": "Inside leg (cm)"
+    }
   },
   "imports": {
     "title": "Imports",
@@ -1151,7 +1184,8 @@
       "eyewear": "Eyewear",
       "accessory": "Accessory",
       "home": "Home",
-      "generic_product": "Other product"
+      "generic_product": "Other product",
+      "luggage": "Luggage"
     },
     "part": {
       "main": "Main fabric",
@@ -1161,7 +1195,12 @@
       "trim": "Trim",
       "sole": "Sole",
       "upper": "Upper",
-      "insole": "Insole"
+      "insole": "Insole",
+      "padding": "Padding",
+      "pocket_lining": "Pocket lining",
+      "shell": "Shell",
+      "handle": "Handle",
+      "strap": "Strap"
     },
     "fibre": {
       "cotton": "cotton",
@@ -1241,6 +1280,131 @@
       "wet_clean_w_mild": "Professional wet clean, gentle",
       "wet_clean_w_very_mild": "Professional wet clean, very gentle",
       "do_not_wet_clean": "Do not wet clean"
+    },
+    "itemSubtype": {
+      "handbag": "Handbag",
+      "shoulder_bag": "Shoulder bag",
+      "crossbody": "Crossbody bag",
+      "tote": "Tote bag",
+      "clutch": "Clutch",
+      "belt_bag": "Belt bag",
+      "backpack": "Backpack",
+      "laptop_bag": "Laptop bag",
+      "briefcase": "Briefcase",
+      "weekender": "Weekend bag",
+      "toiletry_bag": "Toiletry bag",
+      "wallet": "Wallet",
+      "card_holder": "Card holder",
+      "underseat": "Underseat bag",
+      "cabin": "Cabin size",
+      "check_in_medium": "Check-in, medium",
+      "check_in_large": "Check-in, large",
+      "pilot_case": "Pilot case",
+      "garment_bag": "Garment bag",
+      "duffel": "Duffel bag",
+      "sneaker": "Sneaker",
+      "running": "Running shoe",
+      "hiking": "Hiking shoe",
+      "lace_up": "Lace-up shoe",
+      "loafer": "Loafer",
+      "pump": "Pump",
+      "sandal": "Sandal",
+      "slipper": "Slipper",
+      "ankle_boot": "Ankle boot",
+      "boot": "Boot",
+      "knee_boot": "Knee-high boot"
+    },
+    "footwearMaterial": {
+      "leather": "Leather",
+      "coated_leather": "Coated leather",
+      "textile": "Textile",
+      "other": "Other materials"
+    },
+    "colourFamily": {
+      "black": "Black",
+      "white": "White",
+      "grey": "Grey",
+      "beige": "Beige",
+      "brown": "Brown",
+      "red": "Red",
+      "pink": "Pink",
+      "orange": "Orange",
+      "yellow": "Yellow",
+      "green": "Green",
+      "blue": "Blue",
+      "purple": "Purple",
+      "gold": "Gold",
+      "silver": "Silver",
+      "multicolour": "Multicolour",
+      "transparent": "Transparent"
+    },
+    "feature": {
+      "shell": {
+        "hard": "Hard shell",
+        "soft": "Soft shell",
+        "hybrid": "Hybrid"
+      },
+      "lock": {
+        "none": "None",
+        "combination": "Combination lock",
+        "tsa_combination": "TSA combination lock",
+        "tsa_key": "TSA key lock",
+        "key": "Key lock"
+      },
+      "closure": {
+        "zip": "Zip",
+        "magnet": "Magnet",
+        "flap": "Flap",
+        "buckle": "Buckle",
+        "drawstring": "Drawstring",
+        "button": "Button",
+        "hook_and_loop": "Hook and loop",
+        "laces": "Laces",
+        "slip_on": "Slip-on",
+        "open": "Open"
+      },
+      "water_resistance": {
+        "none": "None",
+        "water_repellent": "Water-repellent",
+        "waterproof": "Waterproof"
+      },
+      "detachable_parts": {
+        "shoulder_strap": "shoulder strap",
+        "handle": "handle",
+        "lining": "lining",
+        "insole": "insole",
+        "hood": "hood",
+        "belt": "belt",
+        "pouch": "pouch",
+        "wheels": "wheels"
+      },
+      "adjustable_parts": {
+        "shoulder_strap": "shoulder strap",
+        "waist": "waist",
+        "hem": "hem",
+        "cuff": "cuffs"
+      },
+      "fit": {
+        "slim": "Slim",
+        "regular": "Regular",
+        "relaxed": "Relaxed",
+        "oversized": "Oversized"
+      },
+      "sleeve_length": {
+        "sleeveless": "Sleeveless",
+        "short": "Short",
+        "three_quarter": "Three-quarter",
+        "long": "Long"
+      },
+      "neckline": {
+        "crew": "Crew neck",
+        "v_neck": "V-neck",
+        "collar": "Collar",
+        "hood": "Hood",
+        "turtleneck": "Turtleneck",
+        "boat": "Boat neck",
+        "scoop": "Scoop neck"
+      }
     }
   },
   "email": {
@@ -1303,5 +1467,76 @@
     "notFoundTitle": "Page not found",
     "notFound": "This address does not exist (any more).",
     "home": "Go to the start page"
+  },
+  "article": {
+    "label": "Label information",
+    "composition": "Composition",
+    "recycled": "recycled",
+    "organic": "organic",
+    "animalOrigin": "Contains non-textile parts of animal origin",
+    "footwear": "Footwear materials",
+    "footwearPart": {
+      "upper": "Upper",
+      "lining_and_sock": "Lining and sock",
+      "outer_sole": "Outer sole"
+    },
+    "certifications": "Certifications",
+    "certScope": {
+      "product": "the article is certified",
+      "material": "a material is certified"
+    },
+    "certNote": "As stated by the brand. Certifications are voluntary.",
+    "features": "Features",
+    "measurements": "Measurements",
+    "colourFamily": "Colour family",
+    "dimensions": "H × W × D",
+    "weight": "Weight",
+    "volume": "Volume",
+    "volumeExpanded": "{{volume}} expanded",
+    "handleDrop": "Handle drop",
+    "strapLength": "Strap length",
+    "laptop": "Laptop",
+    "laptopUpTo": "up to {{size}}",
+    "heelHeight": "Heel height",
+    "shaftHeight": "Shaft height",
+    "inseam": "Inside leg",
+    "yes": "Yes",
+    "no": "No",
+    "notStated": "Not stated",
+    "feature": {
+      "shell": "Shell",
+      "wheels": "Wheels",
+      "lock": "Lock",
+      "expandable": "Expandable",
+      "closure": "Closure",
+      "laptop_compartment": "Laptop compartment",
+      "water_resistance": "Water resistance",
+      "detachable_parts": "Detachable",
+      "adjustable_parts": "Adjustable",
+      "fit": "Fit",
+      "sleeve_length": "Sleeve length",
+      "neckline": "Neckline"
+    }
+  },
+  "labelWarning": {
+    "title": "Label information incomplete",
+    "intro": "These are warnings, not errors: the articles are imported and published as usual. Complete the information in your file or on the article, because EU law requires it on the label and in your offer.",
+    "badge": "Label",
+    "fibre_composition_missing": {
+      "why": "The fibre composition is missing. It must be on the label of a textile product and shown before purchase, also online. For bags and luggage this applies when they are at least 80% textile.",
+      "law": "Regulation (EU) No 1007/2011, Art. 9, 11 and 16(1)"
+    },
+    "animal_origin_unknown": {
+      "why": "The materials include leather, wool, silk, down or another material of animal origin. Say whether the article contains non-textile parts of animal origin (yes or no); if it does, the label must say so.",
+      "law": "Regulation (EU) No 1007/2011, Art. 12"
+    },
+    "footwear_materials_missing": {
+      "why": "The materials of the upper, the lining and sock, and the outer sole are missing or incomplete. They must be on the label of footwear.",
+      "law": "Directive 94/11/EC"
+    },
+    "fibre_percentages_not_100": {
+      "why": "The percentages of this part do not add up to 100%. The composition is given as a share of the total fibre weight.",
+      "law": "Regulation (EU) No 1007/2011, Art. 9 and 11"
+    }
   }
 }

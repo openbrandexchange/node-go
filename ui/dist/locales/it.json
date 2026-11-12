@@ -65,7 +65,10 @@
     "size": "Taglia",
     "sizeSystem": "Sistema taglie",
     "sku": "SKU",
-    "retailer": "Rivenditore"
+    "retailer": "Rivenditore",
+    "itemSubtype": "Tipologia",
+    "animalOrigin": "Parti non tessili di origine animale",
+    "secondSize": "Seconda taglia"
   },
   "validate": {
     "required": "Compila questo campo.",
@@ -128,7 +131,11 @@
     "files_missing": "File immagine mancante",
     "validation_failed": "Valore non accettato",
     "position_conflict": "Posizione già occupata",
-    "mass_unpublish_refused": "Troppi articoli andrebbero offline"
+    "mass_unpublish_refused": "Troppi articoli andrebbero offline",
+    "fibre_composition_missing": "Composizione fibrosa mancante",
+    "animal_origin_unknown": "Origine animale non indicata",
+    "footwear_materials_missing": "Materiali della calzatura mancanti",
+    "fibre_percentages_not_100": "Le percentuali non arrivano a 100%"
   },
   "login": {
     "title": "Accedi a {{portal}}",
@@ -358,7 +365,33 @@
     "deleteHint": "Eliminando l'articolo rimuovi anche tutte le taglie e le immagini. Per nasconderlo temporaneamente, disattiva invece «Pubblicato».",
     "delete": "Elimina articolo",
     "deleteTitle": "Eliminare {{style}}?",
-    "deleteBody": "L'articolo, le sue taglie e le sue immagini verranno rimossi. Il software dei rivenditori saprà che non c'è più. L'operazione non si può annullare."
+    "deleteBody": "L'articolo, le sue taglie e le sue immagini verranno rimossi. Il software dei rivenditori saprà che non c'è più. L'operazione non si può annullare.",
+    "materialsFlags": "Aggiungi (recycled) o (organic) dopo una fibra quando serve: «100% polyester (recycled)».",
+    "animalOriginHint": "Ad esempio una toppa in pelle, un bordo in pelliccia o bottoni in corno. Se ci sono, l'etichetta deve indicarlo.",
+    "footwearHint": "Obbligatorio sull'etichetta delle calzature: il materiale prevalente di ciascuna parte (almeno l'80%).",
+    "certificationsHint": "Facoltativo. Schema e numero di licenza, come «gots:CU 123456»; aggiungi (material) se è certificato solo un materiale.",
+    "certificationsInvalid": "Non siamo riusciti a leggere «{{entry}}». Usa schema:numero di licenza, come gots:CU 123456.",
+    "labelHint": "Come lo vedono i rivenditori nella pagina dell'articolo e nel download dei dati articolo.",
+    "labelEmpty": "Ancora nessuna informazione per l'etichetta. Aggiungi qui sotto la composizione e le istruzioni di lavaggio.",
+    "secondSizeHint": "Se c'è: la lunghezza dei jeans (32/34) o la coppa del reggiseno (75/B).",
+    "colourFamilyHint": "Aiuta i rivenditori a filtrare per colore, accanto al tuo nome del colore.",
+    "measurementsHint": "Solo numeri. Valigie: misure esterne con ruote e maniglie. Borse: il corpo della borsa senza manici e tracolla.",
+    "numberInvalid": "Inserisci un numero, come 2,6.",
+    "strapInvalid": "Inserisci la lunghezza minima e massima, come 80-130.",
+    "measure": {
+      "height_cm": "Altezza (cm)",
+      "width_cm": "Larghezza (cm)",
+      "depth_cm": "Profondità (cm)",
+      "weight_kg": "Peso (kg)",
+      "volume_l": "Volume (l)",
+      "volume_expanded_l": "Volume espanso (l)",
+      "handle_drop_cm": "Altezza manici (cm)",
+      "strap_length_cm": "Lunghezza tracolla (cm)",
+      "laptop_max_inch": "Laptop fino a (pollici)",
+      "heel_height_cm": "Altezza tacco (cm)",
+      "shaft_height_cm": "Altezza gambale (cm)",
+      "inseam_cm": "Interno gamba (cm)"
+    }
   },
   "imports": {
     "title": "Importazioni",
@@ -1181,7 +1214,8 @@
       "eyewear": "Occhiali",
       "accessory": "Accessorio",
       "home": "Casa",
-      "generic_product": "Altro prodotto"
+      "generic_product": "Altro prodotto",
+      "luggage": "Valigie"
     },
     "part": {
       "main": "Tessuto principale",
@@ -1191,7 +1225,12 @@
       "trim": "Finiture",
       "sole": "Suola",
       "upper": "Tomaia",
-      "insole": "Soletta"
+      "insole": "Soletta",
+      "padding": "Ovatta",
+      "pocket_lining": "Fodera tasche",
+      "shell": "Scocca",
+      "handle": "Manico",
+      "strap": "Tracolla"
     },
     "fibre": {
       "cotton": "cotone",
@@ -1271,6 +1310,131 @@
       "wet_clean_w_mild": "Lavaggio ad acqua professionale, delicato",
       "wet_clean_w_very_mild": "Lavaggio ad acqua professionale, molto delicato",
       "do_not_wet_clean": "Non effettuare lavaggio ad acqua professionale"
+    },
+    "itemSubtype": {
+      "handbag": "Borsa a mano",
+      "shoulder_bag": "Borsa a spalla",
+      "crossbody": "Borsa a tracolla",
+      "tote": "Shopper",
+      "clutch": "Pochette",
+      "belt_bag": "Marsupio",
+      "backpack": "Zaino",
+      "laptop_bag": "Borsa porta PC",
+      "briefcase": "Ventiquattrore",
+      "weekender": "Borsa da weekend",
+      "toiletry_bag": "Beauty case",
+      "wallet": "Portafoglio",
+      "card_holder": "Porta carte",
+      "underseat": "Borsa sottosedile",
+      "cabin": "Bagaglio a mano",
+      "check_in_medium": "Da stiva, media",
+      "check_in_large": "Da stiva, grande",
+      "pilot_case": "Valigia pilota",
+      "garment_bag": "Porta abiti",
+      "duffel": "Borsone",
+      "sneaker": "Sneaker",
+      "running": "Scarpa da running",
+      "hiking": "Scarpa da trekking",
+      "lace_up": "Scarpa stringata",
+      "loafer": "Mocassino",
+      "pump": "Décolleté",
+      "sandal": "Sandalo",
+      "slipper": "Pantofola",
+      "ankle_boot": "Stivaletto",
+      "boot": "Stivale",
+      "knee_boot": "Stivale al ginocchio"
+    },
+    "footwearMaterial": {
+      "leather": "Cuoio",
+      "coated_leather": "Cuoio rivestito",
+      "textile": "Materie tessili",
+      "other": "Altri materiali"
+    },
+    "colourFamily": {
+      "black": "Nero",
+      "white": "Bianco",
+      "grey": "Grigio",
+      "beige": "Beige",
+      "brown": "Marrone",
+      "red": "Rosso",
+      "pink": "Rosa",
+      "orange": "Arancione",
+      "yellow": "Giallo",
+      "green": "Verde",
+      "blue": "Blu",
+      "purple": "Viola",
+      "gold": "Oro",
+      "silver": "Argento",
+      "multicolour": "Multicolore",
+      "transparent": "Trasparente"
+    },
+    "feature": {
+      "shell": {
+        "hard": "Rigida",
+        "soft": "Morbida",
+        "hybrid": "Ibrida"
+      },
+      "lock": {
+        "none": "Nessuna",
+        "combination": "Serratura a combinazione",
+        "tsa_combination": "Serratura TSA a combinazione",
+        "tsa_key": "Serratura TSA a chiave",
+        "key": "Serratura a chiave"
+      },
+      "closure": {
+        "zip": "Cerniera",
+        "magnet": "Magnete",
+        "flap": "Patta",
+        "buckle": "Fibbia",
+        "drawstring": "Coulisse",
+        "button": "Bottone",
+        "hook_and_loop": "Chiusura a strappo",
+        "laces": "Lacci",
+        "slip_on": "Senza lacci",
+        "open": "Aperta"
+      },
+      "water_resistance": {
+        "none": "Nessuna",
+        "water_repellent": "Idrorepellente",
+        "waterproof": "Impermeabile"
+      },
+      "detachable_parts": {
+        "shoulder_strap": "tracolla",
+        "handle": "manico",
+        "lining": "fodera",
+        "insole": "soletta",
+        "hood": "cappuccio",
+        "belt": "cintura",
+        "pouch": "pochette",
+        "wheels": "ruote"
+      },
+      "adjustable_parts": {
+        "shoulder_strap": "tracolla",
+        "waist": "vita",
+        "hem": "orlo",
+        "cuff": "polsini"
+      },
+      "fit": {
+        "slim": "Slim",
+        "regular": "Regular",
+        "relaxed": "Comoda",
+        "oversized": "Oversize"
+      },
+      "sleeve_length": {
+        "sleeveless": "Senza maniche",
+        "short": "Corta",
+        "three_quarter": "Tre quarti",
+        "long": "Lunga"
+      },
+      "neckline": {
+        "crew": "Girocollo",
+        "v_neck": "Scollo a V",
+        "collar": "Colletto",
+        "hood": "Cappuccio",
+        "turtleneck": "Collo alto",
+        "boat": "Scollo a barca",
+        "scoop": "Scollo a U"
+      }
     }
   },
   "email": {
@@ -1333,5 +1497,76 @@
     "notFoundTitle": "Pagina non trovata",
     "notFound": "Questo indirizzo non esiste (più).",
     "home": "Vai alla pagina iniziale"
+  },
+  "article": {
+    "label": "Informazioni in etichetta",
+    "composition": "Composizione",
+    "recycled": "riciclato",
+    "organic": "biologico",
+    "animalOrigin": "Contiene parti non tessili di origine animale",
+    "footwear": "Materiali della calzatura",
+    "footwearPart": {
+      "upper": "Tomaia",
+      "lining_and_sock": "Fodera e suola interna",
+      "outer_sole": "Suola esterna"
+    },
+    "certifications": "Certificazioni",
+    "certScope": {
+      "product": "l'articolo è certificato",
+      "material": "un materiale è certificato"
+    },
+    "certNote": "Come dichiarato dal marchio. Le certificazioni sono volontarie.",
+    "features": "Caratteristiche",
+    "measurements": "Misure",
+    "colourFamily": "Famiglia di colore",
+    "dimensions": "A × L × P",
+    "weight": "Peso",
+    "volume": "Volume",
+    "volumeExpanded": "{{volume}} espanso",
+    "handleDrop": "Altezza manici",
+    "strapLength": "Lunghezza tracolla",
+    "laptop": "Laptop",
+    "laptopUpTo": "fino a {{size}}",
+    "heelHeight": "Altezza tacco",
+    "shaftHeight": "Altezza gambale",
+    "inseam": "Interno gamba",
+    "yes": "Sì",
+    "no": "No",
+    "notStated": "Non indicato",
+    "feature": {
+      "shell": "Scocca",
+      "wheels": "Ruote",
+      "lock": "Serratura",
+      "expandable": "Espandibile",
+      "closure": "Chiusura",
+      "laptop_compartment": "Scomparto laptop",
+      "water_resistance": "Resistenza all'acqua",
+      "detachable_parts": "Staccabili",
+      "adjustable_parts": "Regolabili",
+      "fit": "Vestibilità",
+      "sleeve_length": "Lunghezza manica",
+      "neckline": "Scollo"
+    }
+  },
+  "labelWarning": {
+    "title": "Informazioni in etichetta incomplete",
+    "intro": "Sono avvisi, non errori: gli articoli vengono importati e pubblicati come sempre. Completa le informazioni nel tuo file o nell'articolo, perché la normativa UE le richiede in etichetta e nella tua offerta.",
+    "badge": "Etichetta",
+    "fibre_composition_missing": {
+      "why": "Manca la composizione fibrosa. Deve figurare sull'etichetta di un prodotto tessile ed essere indicata prima dell'acquisto, anche online. Per borse e valigie vale quando sono tessili per almeno l'80%.",
+      "law": "Regolamento (UE) n. 1007/2011, artt. 9, 11 e 16, paragrafo 1"
+    },
+    "animal_origin_unknown": {
+      "why": "Tra i materiali ci sono pelle, lana, seta, piumino o un altro materiale di origine animale. Indica se l'articolo contiene parti non tessili di origine animale (sì o no); se le contiene, l'etichetta deve indicarlo.",
+      "law": "Regolamento (UE) n. 1007/2011, art. 12"
+    },
+    "footwear_materials_missing": {
+      "why": "I materiali di tomaia, fodera e suola interna e suola esterna mancano o sono incompleti. Devono figurare sull'etichetta delle calzature.",
+      "law": "Direttiva 94/11/CE"
+    },
+    "fibre_percentages_not_100": {
+      "why": "Le percentuali di questa parte non arrivano a 100%. La composizione si esprime come quota del peso totale delle fibre.",
+      "law": "Regolamento (UE) n. 1007/2011, artt. 9 e 11"
+    }
   }
 }

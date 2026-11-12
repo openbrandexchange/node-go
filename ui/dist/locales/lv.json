@@ -65,7 +65,10 @@
     "size": "Izmērs",
     "sizeSystem": "Izmēru sistēma",
     "sku": "SKU",
-    "retailer": "Tirgotājs"
+    "retailer": "Tirgotājs",
+    "itemSubtype": "Tips",
+    "animalOrigin": "Dzīvnieku izcelsmes netekstila daļas",
+    "secondSize": "Otrais izmērs"
   },
   "validate": {
     "required": "Lūdzu, aizpildiet šo lauku.",
@@ -128,7 +131,11 @@
     "files_missing": "Trūkst fotoattēla faila",
     "validation_failed": "Vērtība nav pieņemta",
     "position_conflict": "Vieta jau aizņemta",
-    "mass_unpublish_refused": "Pārāk daudz preču pazustu no piedāvājuma"
+    "mass_unpublish_refused": "Pārāk daudz preču pazustu no piedāvājuma",
+    "fibre_composition_missing": "Trūkst šķiedru sastāva",
+    "animal_origin_unknown": "Dzīvnieku izcelsme nav norādīta",
+    "footwear_materials_missing": "Trūkst apavu materiālu",
+    "fibre_percentages_not_100": "Procenti kopā nav 100 %"
   },
   "login": {
     "title": "Pieteikšanās: {{portal}}",
@@ -358,7 +365,33 @@
     "deleteHint": "Dzēšana noņem preci ar visiem izmēriem un fotoattēliem. Lai paslēptu uz laiku, labāk izslēdziet “Publicēta”.",
     "delete": "Dzēst preci",
     "deleteTitle": "Dzēst {{style}}?",
-    "deleteBody": "Prece, tās izmēri un fotoattēli tiks noņemti. Tirgotāju sistēmas uzzinās, ka tā ir pazudusi. To nevar atsaukt."
+    "deleteBody": "Prece, tās izmēri un fotoattēli tiks noņemti. Tirgotāju sistēmas uzzinās, ka tā ir pazudusi. To nevar atsaukt.",
+    "materialsFlags": "Ja attiecas, aiz šķiedras pievienojiet (recycled) vai (organic): “100% polyester (recycled)”.",
+    "animalOriginHint": "Piemēram, ādas uzšuve, kažokādas apmale vai raga pogas. Ja tādas ir, tas jānorāda uz etiķetes.",
+    "footwearHint": "Obligāti uz apavu etiķetes: katras daļas galvenais materiāls (vismaz 80 %).",
+    "certificationsHint": "Nav obligāti. Shēma un licences numurs, piemēram, “gots:CU 123456”; pievienojiet (material), ja sertificēts ir tikai materiāls.",
+    "certificationsInvalid": "Nevarēja nolasīt “{{entry}}”. Izmantojiet formātu shēma:licences numurs, piemēram, gots:CU 123456.",
+    "labelHint": "Tā, kā tirgotāji to redz preces lapā un lejupielādētajos preču datos.",
+    "labelEmpty": "Etiķetes informācijas vēl nav. Pievienojiet materiālus un kopšanas norādījumus zemāk.",
+    "secondSizeHint": "Ja tāds ir: džinsu garums (32/34) vai krūšturu kausiņš (75/B).",
+    "colourFamilyHint": "Palīdz tirgotājiem filtrēt pēc krāsas, līdzās jūsu krāsas nosaukumam.",
+    "measurementsHint": "Tikai skaitļi. Koferi: ārējie izmēri ar riteņiem un rokturiem. Somas: korpuss bez rokturiem un siksnas.",
+    "numberInvalid": "Ievadiet skaitli, piemēram, 2,6.",
+    "strapInvalid": "Ievadiet īsāko un garāko garumu, piemēram, 80-130.",
+    "measure": {
+      "height_cm": "Augstums (cm)",
+      "width_cm": "Platums (cm)",
+      "depth_cm": "Dziļums (cm)",
+      "weight_kg": "Svars (kg)",
+      "volume_l": "Tilpums (l)",
+      "volume_expanded_l": "Paplašināts tilpums (l)",
+      "handle_drop_cm": "Rokturu augstums (cm)",
+      "strap_length_cm": "Siksnas garums (cm)",
+      "laptop_max_inch": "Klēpjdators līdz (collas)",
+      "heel_height_cm": "Papēža augstums (cm)",
+      "shaft_height_cm": "Stulma augstums (cm)",
+      "inseam_cm": "Soļa garums (cm)"
+    }
   },
   "imports": {
     "title": "Importi",
@@ -1181,7 +1214,8 @@
       "eyewear": "Brilles",
       "accessory": "Aksesuārs",
       "home": "Mājai",
-      "generic_product": "Cits produkts"
+      "generic_product": "Cits produkts",
+      "luggage": "Bagāža"
     },
     "part": {
       "main": "Pamatmateriāls",
@@ -1191,7 +1225,12 @@
       "trim": "Apdare",
       "sole": "Zole",
       "upper": "Virspuse",
-      "insole": "Iekšzole"
+      "insole": "Iekšzole",
+      "padding": "Polsterējums",
+      "pocket_lining": "Kabatu odere",
+      "shell": "Korpuss",
+      "handle": "Rokturis",
+      "strap": "Siksna"
     },
     "fibre": {
       "cotton": "kokvilna",
@@ -1271,6 +1310,131 @@
       "wet_clean_w_mild": "Profesionāla mitrā tīrīšana, saudzīga",
       "wet_clean_w_very_mild": "Profesionāla mitrā tīrīšana, ļoti saudzīga",
       "do_not_wet_clean": "Netīrīt ar profesionālu mitro tīrīšanu"
+    },
+    "itemSubtype": {
+      "handbag": "Rokassoma",
+      "shoulder_bag": "Plecu soma",
+      "crossbody": "Soma pār plecu",
+      "tote": "Iepirkumu soma",
+      "clutch": "Vakara somiņa",
+      "belt_bag": "Jostas soma",
+      "backpack": "Mugursoma",
+      "laptop_bag": "Klēpjdatora soma",
+      "briefcase": "Portfelis",
+      "weekender": "Nedēļas nogales soma",
+      "toiletry_bag": "Kosmētikas soma",
+      "wallet": "Maks",
+      "card_holder": "Karšu turētājs",
+      "underseat": "Soma zem sēdekļa",
+      "cabin": "Rokas bagāžas izmērs",
+      "check_in_medium": "Nododamā bagāža, vidēja",
+      "check_in_large": "Nododamā bagāža, liela",
+      "pilot_case": "Pilota koferis",
+      "garment_bag": "Apģērbu soma",
+      "duffel": "Ceļasoma",
+      "sneaker": "Sporta apavi",
+      "running": "Skriešanas apavi",
+      "hiking": "Pārgājienu apavi",
+      "lace_up": "Šņorkurpes",
+      "loafer": "Mokasīni",
+      "pump": "Laiviņas",
+      "sandal": "Sandales",
+      "slipper": "Čības",
+      "ankle_boot": "Puszābaki",
+      "boot": "Zābaki",
+      "knee_boot": "Garie zābaki"
+    },
+    "footwearMaterial": {
+      "leather": "Āda",
+      "coated_leather": "Pārklāta āda",
+      "textile": "Tekstils",
+      "other": "Citi materiāli"
+    },
+    "colourFamily": {
+      "black": "Melna",
+      "white": "Balta",
+      "grey": "Pelēka",
+      "beige": "Bēša",
+      "brown": "Brūna",
+      "red": "Sarkana",
+      "pink": "Rozā",
+      "orange": "Oranža",
+      "yellow": "Dzeltena",
+      "green": "Zaļa",
+      "blue": "Zila",
+      "purple": "Violeta",
+      "gold": "Zelta",
+      "silver": "Sudraba",
+      "multicolour": "Daudzkrāsaina",
+      "transparent": "Caurspīdīga"
+    },
+    "feature": {
+      "shell": {
+        "hard": "Ciets korpuss",
+        "soft": "Mīksts korpuss",
+        "hybrid": "Hibrīds"
+      },
+      "lock": {
+        "none": "Nav",
+        "combination": "Koda slēdzene",
+        "tsa_combination": "TSA koda slēdzene",
+        "tsa_key": "TSA slēdzene ar atslēgu",
+        "key": "Slēdzene ar atslēgu"
+      },
+      "closure": {
+        "zip": "Rāvējslēdzējs",
+        "magnet": "Magnēts",
+        "flap": "Atloks",
+        "buckle": "Sprādze",
+        "drawstring": "Savelkama aukla",
+        "button": "Poga",
+        "hook_and_loop": "Līplente",
+        "laces": "Šņores",
+        "slip_on": "Uzaujami",
+        "open": "Atvērta"
+      },
+      "water_resistance": {
+        "none": "Nav",
+        "water_repellent": "Ūdeni atgrūdošs",
+        "waterproof": "Ūdensnecaurlaidīgs"
+      },
+      "detachable_parts": {
+        "shoulder_strap": "plecu siksna",
+        "handle": "rokturis",
+        "lining": "odere",
+        "insole": "iekšzole",
+        "hood": "kapuce",
+        "belt": "josta",
+        "pouch": "maciņš",
+        "wheels": "riteņi"
+      },
+      "adjustable_parts": {
+        "shoulder_strap": "plecu siksna",
+        "waist": "viduklis",
+        "hem": "apakšmala",
+        "cuff": "aproces"
+      },
+      "fit": {
+        "slim": "Pieguļošs",
+        "regular": "Standarta",
+        "relaxed": "Brīvs",
+        "oversized": "Ļoti brīvs"
+      },
+      "sleeve_length": {
+        "sleeveless": "Bez piedurknēm",
+        "short": "Īsas",
+        "three_quarter": "Trīs ceturtdaļu",
+        "long": "Garas"
+      },
+      "neckline": {
+        "crew": "Apaļš izgriezums",
+        "v_neck": "V veida izgriezums",
+        "collar": "Apkakle",
+        "hood": "Kapuce",
+        "turtleneck": "Augsta apkakle",
+        "boat": "Laiviņas izgriezums",
+        "scoop": "Dziļš apaļš izgriezums"
+      }
     }
   },
   "email": {
@@ -1333,5 +1497,76 @@
     "notFoundTitle": "Lapa nav atrasta",
     "notFound": "Šādas adreses (vairs) nav.",
     "home": "Uz sākumlapu"
+  },
+  "article": {
+    "label": "Etiķetes informācija",
+    "composition": "Sastāvs",
+    "recycled": "pārstrādāts",
+    "organic": "bioloģisks",
+    "animalOrigin": "Satur dzīvnieku izcelsmes netekstila daļas",
+    "footwear": "Apavu materiāli",
+    "footwearPart": {
+      "upper": "Virsa",
+      "lining_and_sock": "Odere un iekšzole",
+      "outer_sole": "Ārējā zole"
+    },
+    "certifications": "Sertifikāti",
+    "certScope": {
+      "product": "prece ir sertificēta",
+      "material": "sertificēts ir materiāls"
+    },
+    "certNote": "Kā norādījis zīmols. Sertifikāti ir brīvprātīgi.",
+    "features": "Īpašības",
+    "measurements": "Izmēri",
+    "colourFamily": "Krāsu grupa",
+    "dimensions": "A × P × D",
+    "weight": "Svars",
+    "volume": "Tilpums",
+    "volumeExpanded": "{{volume}} paplašināts",
+    "handleDrop": "Rokturu augstums",
+    "strapLength": "Siksnas garums",
+    "laptop": "Klēpjdators",
+    "laptopUpTo": "līdz {{size}}",
+    "heelHeight": "Papēža augstums",
+    "shaftHeight": "Stulma augstums",
+    "inseam": "Soļa garums",
+    "yes": "Jā",
+    "no": "Nē",
+    "notStated": "Nav norādīts",
+    "feature": {
+      "shell": "Korpuss",
+      "wheels": "Riteņi",
+      "lock": "Slēdzene",
+      "expandable": "Paplašināms",
+      "closure": "Aizdare",
+      "laptop_compartment": "Klēpjdatora nodalījums",
+      "water_resistance": "Ūdensizturība",
+      "detachable_parts": "Noņemamas daļas",
+      "adjustable_parts": "Regulējamas daļas",
+      "fit": "Piegriezums",
+      "sleeve_length": "Piedurkņu garums",
+      "neckline": "Kakla izgriezums"
+    }
+  },
+  "labelWarning": {
+    "title": "Etiķetes informācija nav pilnīga",
+    "intro": "Tie ir brīdinājumi, nevis kļūdas: preces tiek importētas un publicētas kā parasti. Papildiniet informāciju savā failā vai pie preces, jo ES tiesību akti to prasa uz etiķetes un jūsu piedāvājumā.",
+    "badge": "Etiķete",
+    "fibre_composition_missing": {
+      "why": "Trūkst šķiedru sastāva. Tam jābūt uz tekstilizstrādājuma etiķetes un jāparāda pirms pirkuma, arī tiešsaistē. Somām un koferiem tas attiecas, ja tie vismaz 80 % sastāv no tekstila.",
+      "law": "Regula (ES) Nr. 1007/2011, 9. un 11. pants un 16. panta 1. punkts"
+    },
+    "animal_origin_unknown": {
+      "why": "Materiālu vidū ir āda, vilna, zīds, dūnas vai cits dzīvnieku izcelsmes materiāls. Norādiet, vai precē ir dzīvnieku izcelsmes netekstila daļas (jā vai nē); ja ir, tas jānorāda uz etiķetes.",
+      "law": "Regula (ES) Nr. 1007/2011, 12. pants"
+    },
+    "footwear_materials_missing": {
+      "why": "Virsas, oderes un iekšzoles, kā arī ārējās zoles materiāli trūkst vai nav norādīti pilnībā. Tiem jābūt uz apavu etiķetes.",
+      "law": "Direktīva 94/11/EK"
+    },
+    "fibre_percentages_not_100": {
+      "why": "Šīs daļas procenti kopā nav 100 %. Sastāvu norāda kā daļu no kopējā šķiedru svara.",
+      "law": "Regula (ES) Nr. 1007/2011, 9. un 11. pants"
+    }
   }
 }

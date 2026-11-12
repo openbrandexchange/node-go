@@ -65,7 +65,10 @@
     "size": "Méid",
     "sizeSystem": "Córas méideanna",
     "sku": "SKU",
-    "retailer": "Miondíoltóir"
+    "retailer": "Miondíoltóir",
+    "itemSubtype": "Fochineál",
+    "animalOrigin": "Codanna neamhtheicstíle de bhunadh ainmhíoch",
+    "secondSize": "An dara méid"
   },
   "validate": {
     "required": "Líon isteach an réimse seo, le do thoil.",
@@ -128,7 +131,11 @@
     "files_missing": "Comhad grianghraif ar iarraidh",
     "validation_failed": "Luach nár glacadh leis",
     "position_conflict": "Áit tógtha cheana",
-    "mass_unpublish_refused": "D’imeodh an iomarca earraí as an tairiscint"
+    "mass_unpublish_refused": "D’imeodh an iomarca earraí as an tairiscint",
+    "fibre_composition_missing": "Comhdhéanamh snáithíní in easnamh",
+    "animal_origin_unknown": "Bunadh ainmhíoch gan lua",
+    "footwear_materials_missing": "Ábhair an choisbhirt in easnamh",
+    "fibre_percentages_not_100": "Ní ionann na céatadáin agus 100%"
   },
   "login": {
     "title": "Logáil isteach: {{portal}}",
@@ -364,7 +371,33 @@
     "deleteHint": "Baintear an t-earra lena mhéideanna agus a ghrianghraif go léir le scriosadh. Chun é a chur i bhfolach go sealadach, múch “Foilsithe” ina ionad.",
     "delete": "Scrios an t-earra",
     "deleteTitle": "{{style}} a scriosadh?",
-    "deleteBody": "Bainfear an t-earra, a mhéideanna agus a ghrianghraif. Cuirfear in iúl do chórais na miondíoltóirí go bhfuil sé imithe. Ní féidir é seo a chealú."
+    "deleteBody": "Bainfear an t-earra, a mhéideanna agus a ghrianghraif. Cuirfear in iúl do chórais na miondíoltóirí go bhfuil sé imithe. Ní féidir é seo a chealú.",
+    "materialsFlags": "Cuir (recycled) nó (organic) i ndiaidh snáithín nuair is cuí: “100% polyester (recycled)”.",
+    "animalOriginHint": "Mar shampla paiste leathair, imeall fionnaidh nó cnaipí adhairce. Má tá a leithéid ann, caithfidh an lipéad é sin a lua.",
+    "footwearHint": "Riachtanach ar lipéid coisbhirt: an t-ábhar as a ndéantar an chuid is mó de gach cuid (80% ar a laghad).",
+    "certificationsHint": "Roghnach. Scéim agus uimhir cheadúnais, mar shampla “gots:CU 123456”; cuir (material) leis nuair nach bhfuil ach ábhar amháin deimhnithe.",
+    "certificationsInvalid": "Níorbh fhéidir “{{entry}}” a léamh. Úsáid scéim:uimhir cheadúnais, mar shampla gots:CU 123456.",
+    "labelHint": "Mar a fheiceann miondíoltóirí é ar leathanach an earra agus sna sonraí earraí a íoslódálann siad.",
+    "labelEmpty": "Níl aon fhaisnéis lipéid ann fós. Cuir na hábhair agus na treoracha cúraim isteach thíos.",
+    "secondSizeHint": "Má tá ceann ann: fad brístí géine (32/34) nó cupa cíochbheirte (75/B).",
+    "colourFamilyHint": "Cabhraíonn sé le miondíoltóirí scagadh de réir datha, in éineacht le d’ainm datha féin.",
+    "measurementsHint": "Uimhreacha amháin. Bagáiste: an méid lasmuigh, rothaí agus hanlaí san áireamh. Málaí: an mála féin gan hanlaí ná strapa.",
+    "numberInvalid": "Cuir isteach uimhir, mar shampla 2.6.",
+    "strapInvalid": "Cuir isteach an fad is giorra agus an fad is faide, mar shampla 80-130.",
+    "measure": {
+      "height_cm": "Airde (cm)",
+      "width_cm": "Leithead (cm)",
+      "depth_cm": "Doimhneacht (cm)",
+      "weight_kg": "Meáchan (kg)",
+      "volume_l": "Toilleadh (l)",
+      "volume_expanded_l": "Toilleadh leathnaithe (l)",
+      "handle_drop_cm": "Airde an hanla (cm)",
+      "strap_length_cm": "Fad an strapa (cm)",
+      "laptop_max_inch": "Ríomhaire glúine suas le (orlach)",
+      "heel_height_cm": "Airde na sála (cm)",
+      "shaft_height_cm": "Airde chos na buataise (cm)",
+      "inseam_cm": "Fad istigh na coise (cm)"
+    }
   },
   "imports": {
     "title": "Iompórtálacha",
@@ -1241,7 +1274,8 @@
       "eyewear": "Spéaclaí",
       "accessory": "Oiriúint",
       "home": "Baile",
-      "generic_product": "Táirge eile"
+      "generic_product": "Táirge eile",
+      "luggage": "Bagáiste"
     },
     "part": {
       "main": "Príomhábhar",
@@ -1251,7 +1285,12 @@
       "trim": "Maisiú",
       "sole": "Bonn",
       "upper": "Uachtar",
-      "insole": "Bonn istigh"
+      "insole": "Bonn istigh",
+      "padding": "Stuáil",
+      "pocket_lining": "Líneáil phóca",
+      "shell": "Blaosc",
+      "handle": "Hanla",
+      "strap": "Strapa"
     },
     "fibre": {
       "cotton": "cadás",
@@ -1331,6 +1370,131 @@
       "wet_clean_w_mild": "Fliuchghlanadh gairmiúil, séimh",
       "wet_clean_w_very_mild": "Fliuchghlanadh gairmiúil, an-séimh",
       "do_not_wet_clean": "Ná fliuchghlan go gairmiúil"
+    },
+    "itemSubtype": {
+      "handbag": "Mála láimhe",
+      "shoulder_bag": "Mála gualainne",
+      "crossbody": "Mála trasna an choirp",
+      "tote": "Mála iompair",
+      "clutch": "Mála glaice",
+      "belt_bag": "Mála coime",
+      "backpack": "Mála droma",
+      "laptop_bag": "Mála ríomhaire glúine",
+      "briefcase": "Mála cáipéisí",
+      "weekender": "Mála deireadh seachtaine",
+      "toiletry_bag": "Mála níocháin",
+      "wallet": "Sparán",
+      "card_holder": "Cás cártaí",
+      "underseat": "Mála faoin suíochán",
+      "cabin": "Méid cábáin",
+      "check_in_medium": "Bagáiste seiceála, meánach",
+      "check_in_large": "Bagáiste seiceála, mór",
+      "pilot_case": "Cás píolóta",
+      "garment_bag": "Mála éadaigh",
+      "duffel": "Mála taistil",
+      "sneaker": "Bróg spóirt",
+      "running": "Bróg reatha",
+      "hiking": "Bróg siúlóide",
+      "lace_up": "Bróg iallacha",
+      "loafer": "Lófar",
+      "pump": "Bróg sála",
+      "sandal": "Cuarán",
+      "slipper": "Slipéar",
+      "ankle_boot": "Buatais rúitín",
+      "boot": "Buatais",
+      "knee_boot": "Buatais ghlúine"
+    },
+    "footwearMaterial": {
+      "leather": "Leathar",
+      "coated_leather": "Leathar brataithe",
+      "textile": "Teicstíl",
+      "other": "Ábhair eile"
+    },
+    "colourFamily": {
+      "black": "Dubh",
+      "white": "Bán",
+      "grey": "Liath",
+      "beige": "Béas",
+      "brown": "Donn",
+      "red": "Dearg",
+      "pink": "Bándearg",
+      "orange": "Oráiste",
+      "yellow": "Buí",
+      "green": "Glas",
+      "blue": "Gorm",
+      "purple": "Corcra",
+      "gold": "Órga",
+      "silver": "Airgeadach",
+      "multicolour": "Ildaite",
+      "transparent": "Trédhearcach"
+    },
+    "feature": {
+      "shell": {
+        "hard": "Blaosc chrua",
+        "soft": "Blaosc bhog",
+        "hybrid": "Hibrideach"
+      },
+      "lock": {
+        "none": "Gan ghlas",
+        "combination": "Glas teaglama",
+        "tsa_combination": "Glas teaglama TSA",
+        "tsa_key": "Glas eochrach TSA",
+        "key": "Glas eochrach"
+      },
+      "closure": {
+        "zip": "Sip",
+        "magnet": "Maighnéad",
+        "flap": "Liopa",
+        "buckle": "Búcla",
+        "drawstring": "Sreangán tarraingthe",
+        "button": "Cnaipe",
+        "hook_and_loop": "Greamán duáin agus lúibe",
+        "laces": "Iallacha",
+        "slip_on": "Gan cheangal",
+        "open": "Oscailte"
+      },
+      "water_resistance": {
+        "none": "Gan frithsheasmhacht",
+        "water_repellent": "Uisce-éarthach",
+        "waterproof": "Uiscedhíonach"
+      },
+      "detachable_parts": {
+        "shoulder_strap": "strapa gualainne",
+        "handle": "hanla",
+        "lining": "líneáil",
+        "insole": "bonn istigh",
+        "hood": "cochall",
+        "belt": "crios",
+        "pouch": "púitse",
+        "wheels": "rothaí"
+      },
+      "adjustable_parts": {
+        "shoulder_strap": "strapa gualainne",
+        "waist": "coim",
+        "hem": "fáithim",
+        "cuff": "cufaí"
+      },
+      "fit": {
+        "slim": "Caol",
+        "regular": "Rialta",
+        "relaxed": "Scaoilte",
+        "oversized": "Rómhór"
+      },
+      "sleeve_length": {
+        "sleeveless": "Gan muinchillí",
+        "short": "Gearr",
+        "three_quarter": "Trí cheathrú",
+        "long": "Fada"
+      },
+      "neckline": {
+        "crew": "Muineál cruinn",
+        "v_neck": "Muineál V",
+        "collar": "Bóna",
+        "hood": "Cochall",
+        "turtleneck": "Muineál póló",
+        "boat": "Muineál báid",
+        "scoop": "Muineál cruinn domhain"
+      }
     }
   },
   "email": {
@@ -1393,5 +1557,76 @@
     "notFoundTitle": "Leathanach gan aimsiú",
     "notFound": "Níl an seoladh seo ann (a thuilleadh).",
     "home": "Chuig an leathanach baile"
+  },
+  "article": {
+    "label": "Faisnéis lipéid",
+    "composition": "Comhdhéanamh",
+    "recycled": "athchúrsáilte",
+    "organic": "orgánach",
+    "animalOrigin": "Tá codanna neamhtheicstíle de bhunadh ainmhíoch ann",
+    "footwear": "Ábhair an choisbhirt",
+    "footwearPart": {
+      "upper": "Uachtar",
+      "lining_and_sock": "Líneáil agus bonn istigh",
+      "outer_sole": "Bonn seachtrach"
+    },
+    "certifications": "Deimhnithe",
+    "certScope": {
+      "product": "tá an t-earra deimhnithe",
+      "material": "tá ábhar deimhnithe"
+    },
+    "certNote": "Mar a luaigh an branda. Is deonach iad na deimhnithe.",
+    "features": "Gnéithe",
+    "measurements": "Toisí",
+    "colourFamily": "Grúpa datha",
+    "dimensions": "A × L × D",
+    "weight": "Meáchan",
+    "volume": "Toilleadh",
+    "volumeExpanded": "{{volume}} leathnaithe",
+    "handleDrop": "Airde an hanla",
+    "strapLength": "Fad an strapa",
+    "laptop": "Ríomhaire glúine",
+    "laptopUpTo": "suas le {{size}}",
+    "heelHeight": "Airde na sála",
+    "shaftHeight": "Airde chos na buataise",
+    "inseam": "Fad istigh na coise",
+    "yes": "Tá",
+    "no": "Níl",
+    "notStated": "Gan lua",
+    "feature": {
+      "shell": "Blaosc",
+      "wheels": "Rothaí",
+      "lock": "Glas",
+      "expandable": "In-leathnaithe",
+      "closure": "Dúnadh",
+      "laptop_compartment": "Urrann ríomhaire glúine",
+      "water_resistance": "Frithsheasmhacht uisce",
+      "detachable_parts": "In-bhainte",
+      "adjustable_parts": "In-choigeartaithe",
+      "fit": "Gearradh",
+      "sleeve_length": "Fad muinchille",
+      "neckline": "Muineál"
+    }
+  },
+  "labelWarning": {
+    "title": "Faisnéis lipéid neamhiomlán",
+    "intro": "Is rabhaidh iad seo, ní earráidí: iompórtáiltear agus foilsítear na hearraí mar is gnách. Comhlánaigh an fhaisnéis i do chomhad nó ar an earra, mar go n-éilíonn dlí an AE í ar an lipéad agus i do thairiscint.",
+    "badge": "Lipéad",
+    "fibre_composition_missing": {
+      "why": "Tá comhdhéanamh na snáithíní in easnamh. Caithfidh sé a bheith ar lipéad táirge teicstíle agus le feiceáil roimh cheannach, ar líne freisin. I gcás málaí agus bagáiste, baineann sé seo leo nuair is teicstíl 80% díobh ar a laghad.",
+      "law": "Rialachán (AE) Uimh. 1007/2011, Airteagail 9 agus 11 agus Airteagal 16(1)"
+    },
+    "animal_origin_unknown": {
+      "why": "Tá leathar, olann, síoda, clúmh nó ábhar eile de bhunadh ainmhíoch sna hábhair. Luaigh an bhfuil codanna neamhtheicstíle de bhunadh ainmhíoch san earra (tá nó níl); má tá, caithfidh an lipéad é sin a lua.",
+      "law": "Rialachán (AE) Uimh. 1007/2011, Airteagal 12"
+    },
+    "footwear_materials_missing": {
+      "why": "Tá ábhair an uachtair, na líneála agus an boinn istigh, agus an boinn sheachtraigh in easnamh nó neamhiomlán. Caithfidh siad a bheith ar lipéad an choisbhirt.",
+      "law": "Treoir 94/11/CE"
+    },
+    "fibre_percentages_not_100": {
+      "why": "Ní ionann céatadáin na coda seo agus 100%. Tugtar an comhdhéanamh mar chion de mheáchan iomlán na snáithíní.",
+      "law": "Rialachán (AE) Uimh. 1007/2011, Airteagail 9 agus 11"
+    }
   }
 }

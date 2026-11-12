@@ -65,7 +65,10 @@
     "size": "Méret",
     "sizeSystem": "Méretrendszer",
     "sku": "SKU",
-    "retailer": "Viszonteladó"
+    "retailer": "Viszonteladó",
+    "itemSubtype": "Altípus",
+    "animalOrigin": "Állati eredetű nem textil részek",
+    "secondSize": "Második méret"
   },
   "validate": {
     "required": "Kérjük, töltse ki ezt a mezőt.",
@@ -128,7 +131,11 @@
     "files_missing": "Hiányzó fotófájl",
     "validation_failed": "Érték nem elfogadva",
     "position_conflict": "A hely már foglalt",
-    "mass_unpublish_refused": "Túl sok termék tűnne el a kínálatból"
+    "mass_unpublish_refused": "Túl sok termék tűnne el a kínálatból",
+    "fibre_composition_missing": "Hiányzik a szálösszetétel",
+    "animal_origin_unknown": "Az állati eredet nincs megadva",
+    "footwear_materials_missing": "Hiányoznak a lábbeli anyagai",
+    "fibre_percentages_not_100": "A százalékok nem adnak ki 100%-ot"
   },
   "login": {
     "title": "Bejelentkezés: {{portal}}",
@@ -355,7 +362,33 @@
     "deleteHint": "A törlés eltávolítja a terméket az összes méretével és fotójával. Ideiglenes elrejtéshez inkább kapcsolja ki a „Közzétéve” beállítást.",
     "delete": "Termék törlése",
     "deleteTitle": "Törli ezt: {{style}}?",
-    "deleteBody": "A termék, a méretei és a fotói eltávolításra kerülnek. A viszonteladók rendszerei értesülnek róla, hogy eltűnt. Ez nem vonható vissza."
+    "deleteBody": "A termék, a méretei és a fotói eltávolításra kerülnek. A viszonteladók rendszerei értesülnek róla, hogy eltűnt. Ez nem vonható vissza.",
+    "materialsFlags": "Adott esetben írja a szál után: (recycled) vagy (organic), pl. „100% polyester (recycled)”.",
+    "animalOriginHint": "Például bőrfolt, szőrmeszegély vagy szarugombok. Ha vannak ilyenek, a címkén fel kell tüntetni.",
+    "footwearHint": "A lábbelik címkéjén kötelező: az az anyag, amelyből az egyes részek túlnyomó része (legalább 80%) készül.",
+    "certificationsHint": "Nem kötelező. Tanúsítási rendszer és licencszám, pl. „gots:CU 123456”; írja hozzá: (material), ha csak egy anyag tanúsított.",
+    "certificationsInvalid": "„{{entry}}” nem olvasható. Használja a rendszer:licencszám formát, pl. gots:CU 123456.",
+    "labelHint": "Ahogy a viszonteladók látják a termékoldalon és a letöltött termékadatokban.",
+    "labelEmpty": "Még nincsenek címkeadatok. Adja meg lent az anyagokat és a kezelési útmutatót.",
+    "secondSizeHint": "Ha van ilyen: a farmer hossza (32/34) vagy a melltartó kosármérete (75/B).",
+    "colourFamilyHint": "Segít a viszonteladóknak szín szerint szűrni, az Ön saját színneve mellett.",
+    "measurementsHint": "Csak számokat adjon meg. Bőröndök: külső méret kerekekkel és fogantyúkkal együtt. Táskák: maga a táska, fülek és pánt nélkül.",
+    "numberInvalid": "Adjon meg egy számot, pl. 2,6.",
+    "strapInvalid": "Adja meg a legrövidebb és a leghosszabb hosszt, pl. 80-130.",
+    "measure": {
+      "height_cm": "Magasság (cm)",
+      "width_cm": "Szélesség (cm)",
+      "depth_cm": "Mélység (cm)",
+      "weight_kg": "Súly (kg)",
+      "volume_l": "Térfogat (l)",
+      "volume_expanded_l": "Térfogat bővítve (l)",
+      "handle_drop_cm": "Fülmagasság (cm)",
+      "strap_length_cm": "Pánthossz (cm)",
+      "laptop_max_inch": "Laptop legfeljebb (hüvelyk)",
+      "heel_height_cm": "Sarokmagasság (cm)",
+      "shaft_height_cm": "Szármagasság (cm)",
+      "inseam_cm": "Belső szárhossz (cm)"
+    }
   },
   "imports": {
     "title": "Importálások",
@@ -1151,7 +1184,8 @@
       "eyewear": "Szemüveg",
       "accessory": "Kiegészítő",
       "home": "Otthon",
-      "generic_product": "Egyéb termék"
+      "generic_product": "Egyéb termék",
+      "luggage": "Bőrönd"
     },
     "part": {
       "main": "Fő anyag",
@@ -1161,7 +1195,12 @@
       "trim": "Díszítés",
       "sole": "Talp",
       "upper": "Felsőrész",
-      "insole": "Talpbetét"
+      "insole": "Talpbetét",
+      "padding": "Párnázás",
+      "pocket_lining": "Zsebbélés",
+      "shell": "Burkolat",
+      "handle": "Fogantyú",
+      "strap": "Pánt"
     },
     "fibre": {
       "cotton": "pamut",
@@ -1241,6 +1280,131 @@
       "wet_clean_w_mild": "Szakszerű nedves tisztítás, kímélő",
       "wet_clean_w_very_mild": "Szakszerű nedves tisztítás, nagyon kímélő",
       "do_not_wet_clean": "Szakszerű nedves tisztítás nem megengedett"
+    },
+    "itemSubtype": {
+      "handbag": "Kézitáska",
+      "shoulder_bag": "Válltáska",
+      "crossbody": "Keresztpántos táska",
+      "tote": "Shopper táska",
+      "clutch": "Borítéktáska",
+      "belt_bag": "Övtáska",
+      "backpack": "Hátizsák",
+      "laptop_bag": "Laptoptáska",
+      "briefcase": "Aktatáska",
+      "weekender": "Hétvégi táska",
+      "toiletry_bag": "Neszesszer",
+      "wallet": "Pénztárca",
+      "card_holder": "Kártyatartó",
+      "underseat": "Ülés alá férő táska",
+      "cabin": "Kabinméret",
+      "check_in_medium": "Feladott poggyász, közepes",
+      "check_in_large": "Feladott poggyász, nagy",
+      "pilot_case": "Pilótatáska",
+      "garment_bag": "Ruhazsák",
+      "duffel": "Utazótáska",
+      "sneaker": "Sportcipő",
+      "running": "Futócipő",
+      "hiking": "Túracipő",
+      "lace_up": "Fűzős cipő",
+      "loafer": "Mokaszin",
+      "pump": "Körömcipő",
+      "sandal": "Szandál",
+      "slipper": "Papucs",
+      "ankle_boot": "Bokacsizma",
+      "boot": "Csizma",
+      "knee_boot": "Térdcsizma"
+    },
+    "footwearMaterial": {
+      "leather": "Bőr",
+      "coated_leather": "Bevont bőr",
+      "textile": "Textil",
+      "other": "Egyéb anyagok"
+    },
+    "colourFamily": {
+      "black": "Fekete",
+      "white": "Fehér",
+      "grey": "Szürke",
+      "beige": "Bézs",
+      "brown": "Barna",
+      "red": "Piros",
+      "pink": "Rózsaszín",
+      "orange": "Narancs",
+      "yellow": "Sárga",
+      "green": "Zöld",
+      "blue": "Kék",
+      "purple": "Lila",
+      "gold": "Arany",
+      "silver": "Ezüst",
+      "multicolour": "Többszínű",
+      "transparent": "Átlátszó"
+    },
+    "feature": {
+      "shell": {
+        "hard": "Kemény héjú",
+        "soft": "Puha héjú",
+        "hybrid": "Hibrid"
+      },
+      "lock": {
+        "none": "Nincs",
+        "combination": "Számzár",
+        "tsa_combination": "TSA számzár",
+        "tsa_key": "TSA kulcsos zár",
+        "key": "Kulcsos zár"
+      },
+      "closure": {
+        "zip": "Cipzár",
+        "magnet": "Mágnes",
+        "flap": "Fedőlap",
+        "buckle": "Csat",
+        "drawstring": "Húzózsinór",
+        "button": "Gomb",
+        "hook_and_loop": "Tépőzár",
+        "laces": "Fűző",
+        "slip_on": "Belebújós",
+        "open": "Nyitott"
+      },
+      "water_resistance": {
+        "none": "Nincs",
+        "water_repellent": "Víztaszító",
+        "waterproof": "Vízálló"
+      },
+      "detachable_parts": {
+        "shoulder_strap": "vállpánt",
+        "handle": "fogantyú",
+        "lining": "bélés",
+        "insole": "talpbetét",
+        "hood": "kapucni",
+        "belt": "öv",
+        "pouch": "kistáska",
+        "wheels": "kerekek"
+      },
+      "adjustable_parts": {
+        "shoulder_strap": "vállpánt",
+        "waist": "derék",
+        "hem": "alsó szegély",
+        "cuff": "mandzsetta"
+      },
+      "fit": {
+        "slim": "Karcsúsított",
+        "regular": "Normál",
+        "relaxed": "Laza",
+        "oversized": "Oversize"
+      },
+      "sleeve_length": {
+        "sleeveless": "Ujjatlan",
+        "short": "Rövid",
+        "three_quarter": "Háromnegyedes",
+        "long": "Hosszú"
+      },
+      "neckline": {
+        "crew": "Kerek nyak",
+        "v_neck": "V-nyak",
+        "collar": "Gallér",
+        "hood": "Kapucni",
+        "turtleneck": "Garbó",
+        "boat": "Csónaknyak",
+        "scoop": "Mély kerek nyak"
+      }
     }
   },
   "email": {
@@ -1303,5 +1467,76 @@
     "notFoundTitle": "Az oldal nem található",
     "notFound": "Ez a cím nem létezik (már).",
     "home": "Ugrás a kezdőlapra"
+  },
+  "article": {
+    "label": "Címkeadatok",
+    "composition": "Összetétel",
+    "recycled": "újrahasznosított",
+    "organic": "bio",
+    "animalOrigin": "Állati eredetű nem textil részeket tartalmaz",
+    "footwear": "A lábbeli anyagai",
+    "footwearPart": {
+      "upper": "Felsőrész",
+      "lining_and_sock": "Bélés és talpbélés",
+      "outer_sole": "Járótalp"
+    },
+    "certifications": "Tanúsítványok",
+    "certScope": {
+      "product": "a termék tanúsított",
+      "material": "egy anyag tanúsított"
+    },
+    "certNote": "A márka közlése szerint. A tanúsítványok önkéntesek.",
+    "features": "Jellemzők",
+    "measurements": "Méretek",
+    "colourFamily": "Színcsoport",
+    "dimensions": "Ma × Sz × Mé",
+    "weight": "Súly",
+    "volume": "Térfogat",
+    "volumeExpanded": "{{volume}} bővítve",
+    "handleDrop": "Fülmagasság",
+    "strapLength": "Pánthossz",
+    "laptop": "Laptop",
+    "laptopUpTo": "legfeljebb {{size}}",
+    "heelHeight": "Sarokmagasság",
+    "shaftHeight": "Szármagasság",
+    "inseam": "Belső szárhossz",
+    "yes": "Igen",
+    "no": "Nem",
+    "notStated": "Nincs megadva",
+    "feature": {
+      "shell": "Burkolat",
+      "wheels": "Kerekek",
+      "lock": "Zár",
+      "expandable": "Bővíthető",
+      "closure": "Záródás",
+      "laptop_compartment": "Laptoprekesz",
+      "water_resistance": "Vízállóság",
+      "detachable_parts": "Levehető",
+      "adjustable_parts": "Állítható",
+      "fit": "Szabás",
+      "sleeve_length": "Ujjhossz",
+      "neckline": "Nyakkivágás"
+    }
+  },
+  "labelWarning": {
+    "title": "Hiányos címkeadatok",
+    "intro": "Ezek figyelmeztetések, nem hibák: a termékeket a szokásos módon importáljuk és tesszük közzé. Egészítse ki az adatokat a fájljában vagy a terméknél, mert az uniós jog előírja őket a címkén és az Ön kínálatában.",
+    "badge": "Címke",
+    "fibre_composition_missing": {
+      "why": "Hiányzik a szálösszetétel. Szerepelnie kell a textiltermék címkéjén, és vásárlás előtt is látszania kell, online is. Táskáknál és bőröndöknél ez akkor érvényes, ha legalább 80%-ban textilből készülnek.",
+      "law": "1007/2011/EU rendelet, 9. és 11. cikk, valamint 16. cikk (1) bekezdés"
+    },
+    "animal_origin_unknown": {
+      "why": "Az anyagok között bőr, gyapjú, selyem, pehely vagy más állati eredetű anyag szerepel. Adja meg, hogy a termék tartalmaz-e állati eredetű nem textil részeket (igen vagy nem); ha igen, a címkén fel kell tüntetni.",
+      "law": "1007/2011/EU rendelet, 12. cikk"
+    },
+    "footwear_materials_missing": {
+      "why": "A felsőrész, a bélés és talpbélés, valamint a járótalp anyaga hiányzik vagy hiányos. Ezeknek szerepelniük kell a lábbeli címkéjén.",
+      "law": "94/11/EK irányelv"
+    },
+    "fibre_percentages_not_100": {
+      "why": "Ennek a résznek a százalékai nem adnak ki 100%-ot. Az összetételt a teljes száltömeg arányában kell megadni.",
+      "law": "1007/2011/EU rendelet, 9. és 11. cikk"
+    }
   }
 }

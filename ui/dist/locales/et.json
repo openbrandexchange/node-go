@@ -65,7 +65,10 @@
     "size": "Suurus",
     "sizeSystem": "Suuruste süsteem",
     "sku": "SKU",
-    "retailer": "Edasimüüja"
+    "retailer": "Edasimüüja",
+    "itemSubtype": "Alaliik",
+    "animalOrigin": "Loomset päritolu mittetekstiilosad",
+    "secondSize": "Teine suurus"
   },
   "validate": {
     "required": "Palun täitke see väli.",
@@ -128,7 +131,11 @@
     "files_missing": "Pildifail puudub",
     "validation_failed": "Väärtust ei aktsepteeritud",
     "position_conflict": "Koht on juba hõivatud",
-    "mass_unpublish_refused": "Liiga palju tooteid läheks võrgust maha"
+    "mass_unpublish_refused": "Liiga palju tooteid läheks võrgust maha",
+    "fibre_composition_missing": "Kiukoostis puudub",
+    "animal_origin_unknown": "Loomne päritolu märkimata",
+    "footwear_materials_missing": "Jalatsi materjalid puuduvad",
+    "fibre_percentages_not_100": "Protsendid ei anna kokku 100%"
   },
   "login": {
     "title": "Sisselogimine: {{portal}}",
@@ -355,7 +362,33 @@
     "deleteHint": "Kustutamine eemaldab toote koos kõigi suuruste ja piltidega. Ajutiseks peitmiseks lülitage selle asemel välja „Avaldatud“.",
     "delete": "Kustuta toode",
     "deleteTitle": "Kas kustutada {{style}}?",
-    "deleteBody": "Toode, selle suurused ja pildid eemaldatakse. Edasimüüjate süsteemid saavad teada, et see on kadunud. Seda ei saa tagasi võtta."
+    "deleteBody": "Toode, selle suurused ja pildid eemaldatakse. Edasimüüjate süsteemid saavad teada, et see on kadunud. Seda ei saa tagasi võtta.",
+    "materialsFlags": "Lisage kiu järele (recycled) või (organic), kui see kehtib: „100% polyester (recycled)“.",
+    "animalOriginHint": "Näiteks nahast embleem, karusnahast ääris või sarvest nööbid. Kui need on olemas, peab see olema sildil märgitud.",
+    "footwearHint": "Jalatsite sildil kohustuslik: materjal, millest on valmistatud suurem osa igast osast (vähemalt 80%).",
+    "certificationsHint": "Valikuline. Sertifitseerimisskeem ja litsentsi number, näiteks „gots:CU 123456“; lisage (material), kui sertifitseeritud on ainult materjal.",
+    "certificationsInvalid": "Me ei suutnud lugeda „{{entry}}“. Kasutage kuju skeem:litsentsi number, näiteks gots:CU 123456.",
+    "labelHint": "Nii, nagu edasimüüjad seda näevad tootelehel ja allalaaditud tooteandmetes.",
+    "labelEmpty": "Sildi teavet veel ei ole. Lisage allpool materjalid ja hooldusjuhised.",
+    "secondSizeHint": "Kui see on olemas: teksade pikkus (32/34) või rinnahoidja korvi suurus (75/B).",
+    "colourFamilyHint": "Aitab edasimüüjatel värvi järgi filtreerida, lisaks teie enda värvinimele.",
+    "measurementsHint": "Ainult numbrid. Kohvrid: välismõõdud koos rataste ja käepidemetega. Kotid: kott ise ilma sangade ja rihmata.",
+    "numberInvalid": "Sisestage number, näiteks 2,6.",
+    "strapInvalid": "Sisestage lühim ja pikim pikkus, näiteks 80-130.",
+    "measure": {
+      "height_cm": "Kõrgus (cm)",
+      "width_cm": "Laius (cm)",
+      "depth_cm": "Sügavus (cm)",
+      "weight_kg": "Kaal (kg)",
+      "volume_l": "Maht (l)",
+      "volume_expanded_l": "Maht laiendatuna (l)",
+      "handle_drop_cm": "Sangade kõrgus (cm)",
+      "strap_length_cm": "Rihma pikkus (cm)",
+      "laptop_max_inch": "Sülearvuti kuni (tolli)",
+      "heel_height_cm": "Konna kõrgus (cm)",
+      "shaft_height_cm": "Säare kõrgus (cm)",
+      "inseam_cm": "Sisemine sääre pikkus (cm)"
+    }
   },
   "imports": {
     "title": "Impordid",
@@ -1151,7 +1184,8 @@
       "eyewear": "Prillid",
       "accessory": "Aksessuaar",
       "home": "Kodu",
-      "generic_product": "Muu toode"
+      "generic_product": "Muu toode",
+      "luggage": "Kohvrid"
     },
     "part": {
       "main": "Põhimaterjal",
@@ -1161,7 +1195,12 @@
       "trim": "Kaunistused",
       "sole": "Tald",
       "upper": "Pealsed",
-      "insole": "Sisetald"
+      "insole": "Sisetald",
+      "padding": "Polsterdus",
+      "pocket_lining": "Taskuvooder",
+      "shell": "Kest",
+      "handle": "Sang",
+      "strap": "Rihm"
     },
     "fibre": {
       "cotton": "puuvill",
@@ -1241,6 +1280,131 @@
       "wet_clean_w_mild": "Professionaalne märgpuhastus, õrn",
       "wet_clean_w_very_mild": "Professionaalne märgpuhastus, väga õrn",
       "do_not_wet_clean": "Mitte teha professionaalset märgpuhastust"
+    },
+    "itemSubtype": {
+      "handbag": "Käekott",
+      "shoulder_bag": "Õlakott",
+      "crossbody": "Üle õla kott",
+      "tote": "Kandekott",
+      "clutch": "Ümbrikkott",
+      "belt_bag": "Vöökott",
+      "backpack": "Seljakott",
+      "laptop_bag": "Sülearvutikott",
+      "briefcase": "Portfell",
+      "weekender": "Nädalavahetuse kott",
+      "toiletry_bag": "Kosmeetikakott",
+      "wallet": "Rahakott",
+      "card_holder": "Kaardihoidja",
+      "underseat": "Istme alla mahtuv kott",
+      "cabin": "Salongi suurus",
+      "check_in_medium": "Äraantav pagas, keskmine",
+      "check_in_large": "Äraantav pagas, suur",
+      "pilot_case": "Pilootkohver",
+      "garment_bag": "Riidekott",
+      "duffel": "Reisikott",
+      "sneaker": "Tossud",
+      "running": "Jooksujalats",
+      "hiking": "Matkajalats",
+      "lace_up": "Paeltega king",
+      "loafer": "Mokassiin",
+      "pump": "Kontsaga king",
+      "sandal": "Sandaal",
+      "slipper": "Toatuhvel",
+      "ankle_boot": "Poolsaabas",
+      "boot": "Saabas",
+      "knee_boot": "Põlvikud"
+    },
+    "footwearMaterial": {
+      "leather": "Nahk",
+      "coated_leather": "Kattega nahk",
+      "textile": "Tekstiil",
+      "other": "Muud materjalid"
+    },
+    "colourFamily": {
+      "black": "Must",
+      "white": "Valge",
+      "grey": "Hall",
+      "beige": "Beež",
+      "brown": "Pruun",
+      "red": "Punane",
+      "pink": "Roosa",
+      "orange": "Oranž",
+      "yellow": "Kollane",
+      "green": "Roheline",
+      "blue": "Sinine",
+      "purple": "Lilla",
+      "gold": "Kuldne",
+      "silver": "Hõbedane",
+      "multicolour": "Mitmevärviline",
+      "transparent": "Läbipaistev"
+    },
+    "feature": {
+      "shell": {
+        "hard": "Kõva kest",
+        "soft": "Pehme kest",
+        "hybrid": "Hübriid"
+      },
+      "lock": {
+        "none": "Puudub",
+        "combination": "Koodlukk",
+        "tsa_combination": "TSA koodlukk",
+        "tsa_key": "TSA võtmelukk",
+        "key": "Võtmelukk"
+      },
+      "closure": {
+        "zip": "Tõmblukk",
+        "magnet": "Magnet",
+        "flap": "Klapp",
+        "buckle": "Pannal",
+        "drawstring": "Tõmbenöör",
+        "button": "Nööp",
+        "hook_and_loop": "Takjakinnis",
+        "laces": "Paelad",
+        "slip_on": "Jalga libistatav",
+        "open": "Lahtine"
+      },
+      "water_resistance": {
+        "none": "Puudub",
+        "water_repellent": "Vetthülgav",
+        "waterproof": "Veekindel"
+      },
+      "detachable_parts": {
+        "shoulder_strap": "õlarihm",
+        "handle": "sang",
+        "lining": "vooder",
+        "insole": "sisetald",
+        "hood": "kapuuts",
+        "belt": "vöö",
+        "pouch": "kotike",
+        "wheels": "rattad"
+      },
+      "adjustable_parts": {
+        "shoulder_strap": "õlarihm",
+        "waist": "vöökoht",
+        "hem": "allserv",
+        "cuff": "mansetid"
+      },
+      "fit": {
+        "slim": "Kitsas",
+        "regular": "Tavaline",
+        "relaxed": "Avar",
+        "oversized": "Oversized"
+      },
+      "sleeve_length": {
+        "sleeveless": "Varrukateta",
+        "short": "Lühike",
+        "three_quarter": "Kolmveerand",
+        "long": "Pikk"
+      },
+      "neckline": {
+        "crew": "Ümar kaelus",
+        "v_neck": "V-kaelus",
+        "collar": "Krae",
+        "hood": "Kapuuts",
+        "turtleneck": "Rullkaelus",
+        "boat": "Paadikaelus",
+        "scoop": "Sügav ümar kaelus"
+      }
     }
   },
   "email": {
@@ -1303,5 +1467,76 @@
     "notFoundTitle": "Lehte ei leitud",
     "notFound": "Seda aadressi ei ole (enam) olemas.",
     "home": "Mine avalehele"
+  },
+  "article": {
+    "label": "Sildi teave",
+    "composition": "Koostis",
+    "recycled": "taaskasutatud",
+    "organic": "mahe",
+    "animalOrigin": "Sisaldab loomset päritolu mittetekstiilosi",
+    "footwear": "Jalatsi materjalid",
+    "footwearPart": {
+      "upper": "Pealsed",
+      "lining_and_sock": "Vooder ja sisetald",
+      "outer_sole": "Välistald"
+    },
+    "certifications": "Sertifikaadid",
+    "certScope": {
+      "product": "toode on sertifitseeritud",
+      "material": "materjal on sertifitseeritud"
+    },
+    "certNote": "Kaubamärgi andmetel. Sertifikaadid on vabatahtlikud.",
+    "features": "Omadused",
+    "measurements": "Mõõdud",
+    "colourFamily": "Värvirühm",
+    "dimensions": "K × L × S",
+    "weight": "Kaal",
+    "volume": "Maht",
+    "volumeExpanded": "{{volume}} laiendatuna",
+    "handleDrop": "Sangade kõrgus",
+    "strapLength": "Rihma pikkus",
+    "laptop": "Sülearvuti",
+    "laptopUpTo": "kuni {{size}}",
+    "heelHeight": "Konna kõrgus",
+    "shaftHeight": "Säare kõrgus",
+    "inseam": "Sisemine sääre pikkus",
+    "yes": "Jah",
+    "no": "Ei",
+    "notStated": "Märkimata",
+    "feature": {
+      "shell": "Kest",
+      "wheels": "Rattad",
+      "lock": "Lukk",
+      "expandable": "Laiendatav",
+      "closure": "Kinnitus",
+      "laptop_compartment": "Sülearvuti tasku",
+      "water_resistance": "Veekindlus",
+      "detachable_parts": "Eemaldatav",
+      "adjustable_parts": "Reguleeritav",
+      "fit": "Lõige",
+      "sleeve_length": "Varruka pikkus",
+      "neckline": "Kaelus"
+    }
+  },
+  "labelWarning": {
+    "title": "Sildi teave on puudulik",
+    "intro": "Need on hoiatused, mitte vead: tooted imporditakse ja avaldatakse nagu tavaliselt. Täiendage teavet oma failis või toote juures, sest EL-i õigus nõuab seda sildil ja teie pakkumises.",
+    "badge": "Silt",
+    "fibre_composition_missing": {
+      "why": "Kiukoostis puudub. See peab olema tekstiiltoote sildil ja nähtav enne ostu, ka veebis. Kottide ja kohvrite puhul kehtib see siis, kui need on vähemalt 80% ulatuses tekstiilist.",
+      "law": "Määrus (EL) nr 1007/2011, artiklid 9 ja 11 ning artikli 16 lõige 1"
+    },
+    "animal_origin_unknown": {
+      "why": "Materjalide hulgas on nahk, vill, siid, udusuled või muu loomset päritolu materjal. Märkige, kas toode sisaldab loomset päritolu mittetekstiilosi (jah või ei); kui sisaldab, peab see olema sildil.",
+      "law": "Määrus (EL) nr 1007/2011, artikkel 12"
+    },
+    "footwear_materials_missing": {
+      "why": "Pealsete, voodri ja sisetalla ning välistalla materjalid puuduvad või on puudulikud. Need peavad olema jalatsi sildil.",
+      "law": "Direktiiv 94/11/EÜ"
+    },
+    "fibre_percentages_not_100": {
+      "why": "Selle osa protsendid ei anna kokku 100%. Koostis esitatakse osakaaluna kiudude kogumassist.",
+      "law": "Määrus (EL) nr 1007/2011, artiklid 9 ja 11"
+    }
   }
 }

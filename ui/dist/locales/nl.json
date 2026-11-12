@@ -65,7 +65,10 @@
     "size": "Maat",
     "sizeSystem": "Maatsysteem",
     "sku": "SKU",
-    "retailer": "Retailer"
+    "retailer": "Retailer",
+    "itemSubtype": "Soort",
+    "animalOrigin": "Niet-textieldelen van dierlijke oorsprong",
+    "secondSize": "Tweede maat"
   },
   "validate": {
     "required": "Vul dit in.",
@@ -128,7 +131,11 @@
     "files_missing": "Beeldbestand ontbreekt",
     "validation_failed": "Waarde niet geaccepteerd",
     "position_conflict": "Positie al bezet",
-    "mass_unpublish_refused": "Te veel artikelen zouden offline gaan"
+    "mass_unpublish_refused": "Te veel artikelen zouden offline gaan",
+    "fibre_composition_missing": "Vezelsamenstelling ontbreekt",
+    "animal_origin_unknown": "Dierlijke oorsprong niet opgegeven",
+    "footwear_materials_missing": "Materialen schoeisel ontbreken",
+    "fibre_percentages_not_100": "Percentages komen niet uit op 100%"
   },
   "login": {
     "title": "Inloggen bij {{portal}}",
@@ -355,7 +362,33 @@
     "deleteHint": "Verwijderen haalt het artikel weg met alle maten en beelden. Wil je het tijdelijk verbergen, zet dan Gepubliceerd uit.",
     "delete": "Artikel verwijderen",
     "deleteTitle": "{{style}} verwijderen?",
-    "deleteBody": "Dit verwijdert het artikel, de maten en de beelden. De software van retailers krijgt door dat het weg is. Dit kan niet ongedaan worden gemaakt."
+    "deleteBody": "Dit verwijdert het artikel, de maten en de beelden. De software van retailers krijgt door dat het weg is. Dit kan niet ongedaan worden gemaakt.",
+    "materialsFlags": "Zet (recycled) of (organic) achter een vezel als dat van toepassing is: “100% polyester (recycled)”.",
+    "animalOriginHint": "Bijvoorbeeld een leren patch, een bontrandje of hoornen knopen. Zijn die er, dan moet dat op het label staan.",
+    "footwearHint": "Verplicht op het label van schoenen: het materiaal waaruit elk deel grotendeels bestaat (minstens 80%).",
+    "certificationsHint": "Optioneel. Keurmerk en licentienummer, zoals “gots:CU 123456”; zet er (material) achter als alleen een materiaal gecertificeerd is.",
+    "certificationsInvalid": "We konden “{{entry}}” niet lezen. Gebruik keurmerk:licentienummer, zoals gots:CU 123456.",
+    "labelHint": "Zoals retailers het zien op de artikelpagina en in hun download van artikelgegevens.",
+    "labelEmpty": "Nog geen labelinformatie. Vul hieronder het materiaal en het wasvoorschrift in.",
+    "secondSizeHint": "Als die er is: de lengtemaat van een jeans (32/34) of de cupmaat van een bh (75/B).",
+    "colourFamilyHint": "Helpt retailers filteren op kleur, naast je eigen kleurnaam.",
+    "measurementsHint": "Alleen cijfers. Koffers: buitenmaat inclusief wielen en handvatten. Tassen: de tas zelf, zonder hengsels en schouderband.",
+    "numberInvalid": "Vul een getal in, zoals 2,6.",
+    "strapInvalid": "Vul de kortste en de langste lengte in, zoals 80-130.",
+    "measure": {
+      "height_cm": "Hoogte (cm)",
+      "width_cm": "Breedte (cm)",
+      "depth_cm": "Diepte (cm)",
+      "weight_kg": "Gewicht (kg)",
+      "volume_l": "Inhoud (l)",
+      "volume_expanded_l": "Inhoud uitgezet (l)",
+      "handle_drop_cm": "Hengselhoogte (cm)",
+      "strap_length_cm": "Lengte schouderband (cm)",
+      "laptop_max_inch": "Laptop tot (inch)",
+      "heel_height_cm": "Hakhoogte (cm)",
+      "shaft_height_cm": "Schachthoogte (cm)",
+      "inseam_cm": "Binnenbeenlengte (cm)"
+    }
   },
   "imports": {
     "title": "Imports",
@@ -1151,7 +1184,8 @@
       "eyewear": "Brillen",
       "accessory": "Accessoire",
       "home": "Wonen",
-      "generic_product": "Overig product"
+      "generic_product": "Overig product",
+      "luggage": "Koffers"
     },
     "part": {
       "main": "Hoofdstof",
@@ -1161,7 +1195,12 @@
       "trim": "Afwerking",
       "sole": "Zool",
       "upper": "Bovenwerk",
-      "insole": "Binnenzool"
+      "insole": "Binnenzool",
+      "padding": "Opvulling",
+      "pocket_lining": "Zakvoering",
+      "shell": "Schaal",
+      "handle": "Handvat",
+      "strap": "Band"
     },
     "fibre": {
       "cotton": "katoen",
@@ -1241,6 +1280,131 @@
       "wet_clean_w_mild": "Professioneel nat reinigen, mild",
       "wet_clean_w_very_mild": "Professioneel nat reinigen, zeer mild",
       "do_not_wet_clean": "Niet professioneel nat reinigen"
+    },
+    "itemSubtype": {
+      "handbag": "Handtas",
+      "shoulder_bag": "Schoudertas",
+      "crossbody": "Crossbodytas",
+      "tote": "Shopper",
+      "clutch": "Clutch",
+      "belt_bag": "Heuptas",
+      "backpack": "Rugzak",
+      "laptop_bag": "Laptoptas",
+      "briefcase": "Aktetas",
+      "weekender": "Weekendtas",
+      "toiletry_bag": "Toilettas",
+      "wallet": "Portemonnee",
+      "card_holder": "Pasjeshouder",
+      "underseat": "Underseater",
+      "cabin": "Handbagage",
+      "check_in_medium": "Ruimbagage, middel",
+      "check_in_large": "Ruimbagage, groot",
+      "pilot_case": "Pilotenkoffer",
+      "garment_bag": "Kledinghoes",
+      "duffel": "Duffeltas",
+      "sneaker": "Sneaker",
+      "running": "Hardloopschoen",
+      "hiking": "Wandelschoen",
+      "lace_up": "Veterschoen",
+      "loafer": "Loafer",
+      "pump": "Pump",
+      "sandal": "Sandaal",
+      "slipper": "Pantoffel",
+      "ankle_boot": "Enkellaars",
+      "boot": "Laars",
+      "knee_boot": "Kniehoge laars"
+    },
+    "footwearMaterial": {
+      "leather": "Leer",
+      "coated_leather": "Bekleed leer",
+      "textile": "Textiel",
+      "other": "Overige materialen"
+    },
+    "colourFamily": {
+      "black": "Zwart",
+      "white": "Wit",
+      "grey": "Grijs",
+      "beige": "Beige",
+      "brown": "Bruin",
+      "red": "Rood",
+      "pink": "Roze",
+      "orange": "Oranje",
+      "yellow": "Geel",
+      "green": "Groen",
+      "blue": "Blauw",
+      "purple": "Paars",
+      "gold": "Goud",
+      "silver": "Zilver",
+      "multicolour": "Meerkleurig",
+      "transparent": "Transparant"
+    },
+    "feature": {
+      "shell": {
+        "hard": "Harde schaal",
+        "soft": "Zachte schaal",
+        "hybrid": "Hybride"
+      },
+      "lock": {
+        "none": "Geen",
+        "combination": "Cijferslot",
+        "tsa_combination": "TSA-cijferslot",
+        "tsa_key": "TSA-sleutelslot",
+        "key": "Sleutelslot"
+      },
+      "closure": {
+        "zip": "Rits",
+        "magnet": "Magneet",
+        "flap": "Klep",
+        "buckle": "Gesp",
+        "drawstring": "Trekkoord",
+        "button": "Knoop",
+        "hook_and_loop": "Klittenband",
+        "laces": "Veters",
+        "slip_on": "Instap",
+        "open": "Open"
+      },
+      "water_resistance": {
+        "none": "Geen",
+        "water_repellent": "Waterafstotend",
+        "waterproof": "Waterdicht"
+      },
+      "detachable_parts": {
+        "shoulder_strap": "schouderband",
+        "handle": "hengsel",
+        "lining": "voering",
+        "insole": "binnenzool",
+        "hood": "capuchon",
+        "belt": "ceintuur",
+        "pouch": "etui",
+        "wheels": "wielen"
+      },
+      "adjustable_parts": {
+        "shoulder_strap": "schouderband",
+        "waist": "taille",
+        "hem": "zoom",
+        "cuff": "manchetten"
+      },
+      "fit": {
+        "slim": "Slim",
+        "regular": "Regular",
+        "relaxed": "Relaxed",
+        "oversized": "Oversized"
+      },
+      "sleeve_length": {
+        "sleeveless": "Mouwloos",
+        "short": "Kort",
+        "three_quarter": "Driekwart",
+        "long": "Lang"
+      },
+      "neckline": {
+        "crew": "Ronde hals",
+        "v_neck": "V-hals",
+        "collar": "Kraag",
+        "hood": "Capuchon",
+        "turtleneck": "Col",
+        "boat": "Boothals",
+        "scoop": "Diepe ronde hals"
+      }
     }
   },
   "email": {
@@ -1303,5 +1467,76 @@
     "notFoundTitle": "Pagina niet gevonden",
     "notFound": "Dit adres bestaat niet (meer).",
     "home": "Naar de startpagina"
+  },
+  "article": {
+    "label": "Labelinformatie",
+    "composition": "Samenstelling",
+    "recycled": "gerecycled",
+    "organic": "biologisch",
+    "animalOrigin": "Bevat niet-textieldelen van dierlijke oorsprong",
+    "footwear": "Materialen schoeisel",
+    "footwearPart": {
+      "upper": "Bovenwerk",
+      "lining_and_sock": "Voering en binnenzool",
+      "outer_sole": "Loopzool"
+    },
+    "certifications": "Certificeringen",
+    "certScope": {
+      "product": "het artikel is gecertificeerd",
+      "material": "een materiaal is gecertificeerd"
+    },
+    "certNote": "Zoals opgegeven door het merk. Certificeringen zijn vrijwillig.",
+    "features": "Kenmerken",
+    "measurements": "Afmetingen",
+    "colourFamily": "Kleurgroep",
+    "dimensions": "H × B × D",
+    "weight": "Gewicht",
+    "volume": "Inhoud",
+    "volumeExpanded": "{{volume}} uitgezet",
+    "handleDrop": "Hengselhoogte",
+    "strapLength": "Lengte schouderband",
+    "laptop": "Laptop",
+    "laptopUpTo": "tot {{size}}",
+    "heelHeight": "Hakhoogte",
+    "shaftHeight": "Schachthoogte",
+    "inseam": "Binnenbeenlengte",
+    "yes": "Ja",
+    "no": "Nee",
+    "notStated": "Niet opgegeven",
+    "feature": {
+      "shell": "Schaal",
+      "wheels": "Wielen",
+      "lock": "Slot",
+      "expandable": "Uitzetbaar",
+      "closure": "Sluiting",
+      "laptop_compartment": "Laptopvak",
+      "water_resistance": "Waterbestendigheid",
+      "detachable_parts": "Afneembaar",
+      "adjustable_parts": "Verstelbaar",
+      "fit": "Pasvorm",
+      "sleeve_length": "Mouwlengte",
+      "neckline": "Halslijn"
+    }
+  },
+  "labelWarning": {
+    "title": "Labelinformatie onvolledig",
+    "intro": "Dit zijn waarschuwingen, geen fouten: de artikelen worden gewoon geïmporteerd en gepubliceerd. Vul de informatie aan in je bestand of bij het artikel, want de EU-wetgeving verplicht die op het label en in je aanbod.",
+    "badge": "Label",
+    "fibre_composition_missing": {
+      "why": "De vezelsamenstelling ontbreekt. Die moet op het label van een textielproduct staan en vóór de aankoop getoond worden, ook online. Voor tassen en koffers geldt dit als ze voor minstens 80% uit textiel bestaan.",
+      "law": "Verordening (EU) nr. 1007/2011, art. 9, 11 en 16, lid 1"
+    },
+    "animal_origin_unknown": {
+      "why": "Het materiaal bevat leer, wol, zijde, dons of een ander materiaal van dierlijke oorsprong. Geef aan of het artikel niet-textieldelen van dierlijke oorsprong bevat (ja of nee); zo ja, dan moet dat op het label staan.",
+      "law": "Verordening (EU) nr. 1007/2011, art. 12"
+    },
+    "footwear_materials_missing": {
+      "why": "Het materiaal van het bovenwerk, de voering en binnenzool en de loopzool ontbreekt of is onvolledig. Dat moet op het label van schoeisel staan.",
+      "law": "Richtlijn 94/11/EG"
+    },
+    "fibre_percentages_not_100": {
+      "why": "De percentages van dit deel komen niet uit op 100%. De samenstelling is een aandeel van het totale vezelgewicht.",
+      "law": "Verordening (EU) nr. 1007/2011, art. 9 en 11"
+    }
   }
 }

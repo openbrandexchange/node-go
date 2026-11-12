@@ -65,7 +65,10 @@
     "size": "Rozmiar",
     "sizeSystem": "System rozmiarów",
     "sku": "SKU",
-    "retailer": "Sprzedawca"
+    "retailer": "Sprzedawca",
+    "itemSubtype": "Rodzaj",
+    "animalOrigin": "Nietekstylne części pochodzenia zwierzęcego",
+    "secondSize": "Drugi rozmiar"
   },
   "validate": {
     "required": "Uzupełnij to pole.",
@@ -128,7 +131,11 @@
     "files_missing": "Brak pliku zdjęcia",
     "validation_failed": "Wartość nie została przyjęta",
     "position_conflict": "Pozycja jest już zajęta",
-    "mass_unpublish_refused": "Zbyt wiele artykułów zniknęłoby z portalu"
+    "mass_unpublish_refused": "Zbyt wiele artykułów zniknęłoby z portalu",
+    "fibre_composition_missing": "Brak składu surowcowego",
+    "animal_origin_unknown": "Nie podano pochodzenia zwierzęcego",
+    "footwear_materials_missing": "Brak materiałów obuwia",
+    "fibre_percentages_not_100": "Procenty nie sumują się do 100%"
   },
   "login": {
     "title": "Zaloguj się: {{portal}}",
@@ -361,7 +368,33 @@
     "deleteHint": "Usunięcie usuwa artykuł wraz ze wszystkimi rozmiarami i zdjęciami. Aby tymczasowo go ukryć, wyłącz raczej „Opublikowany”.",
     "delete": "Usuń artykuł",
     "deleteTitle": "Usunąć {{style}}?",
-    "deleteBody": "Artykuł, jego rozmiary i zdjęcia zostaną usunięte. Systemy sprzedawców otrzymają informację o usunięciu. Tego nie da się cofnąć."
+    "deleteBody": "Artykuł, jego rozmiary i zdjęcia zostaną usunięte. Systemy sprzedawców otrzymają informację o usunięciu. Tego nie da się cofnąć.",
+    "materialsFlags": "Dopisz (recycled) lub (organic) po włóknie, jeśli dotyczy: „100% polyester (recycled)”.",
+    "animalOriginHint": "Na przykład skórzana naszywka, futrzane wykończenie lub guziki z rogu. Jeśli takie są, metka musi o tym informować.",
+    "footwearHint": "Wymagane na metce obuwia: materiał, z którego składa się większość każdej części (co najmniej 80%).",
+    "certificationsHint": "Opcjonalnie. System i numer licencji, np. „gots:CU 123456”; dopisz (material), gdy certyfikowany jest tylko materiał.",
+    "certificationsInvalid": "Nie udało się odczytać „{{entry}}”. Wpisz system:numer licencji, np. gots:CU 123456.",
+    "labelHint": "Tak, jak sprzedawcy widzą to na stronie artykułu i w pobranych danych artykułów.",
+    "labelEmpty": "Nie ma jeszcze informacji z metki. Dodaj poniżej skład i instrukcję konserwacji.",
+    "secondSizeHint": "Jeśli jest: długość dżinsów (32/34) lub miseczka biustonosza (75/B).",
+    "colourFamilyHint": "Pomaga sprzedawcom filtrować według koloru, obok Twojej własnej nazwy koloru.",
+    "measurementsHint": "Tylko liczby. Walizki: wymiary zewnętrzne z kółkami i uchwytami. Torby: sam korpus bez uchwytów i paska.",
+    "numberInvalid": "Wpisz liczbę, np. 2,6.",
+    "strapInvalid": "Wpisz najkrótszą i najdłuższą długość, np. 80-130.",
+    "measure": {
+      "height_cm": "Wysokość (cm)",
+      "width_cm": "Szerokość (cm)",
+      "depth_cm": "Głębokość (cm)",
+      "weight_kg": "Waga (kg)",
+      "volume_l": "Pojemność (l)",
+      "volume_expanded_l": "Pojemność po poszerzeniu (l)",
+      "handle_drop_cm": "Wysokość uchwytów (cm)",
+      "strap_length_cm": "Długość paska (cm)",
+      "laptop_max_inch": "Laptop do (cale)",
+      "heel_height_cm": "Wysokość obcasa (cm)",
+      "shaft_height_cm": "Wysokość cholewki (cm)",
+      "inseam_cm": "Długość nogawki wewnętrzna (cm)"
+    }
   },
   "imports": {
     "title": "Importy",
@@ -1211,7 +1244,8 @@
       "eyewear": "Okulary",
       "accessory": "Akcesorium",
       "home": "Dom",
-      "generic_product": "Inny produkt"
+      "generic_product": "Inny produkt",
+      "luggage": "Bagaż"
     },
     "part": {
       "main": "Materiał główny",
@@ -1221,7 +1255,12 @@
       "trim": "Wykończenia",
       "sole": "Podeszwa",
       "upper": "Cholewka",
-      "insole": "Wkładka"
+      "insole": "Wkładka",
+      "padding": "Watowanie",
+      "pocket_lining": "Podszewka kieszeni",
+      "shell": "Obudowa",
+      "handle": "Uchwyt",
+      "strap": "Pasek"
     },
     "fibre": {
       "cotton": "bawełna",
@@ -1301,6 +1340,131 @@
       "wet_clean_w_mild": "Profesjonalne czyszczenie na mokro, łagodne",
       "wet_clean_w_very_mild": "Profesjonalne czyszczenie na mokro, bardzo łagodne",
       "do_not_wet_clean": "Nie czyścić profesjonalnie na mokro"
+    },
+    "itemSubtype": {
+      "handbag": "Torebka",
+      "shoulder_bag": "Torba na ramię",
+      "crossbody": "Listonoszka",
+      "tote": "Torba shopper",
+      "clutch": "Kopertówka",
+      "belt_bag": "Nerka",
+      "backpack": "Plecak",
+      "laptop_bag": "Torba na laptopa",
+      "briefcase": "Aktówka",
+      "weekender": "Torba weekendowa",
+      "toiletry_bag": "Kosmetyczka",
+      "wallet": "Portfel",
+      "card_holder": "Etui na karty",
+      "underseat": "Torba pod siedzenie",
+      "cabin": "Rozmiar kabinowy",
+      "check_in_medium": "Rejestrowana, średnia",
+      "check_in_large": "Rejestrowana, duża",
+      "pilot_case": "Walizka pilotka",
+      "garment_bag": "Pokrowiec na ubrania",
+      "duffel": "Torba podróżna",
+      "sneaker": "Sneakersy",
+      "running": "But do biegania",
+      "hiking": "But trekkingowy",
+      "lace_up": "But sznurowany",
+      "loafer": "Mokasyn",
+      "pump": "Czółenko",
+      "sandal": "Sandał",
+      "slipper": "Kapeć",
+      "ankle_boot": "Botek",
+      "boot": "Kozak",
+      "knee_boot": "Kozak do kolan"
+    },
+    "footwearMaterial": {
+      "leather": "Skóra",
+      "coated_leather": "Skóra powlekana",
+      "textile": "Materiał tekstylny",
+      "other": "Inne materiały"
+    },
+    "colourFamily": {
+      "black": "Czarny",
+      "white": "Biały",
+      "grey": "Szary",
+      "beige": "Beżowy",
+      "brown": "Brązowy",
+      "red": "Czerwony",
+      "pink": "Różowy",
+      "orange": "Pomarańczowy",
+      "yellow": "Żółty",
+      "green": "Zielony",
+      "blue": "Niebieski",
+      "purple": "Fioletowy",
+      "gold": "Złoty",
+      "silver": "Srebrny",
+      "multicolour": "Wielokolorowy",
+      "transparent": "Przezroczysty"
+    },
+    "feature": {
+      "shell": {
+        "hard": "Twarda",
+        "soft": "Miękka",
+        "hybrid": "Hybrydowa"
+      },
+      "lock": {
+        "none": "Brak",
+        "combination": "Zamek szyfrowy",
+        "tsa_combination": "Zamek szyfrowy TSA",
+        "tsa_key": "Zamek TSA na kluczyk",
+        "key": "Zamek na kluczyk"
+      },
+      "closure": {
+        "zip": "Zamek błyskawiczny",
+        "magnet": "Magnes",
+        "flap": "Klapka",
+        "buckle": "Klamra",
+        "drawstring": "Ściągacz",
+        "button": "Guzik",
+        "hook_and_loop": "Rzep",
+        "laces": "Sznurowadła",
+        "slip_on": "Wsuwane",
+        "open": "Otwarte"
+      },
+      "water_resistance": {
+        "none": "Brak",
+        "water_repellent": "Wodoodpychające",
+        "waterproof": "Wodoszczelne"
+      },
+      "detachable_parts": {
+        "shoulder_strap": "pasek na ramię",
+        "handle": "uchwyt",
+        "lining": "podszewka",
+        "insole": "wkładka",
+        "hood": "kaptur",
+        "belt": "pasek",
+        "pouch": "saszetka",
+        "wheels": "kółka"
+      },
+      "adjustable_parts": {
+        "shoulder_strap": "pasek na ramię",
+        "waist": "talia",
+        "hem": "dół",
+        "cuff": "mankiety"
+      },
+      "fit": {
+        "slim": "Dopasowany",
+        "regular": "Regularny",
+        "relaxed": "Luźny",
+        "oversized": "Oversize"
+      },
+      "sleeve_length": {
+        "sleeveless": "Bez rękawów",
+        "short": "Krótki",
+        "three_quarter": "3/4",
+        "long": "Długi"
+      },
+      "neckline": {
+        "crew": "Okrągły dekolt",
+        "v_neck": "Dekolt w serek",
+        "collar": "Kołnierzyk",
+        "hood": "Kaptur",
+        "turtleneck": "Golf",
+        "boat": "Dekolt łódka",
+        "scoop": "Głęboki okrągły dekolt"
+      }
     }
   },
   "email": {
@@ -1363,5 +1527,76 @@
     "notFoundTitle": "Nie znaleziono strony",
     "notFound": "Ten adres nie istnieje (już).",
     "home": "Przejdź do strony głównej"
+  },
+  "article": {
+    "label": "Informacje z metki",
+    "composition": "Skład",
+    "recycled": "z recyklingu",
+    "organic": "organiczne",
+    "animalOrigin": "Zawiera nietekstylne części pochodzenia zwierzęcego",
+    "footwear": "Materiały obuwia",
+    "footwearPart": {
+      "upper": "Cholewka",
+      "lining_and_sock": "Podszewka i wyściółka",
+      "outer_sole": "Podeszwa zewnętrzna"
+    },
+    "certifications": "Certyfikaty",
+    "certScope": {
+      "product": "certyfikowany jest artykuł",
+      "material": "certyfikowany jest materiał"
+    },
+    "certNote": "Według deklaracji marki. Certyfikaty są dobrowolne.",
+    "features": "Cechy",
+    "measurements": "Wymiary",
+    "colourFamily": "Grupa kolorów",
+    "dimensions": "W × S × G",
+    "weight": "Waga",
+    "volume": "Pojemność",
+    "volumeExpanded": "{{volume}} po poszerzeniu",
+    "handleDrop": "Wysokość uchwytów",
+    "strapLength": "Długość paska",
+    "laptop": "Laptop",
+    "laptopUpTo": "do {{size}}",
+    "heelHeight": "Wysokość obcasa",
+    "shaftHeight": "Wysokość cholewki",
+    "inseam": "Długość nogawki wewnętrzna",
+    "yes": "Tak",
+    "no": "Nie",
+    "notStated": "Nie podano",
+    "feature": {
+      "shell": "Obudowa",
+      "wheels": "Kółka",
+      "lock": "Zamek",
+      "expandable": "Możliwość poszerzenia",
+      "closure": "Zapięcie",
+      "laptop_compartment": "Przegroda na laptopa",
+      "water_resistance": "Odporność na wodę",
+      "detachable_parts": "Odpinane",
+      "adjustable_parts": "Regulowane",
+      "fit": "Krój",
+      "sleeve_length": "Długość rękawa",
+      "neckline": "Dekolt"
+    }
+  },
+  "labelWarning": {
+    "title": "Niepełne informacje na metce",
+    "intro": "To ostrzeżenia, nie błędy: artykuły są importowane i publikowane jak zwykle. Uzupełnij informacje w pliku lub w artykule, bo prawo UE wymaga ich na metce i w Twojej ofercie.",
+    "badge": "Metka",
+    "fibre_composition_missing": {
+      "why": "Brakuje składu surowcowego. Musi być na metce wyrobu włókienniczego i widoczny przed zakupem, także w internecie. Torby i walizki obejmuje to wtedy, gdy co najmniej w 80% są z materiałów włókienniczych.",
+      "law": "Rozporządzenie (UE) nr 1007/2011, art. 9, 11 i 16 ust. 1"
+    },
+    "animal_origin_unknown": {
+      "why": "Wśród materiałów jest skóra, wełna, jedwab, puch lub inny materiał pochodzenia zwierzęcego. Podaj, czy artykuł zawiera nietekstylne części pochodzenia zwierzęcego (tak lub nie); jeśli tak, metka musi o tym informować.",
+      "law": "Rozporządzenie (UE) nr 1007/2011, art. 12"
+    },
+    "footwear_materials_missing": {
+      "why": "Brakuje materiałów cholewki, podszewki i wyściółki oraz podeszwy zewnętrznej albo są niepełne. Muszą być na metce obuwia.",
+      "law": "Dyrektywa 94/11/WE"
+    },
+    "fibre_percentages_not_100": {
+      "why": "Procenty tej części nie sumują się do 100%. Skład podaje się jako udział w całkowitej masie włókien.",
+      "law": "Rozporządzenie (UE) nr 1007/2011, art. 9 i 11"
+    }
   }
 }

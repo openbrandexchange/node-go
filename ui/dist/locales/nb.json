@@ -65,7 +65,10 @@
     "size": "Størrelse",
     "sizeSystem": "Størrelsessystem",
     "sku": "SKU",
-    "retailer": "Forhandler"
+    "retailer": "Forhandler",
+    "itemSubtype": "Type",
+    "animalOrigin": "Ikke-tekstile deler av animalsk opprinnelse",
+    "secondSize": "Andre størrelse"
   },
   "validate": {
     "required": "Fyll ut dette.",
@@ -128,7 +131,11 @@
     "files_missing": "Bildefil mangler",
     "validation_failed": "Verdien ble ikke godtatt",
     "position_conflict": "Plassen er allerede opptatt",
-    "mass_unpublish_refused": "For mange varer ville gått offline"
+    "mass_unpublish_refused": "For mange varer ville gått offline",
+    "fibre_composition_missing": "Fibersammensetning mangler",
+    "animal_origin_unknown": "Animalsk opprinnelse ikke oppgitt",
+    "footwear_materials_missing": "Skomaterialer mangler",
+    "fibre_percentages_not_100": "Prosentsatsene blir ikke 100 %"
   },
   "login": {
     "title": "Logg inn på {{portal}}",
@@ -355,7 +362,33 @@
     "deleteHint": "Sletting fjerner varen med alle størrelser og bilder. Vil du skjule den midlertidig, slår du heller av Publisert.",
     "delete": "Slett vare",
     "deleteTitle": "Slette {{style}}?",
-    "deleteBody": "Varen, størrelsene og bildene fjernes. Forhandlernes systemer får beskjed om at den er borte. Dette kan ikke angres."
+    "deleteBody": "Varen, størrelsene og bildene fjernes. Forhandlernes systemer får beskjed om at den er borte. Dette kan ikke angres.",
+    "materialsFlags": "Legg til (recycled) eller (organic) etter en fiber der det gjelder: «100% polyester (recycled)».",
+    "animalOriginHint": "For eksempel et skinnmerke, en pelskant eller hornknapper. Finnes det, må det stå på merkelappen.",
+    "footwearHint": "Påkrevd på merkingen av sko: materialet som utgjør det meste av hver del (minst 80 %).",
+    "certificationsHint": "Valgfritt. Ordning og lisensnummer, for eksempel «gots:CU 123456»; legg til (material) når bare et materiale er sertifisert.",
+    "certificationsInvalid": "Vi klarte ikke å lese «{{entry}}». Bruk ordning:lisensnummer, for eksempel gots:CU 123456.",
+    "labelHint": "Slik forhandlerne ser det på varesiden og i nedlastingen av varedata.",
+    "labelEmpty": "Ingen merkeopplysninger ennå. Legg inn materiale og vaskeanvisning nedenfor.",
+    "secondSizeHint": "Der det finnes: lengden på jeans (32/34) eller skålstørrelsen på en BH (75/B).",
+    "colourFamilyHint": "Hjelper forhandlere med å filtrere på farge, ved siden av deres eget fargenavn.",
+    "measurementsHint": "Bare tall. Kofferter: utvendige mål inkludert hjul og håndtak. Vesker: selve vesken uten hanker og rem.",
+    "numberInvalid": "Skriv inn et tall, for eksempel 2,6.",
+    "strapInvalid": "Skriv inn korteste og lengste lengde, for eksempel 80-130.",
+    "measure": {
+      "height_cm": "Høyde (cm)",
+      "width_cm": "Bredde (cm)",
+      "depth_cm": "Dybde (cm)",
+      "weight_kg": "Vekt (kg)",
+      "volume_l": "Volum (l)",
+      "volume_expanded_l": "Volum utvidet (l)",
+      "handle_drop_cm": "Hankehøyde (cm)",
+      "strap_length_cm": "Remlengde (cm)",
+      "laptop_max_inch": "Laptop opptil (tommer)",
+      "heel_height_cm": "Hælhøyde (cm)",
+      "shaft_height_cm": "Skafthøyde (cm)",
+      "inseam_cm": "Innvendig benlengde (cm)"
+    }
   },
   "imports": {
     "title": "Importer",
@@ -1151,7 +1184,8 @@
       "eyewear": "Briller",
       "accessory": "Tilbehør",
       "home": "Interiør",
-      "generic_product": "Annet produkt"
+      "generic_product": "Annet produkt",
+      "luggage": "Bagasje"
     },
     "part": {
       "main": "Hovedmateriale",
@@ -1161,7 +1195,12 @@
       "trim": "Detaljer",
       "sole": "Såle",
       "upper": "Overdel",
-      "insole": "Innersåle"
+      "insole": "Innersåle",
+      "padding": "Polstring",
+      "pocket_lining": "Lommefôr",
+      "shell": "Skall",
+      "handle": "Håndtak",
+      "strap": "Rem"
     },
     "fibre": {
       "cotton": "bomull",
@@ -1241,6 +1280,131 @@
       "wet_clean_w_mild": "Profesjonell våtrens, skånsom",
       "wet_clean_w_very_mild": "Profesjonell våtrens, svært skånsom",
       "do_not_wet_clean": "Tåler ikke profesjonell våtrens"
+    },
+    "itemSubtype": {
+      "handbag": "Håndveske",
+      "shoulder_bag": "Skulderveske",
+      "crossbody": "Crossbody-veske",
+      "tote": "Toteveske",
+      "clutch": "Clutch",
+      "belt_bag": "Magveske",
+      "backpack": "Ryggsekk",
+      "laptop_bag": "Laptopveske",
+      "briefcase": "Dokumentveske",
+      "weekender": "Weekendbag",
+      "toiletry_bag": "Toalettveske",
+      "wallet": "Lommebok",
+      "card_holder": "Kortholder",
+      "underseat": "Bag under setet",
+      "cabin": "Kabinstørrelse",
+      "check_in_medium": "Innsjekket, medium",
+      "check_in_large": "Innsjekket, stor",
+      "pilot_case": "Pilotkoffert",
+      "garment_bag": "Dresspose",
+      "duffel": "Duffelbag",
+      "sneaker": "Sneaker",
+      "running": "Løpesko",
+      "hiking": "Tursko",
+      "lace_up": "Snøresko",
+      "loafer": "Loafer",
+      "pump": "Pumps",
+      "sandal": "Sandal",
+      "slipper": "Tøffel",
+      "ankle_boot": "Støvlett",
+      "boot": "Støvel",
+      "knee_boot": "Knehøy støvel"
+    },
+    "footwearMaterial": {
+      "leather": "Lær",
+      "coated_leather": "Belagt lær",
+      "textile": "Tekstil",
+      "other": "Andre materialer"
+    },
+    "colourFamily": {
+      "black": "Svart",
+      "white": "Hvit",
+      "grey": "Grå",
+      "beige": "Beige",
+      "brown": "Brun",
+      "red": "Rød",
+      "pink": "Rosa",
+      "orange": "Oransje",
+      "yellow": "Gul",
+      "green": "Grønn",
+      "blue": "Blå",
+      "purple": "Lilla",
+      "gold": "Gull",
+      "silver": "Sølv",
+      "multicolour": "Flerfarget",
+      "transparent": "Gjennomsiktig"
+    },
+    "feature": {
+      "shell": {
+        "hard": "Hardt skall",
+        "soft": "Mykt skall",
+        "hybrid": "Hybrid"
+      },
+      "lock": {
+        "none": "Ingen",
+        "combination": "Kodelås",
+        "tsa_combination": "TSA-kodelås",
+        "tsa_key": "TSA-nøkkellås",
+        "key": "Nøkkellås"
+      },
+      "closure": {
+        "zip": "Glidelås",
+        "magnet": "Magnet",
+        "flap": "Klaff",
+        "buckle": "Spenne",
+        "drawstring": "Snor",
+        "button": "Knapp",
+        "hook_and_loop": "Borrelås",
+        "laces": "Lisser",
+        "slip_on": "Slip-on",
+        "open": "Åpen"
+      },
+      "water_resistance": {
+        "none": "Ingen",
+        "water_repellent": "Vannavstøtende",
+        "waterproof": "Vanntett"
+      },
+      "detachable_parts": {
+        "shoulder_strap": "skulderrem",
+        "handle": "håndtak",
+        "lining": "fôr",
+        "insole": "innersåle",
+        "hood": "hette",
+        "belt": "belte",
+        "pouch": "pung",
+        "wheels": "hjul"
+      },
+      "adjustable_parts": {
+        "shoulder_strap": "skulderrem",
+        "waist": "liv",
+        "hem": "kant",
+        "cuff": "mansjetter"
+      },
+      "fit": {
+        "slim": "Smal",
+        "regular": "Normal",
+        "relaxed": "Løs",
+        "oversized": "Oversized"
+      },
+      "sleeve_length": {
+        "sleeveless": "Ermeløs",
+        "short": "Kort",
+        "three_quarter": "Trekvart",
+        "long": "Lang"
+      },
+      "neckline": {
+        "crew": "Rund hals",
+        "v_neck": "V-hals",
+        "collar": "Krage",
+        "hood": "Hette",
+        "turtleneck": "Høy hals",
+        "boat": "Båthals",
+        "scoop": "Dyp rund hals"
+      }
     }
   },
   "email": {
@@ -1303,5 +1467,76 @@
     "notFoundTitle": "Fant ikke siden",
     "notFound": "Denne adressen finnes ikke (lenger).",
     "home": "Gå til startsiden"
+  },
+  "article": {
+    "label": "Merkeopplysninger",
+    "composition": "Sammensetning",
+    "recycled": "resirkulert",
+    "organic": "økologisk",
+    "animalOrigin": "Inneholder ikke-tekstile deler av animalsk opprinnelse",
+    "footwear": "Skomaterialer",
+    "footwearPart": {
+      "upper": "Overdel",
+      "lining_and_sock": "Fôr og innersåle",
+      "outer_sole": "Yttersåle"
+    },
+    "certifications": "Sertifiseringer",
+    "certScope": {
+      "product": "varen er sertifisert",
+      "material": "et materiale er sertifisert"
+    },
+    "certNote": "Som oppgitt av merket. Sertifiseringer er frivillige.",
+    "features": "Egenskaper",
+    "measurements": "Mål",
+    "colourFamily": "Fargegruppe",
+    "dimensions": "H × B × D",
+    "weight": "Vekt",
+    "volume": "Volum",
+    "volumeExpanded": "{{volume}} utvidet",
+    "handleDrop": "Hankehøyde",
+    "strapLength": "Remlengde",
+    "laptop": "Laptop",
+    "laptopUpTo": "opptil {{size}}",
+    "heelHeight": "Hælhøyde",
+    "shaftHeight": "Skafthøyde",
+    "inseam": "Innvendig benlengde",
+    "yes": "Ja",
+    "no": "Nei",
+    "notStated": "Ikke oppgitt",
+    "feature": {
+      "shell": "Skall",
+      "wheels": "Hjul",
+      "lock": "Lås",
+      "expandable": "Utvidbar",
+      "closure": "Lukking",
+      "laptop_compartment": "Laptoprom",
+      "water_resistance": "Vannbestandighet",
+      "detachable_parts": "Avtakbar",
+      "adjustable_parts": "Justerbar",
+      "fit": "Passform",
+      "sleeve_length": "Ermelengde",
+      "neckline": "Halsåpning"
+    }
+  },
+  "labelWarning": {
+    "title": "Ufullstendige merkeopplysninger",
+    "intro": "Dette er advarsler, ikke feil: varene importeres og publiseres som vanlig. Fyll ut opplysningene i filen deres eller på varen, fordi EU/EØS-regelverket krever dem på merkingen og i tilbudet deres.",
+    "badge": "Merking",
+    "fibre_composition_missing": {
+      "why": "Fibersammensetningen mangler. Den må stå på merkingen av et tekstilprodukt og vises før kjøp, også på nett. For vesker og kofferter gjelder dette når de består av minst 80 % tekstil.",
+      "law": "Forordning (EU) nr. 1007/2011 artikkel 9, 11 og 16 nr. 1"
+    },
+    "animal_origin_unknown": {
+      "why": "Materialene omfatter skinn, ull, silke, dun eller et annet materiale av animalsk opprinnelse. Oppgi om varen inneholder ikke-tekstile deler av animalsk opprinnelse (ja eller nei); i så fall må det stå på merkingen.",
+      "law": "Forordning (EU) nr. 1007/2011 artikkel 12"
+    },
+    "footwear_materials_missing": {
+      "why": "Materialene i overdelen, fôret og innersålen og yttersålen mangler eller er ufullstendige. De må stå på merkingen av skotøy.",
+      "law": "Direktiv 94/11/EF"
+    },
+    "fibre_percentages_not_100": {
+      "why": "Prosentsatsene for denne delen blir ikke 100 %. Sammensetningen oppgis som andel av den totale fibervekten.",
+      "law": "Forordning (EU) nr. 1007/2011 artikkel 9 og 11"
+    }
   }
 }

@@ -65,7 +65,10 @@
     "size": "Koko",
     "sizeSystem": "Kokojärjestelmä",
     "sku": "SKU",
-    "retailer": "Jälleenmyyjä"
+    "retailer": "Jälleenmyyjä",
+    "itemSubtype": "Alatyyppi",
+    "animalOrigin": "Eläinperäiset muut kuin tekstiiliosat",
+    "secondSize": "Toinen koko"
   },
   "validate": {
     "required": "Täytä tämä kenttä.",
@@ -128,7 +131,11 @@
     "files_missing": "Kuvatiedosto puuttuu",
     "validation_failed": "Arvoa ei hyväksytty",
     "position_conflict": "Kohta on jo varattu",
-    "mass_unpublish_refused": "Liian moni tuote poistuisi näkyvistä"
+    "mass_unpublish_refused": "Liian moni tuote poistuisi näkyvistä",
+    "fibre_composition_missing": "Kuitukoostumus puuttuu",
+    "animal_origin_unknown": "Eläinperäisyyttä ei ilmoitettu",
+    "footwear_materials_missing": "Jalkineen materiaalit puuttuvat",
+    "fibre_percentages_not_100": "Prosentit eivät ole yhteensä 100 %"
   },
   "login": {
     "title": "Kirjaudu: {{portal}}",
@@ -355,7 +362,33 @@
     "deleteHint": "Poistaminen poistaa tuotteen kaikkine kokoineen ja kuvineen. Jos haluat piilottaa sen tilapäisesti, poista sen sijaan Julkaistu-valinta.",
     "delete": "Poista tuote",
     "deleteTitle": "Poistetaanko {{style}}?",
-    "deleteBody": "Tuote, sen koot ja kuvat poistetaan. Jälleenmyyjien järjestelmät saavat tiedon poistosta. Toimintoa ei voi perua."
+    "deleteBody": "Tuote, sen koot ja kuvat poistetaan. Jälleenmyyjien järjestelmät saavat tiedon poistosta. Toimintoa ei voi perua.",
+    "materialsFlags": "Lisää kuidun perään (recycled) tai (organic), jos se pitää paikkansa: ”100% polyester (recycled)”.",
+    "animalOriginHint": "Esimerkiksi nahkamerkki, turkisreunus tai sarvinapit. Jos niitä on, se on mainittava tuotelapussa.",
+    "footwearHint": "Pakollinen jalkineiden merkinnöissä: materiaali, josta kukin osa on pääosin tehty (vähintään 80 %).",
+    "certificationsHint": "Vapaaehtoinen. Sertifiointijärjestelmä ja lisenssinumero, kuten ”gots:CU 123456”; lisää (material), jos vain materiaali on sertifioitu.",
+    "certificationsInvalid": "Emme pystyneet lukemaan kohtaa ”{{entry}}”. Käytä muotoa järjestelmä:lisenssinumero, kuten gots:CU 123456.",
+    "labelHint": "Näin jälleenmyyjät näkevät sen tuotesivulla ja ladatuissa tuotetiedoissa.",
+    "labelEmpty": "Tuotelapun tietoja ei vielä ole. Lisää materiaalit ja hoito-ohjeet alle.",
+    "secondSizeHint": "Jos sellainen on: farkkujen lahkeen pituus (32/34) tai rintaliivien kuppikoko (75/B).",
+    "colourFamilyHint": "Auttaa jälleenmyyjiä suodattamaan värin mukaan oman värinimesi lisäksi.",
+    "measurementsHint": "Vain numeroita. Matkalaukut: ulkomitat pyörät ja kahvat mukaan lukien. Laukut: itse laukku ilman kahvoja ja hihnaa.",
+    "numberInvalid": "Anna luku, esim. 2,6.",
+    "strapInvalid": "Anna lyhin ja pisin pituus, esim. 80-130.",
+    "measure": {
+      "height_cm": "Korkeus (cm)",
+      "width_cm": "Leveys (cm)",
+      "depth_cm": "Syvyys (cm)",
+      "weight_kg": "Paino (kg)",
+      "volume_l": "Tilavuus (l)",
+      "volume_expanded_l": "Tilavuus laajennettuna (l)",
+      "handle_drop_cm": "Kahvojen korkeus (cm)",
+      "strap_length_cm": "Hihnan pituus (cm)",
+      "laptop_max_inch": "Kannettava enintään (tuumaa)",
+      "heel_height_cm": "Korron korkeus (cm)",
+      "shaft_height_cm": "Varren korkeus (cm)",
+      "inseam_cm": "Lahkeen sisäpituus (cm)"
+    }
   },
   "imports": {
     "title": "Tuonnit",
@@ -1151,7 +1184,8 @@
       "eyewear": "Silmälasit",
       "accessory": "Asuste",
       "home": "Koti",
-      "generic_product": "Muu tuote"
+      "generic_product": "Muu tuote",
+      "luggage": "Matkalaukut"
     },
     "part": {
       "main": "Päämateriaali",
@@ -1161,7 +1195,12 @@
       "trim": "Somisteet",
       "sole": "Pohja",
       "upper": "Päällisosa",
-      "insole": "Sisäpohja"
+      "insole": "Sisäpohja",
+      "padding": "Pehmuste",
+      "pocket_lining": "Taskun vuori",
+      "shell": "Kuori",
+      "handle": "Kahva",
+      "strap": "Hihna"
     },
     "fibre": {
       "cotton": "puuvilla",
@@ -1241,6 +1280,131 @@
       "wet_clean_w_mild": "Ammattimainen märkäpesu, hellävarainen",
       "wet_clean_w_very_mild": "Ammattimainen märkäpesu, erittäin hellävarainen",
       "do_not_wet_clean": "Ei ammattimaista märkäpesua"
+    },
+    "itemSubtype": {
+      "handbag": "Käsilaukku",
+      "shoulder_bag": "Olkalaukku",
+      "crossbody": "Crossbody-laukku",
+      "tote": "Kassi",
+      "clutch": "Pikkulaukku",
+      "belt_bag": "Vyölaukku",
+      "backpack": "Reppu",
+      "laptop_bag": "Tietokonelaukku",
+      "briefcase": "Salkku",
+      "weekender": "Viikonloppulaukku",
+      "toiletry_bag": "Toilettilaukku",
+      "wallet": "Lompakko",
+      "card_holder": "Korttikotelo",
+      "underseat": "Istuimen alle mahtuva laukku",
+      "cabin": "Matkustamokoko",
+      "check_in_medium": "Ruumaan, keskikokoinen",
+      "check_in_large": "Ruumaan, suuri",
+      "pilot_case": "Pilottilaukku",
+      "garment_bag": "Vaatepussi",
+      "duffel": "Duffelkassi",
+      "sneaker": "Tennari",
+      "running": "Juoksukenkä",
+      "hiking": "Vaelluskenkä",
+      "lace_up": "Nauhakenkä",
+      "loafer": "Loafer",
+      "pump": "Avokas",
+      "sandal": "Sandaali",
+      "slipper": "Tohveli",
+      "ankle_boot": "Nilkkuri",
+      "boot": "Saapas",
+      "knee_boot": "Polvisaapas"
+    },
+    "footwearMaterial": {
+      "leather": "Nahka",
+      "coated_leather": "Päällystetty nahka",
+      "textile": "Tekstiili",
+      "other": "Muut materiaalit"
+    },
+    "colourFamily": {
+      "black": "Musta",
+      "white": "Valkoinen",
+      "grey": "Harmaa",
+      "beige": "Beige",
+      "brown": "Ruskea",
+      "red": "Punainen",
+      "pink": "Vaaleanpunainen",
+      "orange": "Oranssi",
+      "yellow": "Keltainen",
+      "green": "Vihreä",
+      "blue": "Sininen",
+      "purple": "Violetti",
+      "gold": "Kulta",
+      "silver": "Hopea",
+      "multicolour": "Monivärinen",
+      "transparent": "Läpinäkyvä"
+    },
+    "feature": {
+      "shell": {
+        "hard": "Kova kuori",
+        "soft": "Pehmeä kuori",
+        "hybrid": "Hybridi"
+      },
+      "lock": {
+        "none": "Ei lukkoa",
+        "combination": "Numerolukko",
+        "tsa_combination": "TSA-numerolukko",
+        "tsa_key": "TSA-avainlukko",
+        "key": "Avainlukko"
+      },
+      "closure": {
+        "zip": "Vetoketju",
+        "magnet": "Magneetti",
+        "flap": "Läppä",
+        "buckle": "Solki",
+        "drawstring": "Kiristysnauha",
+        "button": "Nappi",
+        "hook_and_loop": "Tarranauha",
+        "laces": "Nauhat",
+        "slip_on": "Jalkaan sujautettava",
+        "open": "Avoin"
+      },
+      "water_resistance": {
+        "none": "Ei",
+        "water_repellent": "Vettä hylkivä",
+        "waterproof": "Vedenpitävä"
+      },
+      "detachable_parts": {
+        "shoulder_strap": "olkahihna",
+        "handle": "kahva",
+        "lining": "vuori",
+        "insole": "pohjallinen",
+        "hood": "huppu",
+        "belt": "vyö",
+        "pouch": "pussukka",
+        "wheels": "pyörät"
+      },
+      "adjustable_parts": {
+        "shoulder_strap": "olkahihna",
+        "waist": "vyötärö",
+        "hem": "helma",
+        "cuff": "hihansuut"
+      },
+      "fit": {
+        "slim": "Kapea",
+        "regular": "Normaali",
+        "relaxed": "Väljä",
+        "oversized": "Oversize"
+      },
+      "sleeve_length": {
+        "sleeveless": "Hihaton",
+        "short": "Lyhyt",
+        "three_quarter": "Kolmneljäsosa",
+        "long": "Pitkä"
+      },
+      "neckline": {
+        "crew": "Pyöreä pääntie",
+        "v_neck": "V-pääntie",
+        "collar": "Kaulus",
+        "hood": "Huppu",
+        "turtleneck": "Poolokaulus",
+        "boat": "Venepääntie",
+        "scoop": "Syvä pyöreä pääntie"
+      }
     }
   },
   "email": {
@@ -1303,5 +1467,76 @@
     "notFoundTitle": "Sivua ei löytynyt",
     "notFound": "Tätä osoitetta ei ole (enää) olemassa.",
     "home": "Siirry etusivulle"
+  },
+  "article": {
+    "label": "Tuotelapun tiedot",
+    "composition": "Koostumus",
+    "recycled": "kierrätetty",
+    "organic": "luomu",
+    "animalOrigin": "Sisältää eläinperäisiä muita kuin tekstiiliosia",
+    "footwear": "Jalkineen materiaalit",
+    "footwearPart": {
+      "upper": "Päällinen",
+      "lining_and_sock": "Vuori ja pohjallinen",
+      "outer_sole": "Ulkopohja"
+    },
+    "certifications": "Sertifikaatit",
+    "certScope": {
+      "product": "tuote on sertifioitu",
+      "material": "materiaali on sertifioitu"
+    },
+    "certNote": "Tuotemerkin ilmoittama. Sertifikaatit ovat vapaaehtoisia.",
+    "features": "Ominaisuudet",
+    "measurements": "Mitat",
+    "colourFamily": "Väriryhmä",
+    "dimensions": "K × L × S",
+    "weight": "Paino",
+    "volume": "Tilavuus",
+    "volumeExpanded": "{{volume}} laajennettuna",
+    "handleDrop": "Kahvojen korkeus",
+    "strapLength": "Hihnan pituus",
+    "laptop": "Kannettava tietokone",
+    "laptopUpTo": "enintään {{size}}",
+    "heelHeight": "Korron korkeus",
+    "shaftHeight": "Varren korkeus",
+    "inseam": "Lahkeen sisäpituus",
+    "yes": "Kyllä",
+    "no": "Ei",
+    "notStated": "Ei ilmoitettu",
+    "feature": {
+      "shell": "Kuori",
+      "wheels": "Pyörät",
+      "lock": "Lukko",
+      "expandable": "Laajennettava",
+      "closure": "Kiinnitys",
+      "laptop_compartment": "Tietokonetasku",
+      "water_resistance": "Vedenkestävyys",
+      "detachable_parts": "Irrotettava",
+      "adjustable_parts": "Säädettävä",
+      "fit": "Istuvuus",
+      "sleeve_length": "Hihan pituus",
+      "neckline": "Pääntie"
+    }
+  },
+  "labelWarning": {
+    "title": "Tuotelapun tiedot puutteelliset",
+    "intro": "Nämä ovat varoituksia, eivät virheitä: tuotteet tuodaan ja julkaistaan tavalliseen tapaan. Täydennä tiedot tiedostoosi tai tuotteeseen, koska EU-lainsäädäntö vaatii ne tuotelappuun ja tarjontaasi.",
+    "badge": "Tuotelappu",
+    "fibre_composition_missing": {
+      "why": "Kuitukoostumus puuttuu. Sen on oltava tekstiilituotteen tuotelapussa ja näkyvissä ennen ostoa, myös verkossa. Laukkuja ja matkalaukkuja tämä koskee, kun niistä vähintään 80 % on tekstiiliä.",
+      "law": "Asetus (EU) N:o 1007/2011, 9 ja 11 artikla sekä 16 artiklan 1 kohta"
+    },
+    "animal_origin_unknown": {
+      "why": "Materiaaleissa on nahkaa, villaa, silkkiä, untuvaa tai muuta eläinperäistä materiaalia. Kerro, sisältääkö tuote eläinperäisiä muita kuin tekstiiliosia (kyllä tai ei); jos sisältää, se on mainittava tuotelapussa.",
+      "law": "Asetus (EU) N:o 1007/2011, 12 artikla"
+    },
+    "footwear_materials_missing": {
+      "why": "Päällisen, vuoren ja pohjallisen sekä ulkopohjan materiaalit puuttuvat tai ovat puutteellisia. Ne on merkittävä jalkineen tuotelappuun.",
+      "law": "Direktiivi 94/11/EY"
+    },
+    "fibre_percentages_not_100": {
+      "why": "Tämän osan prosentit eivät ole yhteensä 100 %. Koostumus ilmoitetaan osuutena kuitujen kokonaispainosta.",
+      "law": "Asetus (EU) N:o 1007/2011, 9 ja 11 artikla"
+    }
   }
 }

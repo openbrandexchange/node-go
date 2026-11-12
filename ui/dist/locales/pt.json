@@ -65,7 +65,10 @@
     "size": "Tamanho",
     "sizeSystem": "Sistema de tamanhos",
     "sku": "SKU",
-    "retailer": "Revendedor"
+    "retailer": "Revendedor",
+    "itemSubtype": "Tipo",
+    "animalOrigin": "Partes não têxteis de origem animal",
+    "secondSize": "Segundo tamanho"
   },
   "validate": {
     "required": "Preencha este campo.",
@@ -128,7 +131,11 @@
     "files_missing": "Falta o ficheiro de imagem",
     "validation_failed": "Valor não aceite",
     "position_conflict": "Posição já ocupada",
-    "mass_unpublish_refused": "Demasiados artigos ficariam offline"
+    "mass_unpublish_refused": "Demasiados artigos ficariam offline",
+    "fibre_composition_missing": "Falta a composição em fibras",
+    "animal_origin_unknown": "Origem animal não indicada",
+    "footwear_materials_missing": "Faltam os materiais do calçado",
+    "fibre_percentages_not_100": "As percentagens não somam 100%"
   },
   "login": {
     "title": "Iniciar sessão em {{portal}}",
@@ -358,7 +365,33 @@
     "deleteHint": "Eliminar remove o artigo com todos os tamanhos e imagens. Para o ocultar temporariamente, desative antes «Publicado».",
     "delete": "Eliminar artigo",
     "deleteTitle": "Eliminar {{style}}?",
-    "deleteBody": "O artigo, os tamanhos e as imagens serão removidos. O software dos revendedores será informado de que já não existe. Não é possível anular."
+    "deleteBody": "O artigo, os tamanhos e as imagens serão removidos. O software dos revendedores será informado de que já não existe. Não é possível anular.",
+    "materialsFlags": "Acrescente (recycled) ou (organic) depois de uma fibra, quando se aplica: «100% polyester (recycled)».",
+    "animalOriginHint": "Por exemplo, um emblema de pele, um debrum de pelo ou botões de chifre. Se existirem, a etiqueta tem de o indicar.",
+    "footwearHint": "Obrigatório na etiqueta do calçado: o material que constitui a maior parte de cada parte (pelo menos 80%).",
+    "certificationsHint": "Opcional. Esquema e número de licença, como «gots:CU 123456»; acrescente (material) quando só um material é certificado.",
+    "certificationsInvalid": "Não conseguimos ler «{{entry}}». Use esquema:número de licença, como gots:CU 123456.",
+    "labelHint": "Como os revendedores o veem na página do artigo e na transferência dos dados dos artigos.",
+    "labelEmpty": "Ainda não há informação da etiqueta. Acrescente abaixo a composição e as instruções de cuidado.",
+    "secondSizeHint": "Quando existe: o comprimento das calças de ganga (32/34) ou a taça do soutien (75/B).",
+    "colourFamilyHint": "Ajuda os revendedores a filtrar por cor, ao lado do seu próprio nome da cor.",
+    "measurementsHint": "Só números. Malas de viagem: medida exterior com rodas e pegas. Malas: o corpo sem pegas nem alça.",
+    "numberInvalid": "Introduza um número, como 2,6.",
+    "strapInvalid": "Introduza o comprimento mínimo e máximo, como 80-130.",
+    "measure": {
+      "height_cm": "Altura (cm)",
+      "width_cm": "Largura (cm)",
+      "depth_cm": "Profundidade (cm)",
+      "weight_kg": "Peso (kg)",
+      "volume_l": "Capacidade (l)",
+      "volume_expanded_l": "Capacidade expandida (l)",
+      "handle_drop_cm": "Altura da pega (cm)",
+      "strap_length_cm": "Comprimento da alça (cm)",
+      "laptop_max_inch": "Portátil até (polegadas)",
+      "heel_height_cm": "Altura do salto (cm)",
+      "shaft_height_cm": "Altura do cano (cm)",
+      "inseam_cm": "Entrepernas (cm)"
+    }
   },
   "imports": {
     "title": "Importações",
@@ -1181,7 +1214,8 @@
       "eyewear": "Óculos",
       "accessory": "Acessório",
       "home": "Casa",
-      "generic_product": "Outro produto"
+      "generic_product": "Outro produto",
+      "luggage": "Malas de viagem"
     },
     "part": {
       "main": "Tecido principal",
@@ -1191,7 +1225,12 @@
       "trim": "Guarnições",
       "sole": "Sola",
       "upper": "Gáspea",
-      "insole": "Palmilha"
+      "insole": "Palmilha",
+      "padding": "Acolchoado",
+      "pocket_lining": "Forro dos bolsos",
+      "shell": "Estrutura",
+      "handle": "Pega",
+      "strap": "Alça"
     },
     "fibre": {
       "cotton": "algodão",
@@ -1271,6 +1310,131 @@
       "wet_clean_w_mild": "Limpeza a húmido profissional, suave",
       "wet_clean_w_very_mild": "Limpeza a húmido profissional, muito suave",
       "do_not_wet_clean": "Não fazer limpeza a húmido profissional"
+    },
+    "itemSubtype": {
+      "handbag": "Mala de mão",
+      "shoulder_bag": "Mala de ombro",
+      "crossbody": "Mala a tiracolo",
+      "tote": "Saco tote",
+      "clutch": "Clutch",
+      "belt_bag": "Bolsa de cintura",
+      "backpack": "Mochila",
+      "laptop_bag": "Mala para portátil",
+      "briefcase": "Pasta",
+      "weekender": "Saco de fim de semana",
+      "toiletry_bag": "Necessaire",
+      "wallet": "Carteira",
+      "card_holder": "Porta-cartões",
+      "underseat": "Mala para debaixo do assento",
+      "cabin": "Tamanho de cabine",
+      "check_in_medium": "De porão, média",
+      "check_in_large": "De porão, grande",
+      "pilot_case": "Mala de piloto",
+      "garment_bag": "Porta-fatos",
+      "duffel": "Saco de viagem",
+      "sneaker": "Sapatilha",
+      "running": "Sapatilha de corrida",
+      "hiking": "Bota de caminhada",
+      "lace_up": "Sapato com atacadores",
+      "loafer": "Mocassim",
+      "pump": "Escarpim",
+      "sandal": "Sandália",
+      "slipper": "Chinelo",
+      "ankle_boot": "Botim",
+      "boot": "Bota",
+      "knee_boot": "Bota alta"
+    },
+    "footwearMaterial": {
+      "leather": "Couro",
+      "coated_leather": "Couro revestido",
+      "textile": "Têxtil",
+      "other": "Outros materiais"
+    },
+    "colourFamily": {
+      "black": "Preto",
+      "white": "Branco",
+      "grey": "Cinzento",
+      "beige": "Bege",
+      "brown": "Castanho",
+      "red": "Vermelho",
+      "pink": "Rosa",
+      "orange": "Laranja",
+      "yellow": "Amarelo",
+      "green": "Verde",
+      "blue": "Azul",
+      "purple": "Roxo",
+      "gold": "Dourado",
+      "silver": "Prateado",
+      "multicolour": "Multicolor",
+      "transparent": "Transparente"
+    },
+    "feature": {
+      "shell": {
+        "hard": "Rígida",
+        "soft": "Flexível",
+        "hybrid": "Híbrida"
+      },
+      "lock": {
+        "none": "Nenhuma",
+        "combination": "Cadeado de combinação",
+        "tsa_combination": "Cadeado de combinação TSA",
+        "tsa_key": "Fechadura TSA com chave",
+        "key": "Fechadura com chave"
+      },
+      "closure": {
+        "zip": "Fecho de correr",
+        "magnet": "Íman",
+        "flap": "Aba",
+        "buckle": "Fivela",
+        "drawstring": "Cordão",
+        "button": "Botão",
+        "hook_and_loop": "Velcro",
+        "laces": "Atacadores",
+        "slip_on": "Sem fecho",
+        "open": "Aberto"
+      },
+      "water_resistance": {
+        "none": "Nenhuma",
+        "water_repellent": "Repelente à água",
+        "waterproof": "Impermeável"
+      },
+      "detachable_parts": {
+        "shoulder_strap": "alça de ombro",
+        "handle": "pega",
+        "lining": "forro",
+        "insole": "palmilha",
+        "hood": "capuz",
+        "belt": "cinto",
+        "pouch": "bolsa",
+        "wheels": "rodas"
+      },
+      "adjustable_parts": {
+        "shoulder_strap": "alça de ombro",
+        "waist": "cintura",
+        "hem": "bainha",
+        "cuff": "punhos"
+      },
+      "fit": {
+        "slim": "Justo",
+        "regular": "Normal",
+        "relaxed": "Largo",
+        "oversized": "Oversized"
+      },
+      "sleeve_length": {
+        "sleeveless": "Sem mangas",
+        "short": "Curta",
+        "three_quarter": "Três quartos",
+        "long": "Comprida"
+      },
+      "neckline": {
+        "crew": "Decote redondo",
+        "v_neck": "Decote em V",
+        "collar": "Gola",
+        "hood": "Capuz",
+        "turtleneck": "Gola alta",
+        "boat": "Decote barco",
+        "scoop": "Decote redondo largo"
+      }
     }
   },
   "email": {
@@ -1333,5 +1497,76 @@
     "notFoundTitle": "Página não encontrada",
     "notFound": "Este endereço não existe (ou já não existe).",
     "home": "Ir para a página inicial"
+  },
+  "article": {
+    "label": "Informação da etiqueta",
+    "composition": "Composição",
+    "recycled": "reciclado",
+    "organic": "biológico",
+    "animalOrigin": "Contém partes não têxteis de origem animal",
+    "footwear": "Materiais do calçado",
+    "footwearPart": {
+      "upper": "Gáspea",
+      "lining_and_sock": "Forro e palmilha",
+      "outer_sole": "Sola exterior"
+    },
+    "certifications": "Certificações",
+    "certScope": {
+      "product": "o artigo é certificado",
+      "material": "um material é certificado"
+    },
+    "certNote": "Conforme indicado pela marca. As certificações são voluntárias.",
+    "features": "Características",
+    "measurements": "Medidas",
+    "colourFamily": "Família de cor",
+    "dimensions": "A × L × P",
+    "weight": "Peso",
+    "volume": "Capacidade",
+    "volumeExpanded": "{{volume}} expandida",
+    "handleDrop": "Altura da pega",
+    "strapLength": "Comprimento da alça",
+    "laptop": "Portátil",
+    "laptopUpTo": "até {{size}}",
+    "heelHeight": "Altura do salto",
+    "shaftHeight": "Altura do cano",
+    "inseam": "Entrepernas",
+    "yes": "Sim",
+    "no": "Não",
+    "notStated": "Não indicado",
+    "feature": {
+      "shell": "Estrutura",
+      "wheels": "Rodas",
+      "lock": "Fechadura",
+      "expandable": "Expansível",
+      "closure": "Fecho",
+      "laptop_compartment": "Compartimento para portátil",
+      "water_resistance": "Resistência à água",
+      "detachable_parts": "Amovível",
+      "adjustable_parts": "Ajustável",
+      "fit": "Corte",
+      "sleeve_length": "Comprimento da manga",
+      "neckline": "Decote"
+    }
+  },
+  "labelWarning": {
+    "title": "Informação da etiqueta incompleta",
+    "intro": "São avisos, não erros: os artigos são importados e publicados normalmente. Complete a informação no seu ficheiro ou no artigo, porque a lei da UE a exige na etiqueta e na sua oferta.",
+    "badge": "Etiqueta",
+    "fibre_composition_missing": {
+      "why": "Falta a composição em fibras. Tem de constar da etiqueta de um produto têxtil e ser mostrada antes da compra, também online. Nas malas e malas de viagem, aplica-se quando são pelo menos 80% têxteis.",
+      "law": "Regulamento (UE) n.º 1007/2011, artigos 9.º, 11.º e 16.º, n.º 1"
+    },
+    "animal_origin_unknown": {
+      "why": "Os materiais incluem pele, lã, seda, penugem ou outro material de origem animal. Indique se o artigo contém partes não têxteis de origem animal (sim ou não); se contiver, a etiqueta tem de o indicar.",
+      "law": "Regulamento (UE) n.º 1007/2011, artigo 12.º"
+    },
+    "footwear_materials_missing": {
+      "why": "Os materiais da gáspea, do forro e palmilha e da sola exterior faltam ou estão incompletos. Têm de constar da etiqueta do calçado.",
+      "law": "Diretiva 94/11/CE"
+    },
+    "fibre_percentages_not_100": {
+      "why": "As percentagens desta parte não somam 100%. A composição é indicada como parte do peso total das fibras.",
+      "law": "Regulamento (UE) n.º 1007/2011, artigos 9.º e 11.º"
+    }
   }
 }

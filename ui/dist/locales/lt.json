@@ -65,7 +65,10 @@
     "size": "Dydis",
     "sizeSystem": "Dydžių sistema",
     "sku": "SKU",
-    "retailer": "Prekybininkas"
+    "retailer": "Prekybininkas",
+    "itemSubtype": "Rūšis",
+    "animalOrigin": "Netekstilinės gyvūninės kilmės dalys",
+    "secondSize": "Antras dydis"
   },
   "validate": {
     "required": "Užpildykite šį lauką.",
@@ -128,7 +131,11 @@
     "files_missing": "Trūksta nuotraukos failo",
     "validation_failed": "Reikšmė nepriimta",
     "position_conflict": "Vieta jau užimta",
-    "mass_unpublish_refused": "Per daug prekių dingtų iš pasiūlos"
+    "mass_unpublish_refused": "Per daug prekių dingtų iš pasiūlos",
+    "fibre_composition_missing": "Trūksta pluoštinės sudėties",
+    "animal_origin_unknown": "Gyvūninė kilmė nenurodyta",
+    "footwear_materials_missing": "Trūksta avalynės medžiagų",
+    "fibre_percentages_not_100": "Procentai nesudaro 100 %"
   },
   "login": {
     "title": "Prisijungimas: {{portal}}",
@@ -361,7 +368,33 @@
     "deleteHint": "Ištrynus pašalinama prekė su visais dydžiais ir nuotraukomis. Laikinai paslėpti geriau išjunkite „Paskelbta“.",
     "delete": "Ištrinti prekę",
     "deleteTitle": "Ištrinti {{style}}?",
-    "deleteBody": "Prekė, jos dydžiai ir nuotraukos bus pašalinti. Prekybininkų sistemos sužinos, kad ji dingo. To atšaukti negalima."
+    "deleteBody": "Prekė, jos dydžiai ir nuotraukos bus pašalinti. Prekybininkų sistemos sužinos, kad ji dingo. To atšaukti negalima.",
+    "materialsFlags": "Jei taikoma, po pluošto pridėkite (recycled) arba (organic): „100% polyester (recycled)“.",
+    "animalOriginHint": "Pavyzdžiui, odinis antsiuvas, kailio apvadas ar raginės sagos. Jei tokių yra, tai turi būti nurodyta etiketėje.",
+    "footwearHint": "Privaloma avalynės etiketėse: kiekvienos dalies pagrindinė medžiaga (ne mažiau kaip 80 %).",
+    "certificationsHint": "Neprivaloma. Schema ir licencijos numeris, pvz., „gots:CU 123456“; pridėkite (material), jei sertifikuota tik medžiaga.",
+    "certificationsInvalid": "Nepavyko perskaityti „{{entry}}“. Naudokite formatą schema:licencijos numeris, pvz., gots:CU 123456.",
+    "labelHint": "Taip, kaip prekybininkai mato prekės puslapyje ir atsisiųstuose prekių duomenyse.",
+    "labelEmpty": "Etiketės informacijos dar nėra. Žemiau pridėkite medžiagas ir priežiūros nurodymus.",
+    "secondSizeHint": "Jei yra: džinsų ilgis (32/34) arba liemenėlės kaušelis (75/B).",
+    "colourFamilyHint": "Padeda prekybininkams filtruoti pagal spalvą, šalia jūsų spalvos pavadinimo.",
+    "measurementsHint": "Tik skaičiai. Lagaminai: išoriniai matmenys su ratukais ir rankenomis. Rankinės: korpusas be rankenų ir dirželio.",
+    "numberInvalid": "Įveskite skaičių, pvz., 2,6.",
+    "strapInvalid": "Įveskite trumpiausią ir ilgiausią ilgį, pvz., 80-130.",
+    "measure": {
+      "height_cm": "Aukštis (cm)",
+      "width_cm": "Plotis (cm)",
+      "depth_cm": "Gylis (cm)",
+      "weight_kg": "Svoris (kg)",
+      "volume_l": "Tūris (l)",
+      "volume_expanded_l": "Išplėstas tūris (l)",
+      "handle_drop_cm": "Rankenų aukštis (cm)",
+      "strap_length_cm": "Dirželio ilgis (cm)",
+      "laptop_max_inch": "Nešiojamasis kompiuteris iki (colių)",
+      "heel_height_cm": "Kulno aukštis (cm)",
+      "shaft_height_cm": "Aulo aukštis (cm)",
+      "inseam_cm": "Žingsnio ilgis (cm)"
+    }
   },
   "imports": {
     "title": "Importai",
@@ -1211,7 +1244,8 @@
       "eyewear": "Akiniai",
       "accessory": "Aksesuaras",
       "home": "Namams",
-      "generic_product": "Kitas produktas"
+      "generic_product": "Kitas produktas",
+      "luggage": "Lagaminai"
     },
     "part": {
       "main": "Pagrindinė medžiaga",
@@ -1221,7 +1255,12 @@
       "trim": "Apdaila",
       "sole": "Padas",
       "upper": "Viršus",
-      "insole": "Vidpadis"
+      "insole": "Vidpadis",
+      "padding": "Paminkštinimas",
+      "pocket_lining": "Kišenių pamušalas",
+      "shell": "Korpusas",
+      "handle": "Rankena",
+      "strap": "Dirželis"
     },
     "fibre": {
       "cotton": "medvilnė",
@@ -1301,6 +1340,131 @@
       "wet_clean_w_mild": "Profesionalus šlapiasis valymas, švelnus",
       "wet_clean_w_very_mild": "Profesionalus šlapiasis valymas, labai švelnus",
       "do_not_wet_clean": "Nevalyti profesionaliu šlapiuoju būdu"
+    },
+    "itemSubtype": {
+      "handbag": "Rankinė",
+      "shoulder_bag": "Rankinė ant peties",
+      "crossbody": "Rankinė per petį",
+      "tote": "Pirkinių rankinė",
+      "clutch": "Delninė",
+      "belt_bag": "Juosmens rankinė",
+      "backpack": "Kuprinė",
+      "laptop_bag": "Kompiuterio krepšys",
+      "briefcase": "Portfelis",
+      "weekender": "Savaitgalio krepšys",
+      "toiletry_bag": "Kosmetinė",
+      "wallet": "Piniginė",
+      "card_holder": "Kortelių dėklas",
+      "underseat": "Krepšys po sėdyne",
+      "cabin": "Rankinio bagažo dydžio",
+      "check_in_medium": "Registruojamas bagažas, vidutinis",
+      "check_in_large": "Registruojamas bagažas, didelis",
+      "pilot_case": "Piloto lagaminas",
+      "garment_bag": "Drabužių krepšys",
+      "duffel": "Kelioninis krepšys",
+      "sneaker": "Sportbačiai",
+      "running": "Bėgimo batai",
+      "hiking": "Žygio batai",
+      "lace_up": "Suvarstomi batai",
+      "loafer": "Mokasinai",
+      "pump": "Klasikiniai bateliai",
+      "sandal": "Sandalai",
+      "slipper": "Šlepetės",
+      "ankle_boot": "Aulinukai",
+      "boot": "Auliniai batai",
+      "knee_boot": "Aukštaauliai batai"
+    },
+    "footwearMaterial": {
+      "leather": "Oda",
+      "coated_leather": "Padengta oda",
+      "textile": "Tekstilė",
+      "other": "Kitos medžiagos"
+    },
+    "colourFamily": {
+      "black": "Juoda",
+      "white": "Balta",
+      "grey": "Pilka",
+      "beige": "Smėlio",
+      "brown": "Ruda",
+      "red": "Raudona",
+      "pink": "Rožinė",
+      "orange": "Oranžinė",
+      "yellow": "Geltona",
+      "green": "Žalia",
+      "blue": "Mėlyna",
+      "purple": "Violetinė",
+      "gold": "Auksinė",
+      "silver": "Sidabrinė",
+      "multicolour": "Įvairiaspalvė",
+      "transparent": "Permatoma"
+    },
+    "feature": {
+      "shell": {
+        "hard": "Kietas korpusas",
+        "soft": "Minkštas korpusas",
+        "hybrid": "Hibridinis"
+      },
+      "lock": {
+        "none": "Nėra",
+        "combination": "Kodinis užraktas",
+        "tsa_combination": "TSA kodinis užraktas",
+        "tsa_key": "TSA užraktas su raktu",
+        "key": "Užraktas su raktu"
+      },
+      "closure": {
+        "zip": "Užtrauktukas",
+        "magnet": "Magnetas",
+        "flap": "Atvartas",
+        "buckle": "Sagtis",
+        "drawstring": "Sutraukiama virvele",
+        "button": "Saga",
+        "hook_and_loop": "Lipukas",
+        "laces": "Raišteliai",
+        "slip_on": "Įsispiriami",
+        "open": "Be užsegimo"
+      },
+      "water_resistance": {
+        "none": "Nėra",
+        "water_repellent": "Atstumia vandenį",
+        "waterproof": "Neperšlampamas"
+      },
+      "detachable_parts": {
+        "shoulder_strap": "pečių dirželis",
+        "handle": "rankena",
+        "lining": "pamušalas",
+        "insole": "vidpadis",
+        "hood": "gobtuvas",
+        "belt": "diržas",
+        "pouch": "dėkliukas",
+        "wheels": "ratukai"
+      },
+      "adjustable_parts": {
+        "shoulder_strap": "pečių dirželis",
+        "waist": "juosmuo",
+        "hem": "apačia",
+        "cuff": "rankogaliai"
+      },
+      "fit": {
+        "slim": "Prigludęs",
+        "regular": "Įprastas",
+        "relaxed": "Laisvas",
+        "oversized": "Labai laisvas"
+      },
+      "sleeve_length": {
+        "sleeveless": "Be rankovių",
+        "short": "Trumpos",
+        "three_quarter": "Trijų ketvirčių",
+        "long": "Ilgos"
+      },
+      "neckline": {
+        "crew": "Apvali iškirptė",
+        "v_neck": "V formos iškirptė",
+        "collar": "Apykaklė",
+        "hood": "Gobtuvas",
+        "turtleneck": "Golfo apykaklė",
+        "boat": "Valties formos iškirptė",
+        "scoop": "Gili apvali iškirptė"
+      }
     }
   },
   "email": {
@@ -1363,5 +1527,76 @@
     "notFoundTitle": "Puslapis nerastas",
     "notFound": "Tokio adreso nėra.",
     "home": "Į pradžios puslapį"
+  },
+  "article": {
+    "label": "Etiketės informacija",
+    "composition": "Sudėtis",
+    "recycled": "perdirbta",
+    "organic": "ekologiška",
+    "animalOrigin": "Sudėtyje yra netekstilinių gyvūninės kilmės dalių",
+    "footwear": "Avalynės medžiagos",
+    "footwearPart": {
+      "upper": "Viršus",
+      "lining_and_sock": "Pamušalas ir vidpadis",
+      "outer_sole": "Išorinis padas"
+    },
+    "certifications": "Sertifikatai",
+    "certScope": {
+      "product": "prekė sertifikuota",
+      "material": "sertifikuota medžiaga"
+    },
+    "certNote": "Kaip nurodė prekės ženklas. Sertifikatai yra savanoriški.",
+    "features": "Savybės",
+    "measurements": "Matmenys",
+    "colourFamily": "Spalvų grupė",
+    "dimensions": "A × P × G",
+    "weight": "Svoris",
+    "volume": "Tūris",
+    "volumeExpanded": "{{volume}} išplėtus",
+    "handleDrop": "Rankenų aukštis",
+    "strapLength": "Dirželio ilgis",
+    "laptop": "Nešiojamasis kompiuteris",
+    "laptopUpTo": "iki {{size}}",
+    "heelHeight": "Kulno aukštis",
+    "shaftHeight": "Aulo aukštis",
+    "inseam": "Žingsnio ilgis",
+    "yes": "Taip",
+    "no": "Ne",
+    "notStated": "Nenurodyta",
+    "feature": {
+      "shell": "Korpusas",
+      "wheels": "Ratukai",
+      "lock": "Užraktas",
+      "expandable": "Išplečiamas",
+      "closure": "Užsegimas",
+      "laptop_compartment": "Skyrius kompiuteriui",
+      "water_resistance": "Atsparumas vandeniui",
+      "detachable_parts": "Nuimama",
+      "adjustable_parts": "Reguliuojama",
+      "fit": "Kirpimas",
+      "sleeve_length": "Rankovių ilgis",
+      "neckline": "Iškirptė"
+    }
+  },
+  "labelWarning": {
+    "title": "Etiketės informacija nepilna",
+    "intro": "Tai įspėjimai, o ne klaidos: prekės importuojamos ir skelbiamos kaip įprasta. Papildykite informaciją savo faile arba prie prekės, nes ES teisė reikalauja ją pateikti etiketėje ir jūsų pasiūlyme.",
+    "badge": "Etiketė",
+    "fibre_composition_missing": {
+      "why": "Trūksta pluoštinės sudėties. Ji turi būti nurodyta tekstilės gaminio etiketėje ir parodyta prieš pirkimą, taip pat internete. Rankinėms ir lagaminams tai taikoma, kai bent 80 % jų sudaro tekstilė.",
+      "law": "Reglamentas (ES) Nr. 1007/2011, 9 ir 11 straipsniai ir 16 straipsnio 1 dalis"
+    },
+    "animal_origin_unknown": {
+      "why": "Tarp medžiagų yra odos, vilnos, šilko, pūkų ar kitos gyvūninės kilmės medžiagos. Nurodykite, ar prekėje yra netekstilinių gyvūninės kilmės dalių (taip ar ne); jei yra, tai turi būti nurodyta etiketėje.",
+      "law": "Reglamentas (ES) Nr. 1007/2011, 12 straipsnis"
+    },
+    "footwear_materials_missing": {
+      "why": "Trūksta viršaus, pamušalo ir vidpadžio bei išorinio pado medžiagų arba jos nurodytos nepilnai. Jos turi būti nurodytos avalynės etiketėje.",
+      "law": "Direktyva 94/11/EB"
+    },
+    "fibre_percentages_not_100": {
+      "why": "Šios dalies procentai nesudaro 100 %. Sudėtis nurodoma kaip bendro pluoštų svorio dalis.",
+      "law": "Reglamentas (ES) Nr. 1007/2011, 9 ir 11 straipsniai"
+    }
   }
 }

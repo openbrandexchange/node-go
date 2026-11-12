@@ -65,7 +65,10 @@
     "size": "Daqs",
     "sizeSystem": "Sistema tad-daqsijiet",
     "sku": "SKU",
-    "retailer": "Bejjiegħ"
+    "retailer": "Bejjiegħ",
+    "itemSubtype": "Sottotip",
+    "animalOrigin": "Partijiet mhux tessili ta’ oriġini mill-annimali",
+    "secondSize": "It-tieni daqs"
   },
   "validate": {
     "required": "Jekk jogħġbok imla dan il-qasam.",
@@ -128,7 +131,11 @@
     "files_missing": "Fajl tar-ritratt nieqes",
     "validation_failed": "Valur mhux aċċettat",
     "position_conflict": "Pożizzjoni diġà okkupata",
-    "mass_unpublish_refused": "Wisq oġġetti kienu jisparixxu mill-offerta"
+    "mass_unpublish_refused": "Wisq oġġetti kienu jisparixxu mill-offerta",
+    "fibre_composition_missing": "Kompożizzjoni tal-fibri nieqsa",
+    "animal_origin_unknown": "Oriġini mill-annimali mhux iddikjarata",
+    "footwear_materials_missing": "Materjali taż-żarbun neqsin",
+    "fibre_percentages_not_100": "Il-perċentwali ma jammontawx għal 100%"
   },
   "login": {
     "title": "Idħol: {{portal}}",
@@ -364,7 +371,33 @@
     "deleteHint": "It-tħassir ineħħi l-oġġett bid-daqsijiet u r-ritratti kollha tiegħu. Biex taħbih temporanjament, aħjar itfi “Ippubblikat”.",
     "delete": "Ħassar l-oġġett",
     "deleteTitle": "Tħassar {{style}}?",
-    "deleteBody": "L-oġġett, id-daqsijiet u r-ritratti tiegħu jitneħħew. Is-sistemi tal-bejjiegħa jsiru jafu li sparixxa. Dan ma jistax jitħassar lura."
+    "deleteBody": "L-oġġett, id-daqsijiet u r-ritratti tiegħu jitneħħew. Is-sistemi tal-bejjiegħa jsiru jafu li sparixxa. Dan ma jistax jitħassar lura.",
+    "materialsFlags": "Żid (recycled) jew (organic) wara fibra fejn japplika: “100% polyester (recycled)”.",
+    "animalOriginHint": "Pereżempju biċċa ġilda, bordura tal-pil jew buttuni tal-qrun. Jekk hemm, it-tikketta trid tgħid hekk.",
+    "footwearHint": "Obbligatorju fuq it-tikketta taż-żraben: il-materjal ewlieni ta’ kull parti (mill-inqas 80%).",
+    "certificationsHint": "Mhux obbligatorju. L-iskema u n-numru tal-liċenzja, bħal “gots:CU 123456”; żid (material) meta materjal biss ikun iċċertifikat.",
+    "certificationsInvalid": "“{{entry}}” ma setax jinqara. Uża skema:numru tal-liċenzja, bħal gots:CU 123456.",
+    "labelHint": "Kif jarawha l-bejjiegħa fil-paġna tal-oġġett u fid-data tal-oġġetti li jniżżlu.",
+    "labelEmpty": "Għad m’hemmx informazzjoni għat-tikketta. Żid il-materjali u l-istruzzjonijiet tal-kura hawn taħt.",
+    "secondSizeHint": "Fejn hemm: it-tul tal-jeans (32/34) jew it-tazza tar-reġipett (75/B).",
+    "colourFamilyHint": "Tgħin lill-bejjiegħa jiffiltraw skont il-kulur, flimkien mal-isem tiegħek għall-kulur.",
+    "measurementsHint": "Numri biss. Bagalji: il-qies ta’ barra inklużi r-roti u l-manki. Borżi: il-borża nfisha, mingħajr manki u ċinga.",
+    "numberInvalid": "Daħħal numru, bħal 2.6.",
+    "strapInvalid": "Daħħal l-iqsar u l-itwal tul, bħal 80-130.",
+    "measure": {
+      "height_cm": "Għoli (cm)",
+      "width_cm": "Wisa’ (cm)",
+      "depth_cm": "Fond (cm)",
+      "weight_kg": "Piż (kg)",
+      "volume_l": "Volum (l)",
+      "volume_expanded_l": "Volum estiż (l)",
+      "handle_drop_cm": "Għoli tal-manki (cm)",
+      "strap_length_cm": "Tul taċ-ċinga (cm)",
+      "laptop_max_inch": "Laptop sa (pulzieri)",
+      "heel_height_cm": "Għoli tat-takkuna (cm)",
+      "shaft_height_cm": "Għoli tal-kanna tal-istival (cm)",
+      "inseam_cm": "Tul ta’ ġewwa tar-riġel (cm)"
+    }
   },
   "imports": {
     "title": "Importazzjonijiet",
@@ -1241,7 +1274,8 @@
       "eyewear": "Nuċċali",
       "accessory": "Aċċessorju",
       "home": "Dar",
-      "generic_product": "Prodott ieħor"
+      "generic_product": "Prodott ieħor",
+      "luggage": "Bagalji"
     },
     "part": {
       "main": "Materjal ewlieni",
@@ -1251,7 +1285,12 @@
       "trim": "Rifiniment",
       "sole": "Qiegħ",
       "upper": "Parti ta’ fuq",
-      "insole": "Qiegħ ta’ ġewwa"
+      "insole": "Qiegħ ta’ ġewwa",
+      "padding": "Ikkuttunar",
+      "pocket_lining": "Inforra tal-bwiet",
+      "shell": "Qoxra",
+      "handle": "Manku",
+      "strap": "Ċinga"
     },
     "fibre": {
       "cotton": "qoton",
@@ -1331,6 +1370,131 @@
       "wet_clean_w_mild": "Tindif professjonali bl-ilma, bil-mod",
       "wet_clean_w_very_mild": "Tindif professjonali bl-ilma, bil-mod ħafna",
       "do_not_wet_clean": "Tagħmilx tindif professjonali bl-ilma"
+    },
+    "itemSubtype": {
+      "handbag": "Borża tal-idejn",
+      "shoulder_bag": "Borża tal-ispalla",
+      "crossbody": "Borża crossbody",
+      "tote": "Borża tote",
+      "clutch": "Clutch",
+      "belt_bag": "Borża taċ-ċinturin",
+      "backpack": "Backpack",
+      "laptop_bag": "Borża tal-laptop",
+      "briefcase": "Briefcase",
+      "weekender": "Borża tal-weekend",
+      "toiletry_bag": "Borża tat-twaletta",
+      "wallet": "Kartiera",
+      "card_holder": "Holder tal-kards",
+      "underseat": "Borża taħt is-sedil",
+      "cabin": "Daqs tal-kabina",
+      "check_in_medium": "Check-in, medja",
+      "check_in_large": "Check-in, kbira",
+      "pilot_case": "Pilot case",
+      "garment_bag": "Borża tal-ħwejjeġ",
+      "duffel": "Duffel bag",
+      "sneaker": "Sneaker",
+      "running": "Żarbun tal-ġiri",
+      "hiking": "Żarbun tal-hiking",
+      "lace_up": "Żarbun bil-lazzi",
+      "loafer": "Loafer",
+      "pump": "Pump",
+      "sandal": "Sandlu",
+      "slipper": "Papoċċ",
+      "ankle_boot": "Stival qasir",
+      "boot": "Stival",
+      "knee_boot": "Stival sal-irkoppa"
+    },
+    "footwearMaterial": {
+      "leather": "Ġilda",
+      "coated_leather": "Ġilda miksija",
+      "textile": "Tessuti",
+      "other": "Materjali oħra"
+    },
+    "colourFamily": {
+      "black": "Iswed",
+      "white": "Abjad",
+      "grey": "Griż",
+      "beige": "Beige",
+      "brown": "Kannella",
+      "red": "Aħmar",
+      "pink": "Roża",
+      "orange": "Oranġjo",
+      "yellow": "Isfar",
+      "green": "Aħdar",
+      "blue": "Blu",
+      "purple": "Vjola",
+      "gold": "Deheb",
+      "silver": "Fidda",
+      "multicolour": "Multikulur",
+      "transparent": "Trasparenti"
+    },
+    "feature": {
+      "shell": {
+        "hard": "Qoxra iebsa",
+        "soft": "Qoxra ratba",
+        "hybrid": "Ibrida"
+      },
+      "lock": {
+        "none": "Xejn",
+        "combination": "Serratura bil-kombinazzjoni",
+        "tsa_combination": "Serratura TSA bil-kombinazzjoni",
+        "tsa_key": "Serratura TSA biċ-ċavetta",
+        "key": "Serratura biċ-ċavetta"
+      },
+      "closure": {
+        "zip": "Żipp",
+        "magnet": "Kalamita",
+        "flap": "Għatu",
+        "buckle": "Bokkla",
+        "drawstring": "Kurdun",
+        "button": "Buttuna",
+        "hook_and_loop": "Velcro",
+        "laces": "Lazzi",
+        "slip_on": "Slip-on",
+        "open": "Miftuħ"
+      },
+      "water_resistance": {
+        "none": "Xejn",
+        "water_repellent": "Jirrepelli l-ilma",
+        "waterproof": "Ma jgħaddix ilma"
+      },
+      "detachable_parts": {
+        "shoulder_strap": "ċinga tal-ispalla",
+        "handle": "manku",
+        "lining": "inforra",
+        "insole": "qiegħ ta’ ġewwa",
+        "hood": "kappuċċ",
+        "belt": "ċinturin",
+        "pouch": "borża żgħira",
+        "wheels": "roti"
+      },
+      "adjustable_parts": {
+        "shoulder_strap": "ċinga tal-ispalla",
+        "waist": "qadd",
+        "hem": "xifer",
+        "cuff": "truf tal-kmiem"
+      },
+      "fit": {
+        "slim": "Dejjaq",
+        "regular": "Normali",
+        "relaxed": "Komdu",
+        "oversized": "Oversized"
+      },
+      "sleeve_length": {
+        "sleeveless": "Mingħajr kmiem",
+        "short": "Qosra",
+        "three_quarter": "Tliet kwarti",
+        "long": "Twila"
+      },
+      "neckline": {
+        "crew": "Għonq tond",
+        "v_neck": "Għonq V",
+        "collar": "Kullar",
+        "hood": "Kappuċċ",
+        "turtleneck": "Għonq għoli",
+        "boat": "Għonq dgħajsa",
+        "scoop": "Għonq tond baxx"
+      }
     }
   },
   "email": {
@@ -1393,5 +1557,76 @@
     "notFoundTitle": "Il-paġna ma nstabitx",
     "notFound": "Dan l-indirizz ma jeżistix (aktar).",
     "home": "Għall-paġna ewlenija"
+  },
+  "article": {
+    "label": "Informazzjoni tat-tikketta",
+    "composition": "Kompożizzjoni",
+    "recycled": "riċiklat",
+    "organic": "organiku",
+    "animalOrigin": "Fih partijiet mhux tessili ta’ oriġini mill-annimali",
+    "footwear": "Materjali taż-żarbun",
+    "footwearPart": {
+      "upper": "Parti ta’ fuq",
+      "lining_and_sock": "Inforra u qiegħ ta’ ġewwa",
+      "outer_sole": "Qiegħ ta’ barra"
+    },
+    "certifications": "Ċertifikazzjonijiet",
+    "certScope": {
+      "product": "l-oġġett huwa ċċertifikat",
+      "material": "materjal huwa ċċertifikat"
+    },
+    "certNote": "Kif iddikjarat mill-marka. Iċ-ċertifikazzjonijiet huma volontarji.",
+    "features": "Karatteristiċi",
+    "measurements": "Qisien",
+    "colourFamily": "Familja tal-kulur",
+    "dimensions": "Għ × W × F",
+    "weight": "Piż",
+    "volume": "Volum",
+    "volumeExpanded": "{{volume}} estiż",
+    "handleDrop": "Għoli tal-manki",
+    "strapLength": "Tul taċ-ċinga",
+    "laptop": "Laptop",
+    "laptopUpTo": "sa {{size}}",
+    "heelHeight": "Għoli tat-takkuna",
+    "shaftHeight": "Għoli tal-kanna tal-istival",
+    "inseam": "Tul ta’ ġewwa tar-riġel",
+    "yes": "Iva",
+    "no": "Le",
+    "notStated": "Mhux iddikjarat",
+    "feature": {
+      "shell": "Qoxra",
+      "wheels": "Roti",
+      "lock": "Serratura",
+      "expandable": "Jista’ jitkabbar",
+      "closure": "Għeluq",
+      "laptop_compartment": "Kompartiment għal-laptop",
+      "water_resistance": "Reżistenza għall-ilma",
+      "detachable_parts": "Jinqalgħu",
+      "adjustable_parts": "Aġġustabbli",
+      "fit": "Qatgħa",
+      "sleeve_length": "Tul tal-kmiem",
+      "neckline": "Għonq"
+    }
+  },
+  "labelWarning": {
+    "title": "Informazzjoni tat-tikketta mhux kompluta",
+    "intro": "Dawn huma twissijiet, mhux żbalji: l-oġġetti jiġu importati u ppubblikati bħas-soltu. Ikkompleta l-informazzjoni fil-fajl tiegħek jew fuq l-oġġett, għax il-liġi tal-UE titlobha fuq it-tikketta u fl-offerta tiegħek.",
+    "badge": "Tikketta",
+    "fibre_composition_missing": {
+      "why": "Il-kompożizzjoni tal-fibri nieqsa. Trid tkun fuq it-tikketta ta’ prodott tessili u tintwera qabel ix-xiri, anke online. Għall-borżi u l-bagalji dan japplika meta jkunu mill-inqas 80% tessili.",
+      "law": "Regolament (UE) Nru 1007/2011, Artikoli 9, 11 u 16(1)"
+    },
+    "animal_origin_unknown": {
+      "why": "Il-materjali jinkludu ġilda, suf, ħarir, rix fin jew materjal ieħor ta’ oriġini mill-annimali. Għid jekk l-oġġett fihx partijiet mhux tessili ta’ oriġini mill-annimali (iva jew le); jekk iva, it-tikketta trid tgħid hekk.",
+      "law": "Regolament (UE) Nru 1007/2011, Artikolu 12"
+    },
+    "footwear_materials_missing": {
+      "why": "Il-materjali tal-parti ta’ fuq, tal-inforra u l-qiegħ ta’ ġewwa, u tal-qiegħ ta’ barra huma neqsin jew mhux kompluti. Iridu jkunu fuq it-tikketta taż-żraben.",
+      "law": "Direttiva 94/11/KE"
+    },
+    "fibre_percentages_not_100": {
+      "why": "Il-perċentwali ta’ din il-parti ma jammontawx għal 100%. Il-kompożizzjoni tingħata bħala sehem mill-piż totali tal-fibri.",
+      "law": "Regolament (UE) Nru 1007/2011, Artikoli 9 u 11"
+    }
   }
 }

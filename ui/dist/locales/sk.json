@@ -65,7 +65,10 @@
     "size": "Veľkosť",
     "sizeSystem": "Systém veľkostí",
     "sku": "SKU",
-    "retailer": "Predajca"
+    "retailer": "Predajca",
+    "itemSubtype": "Druh",
+    "animalOrigin": "Netextilné časti živočíšneho pôvodu",
+    "secondSize": "Druhá veľkosť"
   },
   "validate": {
     "required": "Vyplňte, prosím, toto pole.",
@@ -128,7 +131,11 @@
     "files_missing": "Chýba súbor fotografie",
     "validation_failed": "Hodnota nebola prijatá",
     "position_conflict": "Pozícia je už obsadená",
-    "mass_unpublish_refused": "Príliš veľa tovaru by zmizlo z ponuky"
+    "mass_unpublish_refused": "Príliš veľa tovaru by zmizlo z ponuky",
+    "fibre_composition_missing": "Chýba vláknové zloženie",
+    "animal_origin_unknown": "Živočíšny pôvod nie je uvedený",
+    "footwear_materials_missing": "Chýbajú materiály obuvi",
+    "fibre_percentages_not_100": "Percentá nedávajú spolu 100 %"
   },
   "login": {
     "title": "Prihlásenie: {{portal}}",
@@ -361,7 +368,33 @@
     "deleteHint": "Odstránením odstránite tovar so všetkými veľkosťami a fotografiami. Na dočasné skrytie radšej vypnite „Zverejnené“.",
     "delete": "Odstrániť tovar",
     "deleteTitle": "Odstrániť {{style}}?",
-    "deleteBody": "Tovar, jeho veľkosti a fotografie budú odstránené. Systémy predajcov sa dozvedia, že zmizol. Túto akciu nemožno vrátiť."
+    "deleteBody": "Tovar, jeho veľkosti a fotografie budú odstránené. Systémy predajcov sa dozvedia, že zmizol. Túto akciu nemožno vrátiť.",
+    "materialsFlags": "Ak to platí, doplňte za vlákno (recycled) alebo (organic): „100% polyester (recycled)“.",
+    "animalOriginHint": "Napríklad kožená nášivka, kožušinový lem alebo gombíky z rohoviny. Ak také sú, musí to byť uvedené na štítku.",
+    "footwearHint": "Povinné na štítku obuvi: materiál, z ktorého je väčšina každej časti (aspoň 80 %).",
+    "certificationsHint": "Nepovinné. Systém a číslo licencie, napr. „gots:CU 123456“; ak je certifikovaný len materiál, doplňte (material).",
+    "certificationsInvalid": "„{{entry}}“ sa nepodarilo prečítať. Použite systém:číslo licencie, napr. gots:CU 123456.",
+    "labelHint": "Tak, ako to predajcovia vidia na stránke tovaru a v stiahnutých údajoch o tovare.",
+    "labelEmpty": "Zatiaľ žiadne údaje na štítok. Nižšie doplňte materiály a pokyny na údržbu.",
+    "secondSizeHint": "Ak je: dĺžka džínsov (32/34) alebo košík podprsenky (75/B).",
+    "colourFamilyHint": "Pomáha predajcom filtrovať podľa farby, popri vašom vlastnom názve farby.",
+    "measurementsHint": "Len čísla. Batožina: vonkajší rozmer vrátane kolies a rukovätí. Tašky: samotné telo bez rukovätí a popruhu.",
+    "numberInvalid": "Zadajte číslo, napr. 2,6.",
+    "strapInvalid": "Zadajte najkratšiu a najdlhšiu dĺžku, napr. 80-130.",
+    "measure": {
+      "height_cm": "Výška (cm)",
+      "width_cm": "Šírka (cm)",
+      "depth_cm": "Hĺbka (cm)",
+      "weight_kg": "Hmotnosť (kg)",
+      "volume_l": "Objem (l)",
+      "volume_expanded_l": "Objem po rozšírení (l)",
+      "handle_drop_cm": "Výška rukovätí (cm)",
+      "strap_length_cm": "Dĺžka popruhu (cm)",
+      "laptop_max_inch": "Notebook do (palce)",
+      "heel_height_cm": "Výška podpätku (cm)",
+      "shaft_height_cm": "Výška sáry (cm)",
+      "inseam_cm": "Vnútorná dĺžka nohavíc (cm)"
+    }
   },
   "imports": {
     "title": "Importy",
@@ -1211,7 +1244,8 @@
       "eyewear": "Okuliare",
       "accessory": "Doplnok",
       "home": "Domácnosť",
-      "generic_product": "Iný produkt"
+      "generic_product": "Iný produkt",
+      "luggage": "Batožina"
     },
     "part": {
       "main": "Hlavný materiál",
@@ -1221,7 +1255,12 @@
       "trim": "Doplnky",
       "sole": "Podrážka",
       "upper": "Zvršok",
-      "insole": "Vložka"
+      "insole": "Vložka",
+      "padding": "Polstrovanie",
+      "pocket_lining": "Podšívka vreciek",
+      "shell": "Obal",
+      "handle": "Rukoväť",
+      "strap": "Popruh"
     },
     "fibre": {
       "cotton": "bavlna",
@@ -1301,6 +1340,131 @@
       "wet_clean_w_mild": "Profesionálne mokré čistenie, šetrné",
       "wet_clean_w_very_mild": "Profesionálne mokré čistenie, veľmi šetrné",
       "do_not_wet_clean": "Nečistiť profesionálne za mokra"
+    },
+    "itemSubtype": {
+      "handbag": "Kabelka",
+      "shoulder_bag": "Taška cez plece",
+      "crossbody": "Crossbody kabelka",
+      "tote": "Taška tote",
+      "clutch": "Psaníčko",
+      "belt_bag": "Ľadvinka",
+      "backpack": "Batoh",
+      "laptop_bag": "Taška na notebook",
+      "briefcase": "Aktovka",
+      "weekender": "Víkendová taška",
+      "toiletry_bag": "Toaletná taška",
+      "wallet": "Peňaženka",
+      "card_holder": "Puzdro na karty",
+      "underseat": "Taška pod sedadlo",
+      "cabin": "Kabínová veľkosť",
+      "check_in_medium": "Do batožinového priestoru, stredný",
+      "check_in_large": "Do batožinového priestoru, veľký",
+      "pilot_case": "Pilotný kufor",
+      "garment_bag": "Obal na oblečenie",
+      "duffel": "Cestovná taška",
+      "sneaker": "Teniska",
+      "running": "Bežecká obuv",
+      "hiking": "Turistická obuv",
+      "lace_up": "Šnurovacia obuv",
+      "loafer": "Mokasína",
+      "pump": "Lodička",
+      "sandal": "Sandál",
+      "slipper": "Papuča",
+      "ankle_boot": "Členková čižma",
+      "boot": "Čižma",
+      "knee_boot": "Čižma po kolená"
+    },
+    "footwearMaterial": {
+      "leather": "Koža",
+      "coated_leather": "Potiahnutá koža",
+      "textile": "Textil",
+      "other": "Iné materiály"
+    },
+    "colourFamily": {
+      "black": "Čierna",
+      "white": "Biela",
+      "grey": "Sivá",
+      "beige": "Béžová",
+      "brown": "Hnedá",
+      "red": "Červená",
+      "pink": "Ružová",
+      "orange": "Oranžová",
+      "yellow": "Žltá",
+      "green": "Zelená",
+      "blue": "Modrá",
+      "purple": "Fialová",
+      "gold": "Zlatá",
+      "silver": "Strieborná",
+      "multicolour": "Viacfarebná",
+      "transparent": "Priehľadná"
+    },
+    "feature": {
+      "shell": {
+        "hard": "Pevný",
+        "soft": "Mäkký",
+        "hybrid": "Hybridný"
+      },
+      "lock": {
+        "none": "Žiadny",
+        "combination": "Kombinačný zámok",
+        "tsa_combination": "Kombinačný zámok TSA",
+        "tsa_key": "Zámok TSA na kľúč",
+        "key": "Zámok na kľúč"
+      },
+      "closure": {
+        "zip": "Zips",
+        "magnet": "Magnet",
+        "flap": "Klopa",
+        "buckle": "Pracka",
+        "drawstring": "Sťahovacia šnúrka",
+        "button": "Gombík",
+        "hook_and_loop": "Suchý zips",
+        "laces": "Šnúrky",
+        "slip_on": "Nazúvacie",
+        "open": "Otvorené"
+      },
+      "water_resistance": {
+        "none": "Žiadna",
+        "water_repellent": "Vodoodpudivé",
+        "waterproof": "Nepremokavé"
+      },
+      "detachable_parts": {
+        "shoulder_strap": "popruh cez plece",
+        "handle": "rukoväť",
+        "lining": "podšívka",
+        "insole": "vložka",
+        "hood": "kapucňa",
+        "belt": "opasok",
+        "pouch": "puzdro",
+        "wheels": "kolieska"
+      },
+      "adjustable_parts": {
+        "shoulder_strap": "popruh cez plece",
+        "waist": "pás",
+        "hem": "spodný lem",
+        "cuff": "manžety"
+      },
+      "fit": {
+        "slim": "Úzky",
+        "regular": "Rovný",
+        "relaxed": "Voľný",
+        "oversized": "Oversized"
+      },
+      "sleeve_length": {
+        "sleeveless": "Bez rukávov",
+        "short": "Krátky",
+        "three_quarter": "Trojštvrťový",
+        "long": "Dlhý"
+      },
+      "neckline": {
+        "crew": "Okrúhly výstrih",
+        "v_neck": "Výstrih do V",
+        "collar": "Golier",
+        "hood": "Kapucňa",
+        "turtleneck": "Rolák",
+        "boat": "Lodičkový výstrih",
+        "scoop": "Hlboký okrúhly výstrih"
+      }
     }
   },
   "email": {
@@ -1363,5 +1527,76 @@
     "notFoundTitle": "Stránka sa nenašla",
     "notFound": "Táto adresa (už) neexistuje.",
     "home": "Prejsť na úvodnú stránku"
+  },
+  "article": {
+    "label": "Údaje na štítku",
+    "composition": "Zloženie",
+    "recycled": "recyklované",
+    "organic": "bio",
+    "animalOrigin": "Obsahuje netextilné časti živočíšneho pôvodu",
+    "footwear": "Materiály obuvi",
+    "footwearPart": {
+      "upper": "Zvršok",
+      "lining_and_sock": "Podšívka a stielka",
+      "outer_sole": "Podošva"
+    },
+    "certifications": "Certifikáty",
+    "certScope": {
+      "product": "tovar je certifikovaný",
+      "material": "materiál je certifikovaný"
+    },
+    "certNote": "Podľa údajov značky. Certifikáty sú dobrovoľné.",
+    "features": "Vlastnosti",
+    "measurements": "Rozmery",
+    "colourFamily": "Skupina farieb",
+    "dimensions": "V × Š × H",
+    "weight": "Hmotnosť",
+    "volume": "Objem",
+    "volumeExpanded": "{{volume}} po rozšírení",
+    "handleDrop": "Výška rukovätí",
+    "strapLength": "Dĺžka popruhu",
+    "laptop": "Notebook",
+    "laptopUpTo": "do {{size}}",
+    "heelHeight": "Výška podpätku",
+    "shaftHeight": "Výška sáry",
+    "inseam": "Vnútorná dĺžka nohavíc",
+    "yes": "Áno",
+    "no": "Nie",
+    "notStated": "Neuvedené",
+    "feature": {
+      "shell": "Obal",
+      "wheels": "Kolieska",
+      "lock": "Zámok",
+      "expandable": "Rozšíriteľné",
+      "closure": "Zapínanie",
+      "laptop_compartment": "Priehradka na notebook",
+      "water_resistance": "Odolnosť voči vode",
+      "detachable_parts": "Odnímateľné",
+      "adjustable_parts": "Nastaviteľné",
+      "fit": "Strih",
+      "sleeve_length": "Dĺžka rukáva",
+      "neckline": "Výstrih"
+    }
+  },
+  "labelWarning": {
+    "title": "Údaje na štítku nie sú úplné",
+    "intro": "Sú to upozornenia, nie chyby: tovar sa importuje a zverejňuje ako zvyčajne. Doplňte údaje vo svojom súbore alebo pri tovare, pretože právo EÚ ich vyžaduje na štítku aj vo vašej ponuke.",
+    "badge": "Štítok",
+    "fibre_composition_missing": {
+      "why": "Chýba vláknové zloženie. Musí byť na štítku textilného výrobku a zobrazené pred kúpou, aj online. Pri taškách a batožine to platí, ak sú aspoň z 80 % textilné.",
+      "law": "Nariadenie (EÚ) č. 1007/2011, čl. 9, 11 a 16 ods. 1"
+    },
+    "animal_origin_unknown": {
+      "why": "Medzi materiálmi je koža, vlna, hodváb, páperie alebo iný materiál živočíšneho pôvodu. Uveďte, či tovar obsahuje netextilné časti živočíšneho pôvodu (áno alebo nie); ak áno, musí to byť uvedené na štítku.",
+      "law": "Nariadenie (EÚ) č. 1007/2011, čl. 12"
+    },
+    "footwear_materials_missing": {
+      "why": "Materiály zvršku, podšívky a stielky a podošvy chýbajú alebo nie sú úplné. Musia byť na štítku obuvi.",
+      "law": "Smernica 94/11/ES"
+    },
+    "fibre_percentages_not_100": {
+      "why": "Percentá tejto časti nedávajú spolu 100 %. Zloženie sa uvádza ako podiel z celkovej hmotnosti vlákien.",
+      "law": "Nariadenie (EÚ) č. 1007/2011, čl. 9 a 11"
+    }
   }
 }

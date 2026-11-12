@@ -65,7 +65,10 @@
     "size": "Mărime",
     "sizeSystem": "Sistem de mărimi",
     "sku": "SKU",
-    "retailer": "Comerciant"
+    "retailer": "Comerciant",
+    "itemSubtype": "Tip",
+    "animalOrigin": "Părți netextile de origine animală",
+    "secondSize": "A doua mărime"
   },
   "validate": {
     "required": "Completați acest câmp.",
@@ -128,7 +131,11 @@
     "files_missing": "Fișier foto lipsă",
     "validation_failed": "Valoare neacceptată",
     "position_conflict": "Poziție deja ocupată",
-    "mass_unpublish_refused": "Prea multe articole ar dispărea din ofertă"
+    "mass_unpublish_refused": "Prea multe articole ar dispărea din ofertă",
+    "fibre_composition_missing": "Compoziție fibroasă lipsă",
+    "animal_origin_unknown": "Origine animală nespecificată",
+    "footwear_materials_missing": "Materialele încălțămintei lipsă",
+    "fibre_percentages_not_100": "Procentele nu însumează 100%"
   },
   "login": {
     "title": "Conectare: {{portal}}",
@@ -358,7 +365,33 @@
     "deleteHint": "Ștergerea elimină articolul cu toate mărimile și fotografiile. Pentru a-l ascunde temporar, dezactivați mai bine „Publicat”.",
     "delete": "Șterge articolul",
     "deleteTitle": "Ștergeți {{style}}?",
-    "deleteBody": "Articolul, mărimile și fotografiile sale vor fi eliminate. Sistemele comercianților vor afla că a dispărut. Acțiunea nu poate fi anulată."
+    "deleteBody": "Articolul, mărimile și fotografiile sale vor fi eliminate. Sistemele comercianților vor afla că a dispărut. Acțiunea nu poate fi anulată.",
+    "materialsFlags": "Adăugați (recycled) sau (organic) după o fibră, unde este cazul: „100% polyester (recycled)”.",
+    "animalOriginHint": "De exemplu un ecuson din piele, un garnisaj din blană sau nasturi din corn. Dacă există, eticheta trebuie să menționeze acest lucru.",
+    "footwearHint": "Obligatoriu pe eticheta încălțămintei: materialul din care este făcută cea mai mare parte a fiecărei părți (cel puțin 80%).",
+    "certificationsHint": "Opțional. Schema și numărul licenței, de ex. „gots:CU 123456”; adăugați (material) când este certificat doar un material.",
+    "certificationsInvalid": "„{{entry}}” nu a putut fi citit. Folosiți schemă:număr licență, de ex. gots:CU 123456.",
+    "labelHint": "Așa cum îl văd comercianții pe pagina articolului și în datele de articol descărcate.",
+    "labelEmpty": "Încă nu există informații pentru etichetă. Adăugați mai jos compoziția și instrucțiunile de întreținere.",
+    "secondSizeHint": "Unde există: lungimea blugilor (32/34) sau cupa sutienului (75/B).",
+    "colourFamilyHint": "Îi ajută pe comercianți să filtreze după culoare, pe lângă numele de culoare propriu.",
+    "measurementsHint": "Doar cifre. Bagaje: dimensiunea exterioară, cu roți și mânere. Genți: corpul fără mânere și curea.",
+    "numberInvalid": "Introduceți un număr, de ex. 2,6.",
+    "strapInvalid": "Introduceți lungimea minimă și maximă, de ex. 80-130.",
+    "measure": {
+      "height_cm": "Înălțime (cm)",
+      "width_cm": "Lățime (cm)",
+      "depth_cm": "Adâncime (cm)",
+      "weight_kg": "Greutate (kg)",
+      "volume_l": "Volum (l)",
+      "volume_expanded_l": "Volum extins (l)",
+      "handle_drop_cm": "Înălțimea mânerului (cm)",
+      "strap_length_cm": "Lungimea curelei (cm)",
+      "laptop_max_inch": "Laptop până la (inch)",
+      "heel_height_cm": "Înălțimea tocului (cm)",
+      "shaft_height_cm": "Înălțimea carâmbului (cm)",
+      "inseam_cm": "Lungime interioară picior (cm)"
+    }
   },
   "imports": {
     "title": "Importuri",
@@ -1181,7 +1214,8 @@
       "eyewear": "Ochelari",
       "accessory": "Accesoriu",
       "home": "Casă",
-      "generic_product": "Alt produs"
+      "generic_product": "Alt produs",
+      "luggage": "Bagaje"
     },
     "part": {
       "main": "Material principal",
@@ -1191,7 +1225,12 @@
       "trim": "Garnituri",
       "sole": "Talpă",
       "upper": "Față",
-      "insole": "Branț"
+      "insole": "Branț",
+      "padding": "Vatelină",
+      "pocket_lining": "Căptușeala buzunarelor",
+      "shell": "Carcasă",
+      "handle": "Mâner",
+      "strap": "Curea"
     },
     "fibre": {
       "cotton": "bumbac",
@@ -1271,6 +1310,131 @@
       "wet_clean_w_mild": "Curățare umedă profesională, delicat",
       "wet_clean_w_very_mild": "Curățare umedă profesională, foarte delicat",
       "do_not_wet_clean": "Fără curățare umedă profesională"
+    },
+    "itemSubtype": {
+      "handbag": "Geantă de mână",
+      "shoulder_bag": "Geantă de umăr",
+      "crossbody": "Geantă crossbody",
+      "tote": "Geantă tote",
+      "clutch": "Plic",
+      "belt_bag": "Borsetă",
+      "backpack": "Rucsac",
+      "laptop_bag": "Geantă pentru laptop",
+      "briefcase": "Servietă",
+      "weekender": "Geantă de weekend",
+      "toiletry_bag": "Trusă de toaletă",
+      "wallet": "Portofel",
+      "card_holder": "Port-card",
+      "underseat": "Bagaj sub scaun",
+      "cabin": "Mărime cabină",
+      "check_in_medium": "De cală, mediu",
+      "check_in_large": "De cală, mare",
+      "pilot_case": "Servietă de pilot",
+      "garment_bag": "Husă pentru haine",
+      "duffel": "Geantă de voiaj",
+      "sneaker": "Sneaker",
+      "running": "Pantof de alergare",
+      "hiking": "Pantof de drumeție",
+      "lace_up": "Pantof cu șireturi",
+      "loafer": "Mocasin",
+      "pump": "Pantof cu toc",
+      "sandal": "Sandală",
+      "slipper": "Papuc",
+      "ankle_boot": "Botină",
+      "boot": "Cizmă",
+      "knee_boot": "Cizmă până la genunchi"
+    },
+    "footwearMaterial": {
+      "leather": "Piele",
+      "coated_leather": "Piele acoperită",
+      "textile": "Material textil",
+      "other": "Alte materiale"
+    },
+    "colourFamily": {
+      "black": "Negru",
+      "white": "Alb",
+      "grey": "Gri",
+      "beige": "Bej",
+      "brown": "Maro",
+      "red": "Roșu",
+      "pink": "Roz",
+      "orange": "Portocaliu",
+      "yellow": "Galben",
+      "green": "Verde",
+      "blue": "Albastru",
+      "purple": "Mov",
+      "gold": "Auriu",
+      "silver": "Argintiu",
+      "multicolour": "Multicolor",
+      "transparent": "Transparent"
+    },
+    "feature": {
+      "shell": {
+        "hard": "Rigidă",
+        "soft": "Moale",
+        "hybrid": "Hibridă"
+      },
+      "lock": {
+        "none": "Fără",
+        "combination": "Lacăt cu cifru",
+        "tsa_combination": "Lacăt TSA cu cifru",
+        "tsa_key": "Încuietoare TSA cu cheie",
+        "key": "Încuietoare cu cheie"
+      },
+      "closure": {
+        "zip": "Fermoar",
+        "magnet": "Magnet",
+        "flap": "Clapă",
+        "buckle": "Cataramă",
+        "drawstring": "Șnur",
+        "button": "Nasture",
+        "hook_and_loop": "Arici",
+        "laces": "Șireturi",
+        "slip_on": "Fără închidere",
+        "open": "Deschis"
+      },
+      "water_resistance": {
+        "none": "Fără",
+        "water_repellent": "Hidrofug",
+        "waterproof": "Impermeabil"
+      },
+      "detachable_parts": {
+        "shoulder_strap": "curea de umăr",
+        "handle": "mâner",
+        "lining": "căptușeală",
+        "insole": "branț",
+        "hood": "glugă",
+        "belt": "curea",
+        "pouch": "săculeț",
+        "wheels": "roți"
+      },
+      "adjustable_parts": {
+        "shoulder_strap": "curea de umăr",
+        "waist": "talie",
+        "hem": "tiv",
+        "cuff": "manșete"
+      },
+      "fit": {
+        "slim": "Slim",
+        "regular": "Regular",
+        "relaxed": "Lejer",
+        "oversized": "Oversized"
+      },
+      "sleeve_length": {
+        "sleeveless": "Fără mâneci",
+        "short": "Scurtă",
+        "three_quarter": "Trei sferturi",
+        "long": "Lungă"
+      },
+      "neckline": {
+        "crew": "Decolteu rotund",
+        "v_neck": "Decolteu în V",
+        "collar": "Guler",
+        "hood": "Glugă",
+        "turtleneck": "Guler înalt",
+        "boat": "Decolteu bărcuță",
+        "scoop": "Decolteu rotund larg"
+      }
     }
   },
   "email": {
@@ -1333,5 +1497,76 @@
     "notFoundTitle": "Pagina nu a fost găsită",
     "notFound": "Această adresă nu (mai) există.",
     "home": "Mergi la pagina principală"
+  },
+  "article": {
+    "label": "Informații pentru etichetă",
+    "composition": "Compoziție",
+    "recycled": "reciclat",
+    "organic": "organic",
+    "animalOrigin": "Conține părți netextile de origine animală",
+    "footwear": "Materialele încălțămintei",
+    "footwearPart": {
+      "upper": "Față",
+      "lining_and_sock": "Căptușeală și branț",
+      "outer_sole": "Talpă exterioară"
+    },
+    "certifications": "Certificări",
+    "certScope": {
+      "product": "articolul este certificat",
+      "material": "un material este certificat"
+    },
+    "certNote": "Conform declarației mărcii. Certificările sunt voluntare.",
+    "features": "Caracteristici",
+    "measurements": "Dimensiuni",
+    "colourFamily": "Familie de culori",
+    "dimensions": "Î × L × A",
+    "weight": "Greutate",
+    "volume": "Volum",
+    "volumeExpanded": "{{volume}} extins",
+    "handleDrop": "Înălțimea mânerului",
+    "strapLength": "Lungimea curelei",
+    "laptop": "Laptop",
+    "laptopUpTo": "până la {{size}}",
+    "heelHeight": "Înălțimea tocului",
+    "shaftHeight": "Înălțimea carâmbului",
+    "inseam": "Lungime interioară picior",
+    "yes": "Da",
+    "no": "Nu",
+    "notStated": "Nespecificat",
+    "feature": {
+      "shell": "Carcasă",
+      "wheels": "Roți",
+      "lock": "Încuietoare",
+      "expandable": "Extensibil",
+      "closure": "Închidere",
+      "laptop_compartment": "Compartiment pentru laptop",
+      "water_resistance": "Rezistență la apă",
+      "detachable_parts": "Detașabile",
+      "adjustable_parts": "Reglabile",
+      "fit": "Croială",
+      "sleeve_length": "Lungimea mânecii",
+      "neckline": "Decolteu"
+    }
+  },
+  "labelWarning": {
+    "title": "Informații pentru etichetă incomplete",
+    "intro": "Acestea sunt avertismente, nu erori: articolele sunt importate și publicate ca de obicei. Completați informațiile în fișier sau la articol, deoarece legislația UE le cere pe etichetă și în oferta dvs.",
+    "badge": "Etichetă",
+    "fibre_composition_missing": {
+      "why": "Lipsește compoziția fibroasă. Trebuie să fie pe eticheta unui produs textil și afișată înainte de cumpărare, inclusiv online. Pentru genți și bagaje se aplică atunci când sunt din cel puțin 80% textile.",
+      "law": "Regulamentul (UE) nr. 1007/2011, art. 9, 11 și art. 16 alin. (1)"
+    },
+    "animal_origin_unknown": {
+      "why": "Materialele includ piele, lână, mătase, puf sau alt material de origine animală. Indicați dacă articolul conține părți netextile de origine animală (da sau nu); dacă da, eticheta trebuie să menționeze acest lucru.",
+      "law": "Regulamentul (UE) nr. 1007/2011, art. 12"
+    },
+    "footwear_materials_missing": {
+      "why": "Materialele feței, ale căptușelii și branțului și ale tălpii exterioare lipsesc sau sunt incomplete. Trebuie să fie pe eticheta încălțămintei.",
+      "law": "Directiva 94/11/CE"
+    },
+    "fibre_percentages_not_100": {
+      "why": "Procentele acestei părți nu însumează 100%. Compoziția se indică drept procent din greutatea totală a fibrelor.",
+      "law": "Regulamentul (UE) nr. 1007/2011, art. 9 și 11"
+    }
   }
 }

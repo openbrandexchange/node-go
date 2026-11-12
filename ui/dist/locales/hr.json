@@ -65,7 +65,10 @@
     "size": "Veličina",
     "sizeSystem": "Sustav veličina",
     "sku": "SKU",
-    "retailer": "Trgovac"
+    "retailer": "Trgovac",
+    "itemSubtype": "Podvrsta",
+    "animalOrigin": "Netekstilni dijelovi životinjskog podrijetla",
+    "secondSize": "Druga veličina"
   },
   "validate": {
     "required": "Ispunite ovo polje.",
@@ -128,7 +131,11 @@
     "files_missing": "Nedostaje datoteka fotografije",
     "validation_failed": "Vrijednost nije prihvaćena",
     "position_conflict": "Mjesto je već zauzeto",
-    "mass_unpublish_refused": "Previše artikala nestalo bi iz ponude"
+    "mass_unpublish_refused": "Previše artikala nestalo bi iz ponude",
+    "fibre_composition_missing": "Nedostaje sastav vlakana",
+    "animal_origin_unknown": "Životinjsko podrijetlo nije navedeno",
+    "footwear_materials_missing": "Nedostaju materijali obuće",
+    "fibre_percentages_not_100": "Postoci ne daju ukupno 100 %"
   },
   "login": {
     "title": "Prijava: {{portal}}",
@@ -358,7 +365,33 @@
     "deleteHint": "Brisanjem uklanjate artikl sa svim veličinama i fotografijama. Za privremeno skrivanje radije isključite „Objavljeno”.",
     "delete": "Izbriši artikl",
     "deleteTitle": "Izbrisati {{style}}?",
-    "deleteBody": "Artikl, njegove veličine i fotografije bit će uklonjeni. Sustavi trgovaca saznat će da je nestao. To se ne može poništiti."
+    "deleteBody": "Artikl, njegove veličine i fotografije bit će uklonjeni. Sustavi trgovaca saznat će da je nestao. To se ne može poništiti.",
+    "materialsFlags": "Dodajte (recycled) ili (organic) iza vlakna kad je to slučaj: „100% polyester (recycled)”.",
+    "animalOriginHint": "Na primjer kožna zakrpa, obrub od krzna ili gumbi od roga. Ako ih ima, to mora pisati na etiketi.",
+    "footwearHint": "Obavezno na etiketi obuće: materijal od kojeg je izrađen veći dio svakog dijela (najmanje 80 %).",
+    "certificationsHint": "Neobavezno. Shema i broj licence, npr. „gots:CU 123456”; dodajte (material) ako je certificiran samo materijal.",
+    "certificationsInvalid": "„{{entry}}” nije moguće pročitati. Navedite shema:broj licence, npr. gots:CU 123456.",
+    "labelHint": "Onako kako to trgovci vide na stranici artikla i u preuzetim podacima o artiklima.",
+    "labelEmpty": "Još nema podataka za etiketu. Dodajte materijale i upute za održavanje u nastavku.",
+    "secondSizeHint": "Ako postoji: duljina traperica (32/34) ili košarica grudnjaka (75/B).",
+    "colourFamilyHint": "Pomaže trgovcima filtrirati po boji, uz vaš vlastiti naziv boje.",
+    "measurementsHint": "Samo brojevi. Kovčezi: vanjske mjere uključujući kotačiće i ručke. Torbe: sama torba bez ručki i remena.",
+    "numberInvalid": "Unesite broj, npr. 2,6.",
+    "strapInvalid": "Unesite najkraću i najdulju duljinu, npr. 80-130.",
+    "measure": {
+      "height_cm": "Visina (cm)",
+      "width_cm": "Širina (cm)",
+      "depth_cm": "Dubina (cm)",
+      "weight_kg": "Težina (kg)",
+      "volume_l": "Zapremina (l)",
+      "volume_expanded_l": "Zapremina proširenog (l)",
+      "handle_drop_cm": "Visina ručki (cm)",
+      "strap_length_cm": "Duljina remena (cm)",
+      "laptop_max_inch": "Laptop do (inča)",
+      "heel_height_cm": "Visina pete (cm)",
+      "shaft_height_cm": "Visina sare (cm)",
+      "inseam_cm": "Unutarnja duljina nogavice (cm)"
+    }
   },
   "imports": {
     "title": "Uvozi",
@@ -1181,7 +1214,8 @@
       "eyewear": "Naočale",
       "accessory": "Dodatak",
       "home": "Dom",
-      "generic_product": "Drugi proizvod"
+      "generic_product": "Drugi proizvod",
+      "luggage": "Prtljaga"
     },
     "part": {
       "main": "Glavni materijal",
@@ -1191,7 +1225,12 @@
       "trim": "Ukrasi",
       "sole": "Potplat",
       "upper": "Gornji dio",
-      "insole": "Uložak"
+      "insole": "Uložak",
+      "padding": "Mekana obloga",
+      "pocket_lining": "Podstava džepova",
+      "shell": "Kućište",
+      "handle": "Ručka",
+      "strap": "Remen"
     },
     "fibre": {
       "cotton": "pamuk",
@@ -1271,6 +1310,131 @@
       "wet_clean_w_mild": "Profesionalno mokro čišćenje, blago",
       "wet_clean_w_very_mild": "Profesionalno mokro čišćenje, vrlo blago",
       "do_not_wet_clean": "Ne čistiti profesionalno mokro"
+    },
+    "itemSubtype": {
+      "handbag": "Ručna torba",
+      "shoulder_bag": "Torba za rame",
+      "crossbody": "Torba preko tijela",
+      "tote": "Shopper torba",
+      "clutch": "Clutch torbica",
+      "belt_bag": "Torbica oko struka",
+      "backpack": "Ruksak",
+      "laptop_bag": "Torba za laptop",
+      "briefcase": "Aktovka",
+      "weekender": "Vikend torba",
+      "toiletry_bag": "Toaletna torbica",
+      "wallet": "Novčanik",
+      "card_holder": "Držač za kartice",
+      "underseat": "Torba ispod sjedala",
+      "cabin": "Kabinska veličina",
+      "check_in_medium": "Predana prtljaga, srednja",
+      "check_in_large": "Predana prtljaga, velika",
+      "pilot_case": "Pilotski kovčeg",
+      "garment_bag": "Navlaka za odjeću",
+      "duffel": "Putna torba",
+      "sneaker": "Tenisica",
+      "running": "Tenisica za trčanje",
+      "hiking": "Planinarska cipela",
+      "lace_up": "Cipela na vezanje",
+      "loafer": "Mokasinka",
+      "pump": "Salonka",
+      "sandal": "Sandala",
+      "slipper": "Papuča",
+      "ankle_boot": "Gležnjača",
+      "boot": "Čizma",
+      "knee_boot": "Čizma do koljena"
+    },
+    "footwearMaterial": {
+      "leather": "Koža",
+      "coated_leather": "Presvučena koža",
+      "textile": "Tekstil",
+      "other": "Ostali materijali"
+    },
+    "colourFamily": {
+      "black": "Crna",
+      "white": "Bijela",
+      "grey": "Siva",
+      "beige": "Bež",
+      "brown": "Smeđa",
+      "red": "Crvena",
+      "pink": "Ružičasta",
+      "orange": "Narančasta",
+      "yellow": "Žuta",
+      "green": "Zelena",
+      "blue": "Plava",
+      "purple": "Ljubičasta",
+      "gold": "Zlatna",
+      "silver": "Srebrna",
+      "multicolour": "Višebojna",
+      "transparent": "Prozirna"
+    },
+    "feature": {
+      "shell": {
+        "hard": "Tvrdo kućište",
+        "soft": "Mekano kućište",
+        "hybrid": "Hibridno"
+      },
+      "lock": {
+        "none": "Bez brave",
+        "combination": "Brava na šifru",
+        "tsa_combination": "TSA brava na šifru",
+        "tsa_key": "TSA brava s ključem",
+        "key": "Brava s ključem"
+      },
+      "closure": {
+        "zip": "Patentni zatvarač",
+        "magnet": "Magnet",
+        "flap": "Preklop",
+        "buckle": "Kopča",
+        "drawstring": "Uvlačna vrpca",
+        "button": "Gumb",
+        "hook_and_loop": "Čičak",
+        "laces": "Vezice",
+        "slip_on": "Bez vezanja",
+        "open": "Otvoreno"
+      },
+      "water_resistance": {
+        "none": "Nije otporno",
+        "water_repellent": "Vodoodbojno",
+        "waterproof": "Vodootporno"
+      },
+      "detachable_parts": {
+        "shoulder_strap": "remen za rame",
+        "handle": "ručka",
+        "lining": "podstava",
+        "insole": "uložak",
+        "hood": "kapuljača",
+        "belt": "pojas",
+        "pouch": "torbica",
+        "wheels": "kotačići"
+      },
+      "adjustable_parts": {
+        "shoulder_strap": "remen za rame",
+        "waist": "struk",
+        "hem": "donji rub",
+        "cuff": "manšete"
+      },
+      "fit": {
+        "slim": "Uski",
+        "regular": "Standardni",
+        "relaxed": "Opušteni",
+        "oversized": "Oversized"
+      },
+      "sleeve_length": {
+        "sleeveless": "Bez rukava",
+        "short": "Kratki",
+        "three_quarter": "Tričetvrtinski",
+        "long": "Dugi"
+      },
+      "neckline": {
+        "crew": "Okrugli izrez",
+        "v_neck": "V-izrez",
+        "collar": "Ovratnik",
+        "hood": "Kapuljača",
+        "turtleneck": "Dolčevita",
+        "boat": "Brodski izrez",
+        "scoop": "Duboki okrugli izrez"
+      }
     }
   },
   "email": {
@@ -1333,5 +1497,76 @@
     "notFoundTitle": "Stranica nije pronađena",
     "notFound": "Ova adresa (više) ne postoji.",
     "home": "Na početnu stranicu"
+  },
+  "article": {
+    "label": "Podaci za etiketu",
+    "composition": "Sastav",
+    "recycled": "reciklirano",
+    "organic": "organsko",
+    "animalOrigin": "Sadrži netekstilne dijelove životinjskog podrijetla",
+    "footwear": "Materijali obuće",
+    "footwearPart": {
+      "upper": "Gornji dio",
+      "lining_and_sock": "Podstava i uložak",
+      "outer_sole": "Vanjski potplat"
+    },
+    "certifications": "Certifikati",
+    "certScope": {
+      "product": "artikl je certificiran",
+      "material": "materijal je certificiran"
+    },
+    "certNote": "Prema navodima marke. Certifikati su dobrovoljni.",
+    "features": "Značajke",
+    "measurements": "Mjere",
+    "colourFamily": "Skupina boja",
+    "dimensions": "V × Š × D",
+    "weight": "Težina",
+    "volume": "Zapremina",
+    "volumeExpanded": "{{volume}} prošireno",
+    "handleDrop": "Visina ručki",
+    "strapLength": "Duljina remena",
+    "laptop": "Laptop",
+    "laptopUpTo": "do {{size}}",
+    "heelHeight": "Visina pete",
+    "shaftHeight": "Visina sare",
+    "inseam": "Unutarnja duljina nogavice",
+    "yes": "Da",
+    "no": "Ne",
+    "notStated": "Nije navedeno",
+    "feature": {
+      "shell": "Kućište",
+      "wheels": "Kotačići",
+      "lock": "Brava",
+      "expandable": "Proširivo",
+      "closure": "Zatvaranje",
+      "laptop_compartment": "Pretinac za laptop",
+      "water_resistance": "Otpornost na vodu",
+      "detachable_parts": "Odvojivo",
+      "adjustable_parts": "Podesivo",
+      "fit": "Kroj",
+      "sleeve_length": "Duljina rukava",
+      "neckline": "Izrez"
+    }
+  },
+  "labelWarning": {
+    "title": "Podaci za etiketu nisu potpuni",
+    "intro": "Ovo su upozorenja, a ne pogreške: artikli se uvoze i objavljuju kao i obično. Dopunite podatke u svojoj datoteci ili na artiklu jer ih pravo EU-a zahtijeva na etiketi i u vašoj ponudi.",
+    "badge": "Etiketa",
+    "fibre_composition_missing": {
+      "why": "Nedostaje sastav vlakana. Mora biti na etiketi tekstilnog proizvoda i prikazan prije kupnje, i na internetu. Za torbe i kovčege to vrijedi ako su izrađeni od najmanje 80 % tekstila.",
+      "law": "Uredba (EU) br. 1007/2011, članci 9. i 11. te članak 16. stavak 1."
+    },
+    "animal_origin_unknown": {
+      "why": "Materijali uključuju kožu, vunu, svilu, paperje ili drugi materijal životinjskog podrijetla. Navedite sadrži li artikl netekstilne dijelove životinjskog podrijetla (da ili ne); ako sadrži, to mora pisati na etiketi.",
+      "law": "Uredba (EU) br. 1007/2011, članak 12."
+    },
+    "footwear_materials_missing": {
+      "why": "Materijali gornjeg dijela, podstave i uloška te vanjskog potplata nedostaju ili nisu potpuni. Moraju biti navedeni na etiketi obuće.",
+      "law": "Direktiva 94/11/EZ"
+    },
+    "fibre_percentages_not_100": {
+      "why": "Postoci ovog dijela ne daju ukupno 100 %. Sastav se navodi kao udio u ukupnoj masi vlakana.",
+      "law": "Uredba (EU) br. 1007/2011, članci 9. i 11."
+    }
   }
 }
