@@ -1,11 +1,11 @@
 # Implementation notes (node-go)
 
-Decisions taken where the [spec](https://github.com/openbrandexchange/spec) (v0.1.0, fixtures synced from commit in `testdata/spec/SPEC_COMMIT`) left room, and extensions the shared admin-ui may rely on. Each is the simplest reading; challenge them with an issue.
+Decisions taken where the [spec](https://github.com/openbrandexchange/spec) (v0.2.0, fixtures synced from commit in `testdata/spec/SPEC_COMMIT`) left room, and extensions the shared admin-ui may rely on. Each is the simplest reading; challenge them with an issue.
 
 ## Status
 
 - `go test ./...` covers the protocol against the Kestrel fixtures (JSON Schema validation of every response, expected products/assets/GTIN lookup), the ingest replay script (one operation at a time, as a JSON batch and as NDJSON), setup/sessions/CSRF, access requests, retailers, the portal, imports, exports and signed webhooks. The same tests run on PostgreSQL with `OBX_TEST_DATABASE_URL`, and against S3/SFTP test servers with `OBX_TEST_S3_ENDPOINT` / `OBX_TEST_SFTP`.
-- `conformance/` runs the obx-go conformance suite (all profiles, including security) against an in-process node on SQLite and PostgreSQL; CI also runs the `obx-conformance` binary against a running `node-go serve` with `--rate-limit-test`: 58 of 58 pass (obx-go a52d3a0).
+- `conformance/` runs the obx-go conformance suite (all profiles, including security) against an in-process node on SQLite and PostgreSQL; CI also runs the `obx-conformance` binary against a running `node-go serve` with `--rate-limit-test`: 65 of 65 pass on SQLite and PostgreSQL (obx-go 626b3a7, spec 43fa091).
 - Operations, security, performance and hosting are tested too: see [docs/development.md](docs/development.md#checks) for the full list CI runs.
 
 ## obx-go
@@ -35,6 +35,14 @@ The node does **not** use obx-go's types at runtime: it needs exact control over
 16. **Scheduled imports:** the remote file list (name, size, modification time, ETag or content hash) is fingerprinted; an unchanged source records a succeeded run with `"x-node-go-unchanged": true` and imports nothing (`force` overrides). SFTP host keys are pinned on first use (written into `config.host_key_fingerprint`). Runs are ordinary jobs with leases, so a crashed run is picked up again; `next_run_at` is stored, so schedules survive restarts. Only one run per source at a time.
 17. **Unreferenced blobs are not garbage-collected** yet (the spec allows it after 24 h).
 18. **Uploads are buffered in the system temp directory** before they are stored (hash and type checks). On Cloud Run that is memory.
+
+## Article data (spec 0.2)
+
+18a. **Stored as part of the write model.** The 0.2 fields live in the JSON `data` of products and variants like the 0.1 fields; migration 3 only marks the database for a one-time rewrite on start (`upgradeArticleData`): normalised fibre keys give an upsert, objects that only gain the new `null` properties are stored silently (no change entry, `updated_at` kept).
+18b. **Normalisation on write** (Ingest API, admin, imports): `recycled_<fibre>` / `organic_<fibre>` (any fibre, prefixes combinable) become the fibre with its flag; `false` flags are not stored; members of `features` / `measurements` that are `null` count as not stated, and an object left empty is `null`; an empty `certifications` list is `null`. A `footwear_materials` object is kept with all three parts (missing parts `null`).
+18c. **Label completeness warnings** follow obx-go: textile item types (rule 10's list, `bag`, `backpack`, `luggage`) get `fibre_composition_missing`, `animal_origin_unknown` (any fibre ending in `_wool` counts as wool) and `fibre_percentages_not_100` (once per part, tolerance 0.01); footwear item types get `footwear_materials_missing`; other types none. They are reported on `unchanged` writes too, in `warnings` as `"<code>: <detail>"` and in `warning_details` with a JSON Pointer. In imports they are ImportRowErrors at the product's first row with the column of rule 10.
+18d. **Import rows are all or nothing**: a row with an invalid product or variant value is skipped as a whole, so a product that appears only on rows with errors is not written (and not counted). Values in `color_family`, `size_length` or measurement cells of a row without variant columns are ignored with a warning; a different `color_family` on a later row of the same colour is a warning (the first wins). A `feature:<key>` column outside the registry gives one warning per column; a feature key that is not a valid key ignores the column with a warning.
+18e. **CSV export** writes every registry `feature:` column, then the other keys of the exported products (sorted); booleans as `yes`/`no`, lists with `|`, numbers with `.` and without trailing zeros, `strap_length_cm` as `min-max` (one number when equal), certifications with ` (material)` for material scope.
 
 ## Admin + portal API
 

@@ -16,7 +16,7 @@ Releases follow [Semantic Versioning](https://semver.org/). Within a major versi
 | Hosting | Command |
 |---|---|
 | Docker Compose (this repository) | `git pull && docker compose up -d --build` |
-| Docker with a published image | change the tag (`ghcr.io/openbrandexchange/node-go:0.1.1`) and `docker compose up -d` |
+| Docker with a published image | change the tag (`ghcr.io/openbrandexchange/node-go:0.2.0`) and `docker compose up -d` |
 | Google Cloud Run | `git pull && ./deploy/cloudrun.sh` (same settings as the first time) |
 | Fly.io | `git pull && fly deploy` |
 | Railway / Render | push the new commit to your fork; the platform rebuilds |
@@ -25,6 +25,15 @@ Releases follow [Semantic Versioning](https://semver.org/). Within a major versi
 3. **Check:** `curl https://your-portal/readyz` shows the new `version` and `schema_version`; sign in once; look at the log for `warn` lines.
 
 With SQLite and Litestream the old and the new instance must not run at the same time for long (both would write the replica): Cloud Run and Fly.io switch over within seconds. Changes made in those seconds on the old instance can be lost; update when the portal is quiet (evening), or use PostgreSQL for zero-downtime updates.
+
+## From 0.1 to 0.2
+
+0.2 implements spec 0.2 (article data). It adds migration 3, which changes no columns: products and variants keep their write model as JSON. On the first start after the upgrade the node rewrites every stored product and variant once, in one transaction, before it serves requests:
+
+- the 0.1 fibre keys `recycled_<fibre>` / `organic_<fibre>` become the fibre with `recycled` / `organic` (a 0.2 node never returns the 0.1 keys); those products get an `upsert` in `/changes`, so retailers' software picks up the new form;
+- every other product and variant only gains the new properties (`null`), without a change entry, so the upgrade does not make every retailer fetch the whole catalog again; their ETags in the Ingest API change once.
+
+Nothing else is needed: imports, `obx push` and the Ingest API keep working, and re-importing the same files afterwards changes nothing. Rolling back to 0.1 needs the backup made before the upgrade (migration 3).
 
 ## Rolling back
 

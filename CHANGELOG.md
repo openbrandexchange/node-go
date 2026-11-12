@@ -5,6 +5,57 @@ follows [Semantic Versioning](https://semver.org/): the major version changes wh
 more than replacing the software (see [docs/upgrading.md](docs/upgrading.md)); database migrations
 are always forward-only and applied automatically on start.
 
+## [0.2.0] - 2026-11-12
+
+Implements Open Brand Exchange protocol 0.2 (spec 0.2.0, [proposal 0002](https://github.com/openbrandexchange/spec/blob/main/docs/proposals/0002-product-data.md):
+article data for fashion, shoes, bags and luggage) and passes `obx-conformance all` (65 of 65
+tests, including P-CAT-5, P-CAT-6, I-IMP-7, I-IMP-8 and the rate-limit test) on SQLite and
+PostgreSQL. Additive: retailers' software written for 0.1 keeps working.
+
+### Added
+- **Article data** stored and returned everywhere (protocol, ingest, admin, portal, exports,
+  webhooks): product `item_subtype`, `contains_animal_origin`, `footwear_materials`,
+  `certifications`, `features` (the typed feature registry: shell, wheels, lock, expandable,
+  closure, laptop compartment, water resistance, detachable and adjustable parts, fit, sleeve
+  length, neckline; other keys are kept as sent); variant `size_length`, `measurements` (cm, kg,
+  l, inch) and `color.family`; the fibre flags `recycled` and `organic`. Products and variants
+  always carry the new properties (`null` when not stated); measurements and features only
+  their stated members.
+- **Imports** (upload, zip, scheduled pull, `node-go import`) read the 0.2 columns:
+  `item_subtype`, `contains_animal_origin`, `footwear_materials`, `certifications`
+  (`scheme:licence (material)`), `feature:<key>`, `color_family` (`gray`/`multicolor`
+  accepted), `size_length` and the measurement columns (decimal comma accepted,
+  `strap_length_cm` as `min-max` or one number), and `(recycled)` / `(organic)` in materials.
+  A column the file does not have keeps the stored value per feature and per measurement.
+  A row with an invalid value is skipped as a whole.
+- **Label completeness warnings** (`fibre_composition_missing`, `animal_origin_unknown`,
+  `footwear_materials_missing`, `fibre_percentages_not_100`) in import results and in the
+  Ingest API's `warning_details`; they never block publishing.
+- The retailers' article data CSV (portal download, selection, `data.csv` in background zips)
+  has the 0.2 columns in the order of the import format, a `feature:<key>` column per registry
+  key, and imports again unchanged.
+- The import template shows a feature, the colour family and a weight.
+
+### Changed
+- Admin screens: vendored admin-ui 0.2.0 (label information, measurements and features on the
+  article pages, editing them in the brand admin, label warnings in import results).
+- The 0.1 fibre keys `recycled_<fibre>` and `organic_<fibre>` are normalised to the fibre with
+  its flag on every write path; a 0.2 node never returns them. Registry feature values outside
+  their type, measurements that are not positive numbers, a strap whose minimum is larger than
+  its maximum, and footwear materials or colour families outside their lists are
+  `422 validation_failed`; empty `features` / `measurements` objects are stored as `null`.
+- The percentages of a material part no longer give a generic import warning; for textile
+  products they give `fibre_percentages_not_100`.
+- `OBX-Version: 0.2`, discovery `obx_version` `0.2` and `spec_version` `0.2.0`; JSON Schemas and
+  fixtures from spec 0.2.0 (`testdata/spec`, now with `fixtures/imports`);
+  `testdata/kestrel-example.zip` has the 11 articles and 35 images of the 0.2 fixtures.
+
+### Upgrading
+- Database migration 3 (no column changes). On the first start the node rewrites the stored
+  products and variants once in their 0.2 form: an object whose 0.1 fibre keys were normalised
+  gets an upsert in `/changes`; every other object only gains the new `null` properties and
+  writes no change entry. See [docs/upgrading.md](docs/upgrading.md#from-01-to-02).
+
 ## [0.1.0] - 2026-11-12
 
 First release. Implements Open Brand Exchange protocol 0.1 (read API, ingest API, node admin and

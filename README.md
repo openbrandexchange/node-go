@@ -30,7 +30,7 @@ go run . serve
 
 Open <http://localhost:8080>. The output shows a line like `First-run setup: open http://localhost:8080 and enter this setup code: 55GX-FKYX-E5HK`; enter that code in the setup wizard together with your company name and your own password (there is never a default password).
 
-Then add the example catalog of the fictional brand Kestrel Outfitters. In the admin, go to **Imports → Choose files**, pick `testdata/kestrel-example.zip` (the spreadsheet and 27 images in one zip) and click **Start import**. Or, when you started with Go:
+Then add the example catalog of the fictional brand Kestrel Outfitters. In the admin, go to **Imports → Choose files**, pick `testdata/kestrel-example.zip` (the spreadsheet and 35 images in one zip) and click **Start import**. Or, when you started with Go:
 
 ```sh
 go run . import --csv testdata/spec/kestrel/products.csv \
@@ -68,6 +68,8 @@ Your photos and product data probably live in a PIM, ERP, DAM or a shared folder
 - **n8n, Make, Zapier or your own code:** plain HTTPS calls; repeating the same data changes nothing.
 
 The spreadsheet format is one row per size, and images are named `{style}_{colour}_{position}.jpg`: see the [import format](https://github.com/openbrandexchange/spec/blob/main/docs/import-format.md).
+
+Besides names, descriptions, sizes and EANs, the portal carries the article data retailers need for their labels and filters (OBX 0.2): composition per part with recycled and organic fibres, care codes, country of origin, "contains non-textile parts of animal origin", footwear materials (upper, lining and sock, outer sole), certifications, the article kind (`item_subtype`, for example `cabin` or `ankle_boot`), features (shell, wheels, lock, expandable, closure, laptop compartment, water resistance, detachable and adjustable parts, fit, sleeve length, neckline) and, per size, a second size, a colour family and measurements (height, width, depth, weight, volume, handle drop, strap length, laptop size, heel and shaft height, inside leg). Each has its own column in the spreadsheet; imports warn when a label would miss what EU law asks for, without blocking anything.
 
 ## For developers
 
