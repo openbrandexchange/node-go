@@ -104,6 +104,6 @@ Security problems: please report them privately to **security@openbrandexchange.
 
 [GNU Affero General Public License v3.0](LICENSE) (AGPL-3.0-only). You may run, change and host it freely; if you offer a changed version to others over a network, share your changes under the same licence. The embedded admin-ui is Apache-2.0; the spec fixtures in `testdata/spec` are CC-BY-4.0. See [NOTICE](NOTICE).
 
-An initiative of Richard Lindhout · Open Brand Exchange Foundation (in formation). The project will be transferred to the foundation, a Dutch stichting, once it is set up ([governance](https://github.com/openbrandexchange/spec/blob/main/docs/governance.md)).
+Open Brand Exchange Foundation (in formation). The project will be transferred to the foundation, a Dutch stichting, once it is set up ([governance](https://github.com/openbrandexchange/spec/blob/main/docs/governance.md)).
 
 <sub>Works with Open Brand Exchange</sub>

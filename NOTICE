@@ -1,7 +1,7 @@
 Open Brand Exchange · Portal for Google Cloud & Docker (node-go)
-Copyright 2026 Richard Lindhout and contributors
+Copyright 2026 Open Brand Exchange Foundation (in formation) and contributors
 
-An initiative of Richard Lindhout · Open Brand Exchange Foundation (in formation)
+Open Brand Exchange Foundation (in formation)
 Contact: hello@openbrandexchange.com · Security reports: security@openbrandexchange.com
 
 This program is free software: you can redistribute it and/or modify it under
@@ -22,7 +22,7 @@ This product includes:
   third-party notices are shipped with it in ui/dist (LICENSE, NOTICE,
   THIRD-PARTY-LICENSES.txt).
 - Fixtures of the Open Brand Exchange specification (testdata/spec), CC-BY-4.0,
-  "Open Brand Exchange specification, © Richard Lindhout and contributors",
+  "Open Brand Exchange specification, © Open Brand Exchange Foundation (in formation) and contributors",
   https://github.com/openbrandexchange/spec.
 - Go modules compiled into the binary, all under permissive licences (MIT,
   BSD-2-Clause, BSD-3-Clause, Apache-2.0): among them modernc.org/sqlite,
