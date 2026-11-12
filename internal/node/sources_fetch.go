@@ -122,6 +122,10 @@ func (f *httpsFetcher) list(ctx context.Context) ([]remoteFile, string, error) {
 		switch {
 		case k == "images_url":
 			name = "images.zip"
+		case importfmt.IsWorkbookName(name):
+			// The name decides (import-format.md §5.1): read as a workbook,
+			// whatever its bytes are.
+			name = "products.xlsx"
 		case isZip && !strings.HasSuffix(strings.ToLower(name), ".zip"):
 			name = "package.zip"
 		case !isZip && !strings.HasSuffix(strings.ToLower(name), ".csv"):
@@ -396,8 +400,8 @@ func (a *App) fetchSource(ctx context.Context, jobID string, p *importPayload) (
 		return true, nil
 	}
 	p.Fingerprint = fp
-	var csvs []remoteFile
-	var zips []remoteFile
+	var csvs, zips []remoteFile
+	var productsXLSX, assetsXLSX *remoteFile
 	stage := func(rf remoteFile, field, name string) *problem.Problem {
 		rc, err := f.open(fctx, rf)
 		if err != nil {
@@ -419,6 +423,17 @@ func (a *App) fetchSource(ctx context.Context, jobID string, p *importPayload) (
 			csvs = append(csvs, rf)
 		case strings.HasSuffix(lower, ".zip"):
 			zips = append(zips, rf)
+		case lower == "products.xlsx" || lower == "assets.xlsx":
+			// Excel workbooks in the place of the CSV files (§5.1).
+			dst := &productsXLSX
+			if lower == "assets.xlsx" {
+				dst = &assetsXLSX
+			}
+			if *dst != nil {
+				return false, problem.New("import_invalid", "The source has more than one %s.", lower)
+			}
+			rfc := rf
+			*dst = &rfc
 		case importfmt.IsImage(base):
 			if pr := stage(rf, "images", base); pr != nil {
 				return false, pr
@@ -437,11 +452,23 @@ func (a *App) fetchSource(ctx context.Context, jobID string, p *importPayload) (
 			others = append(others, csvs[i])
 		}
 	}
-	if productsCSV == nil && len(others) == 1 {
+	if productsCSV != nil && productsXLSX != nil {
+		return false, problem.New("import_invalid", "The source has both products.csv and products.xlsx; keep one of them.")
+	}
+	if assetsCSV != nil && assetsXLSX != nil {
+		return false, problem.New("import_invalid", "The source has both assets.csv and assets.xlsx; keep one of them.")
+	}
+	// The "only *.csv" fallback does not extend to workbooks (§5.1).
+	if productsCSV == nil && productsXLSX == nil && len(others) == 1 {
 		productsCSV = &others[0]
 	}
 	if productsCSV != nil {
 		if pr := stage(*productsCSV, "csv", "products.csv"); pr != nil {
+			return false, pr
+		}
+	}
+	if productsXLSX != nil {
+		if pr := stage(*productsXLSX, "csv", "products.xlsx"); pr != nil {
 			return false, pr
 		}
 	}
@@ -450,9 +477,14 @@ func (a *App) fetchSource(ctx context.Context, jobID string, p *importPayload) (
 			return false, pr
 		}
 	}
+	if assetsXLSX != nil {
+		if pr := stage(*assetsXLSX, "assets_csv", "assets.xlsx"); pr != nil {
+			return false, pr
+		}
+	}
 	for _, z := range zips {
 		field := "images"
-		if strings.Contains(strings.ToLower(path.Base(z.Name)), "package") || (productsCSV == nil && len(zips) == 1) {
+		if strings.Contains(strings.ToLower(path.Base(z.Name)), "package") || (productsCSV == nil && productsXLSX == nil && len(zips) == 1) {
 			field = "package"
 		}
 		if pr := stage(z, field, path.Base(z.Name)); pr != nil {
@@ -460,7 +492,7 @@ func (a *App) fetchSource(ctx context.Context, jobID string, p *importPayload) (
 		}
 	}
 	if len(p.Files) == 0 {
-		return false, problem.New("import_invalid", "The source contains no products.csv, zip or images.")
+		return false, problem.New("import_invalid", "The source contains no products.csv, products.xlsx, zip or images.")
 	}
 	return false, nil
 }

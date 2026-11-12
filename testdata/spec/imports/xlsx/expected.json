@@ -1,0 +1,678 @@
+{
+  "description": "Conformance I-IMP-9 and I-IMP-10 (optional: nodes that accept Excel workbooks, docs/import-format.md §5). For each workbook: send it as the import's products.xlsx (role products) or assets.xlsx (role assets). rows: the canonical rows the conversion gives, header first; rows[i] is Excel row i + 1, so a row that the conversion empties (a conversion error) or that is empty in the sheet is a row of empty strings. csv: the same rows as canonical CSV text (§5.3). errors / warnings: the ImportRowErrors of the conversion (detail starts with detail_prefix). import_errors: every ImportRowError with severity error of a dry-run import of the workbook on a node that holds fixtures/kestrel, sorted by row then column. error: the workbook-level refusal (one ImportRowError with row null, nothing imported); detail_contains is a hint for humans, not checked by obx-conformance. number_vectors / date_vectors / format_vectors: unit test vectors for §5.4.",
+  "limits": {
+    "entries": 1000,
+    "totalBytes": 268435456,
+    "ratio": 100,
+    "ratioFloor": 10485760,
+    "maxRow": 100001,
+    "maxCol": 1000
+  },
+  "cases": [
+    {
+      "file": "products-template.xlsx",
+      "role": "products",
+      "sheet": "Products",
+      "what": "templates/products.xlsx as it is, yellow example rows included: the rows are exactly fixtures/kestrel/products.csv, so importing it equals I-IMP-1 without images (all unchanged on a node that holds the fixtures).",
+      "csv_file": "fixtures/kestrel/products.csv",
+      "errors": [],
+      "warnings": [],
+      "import_errors": []
+    },
+    {
+      "file": "assets-template.xlsx",
+      "role": "assets",
+      "sheet": "Assets",
+      "what": "templates/assets.xlsx as it is: every column of import-format.md 2.3, the rows of fixtures/kestrel/assets.csv.",
+      "rows": [
+        [
+          "file",
+          "style_number",
+          "color_code",
+          "position",
+          "role",
+          "view",
+          "alt_text:en",
+          "alt_text:nl",
+          "license",
+          "license_text",
+          "channels",
+          "territories",
+          "embargo_until",
+          "expires_at",
+          "credit",
+          "model_release",
+          "ai_generated",
+          "ai_edited",
+          "source",
+          "c2pa",
+          "generator"
+        ],
+        [
+          "KO-1002_BLK_2_back.png",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "2030-01-01T00:00:00Z",
+          "",
+          "Photo: Kestrel Studio",
+          "",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        [
+          "KO-1003_RST_3_model.png",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "AI-generated image of a model wearing the rust tee",
+          "Met AI gegenereerd beeld van een model in het roestkleurige T-shirt",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "true",
+          "false",
+          "generated",
+          "none",
+          "fictional-image-model 1.0"
+        ]
+      ],
+      "csv": "file,style_number,color_code,position,role,view,alt_text:en,alt_text:nl,license,license_text,channels,territories,embargo_until,expires_at,credit,model_release,ai_generated,ai_edited,source,c2pa,generator\r\nKO-1002_BLK_2_back.png,,,,,,,,,,,,2030-01-01T00:00:00Z,,Photo: Kestrel Studio,,,,,,\r\nKO-1003_RST_3_model.png,,,,,,AI-generated image of a model wearing the rust tee,Met AI gegenereerd beeld van een model in het roestkleurige T-shirt,,,,,,,,,true,false,generated,none,fictional-image-model 1.0\r\n",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "file": "edge-cases.xlsx",
+      "role": "products",
+      "sheet": "Data",
+      "what": "Sheet choice: the sheet named Products is hidden, so the first visible sheet with style_number in row 1 (Data) is read. Row 2: GTIN typed as a number, numbers, FALSE, a date serial with a date format, text starting with \"=\" (kept as text), a formula with a cached string; L2:L3 merged (the value in L3 is ignored). Row 3: a number with format 00000000000000 (zero-padded GTIN-14), a formula with a cached 0.30000000000000004 (0.3). Row 4: empty. Row 5: a formula without a cached value (conversion error; row skipped). Row 6: a GTIN with a wrong check digit (an error of the CSV import, reported as row 6, column gtin (D)). Row 7: a hidden row (imported) with rich text, a GTIN with an exponent, a percent format (ignored), TRUE and a built-in date format. Row 8: #N/A (conversion error; row skipped). Row 9: date and time, _x000D_ and _x005F_ escapes, a value in column M right of the header (warning). Rows 10-14 have only formatting (not rows).",
+      "rows": [
+        [
+          "brand",
+          "style_number",
+          "name:en",
+          "gtin",
+          "color_code",
+          "size",
+          "weight_kg",
+          "contains_animal_origin",
+          "attr:launch_date",
+          "description:en",
+          "collection",
+          "season"
+        ],
+        [
+          "Kestrel",
+          "KX-9001",
+          "Edge Case Tee",
+          "2000901000015",
+          "BLK",
+          "42",
+          "0.25",
+          "false",
+          "2026-03-01",
+          "=SUM(1,2) is text, not a formula",
+          "Core",
+          "SS26"
+        ],
+        [
+          "Kestrel",
+          "KX-9001",
+          "Edge Case Tee",
+          "02000901000022",
+          "BLK",
+          "44",
+          "0.3",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        [
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        [
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        [
+          "Kestrel",
+          "KX-9003",
+          "Bad Check Digit",
+          "2000903000018",
+          "RED",
+          "L",
+          "",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        [
+          "Kestrel",
+          "KX-9004",
+          "Hidden Row Still Imported",
+          "2000904000012",
+          "GRN",
+          "S",
+          "12.5",
+          "true",
+          "2026-03-01",
+          "",
+          "",
+          ""
+        ],
+        [
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        [
+          "Kestrel",
+          "KX-9006",
+          "Escapes",
+          "2000906000010",
+          "BLK",
+          "S",
+          "",
+          "",
+          "2026-03-01T12:00:00Z",
+          "Line one\r\nLine two",
+          "Capsule_x0031_",
+          ""
+        ]
+      ],
+      "csv": "brand,style_number,name:en,gtin,color_code,size,weight_kg,contains_animal_origin,attr:launch_date,description:en,collection,season\r\nKestrel,KX-9001,Edge Case Tee,2000901000015,BLK,42,0.25,false,2026-03-01,\"=SUM(1,2) is text, not a formula\",Core,SS26\r\nKestrel,KX-9001,Edge Case Tee,02000901000022,BLK,44,0.3,,,,,\r\n,,,,,,,,,,,\r\n,,,,,,,,,,,\r\nKestrel,KX-9003,Bad Check Digit,2000903000018,RED,L,,,,,,\r\nKestrel,KX-9004,Hidden Row Still Imported,2000904000012,GRN,S,12.5,true,2026-03-01,,,\r\n,,,,,,,,,,,\r\nKestrel,KX-9006,Escapes,2000906000010,BLK,S,,,2026-03-01T12:00:00Z,\"Line one\r\nLine two\",Capsule_x0031_,\r\n",
+      "errors": [
+        {
+          "file": "products.xlsx",
+          "row": 5,
+          "column": "weight_kg",
+          "severity": "error",
+          "obx_error": "validation_failed",
+          "detail_prefix": "row 5, column weight_kg (G): ",
+          "value": "=G2*2"
+        },
+        {
+          "file": "products.xlsx",
+          "row": 8,
+          "column": "collection",
+          "severity": "error",
+          "obx_error": "validation_failed",
+          "detail_prefix": "row 8, column collection (K): ",
+          "value": "#N/A"
+        }
+      ],
+      "warnings": [
+        {
+          "file": "products.xlsx",
+          "row": null,
+          "column": null,
+          "severity": "warning",
+          "obx_error": "validation_failed",
+          "detail_prefix": "column M: ",
+          "value": null
+        }
+      ],
+      "import_errors": [
+        {
+          "file": "products.xlsx",
+          "row": 5,
+          "column": "weight_kg",
+          "severity": "error",
+          "obx_error": "validation_failed",
+          "detail_prefix": "row 5, column weight_kg (G): ",
+          "value": "=G2*2"
+        },
+        {
+          "file": "products.xlsx",
+          "row": 6,
+          "column": "gtin",
+          "severity": "error",
+          "obx_error": "invalid_gtin",
+          "detail_prefix": "row 6, column gtin (D): ",
+          "value": "2000903000018"
+        },
+        {
+          "file": "products.xlsx",
+          "row": 8,
+          "column": "collection",
+          "severity": "error",
+          "obx_error": "validation_failed",
+          "detail_prefix": "row 8, column collection (K): ",
+          "value": "#N/A"
+        }
+      ]
+    },
+    {
+      "file": "date1904.xlsx",
+      "role": "products",
+      "sheet": "products",
+      "what": "The 1904 date system (serial 44620 is 2026-03-01) with a custom date format, and a t=\"d\" cell (ISO date). The sheet name matches Products case-insensitively.",
+      "rows": [
+        [
+          "style_number",
+          "name:en",
+          "attr:launch_date"
+        ],
+        [
+          "KX-9101",
+          "Date 1904",
+          "2026-03-01"
+        ],
+        [
+          "KX-9102",
+          "ISO date cell",
+          "2026-03-01"
+        ]
+      ],
+      "csv": "style_number,name:en,attr:launch_date\r\nKX-9101,Date 1904,2026-03-01\r\nKX-9102,ISO date cell,2026-03-01\r\n",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "file": "macro-enabled.xlsx",
+      "role": "products",
+      "what": "A workbook with macros (xl/vbaProject.bin, a macroEnabled content type): refused before anything is read.",
+      "error": {
+        "file": "products.xlsx",
+        "row": null,
+        "column": null,
+        "severity": "error",
+        "obx_error": "workbook_unsafe",
+        "detail_contains": "macro"
+      }
+    },
+    {
+      "file": "external-link.xlsx",
+      "role": "products",
+      "what": "A workbook with a link to another workbook (xl/externalLinks/): refused; the link is never followed.",
+      "error": {
+        "file": "products.xlsx",
+        "row": null,
+        "column": null,
+        "severity": "error",
+        "obx_error": "workbook_unsafe",
+        "detail_contains": "externalLinks"
+      }
+    },
+    {
+      "file": "zip-bomb.xlsx",
+      "role": "products",
+      "what": "A sheet part that expands from about 12 KB to 12 MiB (more than 100 times and more than 10 MiB): refused from the zip directory, before inflating.",
+      "error": {
+        "file": "products.xlsx",
+        "row": null,
+        "column": null,
+        "severity": "error",
+        "obx_error": "workbook_too_large",
+        "detail_contains": "sheet1.xml"
+      }
+    },
+    {
+      "file": "too-many-rows.xlsx",
+      "role": "products",
+      "what": "A value in row 100002, below the row limit (100000 data rows).",
+      "error": {
+        "file": "products.xlsx",
+        "row": null,
+        "column": null,
+        "severity": "error",
+        "obx_error": "workbook_too_large",
+        "detail_contains": "A100002"
+      }
+    },
+    {
+      "file": "not-a-workbook.xlsx",
+      "role": "products",
+      "what": "A CSV file renamed to .xlsx: the name decides that it is read as a workbook, and it is not a zip file. It is not imported as a CSV.",
+      "error": {
+        "file": "products.xlsx",
+        "row": null,
+        "column": null,
+        "severity": "error",
+        "obx_error": "workbook_invalid",
+        "detail_contains": "zip"
+      }
+    },
+    {
+      "file": "encrypted.xlsx",
+      "role": "products",
+      "what": "An OLE compound file (a password-protected workbook or a legacy .xls).",
+      "error": {
+        "file": "products.xlsx",
+        "row": null,
+        "column": null,
+        "severity": "error",
+        "obx_error": "workbook_invalid",
+        "detail_contains": "encrypted"
+      }
+    },
+    {
+      "file": "doctype.xlsx",
+      "role": "products",
+      "what": "xl/workbook.xml has a DOCTYPE with entities: refused, entities are never expanded.",
+      "error": {
+        "file": "products.xlsx",
+        "row": null,
+        "column": null,
+        "severity": "error",
+        "obx_error": "workbook_invalid",
+        "detail_contains": "DOCTYPE"
+      }
+    },
+    {
+      "file": "no-products-sheet.xlsx",
+      "role": "products",
+      "what": "The only sheet named Products is hidden, and the visible sheet has no style_number column in row 1.",
+      "error": {
+        "file": "products.xlsx",
+        "row": null,
+        "column": null,
+        "severity": "error",
+        "obx_error": "workbook_sheet_missing",
+        "detail_contains": "Products"
+      }
+    }
+  ],
+  "number_vectors": [
+    {
+      "v": "2000901000015",
+      "format": "General",
+      "text": "2000901000015"
+    },
+    {
+      "v": "2.000904000012E+12",
+      "format": "General",
+      "text": "2000904000012"
+    },
+    {
+      "v": "2000901000022",
+      "format": "00000000000000",
+      "text": "02000901000022"
+    },
+    {
+      "v": "5",
+      "format": "000",
+      "text": "005"
+    },
+    {
+      "v": "-5",
+      "format": "000",
+      "text": "-5"
+    },
+    {
+      "v": "12.5",
+      "format": "0000",
+      "text": "12.5"
+    },
+    {
+      "v": "1234",
+      "format": "00",
+      "text": "1234"
+    },
+    {
+      "v": "12.5",
+      "format": "General",
+      "text": "12.5"
+    },
+    {
+      "v": "12.50",
+      "format": "General",
+      "text": "12.5"
+    },
+    {
+      "v": "2.6",
+      "format": "0.00",
+      "text": "2.6"
+    },
+    {
+      "v": "0.95",
+      "format": "0%",
+      "text": "0.95"
+    },
+    {
+      "v": "0.30000000000000004",
+      "format": "General",
+      "text": "0.3"
+    },
+    {
+      "v": "1E-3",
+      "format": "General",
+      "text": "0.001"
+    },
+    {
+      "v": "-2.5e-1",
+      "format": "General",
+      "text": "-0.25"
+    },
+    {
+      "v": "-0",
+      "format": "General",
+      "text": "0"
+    },
+    {
+      "v": "007",
+      "format": "General",
+      "text": "7"
+    },
+    {
+      "v": "1.5E+20",
+      "format": "General",
+      "text": "150000000000000000000"
+    },
+    {
+      "v": "123456789012345678",
+      "format": "General",
+      "text": "123456789012346000"
+    },
+    {
+      "v": "0.1234567890123456789",
+      "format": "General",
+      "text": "0.123456789012346"
+    },
+    {
+      "v": "9.9999999999999999",
+      "format": "General",
+      "text": "10"
+    },
+    {
+      "v": "42",
+      "format": "@",
+      "text": "42"
+    }
+  ],
+  "date_vectors": [
+    {
+      "v": "46082",
+      "kind": "date",
+      "date1904": false,
+      "text": "2026-03-01"
+    },
+    {
+      "v": "46082.5",
+      "kind": "datetime",
+      "date1904": false,
+      "text": "2026-03-01T12:00:00Z"
+    },
+    {
+      "v": "46082.75",
+      "kind": "date",
+      "date1904": false,
+      "text": "2026-03-01"
+    },
+    {
+      "v": "46082.99999",
+      "kind": "datetime",
+      "date1904": false,
+      "text": "2026-03-01T23:59:59Z"
+    },
+    {
+      "v": "46082.999999",
+      "kind": "datetime",
+      "date1904": false,
+      "text": "2026-03-02T00:00:00Z"
+    },
+    {
+      "v": "61",
+      "kind": "date",
+      "date1904": false,
+      "text": "1900-03-01"
+    },
+    {
+      "v": "60",
+      "kind": "date",
+      "date1904": false,
+      "text": null
+    },
+    {
+      "v": "44620",
+      "kind": "date",
+      "date1904": true,
+      "text": "2026-03-01"
+    },
+    {
+      "v": "0",
+      "kind": "date",
+      "date1904": true,
+      "text": "1904-01-01"
+    }
+  ],
+  "format_vectors": [
+    {
+      "id": 0,
+      "code": "General",
+      "kind": null
+    },
+    {
+      "id": 1,
+      "code": "0",
+      "kind": null
+    },
+    {
+      "id": 10,
+      "code": "0.00%",
+      "kind": null
+    },
+    {
+      "id": 11,
+      "code": "0.00E+00",
+      "kind": null
+    },
+    {
+      "id": 49,
+      "code": "@",
+      "kind": null
+    },
+    {
+      "id": 14,
+      "code": "m/d/yyyy",
+      "kind": "date"
+    },
+    {
+      "id": 22,
+      "code": "m/d/yyyy h:mm",
+      "kind": "datetime"
+    },
+    {
+      "id": 20,
+      "code": "h:mm",
+      "kind": "datetime"
+    },
+    {
+      "id": 164,
+      "code": "yyyy-mm-dd",
+      "kind": "date"
+    },
+    {
+      "id": 164,
+      "code": "dd/mm/yyyy hh:mm:ss",
+      "kind": "datetime"
+    },
+    {
+      "id": 164,
+      "code": "[$-413]d mmmm yyyy;@",
+      "kind": "date"
+    },
+    {
+      "id": 164,
+      "code": "0.0 \"kg\"",
+      "kind": null
+    },
+    {
+      "id": 164,
+      "code": "#,##0.00 \"days\"",
+      "kind": null
+    },
+    {
+      "id": 164,
+      "code": "[Red]0.00;[Blue]-0.00",
+      "kind": null
+    },
+    {
+      "id": 164,
+      "code": "00000000000000",
+      "kind": null
+    },
+    {
+      "id": 164,
+      "code": "\\d0",
+      "kind": null
+    },
+    {
+      "id": 164,
+      "code": "[h]:mm",
+      "kind": "datetime"
+    }
+  ]
+}

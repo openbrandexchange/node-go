@@ -143,6 +143,17 @@ type importer struct {
 	progress func(done, total int)
 	// present lists the columns of products.csv (import rule 9).
 	present presentColumns
+	// workbooks holds row 1 of products.xlsx / assets.xlsx, keyed by the
+	// CSV file they stand for (import-format.md §5.5).
+	workbooks map[string][]string
+}
+
+// tableInput is products.csv or assets.csv of an import: CSV bytes, or an
+// Excel workbook (import-format.md §5) in a temp file.
+type tableInput struct {
+	data     []byte
+	workbook *os.File
+	size     int64
 }
 
 // presentColumns says which columns a products.csv has, by canonical name:
@@ -269,6 +280,14 @@ func keepAbsentColumns(doc map[string]any, stored string, fields []columnField, 
 }
 
 func (im *importer) add(file string, row int, col, code, detail, value string, warning bool) {
+	if header, ok := im.workbooks[file]; ok {
+		// The rows of a workbook: Excel's row numbers and a locator (§5.5).
+		file = strings.TrimSuffix(file, ".csv") + ".xlsx"
+		if row > 0 {
+			row++
+		}
+		detail = importfmt.WorkbookLocator(header, row, col) + detail
+	}
 	e := ImportRowError{File: file, Severity: "error", ObxError: code, Detail: truncate(detail, 2000)}
 	if warning {
 		e.Severity = "warning"
@@ -289,6 +308,83 @@ func (im *importer) add(file string, row int, col, code, detail, value string, w
 		e.Value = &v
 	}
 	im.errors = append(im.errors, e)
+}
+
+// addIssue records a conversion error or warning of a workbook as it is.
+func (im *importer) addIssue(c importfmt.CellIssue) {
+	e := ImportRowError{File: c.File, Severity: c.Severity, ObxError: c.ObxError, Detail: truncate(c.Detail, 2000)}
+	if c.Severity == "warning" {
+		im.counts.Warnings++
+	} else {
+		im.counts.Errors++
+	}
+	if c.Row > 0 {
+		r := c.Row
+		e.Row = &r
+	}
+	if c.Column != "" {
+		col := c.Column
+		e.Column = &col
+	}
+	if c.Value != nil {
+		v := truncate(*c.Value, 500)
+		e.Value = &v
+	}
+	im.errors = append(im.errors, e)
+}
+
+// fileName is the name an import's products / assets file has in messages.
+func (im *importer) fileName(csvName string) string {
+	if _, ok := im.workbooks[csvName]; ok {
+		return strings.TrimSuffix(csvName, ".csv") + ".xlsx"
+	}
+	return csvName
+}
+
+// loadTable parses products.csv or assets.csv (role products / assets), or
+// converts the workbook that stands for it (import-format.md §5). A workbook
+// that cannot be imported gives one ImportRowError with row null and fails
+// the import with that code, as an unreadable CSV fails it.
+func (im *importer) loadTable(role string, in *tableInput) (*importfmt.Table, *problem.Problem) {
+	csvName := role + ".csv"
+	if in.workbook == nil {
+		t, err := importfmt.ParseCSV(in.data)
+		if err != nil {
+			return nil, problem.New("import_invalid", "%s: %s", csvName, err.Error())
+		}
+		return t, nil
+	}
+	file := importfmt.WorkbookFile(role)
+	refuse := func(code, detail string) *problem.Problem {
+		im.addIssue(importfmt.CellIssue{File: file, Severity: "error", ObxError: code, Detail: detail})
+		return problem.New(code, "%s: %s", file, detail)
+	}
+	if in.size > MaxImportBytes {
+		return nil, refuse("payload_too_large", fmt.Sprintf("the file is larger than %d bytes", MaxImportBytes))
+	}
+	wb, err := importfmt.ConvertWorkbook(in.workbook, in.size, role)
+	if err != nil {
+		var we *importfmt.WorkbookError
+		if errors.As(err, &we) {
+			return nil, refuse(we.Code, we.Detail)
+		}
+		return nil, problem.As(err)
+	}
+	for _, c := range wb.Errors {
+		im.addIssue(c)
+	}
+	for _, c := range wb.Warnings {
+		im.addIssue(c)
+	}
+	if im.workbooks == nil {
+		im.workbooks = map[string][]string{}
+	}
+	im.workbooks[csvName] = wb.Rows[0]
+	t, err := importfmt.TableFromRecords(wb.Rows)
+	if err != nil {
+		return nil, problem.New("import_invalid", "%s: %s", file, err.Error())
+	}
+	return t, nil
 }
 
 func truncate(s string, n int) string {
@@ -343,13 +439,9 @@ func problemDetail(p *problem.Problem) string {
 
 // ---- parsing products.csv -------------------------------------------------------
 
-func (im *importer) parseProducts(data []byte) *problem.Problem {
-	t, err := importfmt.ParseCSV(data)
-	if err != nil {
-		return problem.New("import_invalid", "products.csv: %s", err.Error())
-	}
+func (im *importer) parseProducts(t *importfmt.Table) *problem.Problem {
 	if !t.Has("style_number") {
-		return problem.New("import_invalid", "products.csv needs a style_number column.")
+		return problem.New("import_invalid", "%s needs a style_number column.", im.fileName("products.csv"))
 	}
 	for _, c := range importfmt.UnknownColumns(t.Header, importfmt.KnownColumns) {
 		im.add("products.csv", 0, c, "validation_failed", fmt.Sprintf("unknown column %q ignored", c), "", true)
@@ -712,13 +804,9 @@ type assetRowInfo struct {
 	table *importfmt.Table
 }
 
-func (im *importer) parseAssets(data []byte) (map[string]*assetRowInfo, *problem.Problem) {
-	t, err := importfmt.ParseCSV(data)
-	if err != nil {
-		return nil, problem.New("import_invalid", "assets.csv: %s", err.Error())
-	}
+func (im *importer) parseAssets(t *importfmt.Table) (map[string]*assetRowInfo, *problem.Problem) {
 	if !t.Has("file") {
-		return nil, problem.New("import_invalid", "assets.csv needs a file column.")
+		return nil, problem.New("import_invalid", "%s needs a file column.", im.fileName("assets.csv"))
 	}
 	for _, c := range importfmt.UnknownColumns(t.Header, importfmt.KnownAssetColumns) {
 		im.add("assets.csv", 0, c, "validation_failed", fmt.Sprintf("unknown column %q ignored", c), "", true)
@@ -1275,16 +1363,23 @@ func (im *importer) mirrorPlan() ([]string, *problem.Problem) {
 }
 
 // run executes the whole import.
-func (im *importer) run(productsCSV, assetsCSV []byte, images []*imageSource) *problem.Problem {
-	if productsCSV != nil {
-		if p := im.parseProducts(productsCSV); p != nil {
+func (im *importer) run(productsIn, assetsIn *tableInput, images []*imageSource) *problem.Problem {
+	if productsIn != nil {
+		t, p := im.loadTable("products", productsIn)
+		if p != nil {
+			return p
+		}
+		if p := im.parseProducts(t); p != nil {
 			return p
 		}
 	}
 	assetRows := map[string]*assetRowInfo{}
-	if assetsCSV != nil {
-		var p *problem.Problem
-		if assetRows, p = im.parseAssets(assetsCSV); p != nil {
+	if assetsIn != nil {
+		t, p := im.loadTable("assets", assetsIn)
+		if p != nil {
+			return p
+		}
+		if assetRows, p = im.parseAssets(t); p != nil {
 			return p
 		}
 	}
@@ -1391,9 +1486,9 @@ func (a *App) runImportJob(jc *jobContext) (any, error) {
 			f.Close()
 		}
 	}()
-	productsCSV, assetsCSV, images, prob := a.importInputs(jc.ctx, p, &tmpFiles)
+	productsIn, assetsIn, images, prob := a.importInputs(jc.ctx, p, &tmpFiles)
 	if prob == nil {
-		prob = im.run(productsCSV, assetsCSV, images)
+		prob = im.run(productsIn, assetsIn, images)
 	}
 	res.Counts = im.counts
 	items := make([]any, len(im.errors))
@@ -1414,29 +1509,43 @@ func (a *App) runImportJob(jc *jobContext) (any, error) {
 }
 
 // importInputs loads the uploaded files of an import from the blob store.
-func (a *App) importInputs(ctx context.Context, p importPayload, tmp *[]*os.File) (productsCSV, assetsCSV []byte, images []*imageSource, prob *problem.Problem) {
-	readAll := func(key string) ([]byte, error) {
-		obj, err := a.Store.Open(ctx, key)
+// A file named *.xlsx in the place of products.csv or assets.csv is an Excel
+// workbook (import-format.md §5.1); it is spooled to a temp file.
+func (a *App) importInputs(ctx context.Context, p importPayload, tmp *[]*os.File) (productsIn, assetsIn *tableInput, images []*imageSource, prob *problem.Problem) {
+	load := func(f importFile, what string) (*tableInput, *problem.Problem) {
+		obj, err := a.Store.Open(ctx, f.Key)
 		if err != nil {
-			return nil, err
+			return nil, problem.New("import_invalid", "%s cannot be read.", what)
 		}
 		defer obj.Close()
-		return io.ReadAll(io.LimitReader(obj, 256<<20))
+		if importfmt.IsWorkbookName(f.Name) {
+			tf, _, n, err := spool(obj, MaxImportBytes)
+			if err != nil {
+				var p *problem.Problem
+				if errorsAs(err, &p) {
+					return nil, p
+				}
+				return nil, problem.New("import_invalid", "%s cannot be read.", what)
+			}
+			*tmp = append(*tmp, tf)
+			return &tableInput{workbook: tf, size: n}, nil
+		}
+		b, err := io.ReadAll(io.LimitReader(obj, 256<<20))
+		if err != nil {
+			return nil, problem.New("import_invalid", "%s cannot be read.", what)
+		}
+		return &tableInput{data: b}, nil
 	}
 	for _, f := range p.Files {
 		switch f.Field {
 		case "csv":
-			b, err := readAll(f.Key)
-			if err != nil {
-				return nil, nil, nil, problem.New("import_invalid", "products.csv cannot be read.")
+			if productsIn, prob = load(f, "products.csv"); prob != nil {
+				return nil, nil, nil, prob
 			}
-			productsCSV = b
 		case "assets_csv":
-			b, err := readAll(f.Key)
-			if err != nil {
-				return nil, nil, nil, problem.New("import_invalid", "assets.csv cannot be read.")
+			if assetsIn, prob = load(f, "assets.csv"); prob != nil {
+				return nil, nil, nil, prob
 			}
-			assetsCSV = b
 		case "package", "images":
 			if f.Field == "images" && !strings.HasSuffix(strings.ToLower(f.Name), ".zip") {
 				key, name, size := f.Key, f.Name, f.Bytes
@@ -1449,15 +1558,15 @@ func (a *App) importInputs(ctx context.Context, p importPayload, tmp *[]*os.File
 			if err != nil {
 				return nil, nil, nil, problem.New("import_invalid", "%s is not a readable zip file.", f.Name)
 			}
-			pc, ac, imgs, zp := readPackage(zf, f.Field == "package")
+			pc, ac, imgs, zp := readPackage(zf, f.Field == "package", tmp)
 			if zp != nil {
 				return nil, nil, nil, zp
 			}
 			if pc != nil {
-				productsCSV = pc
+				productsIn = pc
 			}
 			if ac != nil {
-				assetsCSV = ac
+				assetsIn = ac
 			}
 			images = append(images, imgs...)
 		}
@@ -1466,7 +1575,7 @@ func (a *App) importInputs(ctx context.Context, p importPayload, tmp *[]*os.File
 		m := p.Manifest[i]
 		images = append(images, &imageSource{Name: m.File, Manifest: &m})
 	}
-	return productsCSV, assetsCSV, images, nil
+	return productsIn, assetsIn, images, nil
 }
 
 func (a *App) openZip(ctx context.Context, key string, tmp *[]*os.File) (*zip.Reader, error) {
@@ -1494,13 +1603,15 @@ const (
 )
 
 // readPackage extracts products.csv, assets.csv and images from a zip,
-// refusing unsafe archives (zip-slip, symlinks, bombs).
-func readPackage(z *zip.Reader, isPackage bool) (productsCSV, assetsCSV []byte, images []*imageSource, prob *problem.Problem) {
+// refusing unsafe archives (zip-slip, symlinks, bombs). products.xlsx and
+// assets.xlsx take the place of the CSV files (import-format.md §5.1); they
+// are spooled to temp files and opened under the limits of §5.6.
+func readPackage(z *zip.Reader, isPackage bool, tmp *[]*os.File) (productsIn, assetsIn *tableInput, images []*imageSource, prob *problem.Problem) {
 	if len(z.File) > maxZipEntries {
 		return nil, nil, nil, problem.New("import_invalid", "The zip has more than %d entries.", maxZipEntries)
 	}
 	var total uint64
-	var csvs []*zip.File
+	var csvs, workbooks []*zip.File
 	for _, f := range z.File {
 		if err := importfmt.SafeEntry(f); err != nil {
 			return nil, nil, nil, problem.New("import_invalid", "Unsafe zip entry: %s", err.Error())
@@ -1519,6 +1630,8 @@ func readPackage(z *zip.Reader, isPackage bool) (productsCSV, assetsCSV []byte, 
 		switch {
 		case strings.HasSuffix(lower, ".csv") && isPackage:
 			csvs = append(csvs, f)
+		case (lower == "products.xlsx" || lower == "assets.xlsx") && isPackage:
+			workbooks = append(workbooks, f)
 		case importfmt.IsImage(base):
 			zf := f
 			images = append(images, &imageSource{Name: base, Size: int64(f.UncompressedSize64), Open: func() (io.ReadCloser, error) {
@@ -1533,7 +1646,7 @@ func readPackage(z *zip.Reader, isPackage bool) (productsCSV, assetsCSV []byte, 
 			}})
 		}
 	}
-	read := func(f *zip.File) ([]byte, *problem.Problem) {
+	read := func(f *zip.File) (*tableInput, *problem.Problem) {
 		rc, err := f.Open()
 		if err != nil {
 			return nil, problem.New("import_invalid", "%s cannot be read.", f.Name)
@@ -1543,29 +1656,65 @@ func readPackage(z *zip.Reader, isPackage bool) (productsCSV, assetsCSV []byte, 
 		if err != nil {
 			return nil, problem.New("import_invalid", "%s cannot be read.", f.Name)
 		}
-		return b, nil
+		return &tableInput{data: b}, nil
+	}
+	readWorkbook := func(f *zip.File) (*tableInput, *problem.Problem) {
+		rc, err := f.Open()
+		if err != nil {
+			return nil, problem.New("import_invalid", "%s cannot be read.", f.Name)
+		}
+		defer rc.Close()
+		tf, _, n, err := spool(rc, MaxImportBytes)
+		if err != nil {
+			var p *problem.Problem
+			if errorsAs(err, &p) {
+				return nil, p
+			}
+			return nil, problem.New("import_invalid", "%s cannot be read.", f.Name)
+		}
+		*tmp = append(*tmp, tf)
+		return &tableInput{workbook: tf, size: n}, nil
 	}
 	var other []*zip.File
 	for _, f := range csvs {
 		switch strings.ToLower(path.Base(f.Name)) {
 		case "products.csv":
-			if productsCSV, prob = read(f); prob != nil {
+			if productsIn, prob = read(f); prob != nil {
 				return
 			}
 		case "assets.csv":
-			if assetsCSV, prob = read(f); prob != nil {
+			if assetsIn, prob = read(f); prob != nil {
 				return
 			}
 		default:
 			other = append(other, f)
 		}
 	}
-	if productsCSV == nil && len(other) == 1 {
-		if productsCSV, prob = read(other[0]); prob != nil {
+	for _, f := range workbooks {
+		var dst **tableInput
+		name := strings.ToLower(path.Base(f.Name))
+		if name == "products.xlsx" {
+			dst = &productsIn
+		} else {
+			dst = &assetsIn
+		}
+		if *dst != nil {
+			if (*dst).workbook != nil {
+				return nil, nil, nil, problem.New("import_invalid", "The package has more than one %s.", name)
+			}
+			return nil, nil, nil, problem.New("import_invalid", "The package has both %s and %s; send one of them.", strings.TrimSuffix(name, ".xlsx")+".csv", name)
+		}
+		if *dst, prob = readWorkbook(f); prob != nil {
 			return
 		}
 	}
-	return productsCSV, assetsCSV, images, nil
+	// The "only *.csv" fallback does not extend to workbooks (§5.1).
+	if productsIn == nil && len(other) == 1 {
+		if productsIn, prob = read(other[0]); prob != nil {
+			return
+		}
+	}
+	return productsIn, assetsIn, images, nil
 }
 
 // ---- starting imports ---------------------------------------------------------------

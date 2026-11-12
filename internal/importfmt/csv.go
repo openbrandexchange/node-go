@@ -122,20 +122,44 @@ func ParseCSV(data []byte) (*Table, error) {
 	if err != nil {
 		return nil, fmt.Errorf("the header row cannot be read: %v", err)
 	}
-	t := &Table{Raw: header}
-	for _, h := range header {
-		t.Header = append(t.Header, NormalizeHeader(h))
-	}
-	num := 0
+	records := [][]string{header}
 	for {
 		rec, err := r.Read()
 		if err == io.EOF {
 			break
 		}
 		if err != nil {
-			return nil, fmt.Errorf("row %d cannot be read: %v", num+1, err)
+			return nil, fmt.Errorf("row %d cannot be read: %v", len(records), err)
 		}
-		num++
+		records = append(records, rec)
+	}
+	return newTable(records), nil
+}
+
+// TableFromRecords builds a table from rows that are already split into
+// fields, header first (an Excel workbook, import-format.md §5.3). The rows
+// are treated exactly as the same rows in a CSV file.
+func TableFromRecords(records [][]string) (*Table, error) {
+	if len(records) == 0 {
+		return nil, fmt.Errorf("the file has no header row")
+	}
+	first := string(CanonicalCSV(records[:1]))
+	if i := strings.IndexAny(first, "\r\n"); i >= 0 {
+		first = first[:i]
+	}
+	if strings.TrimSpace(first) == "" {
+		return nil, fmt.Errorf("the file has no header row")
+	}
+	return newTable(records), nil
+}
+
+func newTable(records [][]string) *Table {
+	header := records[0]
+	t := &Table{Raw: header}
+	for _, h := range header {
+		t.Header = append(t.Header, NormalizeHeader(h))
+	}
+	for num, rec := range records[1:] {
 		empty := true
 		vals := map[string]string{}
 		for i, v := range rec {
@@ -152,9 +176,9 @@ func ParseCSV(data []byte) (*Table, error) {
 		if empty {
 			continue
 		}
-		t.Rows = append(t.Rows, Row{Num: num, Values: vals})
+		t.Rows = append(t.Rows, Row{Num: num + 1, Values: vals})
 	}
-	return t, nil
+	return t
 }
 
 // Has reports whether the table has a column.

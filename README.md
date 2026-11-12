@@ -64,7 +64,7 @@ Running it for real: [docs/operations.md](docs/operations.md) (health checks, lo
 
 Your photos and product data probably live in a PIM, ERP, DAM or a shared folder already. Pick what fits, from no code at all to a small connector: [docs/automation.md](docs/automation.md).
 
-- **Scheduled import:** in the admin, point the portal at a web address, SFTP folder or bucket with your `products.csv` and images; it picks up changes hourly, daily or weekly.
+- **Scheduled import:** in the admin, point the portal at a web address, SFTP folder or bucket with your `products.csv` (or `products.xlsx`) and images; it picks up changes hourly, daily or weekly.
 - **Command line:** `obx push --csv products.csv --images ./images` from any computer, cron job or CI pipeline (tool from [obx-go](https://github.com/openbrandexchange/obx-go)), or `node-go import …` on the server itself.
 - **n8n, Make, Zapier or your own code:** plain HTTPS calls; repeating the same data changes nothing.
 
@@ -84,7 +84,7 @@ scripts/test-docker.sh             # the Docker image, a Litestream restore and 
 Everything CI runs, how to release and how to add a migration: [docs/development.md](docs/development.md). Contributions are welcome under the Developer Certificate of Origin: [CONTRIBUTING.md](CONTRIBUTING.md), [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md).
 
 - `internal/node`: the node (protocol, ingest, admin + portal API, imports, jobs, exports, webhooks, statistics, e-mail, audit log, backups).
-- `internal/importfmt`: the canonical CSV and file-name parser; `internal/imaging`: pure-Go renditions.
+- `internal/importfmt`: the canonical CSV and file-name parser and the Excel (.xlsx) conversion of import-format.md §5; `internal/imaging`: pure-Go renditions.
 - `ui/dist`: the web interface, vendored from [admin-ui](https://github.com/openbrandexchange/admin-ui) with `scripts/update-ui.sh` (`BUILD=1` rebuilds admin-ui first).
 - API contracts: the [OBX spec](https://github.com/openbrandexchange/spec) (`openapi/*.yaml`). Implementation decisions: [NOTES.md](NOTES.md). Changes: [CHANGELOG.md](CHANGELOG.md).
 

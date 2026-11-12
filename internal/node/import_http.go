@@ -10,6 +10,7 @@ import (
 	"strings"
 
 	"github.com/openbrandexchange/node-go/internal/ids"
+	"github.com/openbrandexchange/node-go/internal/importfmt"
 	"github.com/openbrandexchange/node-go/internal/problem"
 )
 
@@ -70,8 +71,18 @@ func (a *App) parseImportUpload(r *http.Request) (*importRequest, *problem.Probl
 				field = "images"
 			}
 			name := part.FileName()
+			isTable := field == "csv" || field == "assets_csv"
+			if isTable && importfmt.IsOtherSpreadsheetName(name) {
+				// Only .xlsx workbooks are read (import-format.md §5.1).
+				a.cleanupStaged(req)
+				return nil, problem.New("unsupported_media_type", "%s is not a CSV file or an Excel workbook (.xlsx). Save it as CSV or as \"Excel Workbook (.xlsx)\".", sanitizeFilename(name))
+			}
 			if name == "" {
 				name = map[string]string{"package": "package.zip", "csv": "products.csv", "assets_csv": "assets.csv", "images": "images.zip"}[field]
+				// A part without a file name is a workbook by its content type (§5.1).
+				if pct, _, _ := mime.ParseMediaType(part.Header.Get("Content-Type")); isTable && pct == importfmt.WorkbookContentType {
+					name = strings.TrimSuffix(name, ".csv") + ".xlsx"
+				}
 			}
 			f, err := a.stageFile(ctx, req.jobID, field, name, part, MaxImportBytes-used)
 			if err != nil {

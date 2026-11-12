@@ -72,6 +72,13 @@ The node does **not** use obx-go's types at runtime: it needs exact control over
 30. **SSRF:** the checked address is the one connected to (dialer control hook); link-local and cloud-metadata addresses and host names are refused even with `OBX_ALLOW_PRIVATE_URLS=true` (cross-repo rule, the same in node-php and node-ts).
 31. **CORS** only on `/.well-known/obx` (cross-repo rule).
 
+## Excel import (spec import-format.md §5)
+
+18f. **Standard library only**: `archive/zip` and `encoding/xml` (`internal/importfmt/xlsx.go`), so every limit of §5.6 is checked where we can see it: the entry count, declared sizes and ratio from the central directory before anything is inflated, the inflated bytes counted per part (an entry that inflates beyond its declared size is `workbook_too_large`), `DOCTYPE`s refused, only the five XML entities. Only `[Content_Types].xml`, the relationships, the workbook, styles, shared strings and worksheets are inflated; nothing is written to disk under an entry name.
+18g. **Unsafe entry names are checked before `[Content_Types].xml` is parsed** (§5.6 step 5 before step 6), so a workbook with `vbaProject.bin` and a broken content-types part is `workbook_unsafe`. The rows go to the CSV import directly (§5.3 allows it), not through CSV text, so a header such as `a;b` cannot change the delimiter. A date serial after 9999-12-31 and a number with more than 400 digits before or after the point (neither fits a double) are a conversion error and `workbook_invalid` respectively; the spec does not bound them.
+18h. **A workbook that cannot be imported** gives its ImportRowError (`row` and `column` null) and fails the import with a problem of the same code (`422`), as an unreadable `products.csv` fails it (`import_invalid`); nothing of the import is written. The upload is not checked while it is sent; the error comes with the import run. `.xls`, `.xlsm`, `.xlsb`, `.ods`, `.numbers` (and `.xltx`, `.xltm`, `.xlam`) in a `csv` or `assets_csv` part are `415 unsupported_media_type` at once.
+18i. A package with two `products.xlsx` (in different folders) is `import_invalid`, as is a package or pull folder with both `products.csv` and `products.xlsx`. A scheduled web address whose path ends in `.xlsx` is read as `products.xlsx`.
+
 ## Tracked issues
 
 Things a user could run into, with the reason they are not done yet. Each becomes a GitHub issue once the repository is public.

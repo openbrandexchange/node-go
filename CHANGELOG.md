@@ -5,6 +5,22 @@ follows [Semantic Versioning](https://semver.org/): the major version changes wh
 more than replacing the software (see [docs/upgrading.md](docs/upgrading.md)); database migrations
 are always forward-only and applied automatically on start.
 
+## [Unreleased]
+
+### Added
+- **Excel import** ([import-format.md §5](https://github.com/openbrandexchange/spec/blob/main/docs/import-format.md#excel)):
+  `products.xlsx` and `assets.xlsx` are accepted wherever `products.csv` and `assets.csv` are
+  (admin upload, Ingest API `csv` / `assets_csv` parts, package zips, scheduled pulls from a web
+  address, SFTP folder or S3 prefix, `node-go import --csv`). The workbook is turned into exactly
+  the rows of the CSV file and imported as such; errors carry Excel's row numbers and a
+  `row 12, column ean (C): ` locator. The spec's templates import as they are. Standard library
+  only, with the fixed limits of §5.6 (zip bombs, rows, columns), and macros, ActiveX, external
+  links, data connections and `DOCTYPE`s refused.
+- Error codes `workbook_invalid`, `workbook_unsafe`, `workbook_sheet_missing` and
+  `workbook_too_large` (all `422`); `.xls`, `.xlsm`, `.xlsb`, `.ods` and `.numbers` uploads are
+  `415 unsupported_media_type`.
+- JSON Schemas and fixtures from spec commit f6acec6 (`testdata/spec/imports/xlsx`).
+
 ## [0.2.0] - 2026-11-12
 
 Implements Open Brand Exchange protocol 0.2 (spec 0.2.0, [proposal 0002](https://github.com/openbrandexchange/spec/blob/main/docs/proposals/0002-product-data.md):
