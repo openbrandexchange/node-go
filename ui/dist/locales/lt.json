@@ -112,6 +112,10 @@
     "files_missing": "Trūksta kai kurių nuotraukų failų.",
     "import_invalid": "Šio failo importuoti negalima.",
     "mass_unpublish_refused": "Sustabdyta: daugiau nei pusė jūsų prekių dingtų iš pasiūlos. Jei tai tyčia, leiskite tai ir bandykite dar kartą.",
+    "workbook_invalid": "Šio Excel failo neįmanoma perskaityti. Įrašykite jį kaip Excel darbaknygę (.xlsx) ir bandykite dar kartą.",
+    "workbook_unsafe": "Šiame Excel faile yra makrokomandų arba išorinių nuorodų. Įrašykite jį be jų kaip Excel darbaknygę (.xlsx).",
+    "workbook_sheet_missing": "Šiame Excel faile nėra lapo pavadinimu Products (arba Assets).",
+    "workbook_too_large": "Šis Excel failas per didelis (daugiausia 100 000 eilučių ir 1 000 stulpelių).",
     "unsafe_url": "Šis adresas neleidžiamas (nukreipia į privatų tinklą).",
     "csrf_failed": "Jūsų sesija atnaujinta. Bandykite dar kartą.",
     "invalid_credentials": "Neteisingas el. pašto adresas arba slaptažodis.",
@@ -135,7 +139,13 @@
     "fibre_composition_missing": "Trūksta pluoštinės sudėties",
     "animal_origin_unknown": "Gyvūninė kilmė nenurodyta",
     "footwear_materials_missing": "Trūksta avalynės medžiagų",
-    "fibre_percentages_not_100": "Procentai nesudaro 100 %"
+    "fibre_percentages_not_100": "Procentai nesudaro 100 %",
+    "workbook_invalid": "Excel failo neįmanoma perskaityti",
+    "workbook_unsafe": "Makrokomandos arba išorinės nuorodos",
+    "workbook_sheet_missing": "Lapas nerastas",
+    "workbook_too_large": "Excel failas per didelis",
+    "cellError": "Excel klaidos reikšmė: įrašykite pačią reikšmę",
+    "formula": "Formulė be įrašyto rezultato: įrašykite failą programoje Excel"
   },
   "login": {
     "title": "Prisijungimas: {{portal}}",
@@ -398,12 +408,12 @@
   },
   "imports": {
     "title": "Importai",
-    "intro": "Įkelkite CSV failą ir nuotraukas. Atnaujinama tik tai, kas pasikeitė.",
+    "intro": "Įkelkite CSV arba Excel failą ir nuotraukas. Atnaujinama tik tai, kas pasikeitė.",
     "automateLink": "Daryti tai automatiškai",
     "uploadTitle": "Įkelti",
-    "uploadIntro": "Failas products.csv su viena eilute kiekvienam dydžiui ir nuotraukos su pavadinimais kaip KO-1001_NVY_1.jpg. Tinka ir vienas zip su viskuo.",
+    "uploadIntro": "Failas products.csv arba products.xlsx su viena eilute kiekvienam dydžiui ir nuotraukos su pavadinimais kaip KO-1001_NVY_1.jpg. Tinka ir vienas zip su viskuo.",
     "template": "Atsisiųsti CSV šabloną",
-    "drop": "Numeskite čia CSV, zip arba nuotraukas",
+    "drop": "Numeskite čia CSV, Excel failą, zip arba nuotraukas",
     "dropHint": "Aplankai nesvarbu, failų pavadinimai – svarbu. Anksčiau įkeltos nuotraukos atpažįstamos ir iš naujo nesiunčiamos.",
     "choose": "Pasirinkti failus",
     "imagesFound_one": "{{count}} nuotrauka",
@@ -414,7 +424,7 @@
     "ignored_few": "Praleisti {{count}} failai: {{names}}",
     "ignored_many": "Praleista {{count}} failo: {{names}}",
     "ignored_other": "Praleista {{count}} failų: {{names}}",
-    "nothing": "Pasirinktuose failuose nerasta nei CSV, nei nuotraukų.",
+    "nothing": "Pasirinktuose failuose nerasta nei CSV, nei Excel failo, nei nuotraukų.",
     "mode": "Ką daryti su prekėmis, kurių nėra faile",
     "modeUpsert": "Tik pridėti ir atnaujinti",
     "modeMirror": "Atšaukti ir trūkstamas prekes",
@@ -483,11 +493,25 @@
       "warning": "Įspėjimas"
     },
     "where": "Kur",
-    "row": "eilutė {{n}}",
-    "column": "Stulpelis",
+    "row": "Eilutė {{n}}",
     "value": "Reikšmė",
     "problem": "Kas negerai",
-    "filesTitle": "Failai"
+    "filesTitle": "Failai",
+    "templates": "Šablonai",
+    "otherSheet": "{{names}}: pirmiausia įrašykite kaip Excel darbaknygę (.xlsx).",
+    "cell": "Eilutė {{row}}, stulpelis {{column}} ({{letter}})",
+    "rowColumn": "Eilutė {{row}}, stulpelis {{column}}",
+    "columnAt": "Stulpelis {{column}} ({{letter}})",
+    "order": "Tvarka",
+    "downloadList": "Atsisiųsti sąrašą (CSV)",
+    "excel": {
+      "products": "Prekės (Excel)",
+      "assets": "Nuotraukos (Excel)"
+    },
+    "by": {
+      "row": "Pagal eilutę",
+      "problem": "Pagal problemą"
+    }
   },
   "automation": {
     "title": "Automatinis įkėlimas",
@@ -1156,7 +1180,8 @@
         "failed": "Nepavyko",
         "expired": "Nebegalioja"
       }
-    }
+    },
+    "excel": "Prekių duomenys (Excel)"
   },
   "enum": {
     "role": {
@@ -1576,7 +1601,8 @@
       "fit": "Kirpimas",
       "sleeve_length": "Rankovių ilgis",
       "neckline": "Iškirptė"
-    }
+    },
+    "attributes": "Kiti duomenys"
   },
   "labelWarning": {
     "title": "Etiketės informacija nepilna",

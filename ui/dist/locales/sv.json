@@ -112,6 +112,10 @@
     "files_missing": "Några bildfiler saknas.",
     "import_invalid": "Den här filen kan inte importeras.",
     "mass_unpublish_refused": "Stoppad: mer än hälften av dina artiklar skulle tas offline. Om det är meningen, tillåt det och försök igen.",
+    "workbook_invalid": "Den här Excel-filen kan inte läsas. Spara den som Excel-arbetsbok (.xlsx) och försök igen.",
+    "workbook_unsafe": "Den här Excel-filen har makron eller externa länkar. Spara den utan dem som Excel-arbetsbok (.xlsx).",
+    "workbook_sheet_missing": "Den här Excel-filen har inget blad som heter Products (eller Assets).",
+    "workbook_too_large": "Den här Excel-filen är för stor (högst 100 000 rader och 1 000 kolumner).",
     "unsafe_url": "Den här adressen är inte tillåten (den pekar på ett privat nätverk).",
     "csrf_failed": "Din session har förnyats. Försök igen.",
     "invalid_credentials": "E-postadressen eller lösenordet är fel.",
@@ -135,7 +139,13 @@
     "fibre_composition_missing": "Fibersammansättning saknas",
     "animal_origin_unknown": "Animaliskt ursprung inte angivet",
     "footwear_materials_missing": "Skomaterial saknas",
-    "fibre_percentages_not_100": "Procentsatserna blir inte 100 %"
+    "fibre_percentages_not_100": "Procentsatserna blir inte 100 %",
+    "workbook_invalid": "Excel-filen kan inte läsas",
+    "workbook_unsafe": "Makron eller externa länkar",
+    "workbook_sheet_missing": "Bladet hittades inte",
+    "workbook_too_large": "Excel-filen är för stor",
+    "cellError": "Felvärde i Excel: skriv själva värdet",
+    "formula": "Formel utan sparat resultat: spara filen i Excel"
   },
   "login": {
     "title": "Logga in på {{portal}}",
@@ -392,19 +402,19 @@
   },
   "imports": {
     "title": "Importer",
-    "intro": "Ladda upp en CSV-fil och era bilder. Bara det som har ändrats uppdateras.",
+    "intro": "Ladda upp en CSV- eller Excel-fil och era bilder. Bara det som har ändrats uppdateras.",
     "automateLink": "Gör det automatiskt",
     "uploadTitle": "Ladda upp",
-    "uploadIntro": "En products.csv med en rad per storlek, plus bilder med namn som KO-1001_NVY_1.jpg. En zip med allt fungerar också.",
+    "uploadIntro": "En products.csv eller products.xlsx med en rad per storlek, plus bilder med namn som KO-1001_NVY_1.jpg. En zip med allt fungerar också.",
     "template": "Ladda ner CSV-mall",
-    "drop": "Släpp din CSV, zip eller dina bilder här",
+    "drop": "Släpp din CSV, Excel-fil, zip eller dina bilder här",
     "dropHint": "Mappar spelar ingen roll, filnamn gör det. Bilder som du redan har laddat upp känns igen och skickas inte igen.",
     "choose": "Välj filer",
     "imagesFound_one": "{{count}} bild",
     "imagesFound_other": "{{count}} bilder",
     "ignored_one": "{{count}} fil hoppades över: {{names}}",
     "ignored_other": "{{count}} filer hoppades över: {{names}}",
-    "nothing": "Ingen CSV eller bild hittades bland det du valde.",
+    "nothing": "Ingen CSV, Excel-fil eller bild hittades bland det du valde.",
     "mode": "Vad som ska hända med artiklar som inte finns i filen",
     "modeUpsert": "Bara lägg till och uppdatera",
     "modeMirror": "Ta även saknade artiklar offline",
@@ -467,11 +477,25 @@
       "warning": "Varning"
     },
     "where": "Var",
-    "row": "rad {{n}}",
-    "column": "Kolumn",
+    "row": "Rad {{n}}",
     "value": "Värde",
     "problem": "Vad som är fel",
-    "filesTitle": "Filer"
+    "filesTitle": "Filer",
+    "templates": "Mallar",
+    "otherSheet": "{{names}}: spara först som Excel-arbetsbok (.xlsx).",
+    "cell": "Rad {{row}}, kolumn {{column}} ({{letter}})",
+    "rowColumn": "Rad {{row}}, kolumn {{column}}",
+    "columnAt": "Kolumn {{column}} ({{letter}})",
+    "order": "Ordning",
+    "downloadList": "Ladda ner listan (CSV)",
+    "excel": {
+      "products": "Artiklar (Excel)",
+      "assets": "Bilder (Excel)"
+    },
+    "by": {
+      "row": "Per rad",
+      "problem": "Per problem"
+    }
   },
   "automation": {
     "title": "Automatisk uppladdning",
@@ -1096,7 +1120,8 @@
         "failed": "Misslyckades",
         "expired": "Utgången"
       }
-    }
+    },
+    "excel": "Artikeldata (Excel)"
   },
   "enum": {
     "role": {
@@ -1516,7 +1541,8 @@
       "fit": "Passform",
       "sleeve_length": "Ärmlängd",
       "neckline": "Halsringning"
-    }
+    },
+    "attributes": "Övriga uppgifter"
   },
   "labelWarning": {
     "title": "Ofullständig etikettinformation",

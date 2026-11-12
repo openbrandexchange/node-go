@@ -112,6 +112,10 @@
     "files_missing": "Noen bildefiler mangler.",
     "import_invalid": "Denne filen kan ikke importeres.",
     "mass_unpublish_refused": "Stoppet: Mer enn halvparten av varene dine ville blitt tatt offline. Hvis det er meningen, tillat det og prøv igjen.",
+    "workbook_invalid": "Denne Excel-filen kan ikke leses. Lagre den som Excel-arbeidsbok (.xlsx) og prøv igjen.",
+    "workbook_unsafe": "Denne Excel-filen har makroer eller eksterne koblinger. Lagre den uten dem som Excel-arbeidsbok (.xlsx).",
+    "workbook_sheet_missing": "Denne Excel-filen har ikke noe ark med navnet Products (eller Assets).",
+    "workbook_too_large": "Denne Excel-filen er for stor (maks. 100 000 rader og 1000 kolonner).",
     "unsafe_url": "Denne adressen er ikke tillatt (den peker til et privat nettverk).",
     "csrf_failed": "Økten din er fornyet. Prøv igjen.",
     "invalid_credentials": "E-postadressen eller passordet er feil.",
@@ -135,7 +139,13 @@
     "fibre_composition_missing": "Fibersammensetning mangler",
     "animal_origin_unknown": "Animalsk opprinnelse ikke oppgitt",
     "footwear_materials_missing": "Skomaterialer mangler",
-    "fibre_percentages_not_100": "Prosentsatsene blir ikke 100 %"
+    "fibre_percentages_not_100": "Prosentsatsene blir ikke 100 %",
+    "workbook_invalid": "Excel-filen kan ikke leses",
+    "workbook_unsafe": "Makroer eller eksterne koblinger",
+    "workbook_sheet_missing": "Fant ikke arket",
+    "workbook_too_large": "Excel-filen er for stor",
+    "cellError": "Feilverdi i Excel: skriv inn selve verdien",
+    "formula": "Formel uten lagret resultat: lagre filen i Excel"
   },
   "login": {
     "title": "Logg inn på {{portal}}",
@@ -392,19 +402,19 @@
   },
   "imports": {
     "title": "Importer",
-    "intro": "Last opp en CSV-fil og bildene deres. Bare det som er endret, oppdateres.",
+    "intro": "Last opp en CSV- eller Excel-fil og bildene deres. Bare det som er endret, oppdateres.",
     "automateLink": "Gjør det automatisk",
     "uploadTitle": "Last opp",
-    "uploadIntro": "En products.csv med én linje per størrelse, pluss bilder med navn som KO-1001_NVY_1.jpg. En zip med alt fungerer også.",
+    "uploadIntro": "En products.csv eller products.xlsx med én linje per størrelse, pluss bilder med navn som KO-1001_NVY_1.jpg. En zip med alt fungerer også.",
     "template": "Last ned CSV-mal",
-    "drop": "Slipp CSV, zip eller bilder her",
+    "drop": "Slipp CSV, Excel-fil, zip eller bilder her",
     "dropHint": "Mapper spiller ingen rolle, filnavn gjør det. Bilder du har lastet opp før, gjenkjennes og sendes ikke på nytt.",
     "choose": "Velg filer",
     "imagesFound_one": "{{count}} bilde",
     "imagesFound_other": "{{count}} bilder",
     "ignored_one": "{{count}} fil hoppet over: {{names}}",
     "ignored_other": "{{count}} filer hoppet over: {{names}}",
-    "nothing": "Fant ingen CSV eller bilder i det du valgte.",
+    "nothing": "Fant ingen CSV, Excel-fil eller bilder i det du valgte.",
     "mode": "Hva som skal skje med varer som ikke er i filen",
     "modeUpsert": "Bare legg til og oppdater",
     "modeMirror": "Ta også manglende varer offline",
@@ -467,11 +477,25 @@
       "warning": "Advarsel"
     },
     "where": "Hvor",
-    "row": "linje {{n}}",
-    "column": "Kolonne",
+    "row": "Linje {{n}}",
     "value": "Verdi",
     "problem": "Hva er galt",
-    "filesTitle": "Filer"
+    "filesTitle": "Filer",
+    "templates": "Maler",
+    "otherSheet": "{{names}}: lagre først som Excel-arbeidsbok (.xlsx).",
+    "cell": "Linje {{row}}, kolonne {{column}} ({{letter}})",
+    "rowColumn": "Linje {{row}}, kolonne {{column}}",
+    "columnAt": "Kolonne {{column}} ({{letter}})",
+    "order": "Rekkefølge",
+    "downloadList": "Last ned listen (CSV)",
+    "excel": {
+      "products": "Varer (Excel)",
+      "assets": "Bilder (Excel)"
+    },
+    "by": {
+      "row": "Etter linje",
+      "problem": "Etter problem"
+    }
   },
   "automation": {
     "title": "Automatisk opplasting",
@@ -1096,7 +1120,8 @@
         "failed": "Mislyktes",
         "expired": "Utløpt"
       }
-    }
+    },
+    "excel": "Varedata (Excel)"
   },
   "enum": {
     "role": {
@@ -1516,7 +1541,8 @@
       "fit": "Passform",
       "sleeve_length": "Ermelengde",
       "neckline": "Halsåpning"
-    }
+    },
+    "attributes": "Andre opplysninger"
   },
   "labelWarning": {
     "title": "Ufullstendige merkeopplysninger",

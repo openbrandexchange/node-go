@@ -112,6 +112,10 @@
     "files_missing": "Einige Bilddateien fehlen.",
     "import_invalid": "Diese Datei kann nicht importiert werden.",
     "mass_unpublish_refused": "Abgebrochen: Dadurch würde mehr als die Hälfte Ihrer Artikel offline gehen. Wenn das gewollt ist, erlauben Sie es und versuchen Sie es erneut.",
+    "workbook_invalid": "Diese Excel-Datei kann nicht gelesen werden. Speichern Sie sie als Excel-Arbeitsmappe (.xlsx) und versuchen Sie es erneut.",
+    "workbook_unsafe": "Diese Excel-Datei enthält Makros oder externe Verknüpfungen. Speichern Sie sie ohne diese als Excel-Arbeitsmappe (.xlsx).",
+    "workbook_sheet_missing": "Diese Excel-Datei hat kein Tabellenblatt namens Products (oder Assets).",
+    "workbook_too_large": "Diese Excel-Datei ist zu groß (höchstens 100.000 Zeilen und 1.000 Spalten).",
     "unsafe_url": "Diese Adresse ist nicht erlaubt (sie zeigt auf ein privates Netzwerk).",
     "csrf_failed": "Ihre Sitzung wurde erneuert. Bitte versuchen Sie es erneut.",
     "invalid_credentials": "E-Mail-Adresse oder Passwort ist nicht korrekt.",
@@ -135,7 +139,13 @@
     "fibre_composition_missing": "Faserzusammensetzung fehlt",
     "animal_origin_unknown": "Tierischer Ursprung nicht angegeben",
     "footwear_materials_missing": "Schuhmaterialien fehlen",
-    "fibre_percentages_not_100": "Prozentsätze ergeben nicht 100 %"
+    "fibre_percentages_not_100": "Prozentsätze ergeben nicht 100 %",
+    "workbook_invalid": "Excel-Datei nicht lesbar",
+    "workbook_unsafe": "Makros oder externe Verknüpfungen",
+    "workbook_sheet_missing": "Tabellenblatt nicht gefunden",
+    "workbook_too_large": "Excel-Datei zu groß",
+    "cellError": "Fehlerwert in Excel: den Wert selbst eintragen",
+    "formula": "Formel ohne gespeichertes Ergebnis: Datei in Excel speichern"
   },
   "login": {
     "title": "Anmelden bei {{portal}}",
@@ -392,19 +402,19 @@
   },
   "imports": {
     "title": "Importe",
-    "intro": "Laden Sie eine CSV-Datei und Ihre Bilder hoch. Nur Geändertes wird aktualisiert.",
+    "intro": "Laden Sie eine CSV- oder Excel-Datei und Ihre Bilder hoch. Nur Geändertes wird aktualisiert.",
     "automateLink": "Das automatisch erledigen",
     "uploadTitle": "Hochladen",
-    "uploadIntro": "Eine products.csv mit einer Zeile pro Größe und Bilder mit Namen wie KO-1001_NVY_1.jpg. Eine ZIP-Datei mit allem funktioniert auch.",
+    "uploadIntro": "Eine products.csv oder products.xlsx mit einer Zeile pro Größe und Bilder mit Namen wie KO-1001_NVY_1.jpg. Eine ZIP-Datei mit allem funktioniert auch.",
     "template": "CSV-Vorlage herunterladen",
-    "drop": "Ziehen Sie Ihre CSV, ZIP oder Bilder hierher",
+    "drop": "Ziehen Sie Ihre CSV, Excel-Datei, ZIP oder Bilder hierher",
     "dropHint": "Ordner spielen keine Rolle, Dateinamen schon. Bereits hochgeladene Bilder werden erkannt und nicht erneut gesendet.",
     "choose": "Dateien auswählen",
     "imagesFound_one": "{{count}} Bild",
     "imagesFound_other": "{{count}} Bilder",
     "ignored_one": "{{count}} Datei übersprungen: {{names}}",
     "ignored_other": "{{count}} Dateien übersprungen: {{names}}",
-    "nothing": "In Ihrer Auswahl wurde keine CSV und kein Bild gefunden.",
+    "nothing": "In Ihrer Auswahl wurde keine CSV, keine Excel-Datei und kein Bild gefunden.",
     "mode": "Umgang mit Artikeln, die nicht in der Datei stehen",
     "modeUpsert": "Nur hinzufügen und aktualisieren",
     "modeMirror": "Fehlende Artikel auch offline nehmen",
@@ -468,10 +478,24 @@
     },
     "where": "Wo",
     "row": "Zeile {{n}}",
-    "column": "Spalte",
     "value": "Wert",
     "problem": "Was nicht stimmt",
-    "filesTitle": "Dateien"
+    "filesTitle": "Dateien",
+    "templates": "Vorlagen",
+    "otherSheet": "{{names}}: bitte zuerst als Excel-Arbeitsmappe (.xlsx) speichern.",
+    "cell": "Zeile {{row}}, Spalte {{column}} ({{letter}})",
+    "rowColumn": "Zeile {{row}}, Spalte {{column}}",
+    "columnAt": "Spalte {{column}} ({{letter}})",
+    "order": "Sortierung",
+    "downloadList": "Liste herunterladen (CSV)",
+    "excel": {
+      "products": "Artikel (Excel)",
+      "assets": "Bilder (Excel)"
+    },
+    "by": {
+      "row": "Nach Zeile",
+      "problem": "Nach Problem"
+    }
   },
   "automation": {
     "title": "Automatischer Upload",
@@ -1096,7 +1120,8 @@
         "failed": "Fehlgeschlagen",
         "expired": "Abgelaufen"
       }
-    }
+    },
+    "excel": "Artikeldaten (Excel)"
   },
   "enum": {
     "role": {
@@ -1516,7 +1541,8 @@
       "fit": "Passform",
       "sleeve_length": "Ärmellänge",
       "neckline": "Ausschnitt"
-    }
+    },
+    "attributes": "Weitere Angaben"
   },
   "labelWarning": {
     "title": "Etikettangaben unvollständig",

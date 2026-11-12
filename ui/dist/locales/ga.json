@@ -112,6 +112,10 @@
     "files_missing": "Tá roinnt comhad grianghraf ar iarraidh.",
     "import_invalid": "Ní féidir an comhad seo a iompórtáil.",
     "mass_unpublish_refused": "Stoptha: d’imeodh níos mó ná leath d’earraí as an tairiscint. Más d’aon ghnó é, ceadaigh é agus bain triail eile as.",
+    "workbook_invalid": "Ní féidir an comhad Excel seo a léamh. Sábháil é mar Leabhar Oibre Excel (.xlsx) agus bain triail eile as.",
+    "workbook_unsafe": "Tá macraí nó naisc sheachtracha sa chomhad Excel seo. Sábháil é gan iad mar Leabhar Oibre Excel (.xlsx).",
+    "workbook_sheet_missing": "Níl aon bhileog darb ainm Products (nó Assets) sa chomhad Excel seo.",
+    "workbook_too_large": "Tá an comhad Excel seo rómhór (100,000 líne agus 1,000 colún ar a mhéad).",
     "unsafe_url": "Ní cheadaítear an seoladh seo (díríonn sé ar líonra príobháideach).",
     "csrf_failed": "Athnuadh do sheisiún. Bain triail eile as.",
     "invalid_credentials": "Níl an seoladh ríomhphoist nó an pasfhocal ceart.",
@@ -135,7 +139,13 @@
     "fibre_composition_missing": "Comhdhéanamh snáithíní in easnamh",
     "animal_origin_unknown": "Bunadh ainmhíoch gan lua",
     "footwear_materials_missing": "Ábhair an choisbhirt in easnamh",
-    "fibre_percentages_not_100": "Ní ionann na céatadáin agus 100%"
+    "fibre_percentages_not_100": "Ní ionann na céatadáin agus 100%",
+    "workbook_invalid": "Ní féidir an comhad Excel a léamh",
+    "workbook_unsafe": "Macraí nó naisc sheachtracha",
+    "workbook_sheet_missing": "Níor aimsíodh an bhileog",
+    "workbook_too_large": "Tá an comhad Excel rómhór",
+    "cellError": "Luach earráide Excel: clóscríobh an luach féin",
+    "formula": "Foirmle gan toradh sábháilte: sábháil an comhad in Excel"
   },
   "login": {
     "title": "Logáil isteach: {{portal}}",
@@ -401,12 +411,12 @@
   },
   "imports": {
     "title": "Iompórtálacha",
-    "intro": "Uaslódáil comhad CSV agus grianghraif. Ní nuashonraítear ach an méid a d’athraigh.",
+    "intro": "Uaslódáil comhad CSV nó Excel agus grianghraif. Ní nuashonraítear ach an méid a d’athraigh.",
     "automateLink": "Déan é seo go huathoibríoch",
     "uploadTitle": "Uaslódáil",
-    "uploadIntro": "Comhad products.csv le líne amháin in aghaidh na méide, agus grianghraif le hainmneacha mar KO-1001_NVY_1.jpg. Oibríonn zip amháin le gach rud ann freisin.",
+    "uploadIntro": "Comhad products.csv nó products.xlsx le líne amháin in aghaidh na méide, agus grianghraif le hainmneacha mar KO-1001_NVY_1.jpg. Oibríonn zip amháin le gach rud ann freisin.",
     "template": "Íoslódáil teimpléad CSV",
-    "drop": "Scaoil CSV, zip nó grianghraif anseo",
+    "drop": "Scaoil CSV, comhad Excel, zip nó grianghraif anseo",
     "dropHint": "Ní bhaineann fillteáin le hábhar, ach baineann ainmneacha comhad. Aithnítear grianghraif a uaslódáladh cheana agus ní sheoltar arís iad.",
     "choose": "Roghnaigh comhaid",
     "imagesFound_one": "Grianghraif: {{count}}",
@@ -419,7 +429,7 @@
     "ignored_few": "Comhaid scipeáilte ({{count}}): {{names}}",
     "ignored_many": "Comhaid scipeáilte ({{count}}): {{names}}",
     "ignored_other": "Comhaid scipeáilte ({{count}}): {{names}}",
-    "nothing": "Níor aimsíodh CSV ná grianghraif sna comhaid a roghnaíodh.",
+    "nothing": "Níor aimsíodh CSV, comhad Excel ná grianghraif sna comhaid a roghnaíodh.",
     "mode": "Cad a dhéanfar le hearraí nach bhfuil sa chomhad",
     "modeUpsert": "Cuir leis agus nuashonraigh amháin",
     "modeMirror": "Tarraing siar earraí atá ar iarraidh freisin",
@@ -491,11 +501,25 @@
       "warning": "Rabhadh"
     },
     "where": "Cén áit",
-    "row": "líne {{n}}",
-    "column": "Colún",
+    "row": "Líne {{n}}",
     "value": "Luach",
     "problem": "Cad atá cearr",
-    "filesTitle": "Comhaid"
+    "filesTitle": "Comhaid",
+    "templates": "Teimpléid",
+    "otherSheet": "{{names}}: sábháil mar Leabhar Oibre Excel (.xlsx) ar dtús.",
+    "cell": "Líne {{row}}, colún {{column}} ({{letter}})",
+    "rowColumn": "Líne {{row}}, colún {{column}}",
+    "columnAt": "Colún {{column}} ({{letter}})",
+    "order": "Ord",
+    "downloadList": "Íoslódáil an liosta (CSV)",
+    "excel": {
+      "products": "Earraí (Excel)",
+      "assets": "Grianghraif (Excel)"
+    },
+    "by": {
+      "row": "De réir líne",
+      "problem": "De réir faidhbe"
+    }
   },
   "automation": {
     "title": "Uaslódáil uathoibríoch",
@@ -1186,7 +1210,8 @@
         "failed": "Theip air",
         "expired": "Imithe in éag"
       }
-    }
+    },
+    "excel": "Sonraí earraí (Excel)"
   },
   "enum": {
     "role": {
@@ -1606,7 +1631,8 @@
       "fit": "Gearradh",
       "sleeve_length": "Fad muinchille",
       "neckline": "Muineál"
-    }
+    },
+    "attributes": "Sonraí eile"
   },
   "labelWarning": {
     "title": "Faisnéis lipéid neamhiomlán",

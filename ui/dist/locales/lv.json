@@ -112,6 +112,10 @@
     "files_missing": "Trūkst dažu fotoattēlu failu.",
     "import_invalid": "Šo failu nevar importēt.",
     "mass_unpublish_refused": "Apturēts: vairāk nekā puse jūsu preču pazustu no piedāvājuma. Ja tas ir apzināti, atļaujiet to un mēģiniet vēlreiz.",
+    "workbook_invalid": "Šo Excel failu nevar nolasīt. Saglabājiet to kā Excel darbgrāmatu (.xlsx) un mēģiniet vēlreiz.",
+    "workbook_unsafe": "Šajā Excel failā ir makro vai ārējas saites. Saglabājiet to bez tām kā Excel darbgrāmatu (.xlsx).",
+    "workbook_sheet_missing": "Šajā Excel failā nav lapas ar nosaukumu Products (vai Assets).",
+    "workbook_too_large": "Šis Excel fails ir pārāk liels (ne vairāk kā 100 000 rindu un 1000 kolonnu).",
     "unsafe_url": "Šī adrese nav atļauta (tā norāda uz privātu tīklu).",
     "csrf_failed": "Jūsu sesija ir atjaunota. Mēģiniet vēlreiz.",
     "invalid_credentials": "E-pasta adrese vai parole nav pareiza.",
@@ -135,7 +139,13 @@
     "fibre_composition_missing": "Trūkst šķiedru sastāva",
     "animal_origin_unknown": "Dzīvnieku izcelsme nav norādīta",
     "footwear_materials_missing": "Trūkst apavu materiālu",
-    "fibre_percentages_not_100": "Procenti kopā nav 100 %"
+    "fibre_percentages_not_100": "Procenti kopā nav 100 %",
+    "workbook_invalid": "Excel failu nevar nolasīt",
+    "workbook_unsafe": "Makro vai ārējas saites",
+    "workbook_sheet_missing": "Lapa nav atrasta",
+    "workbook_too_large": "Excel fails ir pārāk liels",
+    "cellError": "Excel kļūdas vērtība: ierakstiet pašu vērtību",
+    "formula": "Formula bez saglabāta rezultāta: saglabājiet failu programmā Excel"
   },
   "login": {
     "title": "Pieteikšanās: {{portal}}",
@@ -395,12 +405,12 @@
   },
   "imports": {
     "title": "Importi",
-    "intro": "Augšupielādējiet CSV failu un fotoattēlus. Tiek atjaunināts tikai tas, kas mainījies.",
+    "intro": "Augšupielādējiet CSV vai Excel failu un fotoattēlus. Tiek atjaunināts tikai tas, kas mainījies.",
     "automateLink": "Darīt to automātiski",
     "uploadTitle": "Augšupielādēt",
-    "uploadIntro": "Fails products.csv ar vienu rindu katram izmēram un fotoattēli ar nosaukumiem kā KO-1001_NVY_1.jpg. Der arī viens zip ar visu.",
+    "uploadIntro": "Fails products.csv vai products.xlsx ar vienu rindu katram izmēram un fotoattēli ar nosaukumiem kā KO-1001_NVY_1.jpg. Der arī viens zip ar visu.",
     "template": "Lejupielādēt CSV veidni",
-    "drop": "Nometiet šeit CSV, zip vai fotoattēlus",
+    "drop": "Nometiet šeit CSV, Excel failu, zip vai fotoattēlus",
     "dropHint": "Mapes nav svarīgas, failu nosaukumi ir. Iepriekš augšupielādētie fotoattēli tiek atpazīti un netiek sūtīti atkārtoti.",
     "choose": "Izvēlēties failus",
     "imagesFound_zero": "{{count}} fotoattēlu",
@@ -409,7 +419,7 @@
     "ignored_zero": "Izlaists {{count}} failu: {{names}}",
     "ignored_one": "Izlaists {{count}} fails: {{names}}",
     "ignored_other": "Izlaisti {{count}} faili: {{names}}",
-    "nothing": "Izvēlētajos failos netika atrasts ne CSV, ne fotoattēli.",
+    "nothing": "Izvēlētajos failos netika atrasts ne CSV, ne Excel fails, ne fotoattēli.",
     "mode": "Ko darīt ar precēm, kuru nav failā",
     "modeUpsert": "Tikai pievienot un atjaunināt",
     "modeMirror": "Atsaukt arī trūkstošās preces",
@@ -476,10 +486,24 @@
     },
     "where": "Kur",
     "row": "{{n}}. rinda",
-    "column": "Kolonna",
     "value": "Vērtība",
     "problem": "Kas nav kārtībā",
-    "filesTitle": "Faili"
+    "filesTitle": "Faili",
+    "templates": "Veidnes",
+    "otherSheet": "{{names}}: vispirms saglabājiet kā Excel darbgrāmatu (.xlsx).",
+    "cell": "{{row}}. rinda, kolonna {{column}} ({{letter}})",
+    "rowColumn": "{{row}}. rinda, kolonna {{column}}",
+    "columnAt": "Kolonna {{column}} ({{letter}})",
+    "order": "Secība",
+    "downloadList": "Lejupielādēt sarakstu (CSV)",
+    "excel": {
+      "products": "Preces (Excel)",
+      "assets": "Fotoattēli (Excel)"
+    },
+    "by": {
+      "row": "Pēc rindas",
+      "problem": "Pēc problēmas"
+    }
   },
   "automation": {
     "title": "Automātiska augšupielāde",
@@ -1126,7 +1150,8 @@
         "failed": "Neizdevās",
         "expired": "Beidzies"
       }
-    }
+    },
+    "excel": "Preču dati (Excel)"
   },
   "enum": {
     "role": {
@@ -1546,7 +1571,8 @@
       "fit": "Piegriezums",
       "sleeve_length": "Piedurkņu garums",
       "neckline": "Kakla izgriezums"
-    }
+    },
+    "attributes": "Citi dati"
   },
   "labelWarning": {
     "title": "Etiķetes informācija nav pilnīga",

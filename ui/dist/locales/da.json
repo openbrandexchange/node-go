@@ -112,6 +112,10 @@
     "files_missing": "Nogle billedfiler mangler.",
     "import_invalid": "Denne fil kan ikke importeres.",
     "mass_unpublish_refused": "Stoppet: Mere end halvdelen af dine varer ville blive taget offline. Hvis det er meningen, så tillad det og prøv igen.",
+    "workbook_invalid": "Denne Excel-fil kan ikke læses. Gem den som Excel-projektmappe (.xlsx), og prøv igen.",
+    "workbook_unsafe": "Denne Excel-fil indeholder makroer eller eksterne links. Gem den uden dem som Excel-projektmappe (.xlsx).",
+    "workbook_sheet_missing": "Der er intet ark med navnet Products (eller Assets) i denne Excel-fil.",
+    "workbook_too_large": "Denne Excel-fil er for stor (højst 100.000 rækker og 1.000 kolonner).",
     "unsafe_url": "Denne adresse er ikke tilladt (den peger på et privat netværk).",
     "csrf_failed": "Din session er blevet fornyet. Prøv igen.",
     "invalid_credentials": "E-mailadresse eller adgangskode er forkert.",
@@ -135,7 +139,13 @@
     "fibre_composition_missing": "Fibersammensætning mangler",
     "animal_origin_unknown": "Animalsk oprindelse ikke oplyst",
     "footwear_materials_missing": "Materialer i fodtøj mangler",
-    "fibre_percentages_not_100": "Procentsatserne giver ikke 100 %"
+    "fibre_percentages_not_100": "Procentsatserne giver ikke 100 %",
+    "workbook_invalid": "Excel-filen kan ikke læses",
+    "workbook_unsafe": "Makroer eller eksterne links",
+    "workbook_sheet_missing": "Arket blev ikke fundet",
+    "workbook_too_large": "Excel-filen er for stor",
+    "cellError": "Fejlværdi i Excel: skriv selve værdien",
+    "formula": "Formel uden gemt resultat: gem filen i Excel"
   },
   "login": {
     "title": "Log ind på {{portal}}",
@@ -392,19 +402,19 @@
   },
   "imports": {
     "title": "Importer",
-    "intro": "Upload en CSV-fil og jeres billeder. Kun det, der er ændret, opdateres.",
+    "intro": "Upload en CSV- eller Excel-fil og jeres billeder. Kun det, der er ændret, opdateres.",
     "automateLink": "Gør det automatisk",
     "uploadTitle": "Upload",
-    "uploadIntro": "En products.csv med én linje pr. størrelse plus billeder med navne som KO-1001_NVY_1.jpg. En zip med det hele virker også.",
+    "uploadIntro": "En products.csv eller products.xlsx med én linje pr. størrelse plus billeder med navne som KO-1001_NVY_1.jpg. En zip med det hele virker også.",
     "template": "Download CSV-skabelon",
-    "drop": "Træk din CSV, zip eller dine billeder hertil",
+    "drop": "Træk din CSV, Excel-fil, zip eller dine billeder hertil",
     "dropHint": "Mapper er ligegyldige, filnavne er ikke. Billeder, du har uploadet før, genkendes og sendes ikke igen.",
     "choose": "Vælg filer",
     "imagesFound_one": "{{count}} billede",
     "imagesFound_other": "{{count}} billeder",
     "ignored_one": "{{count}} fil sprunget over: {{names}}",
     "ignored_other": "{{count}} filer sprunget over: {{names}}",
-    "nothing": "Der blev ikke fundet nogen CSV eller billeder i det, du valgte.",
+    "nothing": "Der blev ikke fundet nogen CSV, Excel-fil eller billeder i det, du valgte.",
     "mode": "Hvad der skal ske med varer, der ikke er i filen",
     "modeUpsert": "Kun tilføj og opdater",
     "modeMirror": "Tag også manglende varer offline",
@@ -467,11 +477,25 @@
       "warning": "Advarsel"
     },
     "where": "Hvor",
-    "row": "linje {{n}}",
-    "column": "Kolonne",
+    "row": "Linje {{n}}",
     "value": "Værdi",
     "problem": "Hvad er galt",
-    "filesTitle": "Filer"
+    "filesTitle": "Filer",
+    "templates": "Skabeloner",
+    "otherSheet": "{{names}}: gem først som Excel-projektmappe (.xlsx).",
+    "cell": "Linje {{row}}, kolonne {{column}} ({{letter}})",
+    "rowColumn": "Linje {{row}}, kolonne {{column}}",
+    "columnAt": "Kolonne {{column}} ({{letter}})",
+    "order": "Rækkefølge",
+    "downloadList": "Download listen (CSV)",
+    "excel": {
+      "products": "Varer (Excel)",
+      "assets": "Billeder (Excel)"
+    },
+    "by": {
+      "row": "Efter linje",
+      "problem": "Efter problem"
+    }
   },
   "automation": {
     "title": "Automatisk upload",
@@ -1096,7 +1120,8 @@
         "failed": "Mislykkedes",
         "expired": "Udløbet"
       }
-    }
+    },
+    "excel": "Varedata (Excel)"
   },
   "enum": {
     "role": {
@@ -1516,7 +1541,8 @@
       "fit": "Pasform",
       "sleeve_length": "Ærmelængde",
       "neckline": "Halsudskæring"
-    }
+    },
+    "attributes": "Øvrige oplysninger"
   },
   "labelWarning": {
     "title": "Etiketoplysninger er ufuldstændige",

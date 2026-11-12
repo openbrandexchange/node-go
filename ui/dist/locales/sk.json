@@ -112,6 +112,10 @@
     "files_missing": "Chýbajú niektoré súbory fotografií.",
     "import_invalid": "Tento súbor nemožno importovať.",
     "mass_unpublish_refused": "Zastavené: viac ako polovica vášho tovaru by zmizla z ponuky. Ak je to zámer, povoľte to a skúste to znova.",
+    "workbook_invalid": "Tento súbor Excel nemožno prečítať. Uložte ho ako excelový zošit (.xlsx) a skúste to znova.",
+    "workbook_unsafe": "Tento súbor Excel obsahuje makrá alebo externé prepojenia. Uložte ho bez nich ako excelový zošit (.xlsx).",
+    "workbook_sheet_missing": "V tomto súbore Excel nie je hárok s názvom Products (ani Assets).",
+    "workbook_too_large": "Tento súbor Excel je príliš veľký (najviac 100 000 riadkov a 1 000 stĺpcov).",
     "unsafe_url": "Táto adresa nie je povolená (odkazuje do súkromnej siete).",
     "csrf_failed": "Vaša relácia bola obnovená. Skúste to znova.",
     "invalid_credentials": "E-mailová adresa alebo heslo nie sú správne.",
@@ -135,7 +139,13 @@
     "fibre_composition_missing": "Chýba vláknové zloženie",
     "animal_origin_unknown": "Živočíšny pôvod nie je uvedený",
     "footwear_materials_missing": "Chýbajú materiály obuvi",
-    "fibre_percentages_not_100": "Percentá nedávajú spolu 100 %"
+    "fibre_percentages_not_100": "Percentá nedávajú spolu 100 %",
+    "workbook_invalid": "Súbor Excel nemožno prečítať",
+    "workbook_unsafe": "Makrá alebo externé prepojenia",
+    "workbook_sheet_missing": "Hárok sa nenašiel",
+    "workbook_too_large": "Súbor Excel je príliš veľký",
+    "cellError": "Chybová hodnota Excelu: zadajte samotnú hodnotu",
+    "formula": "Vzorec bez uloženého výsledku: uložte súbor v Exceli"
   },
   "login": {
     "title": "Prihlásenie: {{portal}}",
@@ -398,12 +408,12 @@
   },
   "imports": {
     "title": "Importy",
-    "intro": "Nahrajte súbor CSV a fotografie. Aktualizuje sa len to, čo sa zmenilo.",
+    "intro": "Nahrajte súbor CSV alebo Excel a fotografie. Aktualizuje sa len to, čo sa zmenilo.",
     "automateLink": "Robiť to automaticky",
     "uploadTitle": "Nahrať",
-    "uploadIntro": "Súbor products.csv s jedným riadkom na veľkosť a fotografie s názvami ako KO-1001_NVY_1.jpg. Funguje aj jeden zip so všetkým.",
+    "uploadIntro": "Súbor products.csv alebo products.xlsx s jedným riadkom na veľkosť a fotografie s názvami ako KO-1001_NVY_1.jpg. Funguje aj jeden zip so všetkým.",
     "template": "Stiahnuť šablónu CSV",
-    "drop": "Presuňte sem CSV, zip alebo fotografie",
+    "drop": "Presuňte sem CSV, súbor Excel, zip alebo fotografie",
     "dropHint": "Na priečinkoch nezáleží, na názvoch súborov áno. Skôr nahrané fotografie sa rozpoznajú a znova sa neodosielajú.",
     "choose": "Vybrať súbory",
     "imagesFound_one": "{{count}} fotografia",
@@ -414,7 +424,7 @@
     "ignored_few": "Preskočené {{count}} súbory: {{names}}",
     "ignored_many": "Preskočených {{count}} súboru: {{names}}",
     "ignored_other": "Preskočených {{count}} súborov: {{names}}",
-    "nothing": "Vo vybraných súboroch sa nenašiel žiadny CSV ani fotografie.",
+    "nothing": "Vo vybraných súboroch sa nenašiel žiadny CSV, súbor Excel ani fotografie.",
     "mode": "Čo urobiť s tovarom, ktorý v súbore nie je",
     "modeUpsert": "Len pridávať a aktualizovať",
     "modeMirror": "Stiahnuť z ponuky aj chýbajúci tovar",
@@ -483,11 +493,25 @@
       "warning": "Upozornenie"
     },
     "where": "Kde",
-    "row": "riadok {{n}}",
-    "column": "Stĺpec",
+    "row": "Riadok {{n}}",
     "value": "Hodnota",
     "problem": "Čo je zle",
-    "filesTitle": "Súbory"
+    "filesTitle": "Súbory",
+    "templates": "Šablóny",
+    "otherSheet": "{{names}}: najprv uložte ako excelový zošit (.xlsx).",
+    "cell": "Riadok {{row}}, stĺpec {{column}} ({{letter}})",
+    "rowColumn": "Riadok {{row}}, stĺpec {{column}}",
+    "columnAt": "Stĺpec {{column}} ({{letter}})",
+    "order": "Poradie",
+    "downloadList": "Stiahnuť zoznam (CSV)",
+    "excel": {
+      "products": "Tovar (Excel)",
+      "assets": "Fotografie (Excel)"
+    },
+    "by": {
+      "row": "Podľa riadka",
+      "problem": "Podľa problému"
+    }
   },
   "automation": {
     "title": "Automatické nahrávanie",
@@ -1156,7 +1180,8 @@
         "failed": "Nepodarilo sa",
         "expired": "Vypršalo"
       }
-    }
+    },
+    "excel": "Údaje o tovare (Excel)"
   },
   "enum": {
     "role": {
@@ -1576,7 +1601,8 @@
       "fit": "Strih",
       "sleeve_length": "Dĺžka rukáva",
       "neckline": "Výstrih"
-    }
+    },
+    "attributes": "Ďalšie údaje"
   },
   "labelWarning": {
     "title": "Údaje na štítku nie sú úplné",

@@ -112,6 +112,10 @@
     "files_missing": "Joitakin kuvatiedostoja puuttuu.",
     "import_invalid": "Tätä tiedostoa ei voi tuoda.",
     "mass_unpublish_refused": "Keskeytetty: yli puolet tuotteistasi poistuisi näkyvistä. Jos tämä on tarkoituksellista, salli se ja yritä uudelleen.",
+    "workbook_invalid": "Tätä Excel-tiedostoa ei voi lukea. Tallenna se Excel-työkirjana (.xlsx) ja yritä uudelleen.",
+    "workbook_unsafe": "Tässä Excel-tiedostossa on makroja tai ulkoisia linkkejä. Tallenna se ilman niitä Excel-työkirjana (.xlsx).",
+    "workbook_sheet_missing": "Tässä Excel-tiedostossa ei ole taulukkoa nimeltä Products (tai Assets).",
+    "workbook_too_large": "Tämä Excel-tiedosto on liian suuri (enintään 100 000 riviä ja 1 000 saraketta).",
     "unsafe_url": "Tätä osoitetta ei sallita (se osoittaa yksityiseen verkkoon).",
     "csrf_failed": "Istuntosi uusittiin. Yritä uudelleen.",
     "invalid_credentials": "Sähköpostiosoite tai salasana on väärin.",
@@ -135,7 +139,13 @@
     "fibre_composition_missing": "Kuitukoostumus puuttuu",
     "animal_origin_unknown": "Eläinperäisyyttä ei ilmoitettu",
     "footwear_materials_missing": "Jalkineen materiaalit puuttuvat",
-    "fibre_percentages_not_100": "Prosentit eivät ole yhteensä 100 %"
+    "fibre_percentages_not_100": "Prosentit eivät ole yhteensä 100 %",
+    "workbook_invalid": "Excel-tiedostoa ei voi lukea",
+    "workbook_unsafe": "Makroja tai ulkoisia linkkejä",
+    "workbook_sheet_missing": "Taulukkoa ei löytynyt",
+    "workbook_too_large": "Excel-tiedosto on liian suuri",
+    "cellError": "Excelin virhearvo: kirjoita itse arvo",
+    "formula": "Kaava ilman tallennettua tulosta: tallenna tiedosto Excelissä"
   },
   "login": {
     "title": "Kirjaudu: {{portal}}",
@@ -392,19 +402,19 @@
   },
   "imports": {
     "title": "Tuonnit",
-    "intro": "Lataa CSV-tiedosto ja kuvat. Vain muuttuneet tiedot päivitetään.",
+    "intro": "Lataa CSV- tai Excel-tiedosto ja kuvat. Vain muuttuneet tiedot päivitetään.",
     "automateLink": "Tee tämä automaattisesti",
     "uploadTitle": "Lataa",
-    "uploadIntro": "products.csv, jossa yksi rivi kokoa kohden, sekä kuvat nimillä kuten KO-1001_NVY_1.jpg. Myös zip-tiedosto, jossa on kaikki, käy.",
+    "uploadIntro": "products.csv tai products.xlsx, jossa yksi rivi kokoa kohden, sekä kuvat nimillä kuten KO-1001_NVY_1.jpg. Myös zip-tiedosto, jossa on kaikki, käy.",
     "template": "Lataa CSV-malli",
-    "drop": "Pudota CSV, zip tai kuvat tähän",
+    "drop": "Pudota CSV, Excel-tiedosto, zip tai kuvat tähän",
     "dropHint": "Kansioilla ei ole väliä, tiedostonimillä on. Aiemmin ladatut kuvat tunnistetaan, eikä niitä lähetetä uudelleen.",
     "choose": "Valitse tiedostot",
     "imagesFound_one": "{{count}} kuva",
     "imagesFound_other": "{{count}} kuvaa",
     "ignored_one": "{{count}} tiedosto ohitettiin: {{names}}",
     "ignored_other": "{{count}} tiedostoa ohitettiin: {{names}}",
-    "nothing": "Valinnoista ei löytynyt CSV-tiedostoa eikä kuvia.",
+    "nothing": "Valinnoista ei löytynyt CSV- tai Excel-tiedostoa eikä kuvia.",
     "mode": "Mitä tehdään tuotteille, jotka puuttuvat tiedostosta",
     "modeUpsert": "Vain lisää ja päivitä",
     "modeMirror": "Poista myös puuttuvat tuotteet näkyvistä",
@@ -467,11 +477,25 @@
       "warning": "Varoitus"
     },
     "where": "Missä",
-    "row": "rivi {{n}}",
-    "column": "Sarake",
+    "row": "Rivi {{n}}",
     "value": "Arvo",
     "problem": "Mikä on vialla",
-    "filesTitle": "Tiedostot"
+    "filesTitle": "Tiedostot",
+    "templates": "Mallit",
+    "otherSheet": "{{names}}: tallenna ensin Excel-työkirjana (.xlsx).",
+    "cell": "Rivi {{row}}, sarake {{column}} ({{letter}})",
+    "rowColumn": "Rivi {{row}}, sarake {{column}}",
+    "columnAt": "Sarake {{column}} ({{letter}})",
+    "order": "Järjestys",
+    "downloadList": "Lataa luettelo (CSV)",
+    "excel": {
+      "products": "Tuotteet (Excel)",
+      "assets": "Kuvat (Excel)"
+    },
+    "by": {
+      "row": "Riveittäin",
+      "problem": "Ongelmittain"
+    }
   },
   "automation": {
     "title": "Automaattinen lataus",
@@ -1096,7 +1120,8 @@
         "failed": "Epäonnistui",
         "expired": "Vanhentunut"
       }
-    }
+    },
+    "excel": "Tuotetiedot (Excel)"
   },
   "enum": {
     "role": {
@@ -1516,7 +1541,8 @@
       "fit": "Istuvuus",
       "sleeve_length": "Hihan pituus",
       "neckline": "Pääntie"
-    }
+    },
+    "attributes": "Muut tiedot"
   },
   "labelWarning": {
     "title": "Tuotelapun tiedot puutteelliset",

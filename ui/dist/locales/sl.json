@@ -112,6 +112,10 @@
     "files_missing": "Nekatere datoteke fotografij manjkajo.",
     "import_invalid": "Te datoteke ni mogoče uvoziti.",
     "mass_unpublish_refused": "Ustavljeno: več kot polovica vaših artiklov bi izginila iz ponudbe. Če je to namerno, to dovolite in poskusite znova.",
+    "workbook_invalid": "Te datoteke Excel ni mogoče prebrati. Shranite jo kot Excelov delovni zvezek (.xlsx) in poskusite znova.",
+    "workbook_unsafe": "Ta datoteka Excel vsebuje makre ali zunanje povezave. Shranite jo brez njih kot Excelov delovni zvezek (.xlsx).",
+    "workbook_sheet_missing": "V tej datoteki Excel ni lista z imenom Products (ali Assets).",
+    "workbook_too_large": "Ta datoteka Excel je prevelika (največ 100.000 vrstic in 1.000 stolpcev).",
     "unsafe_url": "Ta naslov ni dovoljen (kaže v zasebno omrežje).",
     "csrf_failed": "Vaša seja je bila osvežena. Poskusite znova.",
     "invalid_credentials": "E-poštni naslov ali geslo ni pravilno.",
@@ -135,7 +139,13 @@
     "fibre_composition_missing": "Manjka surovinska sestava",
     "animal_origin_unknown": "Živalski izvor ni naveden",
     "footwear_materials_missing": "Manjkajo materiali obutve",
-    "fibre_percentages_not_100": "Odstotki ne dajo skupaj 100 %"
+    "fibre_percentages_not_100": "Odstotki ne dajo skupaj 100 %",
+    "workbook_invalid": "Datoteke Excel ni mogoče prebrati",
+    "workbook_unsafe": "Makri ali zunanje povezave",
+    "workbook_sheet_missing": "Lista ni mogoče najti",
+    "workbook_too_large": "Datoteka Excel je prevelika",
+    "cellError": "Vrednost napake v Excelu: vnesite vrednost neposredno",
+    "formula": "Formula brez shranjenega rezultata: shranite datoteko v Excelu"
   },
   "login": {
     "title": "Prijava: {{portal}}",
@@ -398,12 +408,12 @@
   },
   "imports": {
     "title": "Uvozi",
-    "intro": "Naložite datoteko CSV in fotografije. Posodobi se samo to, kar se je spremenilo.",
+    "intro": "Naložite datoteko CSV ali Excel in fotografije. Posodobi se samo to, kar se je spremenilo.",
     "automateLink": "To izvajaj samodejno",
     "uploadTitle": "Naloži",
-    "uploadIntro": "Datoteka products.csv z eno vrstico na velikost in fotografije z imeni, kot je KO-1001_NVY_1.jpg. Deluje tudi en zip z vsem.",
+    "uploadIntro": "Datoteka products.csv ali products.xlsx z eno vrstico na velikost in fotografije z imeni, kot je KO-1001_NVY_1.jpg. Deluje tudi en zip z vsem.",
     "template": "Prenesi predlogo CSV",
-    "drop": "Sem povlecite CSV, zip ali fotografije",
+    "drop": "Sem povlecite CSV, datoteko Excel, zip ali fotografije",
     "dropHint": "Mape niso pomembne, imena datotek pa. Že naložene fotografije se prepoznajo in se ne pošiljajo znova.",
     "choose": "Izberi datoteke",
     "imagesFound_one": "{{count}} fotografija",
@@ -414,7 +424,7 @@
     "ignored_two": "Preskočeni {{count}} datoteki: {{names}}",
     "ignored_few": "Preskočene {{count}} datoteke: {{names}}",
     "ignored_other": "Preskočenih {{count}} datotek: {{names}}",
-    "nothing": "V izbranih datotekah ni bilo najdenega CSV ali fotografij.",
+    "nothing": "V izbranih datotekah ni bilo najdenega CSV, datoteke Excel ali fotografij.",
     "mode": "Kaj storiti z artikli, ki jih ni v datoteki",
     "modeUpsert": "Samo dodajaj in posodabljaj",
     "modeMirror": "Umakni tudi manjkajoče artikle",
@@ -483,11 +493,25 @@
       "warning": "Opozorilo"
     },
     "where": "Kje",
-    "row": "vrstica {{n}}",
-    "column": "Stolpec",
+    "row": "Vrstica {{n}}",
     "value": "Vrednost",
     "problem": "Kaj je narobe",
-    "filesTitle": "Datoteke"
+    "filesTitle": "Datoteke",
+    "templates": "Predloge",
+    "otherSheet": "{{names}}: najprej shranite kot Excelov delovni zvezek (.xlsx).",
+    "cell": "Vrstica {{row}}, stolpec {{column}} ({{letter}})",
+    "rowColumn": "Vrstica {{row}}, stolpec {{column}}",
+    "columnAt": "Stolpec {{column}} ({{letter}})",
+    "order": "Vrstni red",
+    "downloadList": "Prenesi seznam (CSV)",
+    "excel": {
+      "products": "Artikli (Excel)",
+      "assets": "Fotografije (Excel)"
+    },
+    "by": {
+      "row": "Po vrstici",
+      "problem": "Po težavi"
+    }
   },
   "automation": {
     "title": "Samodejno nalaganje",
@@ -1156,7 +1180,8 @@
         "failed": "Ni uspelo",
         "expired": "Poteklo"
       }
-    }
+    },
+    "excel": "Podatki o artiklih (Excel)"
   },
   "enum": {
     "role": {
@@ -1576,7 +1601,8 @@
       "fit": "Kroj",
       "sleeve_length": "Dolžina rokava",
       "neckline": "Izrez"
-    }
+    },
+    "attributes": "Drugi podatki"
   },
   "labelWarning": {
     "title": "Podatki na etiketi niso popolni",

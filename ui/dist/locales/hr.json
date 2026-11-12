@@ -112,6 +112,10 @@
     "files_missing": "Nedostaju neke datoteke fotografija.",
     "import_invalid": "Ovu datoteku nije moguće uvesti.",
     "mass_unpublish_refused": "Zaustavljeno: više od polovice vaših artikala nestalo bi iz ponude. Ako je to namjerno, dopustite to i pokušajte ponovno.",
+    "workbook_invalid": "Ova Excel datoteka ne može se pročitati. Spremite je kao Excelovu radnu knjigu (.xlsx) i pokušajte ponovno.",
+    "workbook_unsafe": "Ova Excel datoteka sadrži makronaredbe ili vanjske veze. Spremite je bez njih kao Excelovu radnu knjigu (.xlsx).",
+    "workbook_sheet_missing": "U ovoj Excel datoteci nema lista naziva Products (ili Assets).",
+    "workbook_too_large": "Ova Excel datoteka je prevelika (najviše 100.000 redaka i 1.000 stupaca).",
     "unsafe_url": "Ova adresa nije dopuštena (upućuje na privatnu mrežu).",
     "csrf_failed": "Vaša sesija je osvježena. Pokušajte ponovno.",
     "invalid_credentials": "Adresa e-pošte ili lozinka nisu točni.",
@@ -135,7 +139,13 @@
     "fibre_composition_missing": "Nedostaje sastav vlakana",
     "animal_origin_unknown": "Životinjsko podrijetlo nije navedeno",
     "footwear_materials_missing": "Nedostaju materijali obuće",
-    "fibre_percentages_not_100": "Postoci ne daju ukupno 100 %"
+    "fibre_percentages_not_100": "Postoci ne daju ukupno 100 %",
+    "workbook_invalid": "Excel datoteka nije čitljiva",
+    "workbook_unsafe": "Makronaredbe ili vanjske veze",
+    "workbook_sheet_missing": "List nije pronađen",
+    "workbook_too_large": "Excel datoteka je prevelika",
+    "cellError": "Excelova vrijednost pogreške: upišite samu vrijednost",
+    "formula": "Formula bez spremljenog rezultata: spremite datoteku u Excelu"
   },
   "login": {
     "title": "Prijava: {{portal}}",
@@ -395,12 +405,12 @@
   },
   "imports": {
     "title": "Uvozi",
-    "intro": "Učitajte CSV datoteku i fotografije. Ažurira se samo ono što se promijenilo.",
+    "intro": "Učitajte CSV ili Excel datoteku i fotografije. Ažurira se samo ono što se promijenilo.",
     "automateLink": "Radi to automatski",
     "uploadTitle": "Učitaj",
-    "uploadIntro": "Datoteka products.csv s jednim retkom po veličini i fotografije s nazivima poput KO-1001_NVY_1.jpg. Radi i jedan zip sa svime.",
+    "uploadIntro": "Datoteka products.csv ili products.xlsx s jednim retkom po veličini i fotografije s nazivima poput KO-1001_NVY_1.jpg. Radi i jedan zip sa svime.",
     "template": "Preuzmi CSV predložak",
-    "drop": "Ovdje ispustite CSV, zip ili fotografije",
+    "drop": "Ovdje ispustite CSV, Excel datoteku, zip ili fotografije",
     "dropHint": "Mape nisu važne, nazivi datoteka jesu. Ranije učitane fotografije prepoznaju se i ne šalju ponovno.",
     "choose": "Odaberi datoteke",
     "imagesFound_one": "{{count}} fotografija",
@@ -409,7 +419,7 @@
     "ignored_one": "Preskočena {{count}} datoteka: {{names}}",
     "ignored_few": "Preskočene {{count}} datoteke: {{names}}",
     "ignored_other": "Preskočeno {{count}} datoteka: {{names}}",
-    "nothing": "U odabranim datotekama nije pronađen CSV ni fotografije.",
+    "nothing": "U odabranim datotekama nije pronađen CSV, Excel datoteka ni fotografije.",
     "mode": "Što učiniti s artiklima kojih nema u datoteci",
     "modeUpsert": "Samo dodaj i ažuriraj",
     "modeMirror": "Povuci i artikle koji nedostaju",
@@ -475,11 +485,25 @@
       "warning": "Upozorenje"
     },
     "where": "Gdje",
-    "row": "redak {{n}}",
-    "column": "Stupac",
+    "row": "Redak {{n}}",
     "value": "Vrijednost",
     "problem": "Što nije u redu",
-    "filesTitle": "Datoteke"
+    "filesTitle": "Datoteke",
+    "templates": "Predlošci",
+    "otherSheet": "{{names}}: najprije spremite kao Excelovu radnu knjigu (.xlsx).",
+    "cell": "Redak {{row}}, stupac {{column}} ({{letter}})",
+    "rowColumn": "Redak {{row}}, stupac {{column}}",
+    "columnAt": "Stupac {{column}} ({{letter}})",
+    "order": "Redoslijed",
+    "downloadList": "Preuzmi popis (CSV)",
+    "excel": {
+      "products": "Artikli (Excel)",
+      "assets": "Fotografije (Excel)"
+    },
+    "by": {
+      "row": "Po retku",
+      "problem": "Po problemu"
+    }
   },
   "automation": {
     "title": "Automatsko učitavanje",
@@ -1126,7 +1150,8 @@
         "failed": "Nije uspjelo",
         "expired": "Isteklo"
       }
-    }
+    },
+    "excel": "Podaci o artiklima (Excel)"
   },
   "enum": {
     "role": {
@@ -1546,7 +1571,8 @@
       "fit": "Kroj",
       "sleeve_length": "Duljina rukava",
       "neckline": "Izrez"
-    }
+    },
+    "attributes": "Ostali podaci"
   },
   "labelWarning": {
     "title": "Podaci za etiketu nisu potpuni",

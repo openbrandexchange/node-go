@@ -112,6 +112,10 @@
     "files_missing": "Some image files are missing.",
     "import_invalid": "This file cannot be imported.",
     "mass_unpublish_refused": "Stopped: this would take more than half of your articles offline. If that is intended, allow it and try again.",
+    "workbook_invalid": "This Excel file cannot be read. Save it as Excel Workbook (.xlsx) and try again.",
+    "workbook_unsafe": "This Excel file has macros or external links. Save it as Excel Workbook (.xlsx) without them.",
+    "workbook_sheet_missing": "No sheet named Products (or Assets) found in this Excel file.",
+    "workbook_too_large": "This Excel file is too large (at most 100,000 rows and 1,000 columns).",
     "unsafe_url": "This address is not allowed (it points to a private network).",
     "csrf_failed": "Your session was refreshed. Please try again.",
     "invalid_credentials": "Email address or password is not correct.",
@@ -135,7 +139,13 @@
     "fibre_composition_missing": "Fibre composition missing",
     "animal_origin_unknown": "Animal origin not stated",
     "footwear_materials_missing": "Footwear materials missing",
-    "fibre_percentages_not_100": "Percentages do not add up to 100%"
+    "fibre_percentages_not_100": "Percentages do not add up to 100%",
+    "workbook_invalid": "Not a readable Excel file",
+    "workbook_unsafe": "Macros or external links",
+    "workbook_sheet_missing": "Sheet not found",
+    "workbook_too_large": "Excel file too large",
+    "cellError": "Excel error value: type the value itself",
+    "formula": "Formula without a saved result: save the file in Excel"
   },
   "login": {
     "title": "Log in to {{portal}}",
@@ -392,19 +402,19 @@
   },
   "imports": {
     "title": "Imports",
-    "intro": "Upload a CSV file and your images. Only what changed is updated.",
+    "intro": "Upload a CSV or Excel file and your images. Only what changed is updated.",
     "automateLink": "Do this automatically",
     "uploadTitle": "Upload",
-    "uploadIntro": "A products.csv with one line per size, plus images named like KO-1001_NVY_1.jpg. A zip with everything works too.",
+    "uploadIntro": "A products.csv or products.xlsx with one line per size, plus images named like KO-1001_NVY_1.jpg. A zip with everything works too.",
     "template": "Download CSV template",
-    "drop": "Drop your CSV, zip or images here",
+    "drop": "Drop your CSV, Excel file, zip or images here",
     "dropHint": "Folders don't matter, file names do. Images you uploaded before are recognised and not sent again.",
     "choose": "Choose files",
     "imagesFound_one": "{{count}} image",
     "imagesFound_other": "{{count}} images",
     "ignored_one": "{{count}} file skipped: {{names}}",
     "ignored_other": "{{count}} files skipped: {{names}}",
-    "nothing": "No CSV or images found in what you chose.",
+    "nothing": "No CSV, Excel file or images found in what you chose.",
     "mode": "What to do with articles missing from the file",
     "modeUpsert": "Only add and update",
     "modeMirror": "Also take missing articles offline",
@@ -467,11 +477,25 @@
       "warning": "Warning"
     },
     "where": "Where",
-    "row": "row {{n}}",
-    "column": "Column",
+    "row": "Row {{n}}",
     "value": "Value",
     "problem": "What's wrong",
-    "filesTitle": "Files"
+    "filesTitle": "Files",
+    "templates": "Templates",
+    "otherSheet": "{{names}}: save as Excel Workbook (.xlsx) first.",
+    "cell": "Row {{row}}, column {{column}} ({{letter}})",
+    "rowColumn": "Row {{row}}, column {{column}}",
+    "columnAt": "Column {{column}} ({{letter}})",
+    "order": "Order",
+    "downloadList": "Download list (CSV)",
+    "excel": {
+      "products": "Products (Excel)",
+      "assets": "Images (Excel)"
+    },
+    "by": {
+      "row": "By row",
+      "problem": "By problem"
+    }
   },
   "automation": {
     "title": "Automatic upload",
@@ -1096,7 +1120,8 @@
         "failed": "Failed",
         "expired": "Expired"
       }
-    }
+    },
+    "excel": "Article data (Excel)"
   },
   "enum": {
     "role": {
@@ -1516,7 +1541,8 @@
       "fit": "Fit",
       "sleeve_length": "Sleeve length",
       "neckline": "Neckline"
-    }
+    },
+    "attributes": "Other details"
   },
   "labelWarning": {
     "title": "Label information incomplete",

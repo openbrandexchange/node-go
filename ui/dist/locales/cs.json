@@ -112,6 +112,10 @@
     "files_missing": "Chybí některé soubory obrázků.",
     "import_invalid": "Tento soubor nelze importovat.",
     "mass_unpublish_refused": "Zastaveno: více než polovina vašich artiklů by zmizela z nabídky. Pokud je to záměr, povolte to a zkuste to znovu.",
+    "workbook_invalid": "Tento soubor Excel nelze přečíst. Uložte jej jako sešit Excelu (.xlsx) a zkuste to znovu.",
+    "workbook_unsafe": "Tento soubor Excel obsahuje makra nebo externí odkazy. Uložte jej bez nich jako sešit Excelu (.xlsx).",
+    "workbook_sheet_missing": "V tomto souboru Excel není list s názvem Products (ani Assets).",
+    "workbook_too_large": "Tento soubor Excel je příliš velký (nejvýše 100 000 řádků a 1 000 sloupců).",
     "unsafe_url": "Tato adresa není povolena (odkazuje do soukromé sítě).",
     "csrf_failed": "Vaše relace byla obnovena. Zkuste to znovu.",
     "invalid_credentials": "E-mailová adresa nebo heslo nejsou správné.",
@@ -135,7 +139,13 @@
     "fibre_composition_missing": "Chybí vlákenné složení",
     "animal_origin_unknown": "Živočišný původ neuveden",
     "footwear_materials_missing": "Chybí materiály obuvi",
-    "fibre_percentages_not_100": "Procenta nedávají dohromady 100 %"
+    "fibre_percentages_not_100": "Procenta nedávají dohromady 100 %",
+    "workbook_invalid": "Soubor Excel nelze přečíst",
+    "workbook_unsafe": "Makra nebo externí odkazy",
+    "workbook_sheet_missing": "List nebyl nalezen",
+    "workbook_too_large": "Soubor Excel je příliš velký",
+    "cellError": "Chybová hodnota Excelu: zadejte samotnou hodnotu",
+    "formula": "Vzorec bez uloženého výsledku: uložte soubor v Excelu"
   },
   "login": {
     "title": "Přihlášení: {{portal}}",
@@ -398,12 +408,12 @@
   },
   "imports": {
     "title": "Importy",
-    "intro": "Nahrajte soubor CSV a fotografie. Aktualizuje se jen to, co se změnilo.",
+    "intro": "Nahrajte soubor CSV nebo Excel a fotografie. Aktualizuje se jen to, co se změnilo.",
     "automateLink": "Dělat to automaticky",
     "uploadTitle": "Nahrát",
-    "uploadIntro": "Soubor products.csv s jedním řádkem na velikost a fotografie s názvy jako KO-1001_NVY_1.jpg. Funguje i jeden zip se vším.",
+    "uploadIntro": "Soubor products.csv nebo products.xlsx s jedním řádkem na velikost a fotografie s názvy jako KO-1001_NVY_1.jpg. Funguje i jeden zip se vším.",
     "template": "Stáhnout šablonu CSV",
-    "drop": "Přetáhněte sem CSV, zip nebo fotografie",
+    "drop": "Přetáhněte sem CSV, soubor Excel, zip nebo fotografie",
     "dropHint": "Na složkách nezáleží, na názvech souborů ano. Dříve nahrané fotografie se rozpoznají a znovu se neodesílají.",
     "choose": "Vybrat soubory",
     "imagesFound_one": "{{count}} fotografie",
@@ -414,7 +424,7 @@
     "ignored_few": "Přeskočeny {{count}} soubory: {{names}}",
     "ignored_many": "Přeskočeno {{count}} souboru: {{names}}",
     "ignored_other": "Přeskočeno {{count}} souborů: {{names}}",
-    "nothing": "Ve vybraných souborech nebyl nalezen žádný CSV ani fotografie.",
+    "nothing": "Ve vybraných souborech nebyl nalezen žádný CSV, soubor Excel ani fotografie.",
     "mode": "Co udělat s artikly, které v souboru nejsou",
     "modeUpsert": "Jen přidávat a aktualizovat",
     "modeMirror": "Stáhnout z nabídky i chybějící artikly",
@@ -483,11 +493,25 @@
       "warning": "Upozornění"
     },
     "where": "Kde",
-    "row": "řádek {{n}}",
-    "column": "Sloupec",
+    "row": "Řádek {{n}}",
     "value": "Hodnota",
     "problem": "Co je špatně",
-    "filesTitle": "Soubory"
+    "filesTitle": "Soubory",
+    "templates": "Šablony",
+    "otherSheet": "{{names}}: nejprve uložte jako sešit Excelu (.xlsx).",
+    "cell": "Řádek {{row}}, sloupec {{column}} ({{letter}})",
+    "rowColumn": "Řádek {{row}}, sloupec {{column}}",
+    "columnAt": "Sloupec {{column}} ({{letter}})",
+    "order": "Řazení",
+    "downloadList": "Stáhnout seznam (CSV)",
+    "excel": {
+      "products": "Artikly (Excel)",
+      "assets": "Fotografie (Excel)"
+    },
+    "by": {
+      "row": "Podle řádku",
+      "problem": "Podle problému"
+    }
   },
   "automation": {
     "title": "Automatické nahrávání",
@@ -1156,7 +1180,8 @@
         "failed": "Nezdařilo se",
         "expired": "Vypršelo"
       }
-    }
+    },
+    "excel": "Údaje o artiklech (Excel)"
   },
   "enum": {
     "role": {
@@ -1576,7 +1601,8 @@
       "fit": "Střih",
       "sleeve_length": "Délka rukávu",
       "neckline": "Výstřih"
-    }
+    },
+    "attributes": "Další údaje"
   },
   "labelWarning": {
     "title": "Údaje na štítku nejsou úplné",

@@ -112,6 +112,10 @@
     "files_missing": "Lipsesc unele fișiere foto.",
     "import_invalid": "Acest fișier nu poate fi importat.",
     "mass_unpublish_refused": "Oprit: mai mult de jumătate dintre articolele dvs. ar dispărea din ofertă. Dacă este intenționat, permiteți acest lucru și încercați din nou.",
+    "workbook_invalid": "Acest fișier Excel nu poate fi citit. Salvați-l ca Registru de lucru Excel (.xlsx) și încercați din nou.",
+    "workbook_unsafe": "Acest fișier Excel conține macrocomenzi sau legături externe. Salvați-l fără ele ca Registru de lucru Excel (.xlsx).",
+    "workbook_sheet_missing": "Acest fișier Excel nu are nicio foaie numită Products (sau Assets).",
+    "workbook_too_large": "Acest fișier Excel este prea mare (cel mult 100.000 de rânduri și 1.000 de coloane).",
     "unsafe_url": "Această adresă nu este permisă (indică o rețea privată).",
     "csrf_failed": "Sesiunea dvs. a fost reîmprospătată. Încercați din nou.",
     "invalid_credentials": "Adresa de e-mail sau parola nu este corectă.",
@@ -135,7 +139,13 @@
     "fibre_composition_missing": "Compoziție fibroasă lipsă",
     "animal_origin_unknown": "Origine animală nespecificată",
     "footwear_materials_missing": "Materialele încălțămintei lipsă",
-    "fibre_percentages_not_100": "Procentele nu însumează 100%"
+    "fibre_percentages_not_100": "Procentele nu însumează 100%",
+    "workbook_invalid": "Fișier Excel ilizibil",
+    "workbook_unsafe": "Macrocomenzi sau legături externe",
+    "workbook_sheet_missing": "Foaia nu a fost găsită",
+    "workbook_too_large": "Fișier Excel prea mare",
+    "cellError": "Valoare de eroare Excel: introduceți valoarea propriu-zisă",
+    "formula": "Formulă fără rezultat salvat: salvați fișierul în Excel"
   },
   "login": {
     "title": "Conectare: {{portal}}",
@@ -395,12 +405,12 @@
   },
   "imports": {
     "title": "Importuri",
-    "intro": "Încărcați un fișier CSV și fotografii. Se actualizează doar ce s-a schimbat.",
+    "intro": "Încărcați un fișier CSV sau Excel și fotografii. Se actualizează doar ce s-a schimbat.",
     "automateLink": "Fă asta automat",
     "uploadTitle": "Încarcă",
-    "uploadIntro": "Un fișier products.csv cu un rând pe mărime și fotografii cu nume precum KO-1001_NVY_1.jpg. Funcționează și un singur zip cu tot.",
+    "uploadIntro": "Un fișier products.csv sau products.xlsx cu un rând pe mărime și fotografii cu nume precum KO-1001_NVY_1.jpg. Funcționează și un singur zip cu tot.",
     "template": "Descarcă șablonul CSV",
-    "drop": "Plasați aici CSV-ul, zip-ul sau fotografiile",
+    "drop": "Plasați aici CSV-ul, fișierul Excel, zip-ul sau fotografiile",
     "dropHint": "Dosarele nu contează, numele fișierelor da. Fotografiile încărcate anterior sunt recunoscute și nu se trimit din nou.",
     "choose": "Alege fișiere",
     "imagesFound_one": "{{count}} fotografie",
@@ -409,7 +419,7 @@
     "ignored_one": "{{count}} fișier omis: {{names}}",
     "ignored_few": "{{count}} fișiere omise: {{names}}",
     "ignored_other": "{{count}} de fișiere omise: {{names}}",
-    "nothing": "Nu s-a găsit niciun CSV sau fotografie în fișierele selectate.",
+    "nothing": "Nu s-a găsit niciun CSV, fișier Excel sau fotografie în fișierele selectate.",
     "mode": "Ce se întâmplă cu articolele care nu sunt în fișier",
     "modeUpsert": "Doar adaugă și actualizează",
     "modeMirror": "Retrage și articolele lipsă",
@@ -475,11 +485,25 @@
       "warning": "Avertisment"
     },
     "where": "Unde",
-    "row": "rândul {{n}}",
-    "column": "Coloană",
+    "row": "Rândul {{n}}",
     "value": "Valoare",
     "problem": "Ce nu este în regulă",
-    "filesTitle": "Fișiere"
+    "filesTitle": "Fișiere",
+    "templates": "Șabloane",
+    "otherSheet": "{{names}}: salvați-l mai întâi ca Registru de lucru Excel (.xlsx).",
+    "cell": "Rândul {{row}}, coloana {{column}} ({{letter}})",
+    "rowColumn": "Rândul {{row}}, coloana {{column}}",
+    "columnAt": "Coloana {{column}} ({{letter}})",
+    "order": "Ordine",
+    "downloadList": "Descarcă lista (CSV)",
+    "excel": {
+      "products": "Articole (Excel)",
+      "assets": "Fotografii (Excel)"
+    },
+    "by": {
+      "row": "După rând",
+      "problem": "După problemă"
+    }
   },
   "automation": {
     "title": "Încărcare automată",
@@ -1126,7 +1150,8 @@
         "failed": "Eșuat",
         "expired": "Expirat"
       }
-    }
+    },
+    "excel": "Date despre articole (Excel)"
   },
   "enum": {
     "role": {
@@ -1546,7 +1571,8 @@
       "fit": "Croială",
       "sleeve_length": "Lungimea mânecii",
       "neckline": "Decolteu"
-    }
+    },
+    "attributes": "Alte date"
   },
   "labelWarning": {
     "title": "Informații pentru etichetă incomplete",

@@ -112,6 +112,10 @@
     "files_missing": "Faltan algunos archivos de imagen.",
     "import_invalid": "Este archivo no se puede importar.",
     "mass_unpublish_refused": "Detenido: esto dejaría fuera de línea más de la mitad de tus artículos. Si es intencionado, permítelo e inténtalo de nuevo.",
+    "workbook_invalid": "No se puede leer este archivo Excel. Guárdalo como Libro de Excel (.xlsx) e inténtalo de nuevo.",
+    "workbook_unsafe": "Este archivo Excel tiene macros o vínculos externos. Guárdalo sin ellos como Libro de Excel (.xlsx).",
+    "workbook_sheet_missing": "Este archivo Excel no tiene ninguna hoja llamada Products (o Assets).",
+    "workbook_too_large": "Este archivo Excel es demasiado grande (máximo 100.000 filas y 1.000 columnas).",
     "unsafe_url": "Esta dirección no está permitida (apunta a una red privada).",
     "csrf_failed": "Tu sesión se ha renovado. Inténtalo de nuevo.",
     "invalid_credentials": "El correo o la contraseña no son correctos.",
@@ -135,7 +139,13 @@
     "fibre_composition_missing": "Falta la composición de fibras",
     "animal_origin_unknown": "Origen animal no indicado",
     "footwear_materials_missing": "Faltan los materiales del calzado",
-    "fibre_percentages_not_100": "Los porcentajes no suman 100 %"
+    "fibre_percentages_not_100": "Los porcentajes no suman 100 %",
+    "workbook_invalid": "Archivo Excel ilegible",
+    "workbook_unsafe": "Macros o vínculos externos",
+    "workbook_sheet_missing": "Hoja no encontrada",
+    "workbook_too_large": "Archivo Excel demasiado grande",
+    "cellError": "Valor de error de Excel: escribe el valor en sí",
+    "formula": "Fórmula sin resultado guardado: guarda el archivo en Excel"
   },
   "login": {
     "title": "Accede a {{portal}}",
@@ -395,12 +405,12 @@
   },
   "imports": {
     "title": "Importaciones",
-    "intro": "Sube un archivo CSV y tus imágenes. Solo se actualiza lo que ha cambiado.",
+    "intro": "Sube un archivo CSV o Excel y tus imágenes. Solo se actualiza lo que ha cambiado.",
     "automateLink": "Hacerlo automáticamente",
     "uploadTitle": "Subir",
-    "uploadIntro": "Un products.csv con una línea por talla, más imágenes con nombres como KO-1001_NVY_1.jpg. También sirve un zip con todo.",
+    "uploadIntro": "Un products.csv o products.xlsx con una línea por talla, más imágenes con nombres como KO-1001_NVY_1.jpg. También sirve un zip con todo.",
     "template": "Descargar plantilla CSV",
-    "drop": "Arrastra aquí tu CSV, zip o imágenes",
+    "drop": "Arrastra aquí tu CSV, Excel, zip o imágenes",
     "dropHint": "Las carpetas dan igual, los nombres de archivo no. Las imágenes que ya subiste se reconocen y no se vuelven a enviar.",
     "choose": "Elegir archivos",
     "imagesFound_one": "{{count}} imagen",
@@ -409,7 +419,7 @@
     "ignored_one": "{{count}} archivo omitido: {{names}}",
     "ignored_many": "{{count}} archivos omitidos: {{names}}",
     "ignored_other": "{{count}} archivos omitidos: {{names}}",
-    "nothing": "No se ha encontrado ningún CSV ni imagen en lo que has elegido.",
+    "nothing": "No se ha encontrado ningún CSV, Excel ni imagen en lo que has elegido.",
     "mode": "Qué hacer con los artículos que no están en el archivo",
     "modeUpsert": "Solo añadir y actualizar",
     "modeMirror": "Retirar también los artículos que falten",
@@ -475,11 +485,25 @@
       "warning": "Aviso"
     },
     "where": "Dónde",
-    "row": "línea {{n}}",
-    "column": "Columna",
+    "row": "Línea {{n}}",
     "value": "Valor",
     "problem": "Qué falla",
-    "filesTitle": "Archivos"
+    "filesTitle": "Archivos",
+    "templates": "Plantillas",
+    "otherSheet": "{{names}}: guárdalo antes como Libro de Excel (.xlsx).",
+    "cell": "Línea {{row}}, columna {{column}} ({{letter}})",
+    "rowColumn": "Línea {{row}}, columna {{column}}",
+    "columnAt": "Columna {{column}} ({{letter}})",
+    "order": "Orden",
+    "downloadList": "Descargar lista (CSV)",
+    "excel": {
+      "products": "Artículos (Excel)",
+      "assets": "Imágenes (Excel)"
+    },
+    "by": {
+      "row": "Por línea",
+      "problem": "Por problema"
+    }
   },
   "automation": {
     "title": "Subida automática",
@@ -1126,7 +1150,8 @@
         "failed": "Error",
         "expired": "Caducado"
       }
-    }
+    },
+    "excel": "Datos de artículos (Excel)"
   },
   "enum": {
     "role": {
@@ -1546,7 +1571,8 @@
       "fit": "Corte",
       "sleeve_length": "Largo de manga",
       "neckline": "Cuello"
-    }
+    },
+    "attributes": "Otros datos"
   },
   "labelWarning": {
     "title": "Información de etiqueta incompleta",

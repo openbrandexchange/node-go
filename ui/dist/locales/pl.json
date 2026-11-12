@@ -112,6 +112,10 @@
     "files_missing": "Brakuje niektórych plików zdjęć.",
     "import_invalid": "Tego pliku nie można zaimportować.",
     "mass_unpublish_refused": "Zatrzymano: ponad połowa Twoich artykułów zniknęłaby z portalu. Jeśli to zamierzone, zezwól na to i spróbuj ponownie.",
+    "workbook_invalid": "Nie można odczytać tego pliku Excel. Zapisz go jako skoroszyt programu Excel (.xlsx) i spróbuj ponownie.",
+    "workbook_unsafe": "Ten plik Excel zawiera makra lub łącza zewnętrzne. Zapisz go bez nich jako skoroszyt programu Excel (.xlsx).",
+    "workbook_sheet_missing": "W tym pliku Excel nie ma arkusza o nazwie Products (ani Assets).",
+    "workbook_too_large": "Ten plik Excel jest za duży (maksymalnie 100 000 wierszy i 1000 kolumn).",
     "unsafe_url": "Ten adres jest niedozwolony (wskazuje na sieć prywatną).",
     "csrf_failed": "Twoja sesja została odświeżona. Spróbuj ponownie.",
     "invalid_credentials": "Adres e-mail lub hasło są nieprawidłowe.",
@@ -135,7 +139,13 @@
     "fibre_composition_missing": "Brak składu surowcowego",
     "animal_origin_unknown": "Nie podano pochodzenia zwierzęcego",
     "footwear_materials_missing": "Brak materiałów obuwia",
-    "fibre_percentages_not_100": "Procenty nie sumują się do 100%"
+    "fibre_percentages_not_100": "Procenty nie sumują się do 100%",
+    "workbook_invalid": "Nie można odczytać pliku Excel",
+    "workbook_unsafe": "Makra lub łącza zewnętrzne",
+    "workbook_sheet_missing": "Nie znaleziono arkusza",
+    "workbook_too_large": "Plik Excel jest za duży",
+    "cellError": "Wartość błędu Excel: wpisz samą wartość",
+    "formula": "Formuła bez zapisanego wyniku: zapisz plik w Excelu"
   },
   "login": {
     "title": "Zaloguj się: {{portal}}",
@@ -398,12 +408,12 @@
   },
   "imports": {
     "title": "Importy",
-    "intro": "Prześlij plik CSV i zdjęcia. Aktualizowane jest tylko to, co się zmieniło.",
+    "intro": "Prześlij plik CSV lub Excel i zdjęcia. Aktualizowane jest tylko to, co się zmieniło.",
     "automateLink": "Zrób to automatycznie",
     "uploadTitle": "Prześlij",
-    "uploadIntro": "Plik products.csv z jednym wierszem na rozmiar oraz zdjęcia o nazwach takich jak KO-1001_NVY_1.jpg. Można też przesłać wszystko w jednym pliku zip.",
+    "uploadIntro": "Plik products.csv lub products.xlsx z jednym wierszem na rozmiar oraz zdjęcia o nazwach takich jak KO-1001_NVY_1.jpg. Można też przesłać wszystko w jednym pliku zip.",
     "template": "Pobierz szablon CSV",
-    "drop": "Upuść tutaj CSV, zip lub zdjęcia",
+    "drop": "Upuść tutaj CSV, plik Excel, zip lub zdjęcia",
     "dropHint": "Foldery nie mają znaczenia, nazwy plików tak. Wcześniej przesłane zdjęcia są rozpoznawane i nie są wysyłane ponownie.",
     "choose": "Wybierz pliki",
     "imagesFound_one": "{{count}} zdjęcie",
@@ -414,7 +424,7 @@
     "ignored_few": "Pominięto {{count}} pliki: {{names}}",
     "ignored_many": "Pominięto {{count}} plików: {{names}}",
     "ignored_other": "Pominięto {{count}} pliku: {{names}}",
-    "nothing": "W wybranych plikach nie znaleziono pliku CSV ani zdjęć.",
+    "nothing": "W wybranych plikach nie znaleziono pliku CSV, pliku Excel ani zdjęć.",
     "mode": "Co zrobić z artykułami, których nie ma w pliku",
     "modeUpsert": "Tylko dodawaj i aktualizuj",
     "modeMirror": "Wycofaj też brakujące artykuły",
@@ -483,11 +493,25 @@
       "warning": "Ostrzeżenie"
     },
     "where": "Gdzie",
-    "row": "wiersz {{n}}",
-    "column": "Kolumna",
+    "row": "Wiersz {{n}}",
     "value": "Wartość",
     "problem": "Co jest nie tak",
-    "filesTitle": "Pliki"
+    "filesTitle": "Pliki",
+    "templates": "Szablony",
+    "otherSheet": "{{names}}: najpierw zapisz jako skoroszyt programu Excel (.xlsx).",
+    "cell": "Wiersz {{row}}, kolumna {{column}} ({{letter}})",
+    "rowColumn": "Wiersz {{row}}, kolumna {{column}}",
+    "columnAt": "Kolumna {{column}} ({{letter}})",
+    "order": "Kolejność",
+    "downloadList": "Pobierz listę (CSV)",
+    "excel": {
+      "products": "Artykuły (Excel)",
+      "assets": "Zdjęcia (Excel)"
+    },
+    "by": {
+      "row": "Według wiersza",
+      "problem": "Według problemu"
+    }
   },
   "automation": {
     "title": "Automatyczne przesyłanie",
@@ -1156,7 +1180,8 @@
         "failed": "Niepowodzenie",
         "expired": "Wygasło"
       }
-    }
+    },
+    "excel": "Dane artykułów (Excel)"
   },
   "enum": {
     "role": {
@@ -1576,7 +1601,8 @@
       "fit": "Krój",
       "sleeve_length": "Długość rękawa",
       "neckline": "Dekolt"
-    }
+    },
+    "attributes": "Inne dane"
   },
   "labelWarning": {
     "title": "Niepełne informacje na metce",

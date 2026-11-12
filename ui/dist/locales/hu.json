@@ -112,6 +112,10 @@
     "files_missing": "Néhány fotófájl hiányzik.",
     "import_invalid": "Ez a fájl nem importálható.",
     "mass_unpublish_refused": "Leállítva: a termékei több mint fele eltűnne a kínálatból. Ha ez szándékos, engedélyezze, és próbálja újra.",
+    "workbook_invalid": "Ez az Excel-fájl nem olvasható. Mentse Excel-munkafüzetként (.xlsx), és próbálja újra.",
+    "workbook_unsafe": "Ez az Excel-fájl makrókat vagy külső hivatkozásokat tartalmaz. Mentse nélkülük Excel-munkafüzetként (.xlsx).",
+    "workbook_sheet_missing": "Ebben az Excel-fájlban nincs Products (vagy Assets) nevű munkalap.",
+    "workbook_too_large": "Ez az Excel-fájl túl nagy (legfeljebb 100 000 sor és 1000 oszlop).",
     "unsafe_url": "Ez a cím nem engedélyezett (magánhálózatra mutat).",
     "csrf_failed": "A munkamenet frissült. Próbálja újra.",
     "invalid_credentials": "Az e-mail-cím vagy a jelszó helytelen.",
@@ -135,7 +139,13 @@
     "fibre_composition_missing": "Hiányzik a szálösszetétel",
     "animal_origin_unknown": "Az állati eredet nincs megadva",
     "footwear_materials_missing": "Hiányoznak a lábbeli anyagai",
-    "fibre_percentages_not_100": "A százalékok nem adnak ki 100%-ot"
+    "fibre_percentages_not_100": "A százalékok nem adnak ki 100%-ot",
+    "workbook_invalid": "Az Excel-fájl nem olvasható",
+    "workbook_unsafe": "Makrók vagy külső hivatkozások",
+    "workbook_sheet_missing": "A munkalap nem található",
+    "workbook_too_large": "Az Excel-fájl túl nagy",
+    "cellError": "Excel-hibaérték: írja be magát az értéket",
+    "formula": "Képlet mentett eredmény nélkül: mentse a fájlt az Excelben"
   },
   "login": {
     "title": "Bejelentkezés: {{portal}}",
@@ -392,19 +402,19 @@
   },
   "imports": {
     "title": "Importálások",
-    "intro": "Töltsön fel egy CSV-fájlt és fotókat. Csak az frissül, ami változott.",
+    "intro": "Töltsön fel egy CSV- vagy Excel-fájlt és fotókat. Csak az frissül, ami változott.",
     "automateLink": "Automatikusan",
     "uploadTitle": "Feltöltés",
-    "uploadIntro": "Egy products.csv fájl méretenként egy sorral, és fotók KO-1001_NVY_1.jpg formájú nevekkel. Egyetlen zip is működik mindennel.",
+    "uploadIntro": "Egy products.csv vagy products.xlsx fájl méretenként egy sorral, és fotók KO-1001_NVY_1.jpg formájú nevekkel. Egyetlen zip is működik mindennel.",
     "template": "CSV-sablon letöltése",
-    "drop": "Húzza ide a CSV-t, a zipet vagy a fotókat",
+    "drop": "Húzza ide a CSV-t, az Excel-fájlt, a zipet vagy a fotókat",
     "dropHint": "A mappák nem számítanak, a fájlnevek igen. A korábban feltöltött fotók felismerésre kerülnek, és nem küldjük el őket újra.",
     "choose": "Fájlok kiválasztása",
     "imagesFound_one": "{{count}} fotó",
     "imagesFound_other": "{{count}} fotó",
     "ignored_one": "{{count}} fájl kihagyva: {{names}}",
     "ignored_other": "{{count}} fájl kihagyva: {{names}}",
-    "nothing": "A kiválasztott fájlokban nem található CSV vagy fotó.",
+    "nothing": "A kiválasztott fájlokban nem található CSV, Excel-fájl vagy fotó.",
     "mode": "Mi legyen a fájlban nem szereplő termékekkel",
     "modeUpsert": "Csak hozzáadás és frissítés",
     "modeMirror": "A hiányzó termékek visszavonása is",
@@ -468,10 +478,24 @@
     },
     "where": "Hol",
     "row": "{{n}}. sor",
-    "column": "Oszlop",
     "value": "Érték",
     "problem": "Mi a hiba",
-    "filesTitle": "Fájlok"
+    "filesTitle": "Fájlok",
+    "templates": "Sablonok",
+    "otherSheet": "{{names}}: előbb mentse Excel-munkafüzetként (.xlsx).",
+    "cell": "{{row}}. sor, {{column}} oszlop ({{letter}})",
+    "rowColumn": "{{row}}. sor, {{column}} oszlop",
+    "columnAt": "{{column}} oszlop ({{letter}})",
+    "order": "Sorrend",
+    "downloadList": "Lista letöltése (CSV)",
+    "excel": {
+      "products": "Termékek (Excel)",
+      "assets": "Fotók (Excel)"
+    },
+    "by": {
+      "row": "Sorok szerint",
+      "problem": "Hibák szerint"
+    }
   },
   "automation": {
     "title": "Automatikus feltöltés",
@@ -1096,7 +1120,8 @@
         "failed": "Sikertelen",
         "expired": "Lejárt"
       }
-    }
+    },
+    "excel": "Termékadatok (Excel)"
   },
   "enum": {
     "role": {
@@ -1516,7 +1541,8 @@
       "fit": "Szabás",
       "sleeve_length": "Ujjhossz",
       "neckline": "Nyakkivágás"
-    }
+    },
+    "attributes": "Egyéb adatok"
   },
   "labelWarning": {
     "title": "Hiányos címkeadatok",

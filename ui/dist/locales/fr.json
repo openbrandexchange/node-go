@@ -112,6 +112,10 @@
     "files_missing": "Certains fichiers image manquent.",
     "import_invalid": "Ce fichier ne peut pas être importé.",
     "mass_unpublish_refused": "Arrêté : plus de la moitié de vos articles seraient mis hors ligne. Si c'est voulu, autorisez-le et réessayez.",
+    "workbook_invalid": "Ce fichier Excel est illisible. Enregistrez-le en Classeur Excel (.xlsx) et réessayez.",
+    "workbook_unsafe": "Ce fichier Excel contient des macros ou des liens externes. Enregistrez-le sans eux en Classeur Excel (.xlsx).",
+    "workbook_sheet_missing": "Ce fichier Excel n'a pas de feuille nommée Products (ou Assets).",
+    "workbook_too_large": "Ce fichier Excel est trop volumineux (100 000 lignes et 1 000 colonnes au maximum).",
     "unsafe_url": "Cette adresse n'est pas autorisée (elle pointe vers un réseau privé).",
     "csrf_failed": "Votre session a été actualisée. Veuillez réessayer.",
     "invalid_credentials": "L'adresse e-mail ou le mot de passe est incorrect.",
@@ -135,7 +139,13 @@
     "fibre_composition_missing": "Composition en fibres manquante",
     "animal_origin_unknown": "Origine animale non indiquée",
     "footwear_materials_missing": "Matières de la chaussure manquantes",
-    "fibre_percentages_not_100": "Les pourcentages ne font pas 100 %"
+    "fibre_percentages_not_100": "Les pourcentages ne font pas 100 %",
+    "workbook_invalid": "Fichier Excel illisible",
+    "workbook_unsafe": "Macros ou liens externes",
+    "workbook_sheet_missing": "Feuille introuvable",
+    "workbook_too_large": "Fichier Excel trop volumineux",
+    "cellError": "Valeur d'erreur Excel : saisissez la valeur elle-même",
+    "formula": "Formule sans résultat enregistré : enregistrez le fichier dans Excel"
   },
   "login": {
     "title": "Connexion à {{portal}}",
@@ -395,12 +405,12 @@
   },
   "imports": {
     "title": "Imports",
-    "intro": "Envoyez un fichier CSV et vos visuels. Seul ce qui a changé est mis à jour.",
+    "intro": "Envoyez un fichier CSV ou Excel et vos visuels. Seul ce qui a changé est mis à jour.",
     "automateLink": "Automatiser cette tâche",
     "uploadTitle": "Envoyer",
-    "uploadIntro": "Un products.csv avec une ligne par taille, et des visuels nommés comme KO-1001_NVY_1.jpg. Un zip contenant le tout fonctionne aussi.",
+    "uploadIntro": "Un products.csv ou products.xlsx avec une ligne par taille, et des visuels nommés comme KO-1001_NVY_1.jpg. Un zip contenant le tout fonctionne aussi.",
     "template": "Télécharger le modèle CSV",
-    "drop": "Déposez ici votre CSV, votre zip ou vos visuels",
+    "drop": "Déposez ici votre CSV, votre fichier Excel, votre zip ou vos visuels",
     "dropHint": "Les dossiers n'ont pas d'importance, les noms de fichiers si. Les visuels déjà envoyés sont reconnus et ne sont pas renvoyés.",
     "choose": "Choisir des fichiers",
     "imagesFound_one": "{{count}} visuel",
@@ -409,7 +419,7 @@
     "ignored_one": "{{count}} fichier ignoré : {{names}}",
     "ignored_many": "{{count}} fichiers ignorés : {{names}}",
     "ignored_other": "{{count}} fichiers ignorés : {{names}}",
-    "nothing": "Aucun CSV ni visuel trouvé dans votre sélection.",
+    "nothing": "Aucun CSV, fichier Excel ni visuel trouvé dans votre sélection.",
     "mode": "Que faire des articles absents du fichier",
     "modeUpsert": "Ajouter et mettre à jour uniquement",
     "modeMirror": "Mettre aussi hors ligne les articles absents",
@@ -475,11 +485,25 @@
       "warning": "Avertissement"
     },
     "where": "Où",
-    "row": "ligne {{n}}",
-    "column": "Colonne",
+    "row": "Ligne {{n}}",
     "value": "Valeur",
     "problem": "Ce qui ne va pas",
-    "filesTitle": "Fichiers"
+    "filesTitle": "Fichiers",
+    "templates": "Modèles",
+    "otherSheet": "{{names}} : enregistrez-le d'abord en Classeur Excel (.xlsx).",
+    "cell": "Ligne {{row}}, colonne {{column}} ({{letter}})",
+    "rowColumn": "Ligne {{row}}, colonne {{column}}",
+    "columnAt": "Colonne {{column}} ({{letter}})",
+    "order": "Ordre",
+    "downloadList": "Télécharger la liste (CSV)",
+    "excel": {
+      "products": "Articles (Excel)",
+      "assets": "Visuels (Excel)"
+    },
+    "by": {
+      "row": "Par ligne",
+      "problem": "Par problème"
+    }
   },
   "automation": {
     "title": "Envoi automatique",
@@ -1126,7 +1150,8 @@
         "failed": "Échec",
         "expired": "Expiré"
       }
-    }
+    },
+    "excel": "Données articles (Excel)"
   },
   "enum": {
     "role": {
@@ -1546,7 +1571,8 @@
       "fit": "Coupe",
       "sleeve_length": "Longueur des manches",
       "neckline": "Encolure"
-    }
+    },
+    "attributes": "Autres informations"
   },
   "labelWarning": {
     "title": "Informations d'étiquette incomplètes",

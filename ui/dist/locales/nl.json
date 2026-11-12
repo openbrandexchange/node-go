@@ -112,6 +112,10 @@
     "files_missing": "Er ontbreken beeldbestanden.",
     "import_invalid": "Dit bestand kan niet worden geïmporteerd.",
     "mass_unpublish_refused": "Gestopt: hiermee zou meer dan de helft van je artikelen offline gaan. Is dat de bedoeling, sta het dan toe en probeer het opnieuw.",
+    "workbook_invalid": "Dit Excel-bestand kan niet worden gelezen. Sla het op als Excel-werkmap (.xlsx) en probeer het opnieuw.",
+    "workbook_unsafe": "Dit Excel-bestand bevat macro's of externe koppelingen. Sla het zonder op als Excel-werkmap (.xlsx).",
+    "workbook_sheet_missing": "Dit Excel-bestand heeft geen werkblad met de naam Products (of Assets).",
+    "workbook_too_large": "Dit Excel-bestand is te groot (hoogstens 100.000 rijen en 1.000 kolommen).",
     "unsafe_url": "Dit adres is niet toegestaan (het verwijst naar een privénetwerk).",
     "csrf_failed": "Je sessie is vernieuwd. Probeer het opnieuw.",
     "invalid_credentials": "E-mailadres of wachtwoord klopt niet.",
@@ -135,7 +139,13 @@
     "fibre_composition_missing": "Vezelsamenstelling ontbreekt",
     "animal_origin_unknown": "Dierlijke oorsprong niet opgegeven",
     "footwear_materials_missing": "Materialen schoeisel ontbreken",
-    "fibre_percentages_not_100": "Percentages komen niet uit op 100%"
+    "fibre_percentages_not_100": "Percentages komen niet uit op 100%",
+    "workbook_invalid": "Excel-bestand niet leesbaar",
+    "workbook_unsafe": "Macro's of externe koppelingen",
+    "workbook_sheet_missing": "Werkblad niet gevonden",
+    "workbook_too_large": "Excel-bestand te groot",
+    "cellError": "Foutwaarde in Excel: vul de waarde zelf in",
+    "formula": "Formule zonder opgeslagen uitkomst: sla het bestand op in Excel"
   },
   "login": {
     "title": "Inloggen bij {{portal}}",
@@ -392,19 +402,19 @@
   },
   "imports": {
     "title": "Imports",
-    "intro": "Upload een CSV-bestand en je beelden. Alleen wat veranderd is wordt bijgewerkt.",
+    "intro": "Upload een CSV- of Excel-bestand en je beelden. Alleen wat veranderd is wordt bijgewerkt.",
     "automateLink": "Doe dit automatisch",
     "uploadTitle": "Uploaden",
-    "uploadIntro": "Een products.csv met één regel per maat, plus beelden met namen als KO-1001_NVY_1.jpg. Een zip met alles erin werkt ook.",
+    "uploadIntro": "Een products.csv of products.xlsx met één regel per maat, plus beelden met namen als KO-1001_NVY_1.jpg. Een zip met alles erin werkt ook.",
     "template": "CSV-voorbeeld downloaden",
-    "drop": "Sleep je CSV, zip of beelden hierheen",
+    "drop": "Sleep je CSV, Excel-bestand, zip of beelden hierheen",
     "dropHint": "Mappen maken niet uit, bestandsnamen wel. Beelden die je eerder hebt geüpload worden herkend en niet opnieuw verstuurd.",
     "choose": "Bestanden kiezen",
     "imagesFound_one": "{{count}} beeld",
     "imagesFound_other": "{{count}} beelden",
     "ignored_one": "{{count}} bestand overgeslagen: {{names}}",
     "ignored_other": "{{count}} bestanden overgeslagen: {{names}}",
-    "nothing": "Geen CSV of beelden gevonden in wat je hebt gekozen.",
+    "nothing": "Geen CSV, Excel-bestand of beelden gevonden in wat je hebt gekozen.",
     "mode": "Wat te doen met artikelen die niet in het bestand staan",
     "modeUpsert": "Alleen toevoegen en bijwerken",
     "modeMirror": "Ontbrekende artikelen ook offline halen",
@@ -467,11 +477,25 @@
       "warning": "Waarschuwing"
     },
     "where": "Waar",
-    "row": "regel {{n}}",
-    "column": "Kolom",
+    "row": "Regel {{n}}",
     "value": "Waarde",
     "problem": "Wat is er mis",
-    "filesTitle": "Bestanden"
+    "filesTitle": "Bestanden",
+    "templates": "Voorbeeldbestanden",
+    "otherSheet": "{{names}}: sla dit eerst op als Excel-werkmap (.xlsx).",
+    "cell": "Regel {{row}}, kolom {{column}} ({{letter}})",
+    "rowColumn": "Regel {{row}}, kolom {{column}}",
+    "columnAt": "Kolom {{column}} ({{letter}})",
+    "order": "Volgorde",
+    "downloadList": "Lijst downloaden (CSV)",
+    "excel": {
+      "products": "Artikelen (Excel)",
+      "assets": "Beelden (Excel)"
+    },
+    "by": {
+      "row": "Per regel",
+      "problem": "Per probleem"
+    }
   },
   "automation": {
     "title": "Automatisch uploaden",
@@ -1096,7 +1120,8 @@
         "failed": "Mislukt",
         "expired": "Verlopen"
       }
-    }
+    },
+    "excel": "Artikeldata (Excel)"
   },
   "enum": {
     "role": {
@@ -1516,7 +1541,8 @@
       "fit": "Pasvorm",
       "sleeve_length": "Mouwlengte",
       "neckline": "Halslijn"
-    }
+    },
+    "attributes": "Overige gegevens"
   },
   "labelWarning": {
     "title": "Labelinformatie onvolledig",

@@ -112,6 +112,10 @@
     "files_missing": "Mõned pildifailid puuduvad.",
     "import_invalid": "Seda faili ei saa importida.",
     "mass_unpublish_refused": "Peatatud: üle poole teie toodetest läheks võrgust maha. Kui see on taotluslik, lubage see ja proovige uuesti.",
+    "workbook_invalid": "Seda Exceli faili ei saa lugeda. Salvestage see Exceli töövihikuna (.xlsx) ja proovige uuesti.",
+    "workbook_unsafe": "Selles Exceli failis on makrod või välislingid. Salvestage see ilma nendeta Exceli töövihikuna (.xlsx).",
+    "workbook_sheet_missing": "Selles Exceli failis pole lehte nimega Products (või Assets).",
+    "workbook_too_large": "See Exceli fail on liiga suur (kuni 100 000 rida ja 1000 veergu).",
     "unsafe_url": "See aadress pole lubatud (see viitab privaatvõrgule).",
     "csrf_failed": "Teie seanss uuendati. Proovige uuesti.",
     "invalid_credentials": "E-posti aadress või parool on vale.",
@@ -135,7 +139,13 @@
     "fibre_composition_missing": "Kiukoostis puudub",
     "animal_origin_unknown": "Loomne päritolu märkimata",
     "footwear_materials_missing": "Jalatsi materjalid puuduvad",
-    "fibre_percentages_not_100": "Protsendid ei anna kokku 100%"
+    "fibre_percentages_not_100": "Protsendid ei anna kokku 100%",
+    "workbook_invalid": "Exceli faili ei saa lugeda",
+    "workbook_unsafe": "Makrod või välislingid",
+    "workbook_sheet_missing": "Lehte ei leitud",
+    "workbook_too_large": "Exceli fail on liiga suur",
+    "cellError": "Exceli veaväärtus: sisestage väärtus ise",
+    "formula": "Valem ilma salvestatud tulemuseta: salvestage fail Excelis"
   },
   "login": {
     "title": "Sisselogimine: {{portal}}",
@@ -392,19 +402,19 @@
   },
   "imports": {
     "title": "Impordid",
-    "intro": "Laadige üles CSV-fail ja pildid. Uuendatakse ainult muutunud andmeid.",
+    "intro": "Laadige üles CSV- või Exceli fail ja pildid. Uuendatakse ainult muutunud andmeid.",
     "automateLink": "Tee seda automaatselt",
     "uploadTitle": "Üleslaadimine",
-    "uploadIntro": "products.csv, kus on üks rida suuruse kohta, ning pildid nimedega nagu KO-1001_NVY_1.jpg. Sobib ka kõike sisaldav zip.",
+    "uploadIntro": "products.csv või products.xlsx, kus on üks rida suuruse kohta, ning pildid nimedega nagu KO-1001_NVY_1.jpg. Sobib ka kõike sisaldav zip.",
     "template": "Laadi alla CSV-mall",
-    "drop": "Lohistage siia oma CSV, zip või pildid",
+    "drop": "Lohistage siia oma CSV, Exceli fail, zip või pildid",
     "dropHint": "Kaustad pole olulised, failinimed on. Varem üles laaditud pildid tuvastatakse ja neid ei saadeta uuesti.",
     "choose": "Vali failid",
     "imagesFound_one": "{{count}} pilt",
     "imagesFound_other": "{{count}} pilti",
     "ignored_one": "{{count}} fail jäeti vahele: {{names}}",
     "ignored_other": "{{count}} faili jäeti vahele: {{names}}",
-    "nothing": "Valitud failidest ei leitud CSV-d ega pilte.",
+    "nothing": "Valitud failidest ei leitud CSV-d, Exceli faili ega pilte.",
     "mode": "Mida teha toodetega, mida failis pole",
     "modeUpsert": "Ainult lisa ja uuenda",
     "modeMirror": "Võta puuduvad tooted ka võrgust maha",
@@ -467,11 +477,25 @@
       "warning": "Hoiatus"
     },
     "where": "Kus",
-    "row": "rida {{n}}",
-    "column": "Veerg",
+    "row": "Rida {{n}}",
     "value": "Väärtus",
     "problem": "Mis on valesti",
-    "filesTitle": "Failid"
+    "filesTitle": "Failid",
+    "templates": "Mallid",
+    "otherSheet": "{{names}}: salvestage esmalt Exceli töövihikuna (.xlsx).",
+    "cell": "Rida {{row}}, veerg {{column}} ({{letter}})",
+    "rowColumn": "Rida {{row}}, veerg {{column}}",
+    "columnAt": "Veerg {{column}} ({{letter}})",
+    "order": "Järjestus",
+    "downloadList": "Laadi loend alla (CSV)",
+    "excel": {
+      "products": "Tooted (Excel)",
+      "assets": "Pildid (Excel)"
+    },
+    "by": {
+      "row": "Rea järgi",
+      "problem": "Probleemi järgi"
+    }
   },
   "automation": {
     "title": "Automaatne üleslaadimine",
@@ -1096,7 +1120,8 @@
         "failed": "Ebaõnnestus",
         "expired": "Aegunud"
       }
-    }
+    },
+    "excel": "Tooteandmed (Excel)"
   },
   "enum": {
     "role": {
@@ -1516,7 +1541,8 @@
       "fit": "Lõige",
       "sleeve_length": "Varruka pikkus",
       "neckline": "Kaelus"
-    }
+    },
+    "attributes": "Muud andmed"
   },
   "labelWarning": {
     "title": "Sildi teave on puudulik",

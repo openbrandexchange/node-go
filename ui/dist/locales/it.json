@@ -112,6 +112,10 @@
     "files_missing": "Mancano alcuni file immagine.",
     "import_invalid": "Questo file non può essere importato.",
     "mass_unpublish_refused": "Interrotto: più della metà dei tuoi articoli andrebbe offline. Se è voluto, consentilo e riprova.",
+    "workbook_invalid": "Questo file Excel non è leggibile. Salvalo come Cartella di lavoro di Excel (.xlsx) e riprova.",
+    "workbook_unsafe": "Questo file Excel contiene macro o collegamenti esterni. Salvalo senza di essi come Cartella di lavoro di Excel (.xlsx).",
+    "workbook_sheet_missing": "In questo file Excel non c'è un foglio chiamato Products (o Assets).",
+    "workbook_too_large": "Questo file Excel è troppo grande (al massimo 100.000 righe e 1.000 colonne).",
     "unsafe_url": "Questo indirizzo non è consentito (punta a una rete privata).",
     "csrf_failed": "La sessione è stata rinnovata. Riprova.",
     "invalid_credentials": "Email o password non corretti.",
@@ -135,7 +139,13 @@
     "fibre_composition_missing": "Composizione fibrosa mancante",
     "animal_origin_unknown": "Origine animale non indicata",
     "footwear_materials_missing": "Materiali della calzatura mancanti",
-    "fibre_percentages_not_100": "Le percentuali non arrivano a 100%"
+    "fibre_percentages_not_100": "Le percentuali non arrivano a 100%",
+    "workbook_invalid": "File Excel non leggibile",
+    "workbook_unsafe": "Macro o collegamenti esterni",
+    "workbook_sheet_missing": "Foglio non trovato",
+    "workbook_too_large": "File Excel troppo grande",
+    "cellError": "Valore di errore Excel: inserisci il valore stesso",
+    "formula": "Formula senza risultato salvato: salva il file in Excel"
   },
   "login": {
     "title": "Accedi a {{portal}}",
@@ -395,12 +405,12 @@
   },
   "imports": {
     "title": "Importazioni",
-    "intro": "Carica un file CSV e le tue immagini. Si aggiorna solo ciò che è cambiato.",
+    "intro": "Carica un file CSV o Excel e le tue immagini. Si aggiorna solo ciò che è cambiato.",
     "automateLink": "Fallo in automatico",
     "uploadTitle": "Carica",
-    "uploadIntro": "Un products.csv con una riga per taglia, più immagini con nomi come KO-1001_NVY_1.jpg. Va bene anche uno zip con tutto.",
+    "uploadIntro": "Un products.csv o products.xlsx con una riga per taglia, più immagini con nomi come KO-1001_NVY_1.jpg. Va bene anche uno zip con tutto.",
     "template": "Scarica il modello CSV",
-    "drop": "Trascina qui CSV, zip o immagini",
+    "drop": "Trascina qui CSV, file Excel, zip o immagini",
     "dropHint": "Le cartelle non contano, i nomi dei file sì. Le immagini già caricate vengono riconosciute e non vengono reinviate.",
     "choose": "Scegli file",
     "imagesFound_one": "{{count}} immagine",
@@ -409,7 +419,7 @@
     "ignored_one": "{{count}} file ignorato: {{names}}",
     "ignored_many": "{{count}} file ignorati: {{names}}",
     "ignored_other": "{{count}} file ignorati: {{names}}",
-    "nothing": "Nessun CSV né immagine trovati tra i file scelti.",
+    "nothing": "Nessun CSV, file Excel né immagine trovati tra i file scelti.",
     "mode": "Cosa fare con gli articoli assenti dal file",
     "modeUpsert": "Solo aggiungere e aggiornare",
     "modeMirror": "Mettere offline anche gli articoli assenti",
@@ -475,11 +485,25 @@
       "warning": "Avviso"
     },
     "where": "Dove",
-    "row": "riga {{n}}",
-    "column": "Colonna",
+    "row": "Riga {{n}}",
     "value": "Valore",
     "problem": "Cosa non va",
-    "filesTitle": "File"
+    "filesTitle": "File",
+    "templates": "Modelli",
+    "otherSheet": "{{names}}: salvalo prima come Cartella di lavoro di Excel (.xlsx).",
+    "cell": "Riga {{row}}, colonna {{column}} ({{letter}})",
+    "rowColumn": "Riga {{row}}, colonna {{column}}",
+    "columnAt": "Colonna {{column}} ({{letter}})",
+    "order": "Ordine",
+    "downloadList": "Scarica l'elenco (CSV)",
+    "excel": {
+      "products": "Articoli (Excel)",
+      "assets": "Immagini (Excel)"
+    },
+    "by": {
+      "row": "Per riga",
+      "problem": "Per problema"
+    }
   },
   "automation": {
     "title": "Caricamento automatico",
@@ -1126,7 +1150,8 @@
         "failed": "Non riuscito",
         "expired": "Scaduto"
       }
-    }
+    },
+    "excel": "Dati articolo (Excel)"
   },
   "enum": {
     "role": {
@@ -1546,7 +1571,8 @@
       "fit": "Vestibilità",
       "sleeve_length": "Lunghezza manica",
       "neckline": "Scollo"
-    }
+    },
+    "attributes": "Altri dati"
   },
   "labelWarning": {
     "title": "Informazioni in etichetta incomplete",

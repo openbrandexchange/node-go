@@ -112,6 +112,10 @@
     "files_missing": "Xi fajls tar-ritratti huma neqsin.",
     "import_invalid": "Dan il-fajl ma jistax jiġi importat.",
     "mass_unpublish_refused": "Twaqqaf: aktar minn nofs l-oġġetti tiegħek kienu jisparixxu mill-offerta. Jekk dan huwa apposta, ippermettih u erġa’ pprova.",
+    "workbook_invalid": "Dan il-fajl Excel ma jistax jinqara. Issejvjah bħala Excel Workbook (.xlsx) u erġa’ pprova.",
+    "workbook_unsafe": "Dan il-fajl Excel fih macros jew links esterni. Issejvjah mingħajrhom bħala Excel Workbook (.xlsx).",
+    "workbook_sheet_missing": "F’dan il-fajl Excel m’hemmx folja bl-isem Products (jew Assets).",
+    "workbook_too_large": "Dan il-fajl Excel kbir wisq (mhux aktar minn 100,000 linja u 1,000 kolonna).",
     "unsafe_url": "Dan l-indirizz mhuwiex permess (jipponta lejn netwerk privat).",
     "csrf_failed": "Is-sessjoni tiegħek ġiet aġġornata. Erġa’ pprova.",
     "invalid_credentials": "L-indirizz tal-email jew il-password mhumiex korretti.",
@@ -135,7 +139,13 @@
     "fibre_composition_missing": "Kompożizzjoni tal-fibri nieqsa",
     "animal_origin_unknown": "Oriġini mill-annimali mhux iddikjarata",
     "footwear_materials_missing": "Materjali taż-żarbun neqsin",
-    "fibre_percentages_not_100": "Il-perċentwali ma jammontawx għal 100%"
+    "fibre_percentages_not_100": "Il-perċentwali ma jammontawx għal 100%",
+    "workbook_invalid": "Il-fajl Excel ma jinqarax",
+    "workbook_unsafe": "Macros jew links esterni",
+    "workbook_sheet_missing": "Il-folja ma nstabitx",
+    "workbook_too_large": "Il-fajl Excel kbir wisq",
+    "cellError": "Valur ta’ żball f’Excel: ikteb il-valur innifsu",
+    "formula": "Formula mingħajr riżultat issejvjat: issejvja l-fajl f’Excel"
   },
   "login": {
     "title": "Idħol: {{portal}}",
@@ -401,12 +411,12 @@
   },
   "imports": {
     "title": "Importazzjonijiet",
-    "intro": "Tella’ fajl CSV u ritratti. Jiġi aġġornat biss dak li nbidel.",
+    "intro": "Tella’ fajl CSV jew Excel u ritratti. Jiġi aġġornat biss dak li nbidel.",
     "automateLink": "Agħmel dan awtomatikament",
     "uploadTitle": "Tella’",
-    "uploadIntro": "Fajl products.csv b’linja waħda għal kull daqs, u ritratti b’ismijiet bħal KO-1001_NVY_1.jpg. Jaħdem ukoll zip wieħed b’kollox.",
+    "uploadIntro": "Fajl products.csv jew products.xlsx b’linja waħda għal kull daqs, u ritratti b’ismijiet bħal KO-1001_NVY_1.jpg. Jaħdem ukoll zip wieħed b’kollox.",
     "template": "Niżżel il-mudell CSV",
-    "drop": "Waqqa’ hawn CSV, zip jew ritratti",
+    "drop": "Waqqa’ hawn CSV, fajl Excel, zip jew ritratti",
     "dropHint": "Il-folders ma jimpurtawx, l-ismijiet tal-fajls iva. Ritratti mtella’ qabel jintgħarfu u ma jintbagħtux mill-ġdid.",
     "choose": "Agħżel fajls",
     "imagesFound_one": "Ritratti: {{count}}",
@@ -419,7 +429,7 @@
     "ignored_few": "Fajls maqbuża ({{count}}): {{names}}",
     "ignored_many": "Fajls maqbuża ({{count}}): {{names}}",
     "ignored_other": "Fajls maqbuża ({{count}}): {{names}}",
-    "nothing": "Ma nstab l-ebda CSV jew ritratt fil-fajls magħżula.",
+    "nothing": "Ma nstab l-ebda CSV, fajl Excel jew ritratt fil-fajls magħżula.",
     "mode": "X’għandu jsir bl-oġġetti li mhumiex fil-fajl",
     "modeUpsert": "Żid u aġġorna biss",
     "modeMirror": "Irtira wkoll l-oġġetti neqsin",
@@ -491,11 +501,25 @@
       "warning": "Twissija"
     },
     "where": "Fejn",
-    "row": "linja {{n}}",
-    "column": "Kolonna",
+    "row": "Linja {{n}}",
     "value": "Valur",
     "problem": "X’inhu ħażin",
-    "filesTitle": "Fajls"
+    "filesTitle": "Fajls",
+    "templates": "Mudelli",
+    "otherSheet": "{{names}}: l-ewwel issejvjah bħala Excel Workbook (.xlsx).",
+    "cell": "Linja {{row}}, kolonna {{column}} ({{letter}})",
+    "rowColumn": "Linja {{row}}, kolonna {{column}}",
+    "columnAt": "Kolonna {{column}} ({{letter}})",
+    "order": "Ordni",
+    "downloadList": "Niżżel il-lista (CSV)",
+    "excel": {
+      "products": "Oġġetti (Excel)",
+      "assets": "Ritratti (Excel)"
+    },
+    "by": {
+      "row": "Skont il-linja",
+      "problem": "Skont il-problema"
+    }
   },
   "automation": {
     "title": "Tlugħ awtomatiku",
@@ -1186,7 +1210,8 @@
         "failed": "Ma rnexxiex",
         "expired": "Skada"
       }
-    }
+    },
+    "excel": "Dettalji tal-oġġetti (Excel)"
   },
   "enum": {
     "role": {
@@ -1606,7 +1631,8 @@
       "fit": "Qatgħa",
       "sleeve_length": "Tul tal-kmiem",
       "neckline": "Għonq"
-    }
+    },
+    "attributes": "Dettalji oħra"
   },
   "labelWarning": {
     "title": "Informazzjoni tat-tikketta mhux kompluta",
