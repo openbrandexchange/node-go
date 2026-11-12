@@ -5,7 +5,7 @@
 # LITESTREAM_REPLICA_URL is set. Base images are pinned by digest and kept
 # current by Dependabot.
 
-FROM --platform=$BUILDPLATFORM golang:1.26-alpine@sha256:8ac98ca534ac3f51e1f420a1dd2c15e74c75cfa0f23f3ad27eb5d7236c349a0c AS build
+FROM --platform=$BUILDPLATFORM golang:1.26.11-alpine@sha256:ae52b5bc6ed045a9ed26ab03dc19327a802a9cc9aa8b27ed57f5c6b60579b0bb AS build
 WORKDIR /src
 COPY go.mod go.sum ./
 RUN go mod download
