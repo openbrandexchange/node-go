@@ -16,7 +16,7 @@ Releases follow [Semantic Versioning](https://semver.org/). Within a major versi
 | Hosting | Command |
 |---|---|
 | Docker Compose (this repository) | `git pull && docker compose up -d --build` |
-| Docker with a published image | change the tag (`ghcr.io/openbrandexchange/node-go:0.2.0`) and `docker compose up -d` |
+| Docker with a published image | change the tag (`ghcr.io/openbrandexchange/node-go:0.2.1`) and `docker compose up -d` |
 | Google Cloud Run | `git pull && ./deploy/cloudrun.sh` (same settings as the first time) |
 | Fly.io | `git pull && fly deploy` |
 | Railway / Render | push the new commit to your fork; the platform rebuilds |

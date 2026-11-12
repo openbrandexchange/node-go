@@ -5,7 +5,11 @@ follows [Semantic Versioning](https://semver.org/): the major version changes wh
 more than replacing the software (see [docs/upgrading.md](docs/upgrading.md)); database migrations
 are always forward-only and applied automatically on start.
 
-## [Unreleased]
+## [0.2.1] - 2026-11-12
+
+Excel workbooks next to CSV files, following spec import-format.md §5. Passes `obx-conformance all`
+built from obx-go 0.2.1, including the optional Excel tests I-IMP-9 and I-IMP-10. No database
+migration; retailers' software sees no change.
 
 ### Added
 - **Excel import** ([import-format.md §5](https://github.com/openbrandexchange/spec/blob/main/docs/import-format.md#excel)):
@@ -25,6 +29,18 @@ are always forward-only and applied automatically on start.
   header names are normalised with each run of white space and `-` as one `_` (CSV too); a part
   read twice counts once toward the inflated limit.
 - JSON Schemas and fixtures from spec commit 9219d68 (`testdata/spec/imports/xlsx`).
+
+### Changed
+- Admin screens: vendored admin-ui 0.2.1. Imports take `products.xlsx` and `assets.xlsx` and link
+  the Excel templates; import problems read "Row 12, column EAN (C)", sorted by row or by problem,
+  with a CSV download of the whole list; a refused workbook is explained in plain words. Retailers
+  get "Article data (Excel)" next to the CSV, and the article page shows the brand's own extra
+  fields. The language files the browser loads no longer carry the e-mail texts (the node still
+  reads them from `ui/dist/locales/`).
+
+### Upgrading
+- Replace the software (new binary or image `ghcr.io/openbrandexchange/node-go:0.2.1`); there is
+  no migration and nothing to configure.
 
 ## [0.2.0] - 2026-11-12
 
@@ -175,4 +191,6 @@ SQLite and PostgreSQL.
   waiting for the requester's software, so the status address no longer hands out a secret that
   stopped working ("Show the key" in the admin renews it).
 
+[0.2.1]: https://github.com/openbrandexchange/node-go/releases/tag/v0.2.1
+[0.2.0]: https://github.com/openbrandexchange/node-go/releases/tag/v0.2.0
 [0.1.0]: https://github.com/openbrandexchange/node-go/releases/tag/v0.1.0
