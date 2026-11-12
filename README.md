@@ -49,13 +49,14 @@ Each option is one command; the guides explain domain names, e-mail and backups.
 
 | Where | Command | Guide |
 |---|---|---|
+| **Hetzner Cloud, in the EU (recommended)** | a server in Nuremberg, Falkenstein or Helsinki, then the Docker command below | [docs/hosting/hetzner.md](docs/hosting/hetzner.md) |
 | Google Cloud Run | `./deploy/cloudrun.sh` (`DRY_RUN=1` first to only see the commands) | [docs/hosting/cloud-run.md](docs/hosting/cloud-run.md) |
 | Your own server with Docker (automatic HTTPS) | `DOMAIN=images.yourbrand.com ADMIN_EMAIL=you@yourbrand.com docker compose up -d` | [docs/hosting/docker.md](docs/hosting/docker.md) |
 | Fly.io | `./deploy/fly.sh your-portal` | [docs/hosting/fly.md](docs/hosting/fly.md) |
 | Railway or Render | deploy this repository (the config files are included) | [docs/hosting/railway-render.md](docs/hosting/railway-render.md) |
 | A Linux server without Docker | `sudo ./deploy/install-linux.sh --domain images.yourbrand.com --with-caddy` | [docs/hosting/linux.md](docs/hosting/linux.md) |
 
-Settings are environment variables with sensible defaults: see [docs/configuration.md](docs/configuration.md). Storage can be local disk (default), any S3-compatible bucket (AWS S3, Cloudflare R2, MinIO) or Google Cloud Storage; the database SQLite (default, continuously backed up with Litestream if you like) or PostgreSQL.
+Settings are environment variables with sensible defaults: see [docs/configuration.md](docs/configuration.md). Storage can be local disk (default), any S3-compatible bucket (Hetzner Object Storage, AWS S3, Cloudflare R2, MinIO) or Google Cloud Storage; the database SQLite (default, continuously backed up with Litestream if you like) or PostgreSQL.
 
 Running it for real: [docs/operations.md](docs/operations.md) (health checks, logs, metrics, backups and restores, retention, the audit log, personal data), [docs/upgrading.md](docs/upgrading.md), [docs/security.md](docs/security.md), [docs/performance.md](docs/performance.md) (tested with 10 000 products), and a [privacy-notice template](docs/privacy-notice-template.md) for your retailers.
 
