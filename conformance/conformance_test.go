@@ -5,6 +5,7 @@ package conformance
 
 import (
 	"context"
+	"fmt"
 	"io"
 	"log/slog"
 	"net/http/httptest"
@@ -49,7 +50,16 @@ func TestConformance(t *testing.T) {
 	if testing.Verbose() {
 		progress = os.Stderr
 	}
-	rep, err := conformance.Run(context.Background(), []string{conformance.ProfileAll}, conformance.Config{BaseURL: base, SetupCode: "CONF-TEST-CODE", Log: progress})
+	// The suite does brand-side steps through the admin and Ingest APIs; the
+	// operator only does what no API offers: simulate_spec_upgrade (P-FEED-7)
+	// moves the /changes cursor epoch as a 0.2 -> 0.3 upgrade does.
+	op := conformance.OperatorFunc(func(ctx context.Context, a conformance.Action) (map[string]string, error) {
+		if a.Name == "simulate_spec_upgrade" {
+			return nil, app.SimulateSpecUpgrade(ctx)
+		}
+		return nil, fmt.Errorf("operator action %s: node-go does this through its admin and Ingest APIs", a.Name)
+	})
+	rep, err := conformance.Run(context.Background(), []string{conformance.ProfileAll}, conformance.Config{BaseURL: base, SetupCode: "CONF-TEST-CODE", Log: progress, Operator: op})
 	if err != nil {
 		t.Fatal(err)
 	}

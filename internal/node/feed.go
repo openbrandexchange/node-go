@@ -19,6 +19,36 @@ type feedCursor struct {
 	After string `json:"a,omitempty"`
 	At    int64  `json:"c,omitempty"`
 	Seq   int64  `json:"s,omitempty"`
+	// Epoch is the node's cursor epoch when the cursor was issued (see
+	// cursorEpoch); cursors from an earlier epoch are cursor_expired.
+	Epoch int64 `json:"e,omitempty"`
+}
+
+// cursorEpoch is the node's current /changes cursor epoch (meta
+// cursor_epoch, 0 when absent). A spec upgrade with incompatible object
+// shapes bumps it in the same transaction as the migration (migration 4 for
+// 0.2 -> 0.3), so every cursor issued before the upgrade, which carries the
+// old epoch or none at all, answers 410 cursor_expired (protocol.md §6.4).
+func (a *App) cursorEpoch(ctx context.Context, q db.Querier) (int64, error) {
+	v, err := getMeta(ctx, q, "cursor_epoch")
+	if err != nil || v == "" {
+		return 0, err
+	}
+	return strconv.ParseInt(v, 10, 64)
+}
+
+// SimulateSpecUpgrade bumps the cursor epoch the way an upgrade to
+// incompatible object shapes does, so every /changes cursor issued so far
+// expires. The conformance operator action simulate_spec_upgrade (P-FEED-7)
+// uses it; the catalog is not touched.
+func (a *App) SimulateSpecUpgrade(ctx context.Context) error {
+	return a.DB.WriteTx(ctx, func(tx *db.Tx) error {
+		e, err := a.cursorEpoch(ctx, tx)
+		if err != nil {
+			return err
+		}
+		return setMeta(ctx, tx, "cursor_epoch", strconv.FormatInt(e+1, 10))
+	})
 }
 
 var snapshotTypes = []string{KindBrand, KindProduct, KindVariant, KindAsset}
@@ -75,15 +105,21 @@ func (a *App) handleChanges(w http.ResponseWriter, r *http.Request) {
 
 // Changes returns one feed page for viewer v.
 func (a *App) Changes(ctx context.Context, v *Viewer, cursor string, limit int) (*ChangesPage, *problem.Problem, error) {
+	epoch, err := a.cursorEpoch(ctx, a.DB)
+	if err != nil {
+		return nil, nil, err
+	}
 	var cur feedCursor
 	if cursor == "" {
 		hw, err := a.maxSeq(ctx)
 		if err != nil {
 			return nil, nil, err
 		}
-		cur = feedCursor{Phase: "s", HW: hw, At: a.now().Unix()}
+		cur = feedCursor{Phase: "s", HW: hw, At: a.now().Unix(), Epoch: epoch}
 	} else if !a.decodeCursor("changes", cursor, &cur) || (cur.Phase != "s" && cur.Phase != "l") {
 		return nil, problem.New("cursor_invalid", "The cursor is malformed or from another node; restart without a cursor."), nil
+	} else if cur.Epoch != epoch {
+		return nil, problem.New("cursor_expired", "This cursor was issued before the node upgraded to incompatible object shapes (now spec "+SpecVersion+"); restart without a cursor."), nil
 	}
 	if cur.Phase == "s" {
 		if cursor != "" && a.now().Sub(time.Unix(cur.At, 0)) > 24*time.Hour {
@@ -95,7 +131,7 @@ func (a *App) Changes(ctx context.Context, v *Viewer, cursor string, limit int) 
 	if pb, _ := strconv.ParseInt(pruned, 10, 64); pb > 0 && cur.Seq < pb {
 		return nil, problem.New("cursor_expired", "This cursor is older than the retained history; restart without a cursor."), nil
 	}
-	return a.livePage(ctx, v, cur.Seq, limit)
+	return a.livePage(ctx, v, cur.Seq, epoch, limit)
 }
 
 func (a *App) snapshotPage(ctx context.Context, v *Viewer, cur feedCursor, limit int) (*ChangesPage, *problem.Problem, error) {
@@ -166,7 +202,7 @@ func (a *App) snapshotPage(ctx context.Context, v *Viewer, cur feedCursor, limit
 		cur.After = ""
 	}
 	// Snapshot exhausted: continue live from the high-water mark.
-	page.NextCursor = a.encodeCursor("changes", feedCursor{Phase: "l", Seq: cur.HW})
+	page.NextCursor = a.encodeCursor("changes", feedCursor{Phase: "l", Seq: cur.HW, Epoch: cur.Epoch})
 	return page, nil, nil
 }
 
@@ -184,7 +220,7 @@ func (a *App) renderData(kind, rep, up string, v *Viewer) any {
 	return nil
 }
 
-func (a *App) livePage(ctx context.Context, v *Viewer, after int64, limit int) (*ChangesPage, *problem.Problem, error) {
+func (a *App) livePage(ctx context.Context, v *Viewer, after, epoch int64, limit int) (*ChangesPage, *problem.Problem, error) {
 	page := &ChangesPage{Changes: []Change{}, Phase: "live"}
 	last := after
 	scanned := 0
@@ -262,7 +298,7 @@ func (a *App) livePage(ctx context.Context, v *Viewer, after int64, limit int) (
 	var n int
 	_ = a.DB.QueryRow(ctx, `SELECT COUNT(*) FROM (SELECT seq FROM changes WHERE seq > ? LIMIT 1) x`, last).Scan(&n)
 	page.HasMore = n > 0
-	page.NextCursor = a.encodeCursor("changes", feedCursor{Phase: "l", Seq: last})
+	page.NextCursor = a.encodeCursor("changes", feedCursor{Phase: "l", Seq: last, Epoch: epoch})
 	return page, nil, nil
 }
 

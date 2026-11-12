@@ -171,9 +171,13 @@ INSERT INTO meta (key, value) VALUES ('upgrade_article_data', '0.2');
 `,
 	// 4: spec 0.3 materials and care as terms with names (proposal 0004).
 	// Stored as JSON in products.data, so no column changes; this marks the
-	// products for the one-time rewrite node.App does on start.
+	// products for the one-time rewrite node.App does on start. The object
+	// shapes are incompatible with 0.2, so the /changes cursor epoch moves to
+	// 1: every cursor issued before (epoch 0) answers 410 cursor_expired
+	// (protocol.md §6.4). A later incompatible upgrade sets the next epoch.
 	`
 INSERT INTO meta (key, value) VALUES ('upgrade_terms', '0.3');
+INSERT INTO meta (key, value) VALUES ('cursor_epoch', '1');
 `,
 }
 

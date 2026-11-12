@@ -34,6 +34,11 @@ clients (allowed before 1.0); see [docs/upgrading.md](docs/upgrading.md#from-02-
 - **Migration 4** rewrites stored products once on start from the 0.1/0.2 shapes to 0.3 (flags
   become the qualifier, care entries get category, symbol and name); rewritten products get an
   `upsert` in `/changes`.
+- **Cursors from before the upgrade expire** (protocol.md §6.4, conformance P-FEED-7): every
+  `/changes` cursor carries the node's cursor epoch; migration 4 moves it from 0 to 1, so cursors
+  issued by 0.2 (and earlier export `changes_cursor`s) answer `410 cursor_expired` and consumers
+  restart with a snapshot in the 0.3 shapes. The conformance operator action
+  `simulate_spec_upgrade` moves the epoch the same way.
 
 ### Changed
 - Label completeness warnings and the article data CSV export use the material and qualifier
@@ -41,7 +46,7 @@ clients (allowed before 1.0); see [docs/upgrading.md](docs/upgrading.md#from-02-
 - Fixtures and schemas synced from spec 0.3.0.
 
 ### Open
-- Admin screens still are admin-ui 0.2.0; re-vendor admin-ui 0.3 once it is released.
+- Admin screens still are admin-ui 0.2.1; re-vendor admin-ui 0.3 once it is released.
 
 ## [0.2.1] - 2026-11-12
 
