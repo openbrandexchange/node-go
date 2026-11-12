@@ -5,7 +5,7 @@ follows [Semantic Versioning](https://semver.org/): the major version changes wh
 more than replacing the software (see [docs/upgrading.md](docs/upgrading.md)); database migrations
 are always forward-only and applied automatically on start.
 
-## [0.1.0] - 2026-09-28
+## [0.1.0] - 2026-11-12
 
 First release. Implements Open Brand Exchange protocol 0.1 (read API, ingest API, node admin and
 portal API) and passes `obx-conformance all` (61 of 61 tests, including the rate-limit test) on
