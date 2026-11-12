@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://openbrandexchange.com/schemas/v0.2/ProductInput.json",
+  "$id": "https://openbrandexchange.com/schemas/v0.3/ProductInput.json",
   "type": "object",
   "title": "ProductInput",
   "description": "Ingest write model for a product. Key: external_id (path); when a brand has no separate product id, use the style number.",

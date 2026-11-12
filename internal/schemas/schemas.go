@@ -28,7 +28,7 @@ var printer = message.NewPrinter(language.English)
 var files embed.FS
 
 // Base is the $id prefix of every schema.
-const Base = "https://openbrandexchange.com/schemas/v0.2/"
+const Base = "https://openbrandexchange.com/schemas/v0.3/"
 
 // FieldError is one validation failure.
 type FieldError struct {

@@ -15,6 +15,7 @@ import (
 	"unicode"
 	"unicode/utf8"
 
+	"github.com/openbrandexchange/node-go/internal/vocab"
 	"golang.org/x/text/runes"
 	"golang.org/x/text/transform"
 	"golang.org/x/text/unicode/norm"
@@ -323,12 +324,12 @@ func Slug(s string) string {
 }
 
 // Fiber is one fibre of a part, normalised (0.1 keys recycled_<fibre> and
-// organic_<fibre> become the fibre with the flag).
+// organic_<fibre> become the material with that qualifier). Qualifier is ""
+// when the fibre has none.
 type Fiber struct {
-	Key        string
+	Material   string
 	Percentage float64
-	Recycled   bool
-	Organic    bool
+	Qualifier  string
 }
 
 // Part is one material part.
@@ -338,14 +339,16 @@ type Part struct {
 }
 
 var (
-	fiberRe = regexp.MustCompile(`^([0-9]+(?:[.,][0-9]+)?)\s*%\s*(.+)$`)
-	flagRe  = regexp.MustCompile(`(?i)\s*\((recycled|organic)\)\s*$`)
+	fiberRe     = regexp.MustCompile(`^([0-9]+(?:[.,][0-9]+)?)\s*%\s*(.+)$`)
+	qualifierRe = regexp.MustCompile(`\s*\(([^()]*)\)\s*$`)
 )
 
 // ParseMaterials parses "outer: 65% cotton, 35% polyamide; lining: 100%
-// polyester (recycled)". Whether the percentages of a part add up to 100 is
-// a label completeness check of the stored product (import-format.md rule
-// 10), not a parse warning.
+// polyester (recycled)" (import-format.md §1.4). A qualifier in brackets
+// sets the fibre's qualifier, one per fibre; a 0.1 key recycled_<fibre> or
+// organic_<fibre> wins over a bracket. Whether the percentages of a part add
+// up to 100 is a label completeness check of the stored product
+// (import-format.md rule 10), not a parse warning.
 func ParseMaterials(s string) ([]Part, []string, error) {
 	var parts []Part
 	var warnings []string
@@ -379,25 +382,26 @@ func ParseMaterials(s string) ([]Part, []string, error) {
 			}
 			fib := Fiber{Percentage: pct}
 			rest := m[2]
-			for {
-				fm := flagRe.FindStringSubmatch(rest)
-				if fm == nil {
-					break
+			if qm := qualifierRe.FindStringSubmatch(rest); qm != nil {
+				q := Key(qm[1])
+				if !ValidKey(q) {
+					return nil, nil, fmt.Errorf("invalid qualifier %q in %q", qm[1], f)
 				}
-				if strings.EqualFold(fm[1], "recycled") {
-					fib.Recycled = true
-				} else {
-					fib.Organic = true
+				fib.Qualifier = q
+				rest = rest[:len(rest)-len(qm[0])]
+				if qualifierRe.MatchString(rest) {
+					return nil, nil, fmt.Errorf("%q has more than one qualifier; a fibre has one", f)
 				}
-				rest = rest[:len(rest)-len(fm[0])]
 			}
 			key := Key(rest)
 			if !ValidKey(key) {
-				return nil, nil, fmt.Errorf("invalid fibre %q", m[2])
+				return nil, nil, fmt.Errorf("invalid material %q", rest)
 			}
-			var rec, org bool
-			fib.Key, rec, org = NormalizeFiber(key)
-			fib.Recycled, fib.Organic = fib.Recycled || rec, fib.Organic || org
+			var q string
+			fib.Material, q = NormalizeMaterial(key)
+			if q != "" {
+				fib.Qualifier = q
+			}
 			part.Fibers = append(part.Fibers, fib)
 		}
 		if len(part.Fibers) == 0 {
@@ -408,17 +412,13 @@ func ParseMaterials(s string) ([]Part, []string, error) {
 	return parts, warnings, nil
 }
 
-// CareCodes is the recommended care code list (ISO 3758 aligned).
+// CareCodes are the care codes of the specification's vocabulary
+// (vocabularies/care.json, ISO 3758 aligned).
 var CareCodes = map[string]bool{}
 
 func init() {
-	for _, c := range strings.Fields(`wash_95 wash_70 wash_60 wash_60_mild wash_50 wash_50_mild wash_40 wash_40_mild wash_40_very_mild
-wash_30 wash_30_mild wash_30_very_mild hand_wash do_not_wash bleach_any bleach_oxygen_only do_not_bleach
-tumble_dry_normal tumble_dry_low do_not_tumble_dry line_dry drip_line_dry dry_flat drip_dry_flat line_dry_shade
-drip_line_dry_shade dry_flat_shade drip_dry_flat_shade iron_high iron_medium iron_low do_not_iron dry_clean_p
-dry_clean_p_mild dry_clean_p_very_mild dry_clean_f dry_clean_f_mild dry_clean_f_very_mild do_not_dry_clean
-wet_clean_w wet_clean_w_mild wet_clean_w_very_mild do_not_wet_clean`) {
-		CareCodes[c] = true
+	for _, e := range vocab.Care.Entries {
+		CareCodes[e.Code] = true
 	}
 }
 

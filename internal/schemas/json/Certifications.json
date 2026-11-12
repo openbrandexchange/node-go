@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://openbrandexchange.com/schemas/v0.2/Certifications.json",
+  "$id": "https://openbrandexchange.com/schemas/v0.3/Certifications.json",
   "title": "Certifications",
   "description": "Voluntary certifications the brand states for this product (private schemes, not legal requirements). The node passes them on as stated; checking a licence is up to the reader.",
   "type": "array",

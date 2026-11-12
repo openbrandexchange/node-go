@@ -6,12 +6,14 @@ import (
 	"strings"
 
 	"github.com/openbrandexchange/node-go/internal/importfmt"
+	"github.com/openbrandexchange/node-go/internal/vocab"
 )
 
-// Article data of spec 0.2 (protocol.md §5.9). Protocol objects always carry
-// the new product and variant properties (null when not stated); inside
-// measurements and features only stated members are present, and the fibre
-// flags recycled and organic only when true.
+// Article data of spec 0.2 and 0.3 (protocol.md §5.9). Protocol objects
+// always carry the product and variant properties (null when not stated);
+// inside measurements and features only stated members are present. The
+// parts, materials and qualifiers of materials and the care entries are
+// terms with their names from the vocabularies (0.3, protocol.md §5.9.1).
 
 // FootwearMaterials is the material of the three parts of a shoe
 // (Directive 94/11/EC); responses always include all three parts.
@@ -108,16 +110,80 @@ type WarningDetail struct {
 	column string
 }
 
-// normalizeMaterials applies the 0.2 fibre rule to stored materials:
-// recycled_<fibre> and organic_<fibre> become the fibre with its flag.
-func normalizeMaterials(ms []MaterialPart) {
+// normalizeTerms gives stored materials and care their canonical 0.3 form
+// (protocol.md §5.9.1, ingest.md §3.4): a 0.1 key recycled_<fibre> or
+// organic_<fibre> becomes the material with that qualifier (the key wins
+// over a qualifier that was sent); a known code gets the vocabulary's name
+// (and for care its category and symbol), whatever was sent; an unknown code
+// keeps what was sent, or null. A language without a name is left out.
+func normalizeTerms(ms []MaterialPart, care []CareItem) {
 	for i := range ms {
+		fillTerm(&ms[i].Part, vocab.Parts)
 		for j := range ms[i].Fibers {
 			f := &ms[i].Fibers[j]
-			key, rec, org := importfmt.NormalizeFiber(f.Fiber)
-			f.Fiber, f.Recycled, f.Organic = key, f.Recycled || rec, f.Organic || org
+			code, q := importfmt.NormalizeMaterial(f.Material.Code)
+			if code != f.Material.Code {
+				f.Material = Term{Code: code}
+			}
+			if q != "" {
+				f.Qualifier = &Term{Code: q}
+			}
+			fillTerm(&f.Material, vocab.Materials)
+			if f.Qualifier != nil {
+				fillTerm(f.Qualifier, vocab.Qualifiers)
+			}
 		}
 	}
+	for i := range care {
+		c := &care[i]
+		if e, ok := vocab.Care.Lookup(c.Code); ok {
+			c.Category, c.Symbol, c.Name = cloneString(e.Category), cloneString(e.Symbol), vocabName(e.Name)
+		} else {
+			c.Name = cleanText(c.Name)
+		}
+		c.Text = cleanText(c.Text)
+	}
+}
+
+func fillTerm(t *Term, v *vocab.Vocabulary) {
+	if e, ok := v.Lookup(t.Code); ok {
+		t.Name = vocabName(e.Name)
+		return
+	}
+	t.Name = cleanText(t.Name)
+}
+
+// vocabName copies a vocabulary name (nil stays nil).
+func vocabName(m map[string]string) LocalizedText {
+	if len(m) == 0 {
+		return nil
+	}
+	out := make(LocalizedText, len(m))
+	for k, v := range m {
+		out[k] = v
+	}
+	return out
+}
+
+// cleanText leaves out languages without text; nothing left is nil.
+func cleanText(t LocalizedText) LocalizedText {
+	for k, v := range t {
+		if strings.TrimSpace(v) == "" {
+			delete(t, k)
+		}
+	}
+	if len(t) == 0 {
+		return nil
+	}
+	return t
+}
+
+func cloneString(s *string) *string {
+	if s == nil {
+		return nil
+	}
+	v := *s
+	return &v
 }
 
 // prepareArticleInput applies ingest.md §3.4 to a write document before it
@@ -196,9 +262,9 @@ func labelWarnings(d *ProductData) []WarningDetail {
 		animal:
 			for _, p := range d.Materials {
 				for _, f := range p.Fibers {
-					if animalFibres[f.Fiber] || strings.HasSuffix(f.Fiber, "_wool") {
+					if animalFibres[f.Material.Code] || strings.HasSuffix(f.Material.Code, "_wool") {
 						add(warnAnimalOriginUnknown, "/contains_animal_origin", "contains_animal_origin",
-							fmt.Sprintf("the materials contain %s; state whether the product contains non-textile parts of animal origin (Regulation (EU) No 1007/2011 Art. 12)", f.Fiber))
+							fmt.Sprintf("the materials contain %s; state whether the product contains non-textile parts of animal origin (Regulation (EU) No 1007/2011 Art. 12)", f.Material.Code))
 						break animal
 					}
 				}

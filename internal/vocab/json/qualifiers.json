@@ -1,0 +1,32 @@
+{
+  "description": "Qualifier codes of a fibre in `materials`: what the fibre is, apart from which fibre. A label shows the name next to the material (\"Cotton (Organic)\").",
+  "entries": [
+    {
+      "code": "organic",
+      "name": {
+        "en": "Organic",
+        "nl": "Biologisch",
+        "de": "Bio",
+        "fr": "Biologique"
+      }
+    },
+    {
+      "code": "recycled",
+      "name": {
+        "en": "Recycled",
+        "nl": "Gerecycled",
+        "de": "Recycelt",
+        "fr": "Recyclé"
+      }
+    },
+    {
+      "code": "regenerative",
+      "name": {
+        "en": "Regenerative",
+        "nl": "Regeneratief",
+        "de": "Regenerativ",
+        "fr": "Régénératif"
+      }
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://openbrandexchange.com/schemas/v0.2/IngestResult.json",
+  "$id": "https://openbrandexchange.com/schemas/v0.3/IngestResult.json",
   "type": "object",
   "title": "IngestResult",
   "properties": {

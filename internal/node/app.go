@@ -26,12 +26,12 @@ import (
 // Software and Version identify this implementation in discovery.
 const (
 	Software    = "obx-node-go"
-	SpecVersion = "0.2.0"
-	OBXVersion  = "0.2"
+	SpecVersion = "0.3.0"
+	OBXVersion  = "0.3"
 )
 
 // Version is set at build time (-ldflags "-X .../node.Version=...").
-var Version = "0.2.1-dev"
+var Version = "0.3.0-dev"
 
 // App holds the node's shared state.
 type App struct {
@@ -100,6 +100,10 @@ func New(ctx context.Context, cfg *config.Config, ui fs.FS, log *slog.Logger) (*
 	if err := a.initMeta(ctx); err != nil {
 		d.Close()
 		return nil, err
+	}
+	if err := a.upgradeTerms(ctx); err != nil {
+		d.Close()
+		return nil, fmt.Errorf("upgrade to spec 0.3 materials and care: %w", err)
 	}
 	if err := a.upgradeArticleData(ctx); err != nil {
 		d.Close()

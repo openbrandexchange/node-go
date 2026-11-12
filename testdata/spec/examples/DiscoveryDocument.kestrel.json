@@ -1,9 +1,9 @@
 {
-  "obx_version": "0.2",
-  "spec_version": "0.2.0",
+  "obx_version": "0.3",
+  "spec_version": "0.3.0",
   "node": {
     "software": "obx-node-go",
-    "version": "0.2.0"
+    "version": "0.3.0"
   },
   "publisher": {
     "id": "pub_kestrel",

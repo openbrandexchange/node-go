@@ -96,7 +96,7 @@
     },
     {
       "file": "4-fibre-flags.csv",
-      "what": "The flag form gives the same materials as the 0.1 key recycled_polyester in the fixture: unchanged, no change entries.",
+      "what": "The qualifier form gives the same materials as the 0.1 key recycled_polyester in the fixture: unchanged, no change entries.",
       "counts": {
         "rows": 1,
         "created": 0,

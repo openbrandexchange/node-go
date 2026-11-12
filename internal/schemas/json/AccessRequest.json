@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://openbrandexchange.com/schemas/v0.2/AccessRequest.json",
+  "$id": "https://openbrandexchange.com/schemas/v0.3/AccessRequest.json",
   "type": "object",
   "title": "AccessRequest",
   "description": "A retailer's request for access. Admin API adds retailer/contact details (see node-admin.yaml).",

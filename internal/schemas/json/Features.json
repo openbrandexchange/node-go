@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://openbrandexchange.com/schemas/v0.2/Features.json",
+  "$id": "https://openbrandexchange.com/schemas/v0.3/Features.json",
   "title": "Features",
   "description": "Typed product features from the registry in docs/protocol.md#features. Keys of the registry have the type and values listed there; other keys (same key pattern) are allowed and not validated. Only stated features are present; null instead of an empty object.",
   "type": "object",

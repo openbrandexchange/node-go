@@ -213,9 +213,11 @@ func (w *writer) prepare(kind, ext string, doc map[string]any, existing *row) (*
 		if d.Attributes != nil {
 			d.Attributes = normalizeNumbers(map[string]any(d.Attributes)).(map[string]any)
 		}
-		// 0.2 article data (ingest.md §3.4): 0.1 fibre keys become the
-		// fibre with its flag; empty features and certifications are null.
-		normalizeMaterials(d.Materials)
+		// Article data (ingest.md §3.4): materials and care get their
+		// canonical 0.3 form (0.1 fibre keys become the material with its
+		// qualifier, names from the vocabularies); empty features and
+		// certifications are null.
+		normalizeTerms(d.Materials, d.Care)
 		if len(d.Features) == 0 {
 			d.Features = nil
 		} else {

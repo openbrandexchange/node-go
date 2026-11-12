@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://openbrandexchange.com/schemas/v0.2/DiscoveryDocument.json",
+  "$id": "https://openbrandexchange.com/schemas/v0.3/DiscoveryDocument.json",
   "type": "object",
   "title": "DiscoveryDocument",
   "description": "Served at GET /.well-known/obx on the node's host (also on custom domains).",

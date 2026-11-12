@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://openbrandexchange.com/schemas/v0.2/LocalizedText.json",
+  "$id": "https://openbrandexchange.com/schemas/v0.3/LocalizedText.json",
   "title": "LocalizedText",
   "description": "Free text per language, keyed by BCP 47 tag. At least one language. Example: {\"nl\": \"Trui\", \"en\": \"Sweater\"}.",
   "type": "object",

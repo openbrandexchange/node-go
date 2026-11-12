@@ -47,24 +47,37 @@ func (t LocalizedText) Pick(lang string, order ...string) string {
 	return ""
 }
 
-// Fiber is one fibre of a material part.
+// Term is a stable code with its name per language (protocol.md §5.9.1):
+// the part, material and qualifier of materials. Name is nil (null) when
+// there is none.
+type Term struct {
+	Code string        `json:"code"`
+	Name LocalizedText `json:"name"`
+}
+
+// Fiber is one fibre of a material part; Qualifier is nil (null) when the
+// fibre has none.
 type Fiber struct {
-	Fiber      string  `json:"fiber"`
+	Material   Term    `json:"material"`
 	Percentage float64 `json:"percentage"`
-	Recycled   bool    `json:"recycled,omitempty"`
-	Organic    bool    `json:"organic,omitempty"`
+	Qualifier  *Term   `json:"qualifier"`
 }
 
 // MaterialPart is the composition of one part.
 type MaterialPart struct {
-	Part   string  `json:"part"`
+	Part   Term    `json:"part"`
 	Fibers []Fiber `json:"fibers"`
 }
 
-// CareItem is one care instruction.
+// CareItem is one care instruction: its code, ISO 3758 category, GINETEX
+// symbol code and name (from the vocabulary for known codes), and the
+// brand's own extra text.
 type CareItem struct {
-	Code string        `json:"code"`
-	Text LocalizedText `json:"text"`
+	Code     string        `json:"code"`
+	Category *string       `json:"category"`
+	Symbol   *string       `json:"symbol"`
+	Name     LocalizedText `json:"name"`
+	Text     LocalizedText `json:"text"`
 }
 
 // Color of a variant.

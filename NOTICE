@@ -21,7 +21,8 @@ This product includes:
   https://github.com/openbrandexchange/admin-ui. Its own licence and
   third-party notices are shipped with it in ui/dist (LICENSE, NOTICE,
   THIRD-PARTY-LICENSES.txt).
-- Fixtures of the Open Brand Exchange specification (testdata/spec), CC-BY-4.0,
+- JSON Schemas, vocabularies and fixtures of the Open Brand Exchange specification
+  (internal/schemas/json, internal/vocab/json, testdata/spec), CC-BY-4.0,
   "Open Brand Exchange specification, © Open Brand Exchange Foundation (in formation) and contributors",
   https://github.com/openbrandexchange/spec.
 - Go modules compiled into the binary, all under permissive licences (MIT,

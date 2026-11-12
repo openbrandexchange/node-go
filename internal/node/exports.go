@@ -454,6 +454,10 @@ func (a *App) runExportJob(jc *jobContext) (any, error) {
 	if err != nil {
 		return nil, err
 	}
+	epoch, err := a.cursorEpoch(ctx, a.DB)
+	if err != nil {
+		return nil, err
+	}
 	ids, err := a.exportProductIDs(ctx, v, &req)
 	if err != nil {
 		return nil, err
@@ -526,7 +530,7 @@ func (a *App) runExportJob(jc *jobContext) (any, error) {
 	if err := b.finish(); err != nil {
 		return nil, err
 	}
-	cursor := a.encodeCursor("changes", feedCursor{Phase: "l", Seq: hw})
+	cursor := a.encodeCursor("changes", feedCursor{Phase: "l", Seq: hw, Epoch: epoch})
 	_ = enc.Encode(map[string]any{"type": "header", "export_id": jc.job.ID, "created_at": jc.job.CreatedAt, "obx_version": OBXVersion,
 		"changes_cursor": cursor, "counts": counts})
 	for _, l := range lines {

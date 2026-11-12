@@ -332,16 +332,13 @@ func formatMaterials(ms []MaterialPart) string {
 	for _, m := range ms {
 		var fs []string
 		for _, f := range m.Fibers {
-			c := strconv.FormatFloat(f.Percentage, 'f', -1, 64) + "% " + f.Fiber
-			if f.Recycled {
-				c += " (recycled)"
-			}
-			if f.Organic {
-				c += " (organic)"
+			c := strconv.FormatFloat(f.Percentage, 'f', -1, 64) + "% " + f.Material.Code
+			if f.Qualifier != nil {
+				c += " (" + f.Qualifier.Code + ")"
 			}
 			fs = append(fs, c)
 		}
-		parts = append(parts, m.Part+": "+strings.Join(fs, ", "))
+		parts = append(parts, m.Part.Code+": "+strings.Join(fs, ", "))
 	}
 	return strings.Join(parts, "; ")
 }

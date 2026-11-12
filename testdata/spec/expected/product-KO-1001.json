@@ -19,11 +19,23 @@
   "collection": "Highland",
   "materials": [
     {
-      "part": "main",
+      "part": {
+        "code": "main",
+        "name": null
+      },
       "fibers": [
         {
-          "fiber": "merino_wool",
-          "percentage": 100
+          "material": {
+            "code": "merino_wool",
+            "name": {
+              "en": "Merino wool",
+              "nl": "Merinowol",
+              "de": "Merinowolle",
+              "fr": "Laine mérinos"
+            }
+          },
+          "percentage": 100,
+          "qualifier": null
         }
       ]
     }
@@ -33,26 +45,74 @@
   "care": [
     {
       "code": "wash_30_very_mild",
+      "category": "washing",
+      "symbol": "1_F_30",
+      "name": {
+        "en": "Wash at 30 °C, very mild process",
+        "nl": "Wassen op 30 °C, zeer fijne was",
+        "de": "Waschen bei 30 °C, Spezialschonwaschgang",
+        "fr": "Lavage à 30 °C, programme très délicat"
+      },
       "text": null
     },
     {
       "code": "do_not_bleach",
+      "category": "bleaching",
+      "symbol": "2_X",
+      "name": {
+        "en": "Do not bleach",
+        "nl": "Niet bleken",
+        "de": "Nicht bleichen",
+        "fr": "Ne pas blanchir"
+      },
       "text": null
     },
     {
       "code": "do_not_tumble_dry",
+      "category": "drying",
+      "symbol": "3_X",
+      "name": {
+        "en": "Do not tumble dry",
+        "nl": "Niet in de droger",
+        "de": "Nicht im Wäschetrockner trocknen",
+        "fr": "Ne pas sécher en tambour"
+      },
       "text": null
     },
     {
       "code": "dry_flat",
+      "category": "drying",
+      "symbol": "3_T",
+      "name": {
+        "en": "Dry flat",
+        "nl": "Liggend drogen",
+        "de": "Liegend trocknen",
+        "fr": "Séchage à plat"
+      },
       "text": null
     },
     {
       "code": "iron_low",
+      "category": "ironing",
+      "symbol": "4_C",
+      "name": {
+        "en": "Iron at low temperature (max. 110 °C)",
+        "nl": "Strijken op lage temperatuur (max. 110 °C)",
+        "de": "Bügeln bei niedriger Temperatur (max. 110 °C)",
+        "fr": "Repassage à basse température (max. 110 °C)"
+      },
       "text": null
     },
     {
       "code": "dry_clean_p",
+      "category": "professional_care",
+      "symbol": "5_P",
+      "name": {
+        "en": "Professional dry cleaning (P)",
+        "nl": "Chemisch reinigen (P)",
+        "de": "Chemische Reinigung (P)",
+        "fr": "Nettoyage à sec professionnel (P)"
+      },
       "text": null
     }
   ],

@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://openbrandexchange.com/schemas/v0.2/Rendition.json",
+  "$id": "https://openbrandexchange.com/schemas/v0.3/Rendition.json",
   "type": "object",
   "title": "Rendition",
   "description": "One downloadable form of an asset. original = uploaded bytes, unmodified; web = longest side <= 2000 px JPEG; square = web centred on a white square canvas; thumb = longest side <= 600 px JPEG.",

@@ -61,20 +61,30 @@ func TestParseCSV(t *testing.T) {
 
 func TestMaterialsAndCare(t *testing.T) {
 	parts, warns, err := ParseMaterials("outer: 65% Cotton, 35% polyamide; lining: 100% polyester")
-	if err != nil || len(parts) != 2 || parts[0].Name != "outer" || parts[0].Fibers[0].Key != "cotton" || len(warns) != 0 {
+	if err != nil || len(parts) != 2 || parts[0].Name != "outer" || parts[0].Fibers[0].Material != "cotton" || len(warns) != 0 {
 		t.Fatalf("%v %v %v", parts, warns, err)
 	}
-	// 0.1 keys and flags give the same normalised fibre; sums are not a parse warning.
-	for _, in := range []string{"90% organic cotton", "90% cotton (organic)", "90% Cotton (Organic)"} {
+	// 0.1 keys and qualifiers give the same normalised fibre; sums are not a parse warning.
+	for _, in := range []string{"90% organic cotton", "90% cotton (organic)", "90% Cotton (Organic)", "90% organic_cotton (recycled)"} {
 		p, w, err := ParseMaterials(in)
-		if err != nil || len(w) != 0 || p[0].Fibers[0] != (Fiber{Key: "cotton", Percentage: 90, Organic: true}) {
+		if err != nil || len(w) != 0 || p[0].Fibers[0] != (Fiber{Material: "cotton", Percentage: 90, Qualifier: "organic"}) {
 			t.Fatalf("%s: %+v %v %v", in, p, w, err)
 		}
 	}
-	p, _, err := ParseMaterials("outer: 100% polyester (recycled); lining: 100% recycled_polyamide (organic)")
-	if err != nil || p[0].Fibers[0] != (Fiber{Key: "polyester", Percentage: 100, Recycled: true}) ||
-		p[1].Fibers[0] != (Fiber{Key: "polyamide", Percentage: 100, Recycled: true, Organic: true}) {
+	p, _, err := ParseMaterials("outer: 100% polyester (recycled); lining: 100% recycled_polyamide; trim: 100% Merino Wool (Regenerative)")
+	if err != nil || p[0].Fibers[0] != (Fiber{Material: "polyester", Percentage: 100, Qualifier: "recycled"}) ||
+		p[1].Fibers[0] != (Fiber{Material: "polyamide", Percentage: 100, Qualifier: "recycled"}) ||
+		p[2].Fibers[0] != (Fiber{Material: "merino_wool", Percentage: 100, Qualifier: "regenerative"}) {
 		t.Fatalf("%+v %v", p, err)
+	}
+	if p, _, err := ParseMaterials("100% cotton"); err != nil || p[0].Fibers[0].Qualifier != "" {
+		t.Fatalf("%+v %v", p, err)
+	}
+	// One qualifier per fibre.
+	for _, in := range []string{"100% cotton (organic) (recycled)", "100% cotton ()", "100% cotton (?!)"} {
+		if _, _, err := ParseMaterials(in); err == nil {
+			t.Fatalf("%s: expected an error", in)
+		}
 	}
 	if _, _, err := ParseMaterials("lots of cotton"); err == nil {
 		t.Fatal("expected an error")

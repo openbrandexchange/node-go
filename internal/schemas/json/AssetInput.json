@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://openbrandexchange.com/schemas/v0.2/AssetInput.json",
+  "$id": "https://openbrandexchange.com/schemas/v0.3/AssetInput.json",
   "type": "object",
   "title": "AssetInput",
   "description": "Ingest write model for an asset. Key: external_id (path); filename-pattern convention = `<style>_<color>_<position>`.",

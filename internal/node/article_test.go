@@ -12,9 +12,9 @@ import (
 	"github.com/openbrandexchange/node-go/internal/db"
 )
 
-// The 0.2 article data (protocol.md §5.9): imports (fixtures/imports, the
-// cases of conformance I-IMP-7 and I-IMP-8), the Ingest API, the CSV export
-// and the upgrade of a 0.1 database.
+// The article data (protocol.md §5.9, materials and care as terms since 0.3):
+// imports (fixtures/imports, the cases of conformance I-IMP-7 and I-IMP-8),
+// the Ingest API, the CSV export and the upgrade of 0.1 and 0.2 databases.
 
 func importsFixture(t *testing.T, name string) string {
 	return filepath.Join(specDir(t), "imports", name)
@@ -214,7 +214,14 @@ func TestArticleDataIngest(t *testing.T) {
 	product := map[string]any{
 		"brand_external_id": brand, "style_number": "LG-1", "name": map[string]any{"en": "Cabin case"},
 		"item_type": "luggage", "item_subtype": "cabin",
-		"materials":      []any{map[string]any{"part": "shell", "fibers": []any{map[string]any{"fiber": "recycled_polyester", "percentage": 60}, map[string]any{"fiber": "polyamide", "percentage": 30, "recycled": false}}}},
+		"materials": []any{map[string]any{"part": map[string]any{"code": "shell"}, "fibers": []any{
+			map[string]any{"material": map[string]any{"code": "recycled_polyester"}, "percentage": 60, "qualifier": map[string]any{"code": "organic"}},
+			map[string]any{"material": map[string]any{"code": "polyamide", "name": map[string]any{"en": "Nylon"}}, "percentage": 30},
+			map[string]any{"material": map[string]any{"code": "x_fibre", "name": map[string]any{"en": "X fibre"}}, "percentage": 5,
+				"qualifier": map[string]any{"code": "upcycled", "name": map[string]any{"en": "Upcycled"}}}}}},
+		"care": []any{map[string]any{"code": "wash_30", "category": "drying", "text": map[string]any{"en": "Wash inside out"}},
+			map[string]any{"code": "steam_only", "category": "ironing", "symbol": "4_Z", "name": map[string]any{"en": "Steam only"}},
+			map[string]any{"code": "air_out"}},
 		"features":       map[string]any{"wheels": 4, "shell": "hard", "handle_type": "telescopic", "lock": nil},
 		"certifications": []any{map[string]any{"scheme": "grs", "scope": "material"}},
 	}
@@ -230,12 +237,32 @@ func TestArticleDataIngest(t *testing.T) {
 
 	rec := ing.must(200, "GET", "/obx/v1/ingest/products/LG-1", nil)
 	data := rec["data"].(map[string]any)
-	fib := data["materials"].([]any)[0].(map[string]any)["fibers"].([]any)
-	if f0 := fib[0].(map[string]any); f0["fiber"] != "polyester" || f0["recycled"] != true {
-		t.Fatalf("0.1 fibre key not normalised: %v", fib)
+	// Terms: known codes get the vocabulary's names whatever was sent, the
+	// 0.1 key wins over a sent qualifier, unknown codes keep what was sent
+	// (without empty languages), and a missing name or qualifier is null.
+	asJSON := func(v any) string { b, _ := json.Marshal(v); return string(b) }
+	ms := data["materials"].([]any)[0].(map[string]any)
+	if got := asJSON(ms["part"]); got != `{"code":"shell","name":{"de":"Schale","en":"Shell","fr":"Coque","nl":"Schaal"}}` {
+		t.Errorf("part %s", got)
 	}
-	if _, has := fib[1].(map[string]any)["recycled"]; has {
-		t.Fatalf("a false flag is stored: %v", fib)
+	fib := ms["fibers"].([]any)
+	for i, want := range []string{
+		`{"material":{"code":"polyester","name":{"de":"Polyester","en":"Polyester","fr":"Polyester","nl":"Polyester"}},"percentage":60,"qualifier":{"code":"recycled","name":{"de":"Recycelt","en":"Recycled","fr":"Recyclé","nl":"Gerecycled"}}}`,
+		`{"material":{"code":"polyamide","name":{"de":"Polyamid","en":"Polyamide","fr":"Polyamide","nl":"Polyamide"}},"percentage":30,"qualifier":null}`,
+		`{"material":{"code":"x_fibre","name":{"en":"X fibre"}},"percentage":5,"qualifier":{"code":"upcycled","name":{"en":"Upcycled"}}}`,
+	} {
+		if got := asJSON(fib[i]); got != want {
+			t.Errorf("fibre %d\n%s\nwant\n%s", i, got, want)
+		}
+	}
+	for i, want := range []string{
+		`{"category":"washing","code":"wash_30","name":{"de":"Waschen bei 30 °C","en":"Wash at 30 °C","fr":"Lavage à 30 °C","nl":"Wassen op 30 °C"},"symbol":"1_D_30","text":{"en":"Wash inside out"}}`,
+		`{"category":"ironing","code":"steam_only","name":{"en":"Steam only"},"symbol":"4_Z","text":null}`,
+		`{"category":null,"code":"air_out","name":null,"symbol":null,"text":null}`,
+	} {
+		if got := asJSON(data["care"].([]any)[i]); got != want {
+			t.Errorf("care %d\n%s\nwant\n%s", i, got, want)
+		}
 	}
 	if f := data["features"].(map[string]any); f["wheels"] != float64(4) || f["handle_type"] != "telescopic" || len(f) != 3 {
 		t.Fatalf("features %v", f)
@@ -299,6 +326,9 @@ func TestArticleDataIngest(t *testing.T) {
 
 	p := retail.must(200, "GET", "/obx/v1/products?limit=10", nil)["items"].([]any)[0].(map[string]any)
 	validate(t, "ProductDetail", p)
+	if asJSON(p["materials"]) != asJSON(data["materials"]) || asJSON(p["care"]) != asJSON(data["care"]) {
+		t.Fatalf("protocol materials/care differ from the record:\n%s\n%s", asJSON(p["materials"]), asJSON(p["care"]))
+	}
 	for _, f := range []string{"item_subtype", "contains_animal_origin", "footwear_materials", "certifications", "features"} {
 		if _, ok := p[f]; !ok {
 			t.Errorf("product lacks %s", f)
@@ -316,43 +346,109 @@ func TestArticleDataIngest(t *testing.T) {
 	}
 }
 
-// TestUpgradeArticleData starts from objects stored by 0.1 (no article data
-// properties, the fibre key recycled_polyester) and checks the one-time
-// rewrite: only the object whose content changed gets a change entry.
-func TestUpgradeArticleData(t *testing.T) {
+// downgradeProduct turns a stored 0.3 product (data or rep) into what 0.1
+// stored: materials as {part, fibers: [{fiber, percentage}]} with the 0.1
+// key recycled_<fibre>, care as {code, text}, and without the 0.2 article
+// data properties that are null. With v02 it is the 0.2 shape instead (flags, the 0.2
+// properties kept).
+func downgradeProduct(t *testing.T, s string, v02 bool) string {
+	t.Helper()
+	var m map[string]any
+	dec := json.NewDecoder(strings.NewReader(s))
+	dec.UseNumber()
+	if err := dec.Decode(&m); err != nil {
+		t.Fatal(err)
+	}
+	if ms, ok := m["materials"].([]any); ok {
+		for _, p := range ms {
+			pm := p.(map[string]any)
+			pm["part"] = pm["part"].(map[string]any)["code"]
+			for _, f := range pm["fibers"].([]any) {
+				fm := f.(map[string]any)
+				code := fm["material"].(map[string]any)["code"].(string)
+				q, _ := fm["qualifier"].(map[string]any)
+				delete(fm, "material")
+				delete(fm, "qualifier")
+				switch {
+				case q != nil && !v02:
+					fm["fiber"] = q["code"].(string) + "_" + code
+				case q != nil:
+					fm["fiber"], fm[q["code"].(string)] = code, true
+				default:
+					fm["fiber"] = code
+				}
+			}
+		}
+	}
+	if cs, ok := m["care"].([]any); ok {
+		for _, c := range cs {
+			cm := c.(map[string]any)
+			delete(cm, "category")
+			delete(cm, "symbol")
+			delete(cm, "name")
+		}
+	}
+	if !v02 {
+		for _, f := range []string{"item_subtype", "contains_animal_origin", "footwear_materials", "certifications", "features"} {
+			if m[f] == nil {
+				delete(m, f)
+			}
+		}
+	}
+	b, _ := json.Marshal(m)
+	return string(b)
+}
+
+// TestUpgradeStoredProducts starts from products stored by 0.1 (KT-2001 with
+// the fibre key recycled_polyester, no article data properties) and 0.2
+// (KO-1003 with the flag organic) and checks the one-time rewrites of
+// migrations 3 and 4: the stored objects get the 0.3 shape, exactly as a
+// fresh import gives it; the rewritten products get a change entry, the
+// untouched ones none.
+func TestUpgradeStoredProducts(t *testing.T) {
 	k := newKestrelNode(t)
 	ctx := context.Background()
 	_, cursor, _ := drainChanges(t, k.all, "", 500)
 	old := map[string]string{}
-	for _, ext := range []string{"KO-1002", "KT-2001"} {
+	for ext, v02 := range map[string]bool{"KT-2001": false, "KO-1003": true} {
 		var data, rep string
 		if err := k.app.DB.QueryRow(ctx, `SELECT data, rep FROM products WHERE external_id = ?`, ext).Scan(&data, &rep); err != nil {
 			t.Fatal(err)
 		}
 		old[ext] = rep
-		data = strings.ReplaceAll(data, `"fiber":"polyester","percentage":100,"recycled":true`, `"fiber":"recycled_polyester","percentage":100`)
-		rep = strings.ReplaceAll(rep, `"fiber":"polyester","percentage":100,"recycled":true`, `"fiber":"recycled_polyester","percentage":100`)
-		for _, f := range []string{`"item_subtype":null,`, `"contains_animal_origin":null,`, `"footwear_materials":null,`, `"certifications":null,`, `"features":null,`} {
-			data, rep = strings.Replace(data, f, "", 1), strings.Replace(rep, f, "", 1)
-		}
-		if strings.Contains(rep, "item_subtype") {
-			t.Fatalf("%s rep still has 0.2 properties: %s", ext, rep)
+		data, rep = downgradeProduct(t, data, v02), downgradeProduct(t, rep, v02)
+		if strings.Contains(data, `"material"`) || strings.Contains(rep, `"category"`) {
+			t.Fatalf("%s is not in the old shape: %s", ext, data)
 		}
 		if err := k.app.DB.WriteTx(ctx, func(tx *db.Tx) error {
 			_, err := tx.Exec(ctx, `UPDATE products SET data = ?, rep = ?, rep_hash = ? WHERE external_id = ?`, data, rep, hashHex([]byte(rep)), ext)
 			if err == nil {
 				err = setMeta(ctx, tx, "upgrade_article_data", "0.2")
 			}
+			if err == nil {
+				err = setMeta(ctx, tx, "upgrade_terms", "0.3")
+			}
 			return err
 		}); err != nil {
 			t.Fatal(err)
 		}
 	}
+	if !strings.Contains(downgradeProduct(t, old["KT-2001"], false), `"fiber":"recycled_polyester"`) ||
+		!strings.Contains(downgradeProduct(t, old["KO-1003"], true), `"fiber":"cotton","organic":true`) {
+		t.Fatal("the fixture products lack the recycled/organic fibres this test needs")
+	}
+	if err := k.app.upgradeTerms(ctx); err != nil {
+		t.Fatal(err)
+	}
 	if err := k.app.upgradeArticleData(ctx); err != nil {
 		t.Fatal(err)
 	}
 	ch, _, _ := drainChanges(t, k.all, cursor, 100)
-	if len(ch) != 1 || ch[0]["data"].(map[string]any)["external_id"] != "KT-2001" {
+	got := map[string]bool{}
+	for _, c := range ch {
+		got[c["data"].(map[string]any)["external_id"].(string)] = true
+	}
+	if len(ch) != 2 || !got["KT-2001"] || !got["KO-1003"] {
 		t.Fatalf("changes after the upgrade: %v", ch)
 	}
 	for ext, rep := range old {
@@ -362,8 +458,10 @@ func TestUpgradeArticleData(t *testing.T) {
 			t.Errorf("%s rep after the upgrade\n%s\nwant\n%s", ext, now, rep)
 		}
 	}
-	if v, _ := getMeta(ctx, k.app.DB, "upgrade_article_data"); v != "" {
-		t.Fatal("the upgrade marker is still there")
+	for _, key := range []string{"upgrade_article_data", "upgrade_terms"} {
+		if v, _ := getMeta(ctx, k.app.DB, key); v != "" {
+			t.Fatalf("the upgrade marker %s is still there", key)
+		}
 	}
 	// Writing the same data again is unchanged.
 	run := k.runImport(k.admin, k.kestrelFiles(), nil)

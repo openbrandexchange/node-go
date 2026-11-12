@@ -16,7 +16,7 @@ Releases follow [Semantic Versioning](https://semver.org/). Within a major versi
 | Hosting | Command |
 |---|---|
 | Docker Compose (this repository) | `git pull && docker compose up -d --build` |
-| Docker with a published image | change the tag (`ghcr.io/openbrandexchange/node-go:0.2.1`) and `docker compose up -d` |
+| Docker with a published image | change the tag (`ghcr.io/openbrandexchange/node-go:0.3.0`) and `docker compose up -d` |
 | Google Cloud Run | `git pull && ./deploy/cloudrun.sh` (same settings as the first time) |
 | Fly.io | `git pull && fly deploy` |
 | Railway / Render | push the new commit to your fork; the platform rebuilds |
@@ -25,6 +25,14 @@ Releases follow [Semantic Versioning](https://semver.org/). Within a major versi
 3. **Check:** `curl https://your-portal/readyz` shows the new `version` and `schema_version`; sign in once; look at the log for `warn` lines.
 
 With SQLite and Litestream the old and the new instance must not run at the same time for long (both would write the replica): Cloud Run and Fly.io switch over within seconds. Changes made in those seconds on the old instance can be lost; update when the portal is quiet (evening), or use PostgreSQL for zero-downtime updates.
+
+## From 0.2 to 0.3
+
+0.3 implements spec 0.3 ([proposal 0004](https://github.com/openbrandexchange/spec/blob/main/docs/proposals/0004-terms-with-names.md)): materials and care are terms with names. **This is a breaking change for retailers' software**: `materials[].part`, `fibers[].material` and `fibers[].qualifier` are objects `{code, name}` instead of strings and flags, and care entries gain `category`, `symbol` and `name`. Tell your retailers before you upgrade; `OBX-Version` becomes `0.3`.
+
+It adds migration 4, which changes no columns. On the first start after the upgrade the node rewrites every stored product once, in one transaction, before it serves requests: `part` and `fiber` become terms with the names of the specification's vocabularies, `recycled: true` / `organic: true` become the qualifier (`recycled` when a fibre had both), and care entries get their category, symbol and name. Every product whose materials or care changed gets an `upsert` in `/changes`. Every `/changes` cursor issued before the upgrade (including the `changes_cursor` of earlier exports) answers `410 cursor_expired` ([protocol.md §6.4](https://github.com/openbrandexchange/spec/blob/main/docs/protocol.md#64-retention-and-cursors)): retailers' software restarts the feed without a cursor and gets a snapshot in the new shape. A 0.1 database is upgraded in the same start (migrations 3 and 4).
+
+Brands' files and connectors keep working: the import format only gained `(<qualifier>)`, e.g. `(regenerative)`, and the Ingest API accepts terms with just a `code`. Ingest clients that still send the 0.2 shape (`"part": "outer"`, `"fiber": …`) get `422 validation_failed` and must move to `{"code": …}`. Rolling back to 0.2 needs the backup made before the upgrade.
 
 ## From 0.1 to 0.2
 
