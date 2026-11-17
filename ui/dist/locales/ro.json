@@ -68,7 +68,8 @@
     "retailer": "Comerciant",
     "itemSubtype": "Tip",
     "animalOrigin": "Părți netextile de origine animală",
-    "secondSize": "A doua mărime"
+    "secondSize": "A doua mărime",
+    "variantId": "ID variantă"
   },
   "validate": {
     "required": "Completați acest câmp.",
@@ -117,6 +118,7 @@
     "workbook_sheet_missing": "Acest fișier Excel nu are nicio foaie numită Products (sau Assets).",
     "workbook_too_large": "Acest fișier Excel este prea mare (cel mult 100.000 de rânduri și 1.000 de coloane).",
     "unsafe_url": "Această adresă nu este permisă (indică o rețea privată).",
+    "idempotency_key_reused": "Acest lucru a fost deja trimis cu aceeași cheie, dar cu alt conținut. Nu s-a modificat nimic.",
     "csrf_failed": "Sesiunea dvs. a fost reîmprospătată. Încercați din nou.",
     "invalid_credentials": "Adresa de e-mail sau parola nu este corectă.",
     "account_blocked": "Acest cont este blocat. Dacă credeți că este o greșeală, contactați marca.",
@@ -140,6 +142,8 @@
     "animal_origin_unknown": "Origine animală nespecificată",
     "footwear_materials_missing": "Materialele încălțămintei lipsă",
     "fibre_percentages_not_100": "Procentele nu însumează 100%",
+    "material_unknown": "Materialul nu este în listă",
+    "qualifier_deprecated": "Notație veche pentru sustenabilitate",
     "workbook_invalid": "Fișier Excel ilizibil",
     "workbook_unsafe": "Macrocomenzi sau legături externe",
     "workbook_sheet_missing": "Foaia nu a fost găsită",
@@ -297,9 +301,21 @@
     "styleHint": "Codul dvs. propriu de articol. Identifică articolul și nu poate fi schimbat ulterior.",
     "styleLocked": "Codul de articol identifică acest articol și nu poate fi schimbat.",
     "seasonHint": "Așa cum îl folosiți, de exemplu AW26 sau NOS.",
-    "materialsHint": "Ca pe etichetă: „outer: 65% cotton, 35% polyamide; lining: 100% polyester”.",
-    "materialsInvalid": "„{{part}}” nu a putut fi citit. Indicați procentul și materialul, de ex. 100% cotton.",
     "materialsNot100": "Procentele pentru {{parts}} nu însumează 100%.",
+    "materialsEditorHint": "Pentru fiecare parte, ca pe etichetă: procentul, materialul și, dacă este cazul, dacă fibra este organică, reciclată sau regenerativă.",
+    "materialPart": "Parte",
+    "materialPercentage": "Procent",
+    "materialName": "Material",
+    "materialQualifier": "Sustenabilitate",
+    "materialQualifierHint": "bifați tot ce se aplică",
+    "addFibre": "Adaugă material",
+    "addPart": "Adaugă parte",
+    "removeFibre": "Elimină materialul",
+    "removePart": "Elimină partea",
+    "materialsRowInvalid": "Alegeți un material pe fiecare rând folosit. Procentul este opțional; dacă îl indicați, este între 0 și 100.",
+    "variantIdHint": "Lăsați gol pentru a folosi {{id}}. ID-ul rămâne mereu același; EAN-ul poate fi adăugat sau corectat mai târziu.",
+    "variantIdFixed": "Rămâne mereu același, chiar dacă EAN-ul se schimbă.",
+    "variantIdTooLong": "Cel mult 200 de caractere. Introduceți un ID mai scurt.",
     "careHint": "Alegeți simbolurile de pe eticheta de întreținere, în ordinea de pe etichetă.",
     "careGroup": {
       "washing": "Spălare",
@@ -376,7 +392,6 @@
     "delete": "Șterge articolul",
     "deleteTitle": "Ștergeți {{style}}?",
     "deleteBody": "Articolul, mărimile și fotografiile sale vor fi eliminate. Sistemele comercianților vor afla că a dispărut. Acțiunea nu poate fi anulată.",
-    "materialsFlags": "Adăugați (recycled) sau (organic) după o fibră, unde este cazul: „100% polyester (recycled)”.",
     "animalOriginHint": "De exemplu un ecuson din piele, un garnisaj din blană sau nasturi din corn. Dacă există, eticheta trebuie să menționeze acest lucru.",
     "footwearHint": "Obligatoriu pe eticheta încălțămintei: materialul din care este făcută cea mai mare parte a fiecărei părți (cel puțin 80%).",
     "certificationsHint": "Opțional. Schema și numărul licenței, de ex. „gots:CU 123456”; adăugați (material) când este certificat doar un material.",
@@ -916,6 +931,10 @@
     "selfServiceHint": "Astfel încât dezvoltatorii lor să se poată conecta fără aprobarea dvs.",
     "languages": "Limbile textelor de produs",
     "languagesHint": "Comercianții văd textele în limba lor, dacă există, altfel în engleză, altfel în limba dvs. principală.",
+    "otherLanguage": "Altă limbă",
+    "otherLanguageHint": "Un cod de limbă, și cu scriere sau regiune: de-CH, zh-Hant, es-419.",
+    "addLanguage": "Adaugă limba",
+    "languageTagInvalid": "Nu este un cod de limbă. Folosiți de exemplu de-CH, zh-Hant sau es-419.",
     "defaultRights": "Drepturi de utilizare standard",
     "defaultRightsHint": "Pentru fotografiile pentru care datele nu spun altceva.",
     "channels": "Unde pot folosi comercianții fotografiile",
@@ -1008,6 +1027,7 @@
     "filters": {
       "title": "Filtre",
       "clear": "Șterge filtrele",
+      "showResults": "Afișează rezultatele",
       "new": "Nou sau modificat",
       "anytime": "Oricând",
       "lastDays_one": "Ultima zi",
@@ -1018,7 +1038,8 @@
       "target_group": "Pentru cine",
       "color": "Culoare",
       "season": "Sezon",
-      "collection": "Colecție"
+      "collection": "Colecție",
+      "qualifier": "Sustenabilitate"
     },
     "tile": {
       "colours_one": "{{count}} culoare",
@@ -1259,8 +1280,6 @@
     },
     "fibre": {
       "cotton": "bumbac",
-      "organic_cotton": "bumbac organic",
-      "recycled_cotton": "bumbac reciclat",
       "linen": "in",
       "hemp": "cânepă",
       "silk": "mătase",
@@ -1276,9 +1295,7 @@
       "cupro": "cupro",
       "acetate": "acetat",
       "polyester": "poliester",
-      "recycled_polyester": "poliester reciclat",
       "polyamide": "poliamidă",
-      "recycled_polyamide": "poliamidă reciclată",
       "elastane": "elastan",
       "acrylic": "acril",
       "polypropylene": "polipropilenă",
@@ -1290,6 +1307,14 @@
       "rubber": "cauciuc",
       "metal": "metal",
       "other": "alte fibre"
+    },
+    "qualifier": {
+      "organic": "organic",
+      "in_conversion": "în conversie",
+      "recycled": "reciclat",
+      "pre_consumer": "pre-consum",
+      "post_consumer": "post-consum",
+      "regenerative": "regenerativ"
     },
     "care": {
       "wash_95": "Spălare la 95 °C",
@@ -1526,8 +1551,6 @@
   "article": {
     "label": "Informații pentru etichetă",
     "composition": "Compoziție",
-    "recycled": "reciclat",
-    "organic": "organic",
     "animalOrigin": "Conține părți netextile de origine animală",
     "footwear": "Materialele încălțămintei",
     "footwearPart": {
@@ -1594,5 +1617,17 @@
       "why": "Procentele acestei părți nu însumează 100%. Compoziția se indică drept procent din greutatea totală a fibrelor.",
       "law": "Regulamentul (UE) nr. 1007/2011, art. 9 și 11"
     }
+  },
+  "demo": {
+    "banner": "Demo, date fictive",
+    "bannerNote": "Modificările sunt anulate automat.",
+    "title": "Explorați fără cont",
+    "intro": "O marcă fictivă cu date de test. Alegeți cum doriți să o vedeți.",
+    "asRetailer": "Vedeți ca și comerciant",
+    "asRetailerHint": "Căutare, listă EAN, pagini de produs, descărcări",
+    "asBrand": "Vedeți ca marcă",
+    "asBrandHint": "Catalog, import Excel, acces pe comerciant, statistici",
+    "refused": "Acest lucru nu este posibil în demo.",
+    "api": "Cheie API doar pentru citire pentru dezvoltatori"
   }
 }

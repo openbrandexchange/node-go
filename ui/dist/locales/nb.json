@@ -68,7 +68,8 @@
     "retailer": "Forhandler",
     "itemSubtype": "Type",
     "animalOrigin": "Ikke-tekstile deler av animalsk opprinnelse",
-    "secondSize": "Andre størrelse"
+    "secondSize": "Andre størrelse",
+    "variantId": "Variant-ID"
   },
   "validate": {
     "required": "Fyll ut dette.",
@@ -117,6 +118,7 @@
     "workbook_sheet_missing": "Denne Excel-filen har ikke noe ark med navnet Products (eller Assets).",
     "workbook_too_large": "Denne Excel-filen er for stor (maks. 100 000 rader og 1000 kolonner).",
     "unsafe_url": "Denne adressen er ikke tillatt (den peker til et privat nettverk).",
+    "idempotency_key_reused": "Dette er allerede sendt med samme nøkkel, men med annet innhold. Ingenting er endret.",
     "csrf_failed": "Økten din er fornyet. Prøv igjen.",
     "invalid_credentials": "E-postadressen eller passordet er feil.",
     "account_blocked": "Denne kontoen er sperret. Kontakt merket hvis du mener det er en feil.",
@@ -140,6 +142,8 @@
     "animal_origin_unknown": "Animalsk opprinnelse ikke oppgitt",
     "footwear_materials_missing": "Skomaterialer mangler",
     "fibre_percentages_not_100": "Prosentsatsene blir ikke 100 %",
+    "material_unknown": "Materialet er ikke på listen",
+    "qualifier_deprecated": "Gammel skrivemåte for bærekraft",
     "workbook_invalid": "Excel-filen kan ikke leses",
     "workbook_unsafe": "Makroer eller eksterne koblinger",
     "workbook_sheet_missing": "Fant ikke arket",
@@ -294,9 +298,21 @@
     "styleHint": "Deres eget varenummer. Det identifiserer varen og kan ikke endres senere.",
     "styleLocked": "Varenummeret identifiserer varen og kan ikke endres.",
     "seasonHint": "Slik dere bruker det, for eksempel AW26 eller NOS.",
-    "materialsHint": "Som på merkelappen: «outer: 65% cotton, 35% polyamide; lining: 100% polyester».",
-    "materialsInvalid": "Vi klarte ikke å lese «{{part}}». Bruk en prosentsats og et materiale, for eksempel 100% cotton.",
     "materialsNot100": "Prosentsatsene for {{parts}} blir ikke 100 %.",
+    "materialsEditorHint": "Per del, som på merkelappen: prosentandelen, materialet og, der det gjelder, om fiberen er økologisk, resirkulert eller regenerativ.",
+    "materialPart": "Del",
+    "materialPercentage": "Prosent",
+    "materialName": "Materiale",
+    "materialQualifier": "Bærekraft",
+    "materialQualifierHint": "kryss av for alt som passer",
+    "addFibre": "Legg til materiale",
+    "addPart": "Legg til del",
+    "removeFibre": "Fjern materiale",
+    "removePart": "Fjern del",
+    "materialsRowInvalid": "Velg et materiale på hver linje du bruker. Prosent er valgfritt; oppgir du det, er det mellom 0 og 100.",
+    "variantIdHint": "La stå tomt for å bruke {{id}}. ID-en forblir alltid den samme; EAN kan legges til eller rettes senere.",
+    "variantIdFixed": "Forblir alltid den samme, også når EAN endres.",
+    "variantIdTooLong": "Høyst 200 tegn. Skriv en kortere ID.",
     "careHint": "Velg symbolene fra vaskelappen i rekkefølgen på lappen.",
     "careGroup": {
       "washing": "Vask",
@@ -373,7 +389,6 @@
     "delete": "Slett vare",
     "deleteTitle": "Slette {{style}}?",
     "deleteBody": "Varen, størrelsene og bildene fjernes. Forhandlernes systemer får beskjed om at den er borte. Dette kan ikke angres.",
-    "materialsFlags": "Legg til (recycled) eller (organic) etter en fiber der det gjelder: «100% polyester (recycled)».",
     "animalOriginHint": "For eksempel et skinnmerke, en pelskant eller hornknapper. Finnes det, må det stå på merkelappen.",
     "footwearHint": "Påkrevd på merkingen av sko: materialet som utgjør det meste av hver del (minst 80 %).",
     "certificationsHint": "Valgfritt. Ordning og lisensnummer, for eksempel «gots:CU 123456»; legg til (material) når bare et materiale er sertifisert.",
@@ -903,6 +918,10 @@
     "selfServiceHint": "Slik at utviklerne deres kan koble til uten å spørre dere.",
     "languages": "Språk for produkttekstene",
     "languagesHint": "Forhandlere ser tekstene på sitt eget språk hvis det finnes, ellers på engelsk, ellers på hovedspråket deres.",
+    "otherLanguage": "Annet språk",
+    "otherLanguageHint": "En språkkode, også med skrift eller region: de-CH, zh-Hant, es-419.",
+    "addLanguage": "Legg til språk",
+    "languageTagInvalid": "Ikke en språkkode. Bruk for eksempel de-CH, zh-Hant eller es-419.",
     "defaultRights": "Standard bruksrettigheter",
     "defaultRightsHint": "For bilder der opplysningene ikke sier noe annet.",
     "channels": "Hvor forhandlere kan bruke bildene",
@@ -990,6 +1009,7 @@
     "filters": {
       "title": "Filtre",
       "clear": "Fjern filtre",
+      "showResults": "Vis resultater",
       "new": "Ny eller endret",
       "anytime": "Når som helst",
       "lastDays_one": "Siste {{count}} dag",
@@ -999,7 +1019,8 @@
       "target_group": "For",
       "color": "Farge",
       "season": "Sesong",
-      "collection": "Kolleksjon"
+      "collection": "Kolleksjon",
+      "qualifier": "Bærekraft"
     },
     "tile": {
       "colours_one": "{{count}} farge",
@@ -1229,8 +1250,6 @@
     },
     "fibre": {
       "cotton": "bomull",
-      "organic_cotton": "økologisk bomull",
-      "recycled_cotton": "resirkulert bomull",
       "linen": "lin",
       "hemp": "hamp",
       "silk": "silke",
@@ -1246,9 +1265,7 @@
       "cupro": "cupro",
       "acetate": "acetat",
       "polyester": "polyester",
-      "recycled_polyester": "resirkulert polyester",
       "polyamide": "polyamid",
-      "recycled_polyamide": "resirkulert polyamid",
       "elastane": "elastan",
       "acrylic": "akryl",
       "polypropylene": "polypropylen",
@@ -1260,6 +1277,14 @@
       "rubber": "gummi",
       "metal": "metall",
       "other": "andre fibre"
+    },
+    "qualifier": {
+      "organic": "økologisk",
+      "in_conversion": "under omlegging",
+      "recycled": "resirkulert",
+      "pre_consumer": "pre-consumer",
+      "post_consumer": "post-consumer",
+      "regenerative": "regenerativ"
     },
     "care": {
       "wash_95": "Vask på 95 °C",
@@ -1496,8 +1521,6 @@
   "article": {
     "label": "Merkeopplysninger",
     "composition": "Sammensetning",
-    "recycled": "resirkulert",
-    "organic": "økologisk",
     "animalOrigin": "Inneholder ikke-tekstile deler av animalsk opprinnelse",
     "footwear": "Skomaterialer",
     "footwearPart": {
@@ -1564,5 +1587,17 @@
       "why": "Prosentsatsene for denne delen blir ikke 100 %. Sammensetningen oppgis som andel av den totale fibervekten.",
       "law": "Forordning (EU) nr. 1007/2011 artikkel 9 og 11"
     }
+  },
+  "demo": {
+    "banner": "Demo, fiktive data",
+    "bannerNote": "Endringer tilbakestilles automatisk.",
+    "title": "Se deg rundt uten konto",
+    "intro": "Et fiktivt merke med testdata. Velg hvordan du vil se det.",
+    "asRetailer": "Se som forhandler",
+    "asRetailerHint": "Søk, EAN-liste, produktsider, nedlastinger",
+    "asBrand": "Se som merke",
+    "asBrandHint": "Katalog, Excel-import, tilgang per forhandler, statistikk",
+    "refused": "Dette er ikke mulig i demoen.",
+    "api": "Skrivebeskyttet API-nøkkel for utviklere"
   }
 }

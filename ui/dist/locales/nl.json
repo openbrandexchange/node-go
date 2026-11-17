@@ -68,7 +68,8 @@
     "retailer": "Retailer",
     "itemSubtype": "Soort",
     "animalOrigin": "Niet-textieldelen van dierlijke oorsprong",
-    "secondSize": "Tweede maat"
+    "secondSize": "Tweede maat",
+    "variantId": "Variant-ID"
   },
   "validate": {
     "required": "Vul dit in.",
@@ -117,6 +118,7 @@
     "workbook_sheet_missing": "Dit Excel-bestand heeft geen werkblad met de naam Products (of Assets).",
     "workbook_too_large": "Dit Excel-bestand is te groot (hoogstens 100.000 rijen en 1.000 kolommen).",
     "unsafe_url": "Dit adres is niet toegestaan (het verwijst naar een privénetwerk).",
+    "idempotency_key_reused": "Dit is al eerder verstuurd met dezelfde sleutel maar met andere inhoud. Er is niets gewijzigd.",
     "csrf_failed": "Je sessie is vernieuwd. Probeer het opnieuw.",
     "invalid_credentials": "E-mailadres of wachtwoord klopt niet.",
     "account_blocked": "Dit account is geblokkeerd. Neem contact op met het merk als je denkt dat dit een vergissing is.",
@@ -140,6 +142,8 @@
     "animal_origin_unknown": "Dierlijke oorsprong niet opgegeven",
     "footwear_materials_missing": "Materialen schoeisel ontbreken",
     "fibre_percentages_not_100": "Percentages komen niet uit op 100%",
+    "material_unknown": "Materiaal staat niet in de lijst",
+    "qualifier_deprecated": "Oude schrijfwijze voor duurzaamheid",
     "workbook_invalid": "Excel-bestand niet leesbaar",
     "workbook_unsafe": "Macro's of externe koppelingen",
     "workbook_sheet_missing": "Werkblad niet gevonden",
@@ -294,9 +298,21 @@
     "styleHint": "Je eigen artikelnummer. Het identificeert het artikel en kan later niet meer worden gewijzigd.",
     "styleLocked": "Het artikelnummer identificeert dit artikel en kan niet worden gewijzigd.",
     "seasonHint": "Zoals je het zelf gebruikt, bijvoorbeeld AW26 of NOS.",
-    "materialsHint": "Zoals op het label: “outer: 65% cotton, 35% polyamide; lining: 100% polyester”.",
-    "materialsInvalid": "We konden “{{part}}” niet lezen. Gebruik een percentage en een materiaal, zoals 100% cotton.",
     "materialsNot100": "De percentages van {{parts}} komen niet uit op 100%.",
+    "materialsEditorHint": "Per onderdeel, zoals op het label: het percentage, het materiaal en waar dat geldt of de vezel biologisch, gerecycled of regeneratief is.",
+    "materialPart": "Onderdeel",
+    "materialPercentage": "Percentage",
+    "materialName": "Materiaal",
+    "materialQualifier": "Duurzaamheid",
+    "materialQualifierHint": "vink alles aan wat geldt",
+    "addFibre": "Materiaal toevoegen",
+    "addPart": "Onderdeel toevoegen",
+    "removeFibre": "Materiaal verwijderen",
+    "removePart": "Onderdeel verwijderen",
+    "materialsRowInvalid": "Kies op elke regel die je gebruikt een materiaal. Een percentage is niet verplicht; als je er een geeft, ligt het tussen 0 en 100.",
+    "variantIdHint": "Laat leeg voor {{id}}. De ID blijft altijd hetzelfde; de EAN kun je later toevoegen of verbeteren.",
+    "variantIdFixed": "Blijft altijd hetzelfde, ook als de EAN verandert.",
+    "variantIdTooLong": "Maximaal 200 tekens. Typ een kortere ID.",
     "careHint": "Kies de symbolen van het wasetiket, in de volgorde van het etiket.",
     "careGroup": {
       "washing": "Wassen",
@@ -373,7 +389,6 @@
     "delete": "Artikel verwijderen",
     "deleteTitle": "{{style}} verwijderen?",
     "deleteBody": "Dit verwijdert het artikel, de maten en de beelden. De software van retailers krijgt door dat het weg is. Dit kan niet ongedaan worden gemaakt.",
-    "materialsFlags": "Zet (recycled) of (organic) achter een vezel als dat van toepassing is: “100% polyester (recycled)”.",
     "animalOriginHint": "Bijvoorbeeld een leren patch, een bontrandje of hoornen knopen. Zijn die er, dan moet dat op het label staan.",
     "footwearHint": "Verplicht op het label van schoenen: het materiaal waaruit elk deel grotendeels bestaat (minstens 80%).",
     "certificationsHint": "Optioneel. Keurmerk en licentienummer, zoals “gots:CU 123456”; zet er (material) achter als alleen een materiaal gecertificeerd is.",
@@ -903,6 +918,10 @@
     "selfServiceHint": "Zodat hun ontwikkelaars kunnen koppelen zonder het jou te vragen.",
     "languages": "Talen van je productteksten",
     "languagesHint": "Retailers zien je teksten in hun eigen taal als die er is, anders in het Engels, anders in je hoofdtaal.",
+    "otherLanguage": "Andere taal",
+    "otherLanguageHint": "Een taalcode, ook met schrift of regio: de-CH, zh-Hant, es-419.",
+    "addLanguage": "Taal toevoegen",
+    "languageTagInvalid": "Geen taalcode. Gebruik bijvoorbeeld de-CH, zh-Hant of es-419.",
     "defaultRights": "Standaard gebruiksrechten",
     "defaultRightsHint": "Voor beelden waarvan de gegevens niets anders zeggen.",
     "channels": "Waar retailers beelden mogen gebruiken",
@@ -990,6 +1009,7 @@
     "filters": {
       "title": "Filters",
       "clear": "Filters wissen",
+      "showResults": "Toon resultaten",
       "new": "Nieuw of gewijzigd",
       "anytime": "Altijd",
       "lastDays_one": "Afgelopen {{count}} dag",
@@ -999,7 +1019,8 @@
       "target_group": "Voor",
       "color": "Kleur",
       "season": "Seizoen",
-      "collection": "Collectie"
+      "collection": "Collectie",
+      "qualifier": "Duurzaamheid"
     },
     "tile": {
       "colours_one": "{{count}} kleur",
@@ -1229,8 +1250,6 @@
     },
     "fibre": {
       "cotton": "katoen",
-      "organic_cotton": "biologisch katoen",
-      "recycled_cotton": "gerecycled katoen",
       "linen": "linnen",
       "hemp": "hennep",
       "silk": "zijde",
@@ -1246,9 +1265,7 @@
       "cupro": "cupro",
       "acetate": "acetaat",
       "polyester": "polyester",
-      "recycled_polyester": "gerecycled polyester",
       "polyamide": "polyamide",
-      "recycled_polyamide": "gerecycled polyamide",
       "elastane": "elastaan",
       "acrylic": "acryl",
       "polypropylene": "polypropyleen",
@@ -1260,6 +1277,14 @@
       "rubber": "rubber",
       "metal": "metaal",
       "other": "overige vezels"
+    },
+    "qualifier": {
+      "organic": "biologisch",
+      "in_conversion": "in omschakeling",
+      "recycled": "gerecycled",
+      "pre_consumer": "pre-consumer",
+      "post_consumer": "post-consumer",
+      "regenerative": "regeneratief"
     },
     "care": {
       "wash_95": "Wassen op 95 °C",
@@ -1496,8 +1521,6 @@
   "article": {
     "label": "Labelinformatie",
     "composition": "Samenstelling",
-    "recycled": "gerecycled",
-    "organic": "biologisch",
     "animalOrigin": "Bevat niet-textieldelen van dierlijke oorsprong",
     "footwear": "Materialen schoeisel",
     "footwearPart": {
@@ -1564,5 +1587,17 @@
       "why": "De percentages van dit deel komen niet uit op 100%. De samenstelling is een aandeel van het totale vezelgewicht.",
       "law": "Verordening (EU) nr. 1007/2011, art. 9 en 11"
     }
+  },
+  "demo": {
+    "banner": "Demo, fictieve gegevens",
+    "bannerNote": "Wijzigingen worden automatisch teruggedraaid.",
+    "title": "Rondkijken zonder account",
+    "intro": "Een fictief merk met testgegevens. Kies hoe je wilt kijken.",
+    "asRetailer": "Bekijk als retailer",
+    "asRetailerHint": "Zoeken, EAN-lijst, productpagina's, downloads",
+    "asBrand": "Bekijk als merk",
+    "asBrandHint": "Catalogus, Excel-import, toegang per retailer, statistieken",
+    "refused": "Dit kan niet in de demo.",
+    "api": "Alleen-lezen API-sleutel voor ontwikkelaars"
   }
 }

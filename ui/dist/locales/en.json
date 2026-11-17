@@ -68,7 +68,8 @@
     "retailer": "Retailer",
     "itemSubtype": "Kind",
     "animalOrigin": "Non-textile parts of animal origin",
-    "secondSize": "Second size"
+    "secondSize": "Second size",
+    "variantId": "Variant ID"
   },
   "validate": {
     "required": "Please fill this in.",
@@ -117,6 +118,7 @@
     "workbook_sheet_missing": "No sheet named Products (or Assets) found in this Excel file.",
     "workbook_too_large": "This Excel file is too large (at most 100,000 rows and 1,000 columns).",
     "unsafe_url": "This address is not allowed (it points to a private network).",
+    "idempotency_key_reused": "This was already sent with the same key but different content. Nothing was changed.",
     "csrf_failed": "Your session was refreshed. Please try again.",
     "invalid_credentials": "Email address or password is not correct.",
     "account_blocked": "This account has been blocked. Contact the brand if you think this is a mistake.",
@@ -140,6 +142,8 @@
     "animal_origin_unknown": "Animal origin not stated",
     "footwear_materials_missing": "Footwear materials missing",
     "fibre_percentages_not_100": "Percentages do not add up to 100%",
+    "material_unknown": "Material not in the list",
+    "qualifier_deprecated": "Old notation for sustainability",
     "workbook_invalid": "Not a readable Excel file",
     "workbook_unsafe": "Macros or external links",
     "workbook_sheet_missing": "Sheet not found",
@@ -294,9 +298,21 @@
     "styleHint": "Your own article (style) number. It identifies the article and cannot be changed later.",
     "styleLocked": "The article number identifies this article and cannot be changed.",
     "seasonHint": "As you use it, for example AW26 or NOS.",
-    "materialsHint": "Like on the label: “outer: 65% cotton, 35% polyamide; lining: 100% polyester”.",
-    "materialsInvalid": "We could not read “{{part}}”. Use a percentage and a material, like 100% cotton.",
     "materialsNot100": "The percentages of {{parts}} do not add up to 100%.",
+    "materialsEditorHint": "Per part, as on the label: the percentage, the material and, where it applies, whether the fibre is organic, recycled or regenerative.",
+    "materialPart": "Part",
+    "materialPercentage": "Percentage",
+    "materialName": "Material",
+    "materialQualifier": "Sustainability",
+    "materialQualifierHint": "tick all that apply",
+    "addFibre": "Add material",
+    "addPart": "Add part",
+    "removeFibre": "Remove material",
+    "removePart": "Remove part",
+    "materialsRowInvalid": "Choose a material on every line you use. A percentage is optional; where you give one, it is between 0 and 100.",
+    "variantIdHint": "Leave empty to use {{id}}. The ID stays the same for good; the EAN can be added or corrected later.",
+    "variantIdFixed": "Stays the same for good, also when the EAN changes.",
+    "variantIdTooLong": "At most 200 characters. Type a shorter ID.",
     "careHint": "Pick the symbols from the care label, in label order.",
     "careGroup": {
       "washing": "Washing",
@@ -373,7 +389,6 @@
     "delete": "Delete article",
     "deleteTitle": "Delete {{style}}?",
     "deleteBody": "This removes the article, its sizes and its images. Retailers' software will be told it is gone. This cannot be undone.",
-    "materialsFlags": "Add (recycled) or (organic) after a fibre where it applies: “100% polyester (recycled)”.",
     "animalOriginHint": "For example a leather patch, a fur trim or horn buttons. When there are, the label must say so.",
     "footwearHint": "Required on shoe labels: the material that makes up most of each part (at least 80%).",
     "certificationsHint": "Optional. Scheme and licence number, like “gots:CU 123456”; add (material) when only a material is certified.",
@@ -903,6 +918,10 @@
     "selfServiceHint": "So their developers can connect without asking you.",
     "languages": "Languages of your product texts",
     "languagesHint": "Retailers see your texts in their language when available, otherwise in English, otherwise in your main language.",
+    "otherLanguage": "Other language",
+    "otherLanguageHint": "A language code, also with script or region: de-CH, zh-Hant, es-419.",
+    "addLanguage": "Add language",
+    "languageTagInvalid": "Not a language code. Use for example de-CH, zh-Hant or es-419.",
     "defaultRights": "Standard usage rights",
     "defaultRightsHint": "For images whose data does not say otherwise.",
     "channels": "Where retailers may use images",
@@ -990,6 +1009,7 @@
     "filters": {
       "title": "Filters",
       "clear": "Clear filters",
+      "showResults": "Show results",
       "new": "New or changed",
       "anytime": "Any time",
       "lastDays_one": "Last {{count}} day",
@@ -999,7 +1019,8 @@
       "target_group": "For",
       "color": "Colour",
       "season": "Season",
-      "collection": "Collection"
+      "collection": "Collection",
+      "qualifier": "Sustainability"
     },
     "tile": {
       "colours_one": "{{count}} colour",
@@ -1229,8 +1250,6 @@
     },
     "fibre": {
       "cotton": "cotton",
-      "organic_cotton": "organic cotton",
-      "recycled_cotton": "recycled cotton",
       "linen": "linen",
       "hemp": "hemp",
       "silk": "silk",
@@ -1246,9 +1265,7 @@
       "cupro": "cupro",
       "acetate": "acetate",
       "polyester": "polyester",
-      "recycled_polyester": "recycled polyester",
       "polyamide": "polyamide",
-      "recycled_polyamide": "recycled polyamide",
       "elastane": "elastane",
       "acrylic": "acrylic",
       "polypropylene": "polypropylene",
@@ -1260,6 +1277,14 @@
       "rubber": "rubber",
       "metal": "metal",
       "other": "other fibres"
+    },
+    "qualifier": {
+      "organic": "organic",
+      "in_conversion": "in conversion",
+      "recycled": "recycled",
+      "pre_consumer": "pre-consumer",
+      "post_consumer": "post-consumer",
+      "regenerative": "regenerative"
     },
     "care": {
       "wash_95": "Wash at 95 °C",
@@ -1496,8 +1521,6 @@
   "article": {
     "label": "Label information",
     "composition": "Composition",
-    "recycled": "recycled",
-    "organic": "organic",
     "animalOrigin": "Contains non-textile parts of animal origin",
     "footwear": "Footwear materials",
     "footwearPart": {
@@ -1564,5 +1587,17 @@
       "why": "The percentages of this part do not add up to 100%. The composition is given as a share of the total fibre weight.",
       "law": "Regulation (EU) No 1007/2011, Art. 9 and 11"
     }
+  },
+  "demo": {
+    "banner": "Demo, fictional data",
+    "bannerNote": "Changes are undone automatically.",
+    "title": "Look around without an account",
+    "intro": "A fictional brand with test data. Choose how you want to look at it.",
+    "asRetailer": "View as retailer",
+    "asRetailerHint": "Search, EAN list, product pages, downloads",
+    "asBrand": "View as brand",
+    "asBrandHint": "Catalog, Excel import, access per retailer, statistics",
+    "refused": "This is not possible in the demo.",
+    "api": "Read-only API key for developers"
   }
 }

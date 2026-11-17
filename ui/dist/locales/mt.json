@@ -68,7 +68,8 @@
     "retailer": "Bejjiegħ",
     "itemSubtype": "Sottotip",
     "animalOrigin": "Partijiet mhux tessili ta’ oriġini mill-annimali",
-    "secondSize": "It-tieni daqs"
+    "secondSize": "It-tieni daqs",
+    "variantId": "ID tal-varjant"
   },
   "validate": {
     "required": "Jekk jogħġbok imla dan il-qasam.",
@@ -117,6 +118,7 @@
     "workbook_sheet_missing": "F’dan il-fajl Excel m’hemmx folja bl-isem Products (jew Assets).",
     "workbook_too_large": "Dan il-fajl Excel kbir wisq (mhux aktar minn 100,000 linja u 1,000 kolonna).",
     "unsafe_url": "Dan l-indirizz mhuwiex permess (jipponta lejn netwerk privat).",
+    "idempotency_key_reused": "Dan intbagħat diġà bl-istess ċavetta iżda b'kontenut ieħor. Ma nbidel xejn.",
     "csrf_failed": "Is-sessjoni tiegħek ġiet aġġornata. Erġa’ pprova.",
     "invalid_credentials": "L-indirizz tal-email jew il-password mhumiex korretti.",
     "account_blocked": "Dan il-kont huwa bblokkat. Jekk taħseb li dan huwa żball, ikkuntattja lill-brand.",
@@ -140,6 +142,8 @@
     "animal_origin_unknown": "Oriġini mill-annimali mhux iddikjarata",
     "footwear_materials_missing": "Materjali taż-żarbun neqsin",
     "fibre_percentages_not_100": "Il-perċentwali ma jammontawx għal 100%",
+    "material_unknown": "Il-materjal mhux fil-lista",
+    "qualifier_deprecated": "Notazzjoni qadima għas-sostenibbiltà",
     "workbook_invalid": "Il-fajl Excel ma jinqarax",
     "workbook_unsafe": "Macros jew links esterni",
     "workbook_sheet_missing": "Il-folja ma nstabitx",
@@ -303,9 +307,21 @@
     "styleHint": "In-numru tal-oġġett tiegħek. Jidentifika l-oġġett u ma jistax jinbidel aktar tard.",
     "styleLocked": "In-numru tal-oġġett jidentifika dan l-oġġett u ma jistax jinbidel.",
     "seasonHint": "Kif tużah int, pereżempju AW26 jew NOS.",
-    "materialsHint": "Bħal fuq it-tikketta: “outer: 65% cotton, 35% polyamide; lining: 100% polyester”.",
-    "materialsInvalid": "“{{part}}” ma setax jinqara. Agħti perċentwal u materjal, eż. 100% cotton.",
     "materialsNot100": "Il-perċentwali għal {{parts}} ma jammontawx għal 100%.",
+    "materialsEditorHint": "Għal kull parti, bħal fuq it-tikketta: il-perċentwal, il-materjal u, fejn japplika, jekk il-fibra hijiex organika, riċiklata jew riġenerattiva.",
+    "materialPart": "Parti",
+    "materialPercentage": "Perċentwal",
+    "materialName": "Materjal",
+    "materialQualifier": "Sostenibbiltà",
+    "materialQualifierHint": "immarka dak kollu li japplika",
+    "addFibre": "Żid materjal",
+    "addPart": "Żid parti",
+    "removeFibre": "Neħħi l-materjal",
+    "removePart": "Neħħi l-parti",
+    "materialsRowInvalid": "Agħżel materjal f'kull linja li tuża. Il-perċentwal mhux obbligatorju; jekk tagħtih, ikun bejn 0 u 100.",
+    "variantIdHint": "Ħallih vojt biex tuża {{id}}. L-ID jibqa' l-istess għal dejjem; l-EAN jista' jiżdied jew jiġi kkoreġut aktar tard.",
+    "variantIdFixed": "Jibqa' l-istess għal dejjem, anki meta jinbidel l-EAN.",
+    "variantIdTooLong": "Massimu ta' 200 karattru. Ikteb ID iqsar.",
     "careHint": "Agħżel is-simboli mit-tikketta tal-kura fl-ordni tat-tikketta.",
     "careGroup": {
       "washing": "Ħasil",
@@ -382,7 +398,6 @@
     "delete": "Ħassar l-oġġett",
     "deleteTitle": "Tħassar {{style}}?",
     "deleteBody": "L-oġġett, id-daqsijiet u r-ritratti tiegħu jitneħħew. Is-sistemi tal-bejjiegħa jsiru jafu li sparixxa. Dan ma jistax jitħassar lura.",
-    "materialsFlags": "Żid (recycled) jew (organic) wara fibra fejn japplika: “100% polyester (recycled)”.",
     "animalOriginHint": "Pereżempju biċċa ġilda, bordura tal-pil jew buttuni tal-qrun. Jekk hemm, it-tikketta trid tgħid hekk.",
     "footwearHint": "Obbligatorju fuq it-tikketta taż-żraben: il-materjal ewlieni ta’ kull parti (mill-inqas 80%).",
     "certificationsHint": "Mhux obbligatorju. L-iskema u n-numru tal-liċenzja, bħal “gots:CU 123456”; żid (material) meta materjal biss ikun iċċertifikat.",
@@ -942,6 +957,10 @@
     "selfServiceHint": "Biex l-iżviluppaturi tagħhom ikunu jistgħu jikkonnettjaw mingħajr l-approvazzjoni tiegħek.",
     "languages": "Lingwi tat-testi tal-prodotti",
     "languagesHint": "Il-bejjiegħa jaraw it-testi fil-lingwa tagħhom jekk jeżistu, inkella bl-Ingliż, inkella fil-lingwa ewlenija tiegħek.",
+    "otherLanguage": "Lingwa oħra",
+    "otherLanguageHint": "Kodiċi tal-lingwa, anki b'kitba jew reġjun: de-CH, zh-Hant, es-419.",
+    "addLanguage": "Żid lingwa",
+    "languageTagInvalid": "Dan mhux kodiċi tal-lingwa. Uża pereżempju de-CH, zh-Hant jew es-419.",
     "defaultRights": "Drittijiet tal-użu standard",
     "defaultRightsHint": "Għal ritratti li d-dettalji tagħhom ma jgħidux xort’oħra.",
     "channels": "Fejn il-bejjiegħa jistgħu jużaw ir-ritratti",
@@ -1044,6 +1063,7 @@
     "filters": {
       "title": "Filtri",
       "clear": "Neħħi l-filtri",
+      "showResults": "Uri r-riżultati",
       "new": "Ġdid jew mibdul",
       "anytime": "Kull meta",
       "lastDays_one": "L-aħħar jum",
@@ -1056,7 +1076,8 @@
       "target_group": "Għal min",
       "color": "Kulur",
       "season": "Staġun",
-      "collection": "Kollezzjoni"
+      "collection": "Kollezzjoni",
+      "qualifier": "Sostenibbiltà"
     },
     "tile": {
       "colours_one": "Kuluri: {{count}}",
@@ -1319,8 +1340,6 @@
     },
     "fibre": {
       "cotton": "qoton",
-      "organic_cotton": "qoton organiku",
-      "recycled_cotton": "qoton riċiklat",
       "linen": "għażel",
       "hemp": "qanneb",
       "silk": "ħarir",
@@ -1336,9 +1355,7 @@
       "cupro": "cupro",
       "acetate": "aċetat",
       "polyester": "poliester",
-      "recycled_polyester": "poliester riċiklat",
       "polyamide": "poliammid",
-      "recycled_polyamide": "poliammid riċiklat",
       "elastane": "elastan",
       "acrylic": "akriliku",
       "polypropylene": "polipropilen",
@@ -1350,6 +1367,14 @@
       "rubber": "gomma",
       "metal": "metall",
       "other": "fibri oħra"
+    },
+    "qualifier": {
+      "organic": "organiku",
+      "in_conversion": "f'konverżjoni",
+      "recycled": "riċiklat",
+      "pre_consumer": "qabel il-konsum",
+      "post_consumer": "wara l-konsum",
+      "regenerative": "riġenerattiv"
     },
     "care": {
       "wash_95": "Aħsel f’95 °C",
@@ -1586,8 +1611,6 @@
   "article": {
     "label": "Informazzjoni tat-tikketta",
     "composition": "Kompożizzjoni",
-    "recycled": "riċiklat",
-    "organic": "organiku",
     "animalOrigin": "Fih partijiet mhux tessili ta’ oriġini mill-annimali",
     "footwear": "Materjali taż-żarbun",
     "footwearPart": {
@@ -1654,5 +1677,17 @@
       "why": "Il-perċentwali ta’ din il-parti ma jammontawx għal 100%. Il-kompożizzjoni tingħata bħala sehem mill-piż totali tal-fibri.",
       "law": "Regolament (UE) Nru 1007/2011, Artikoli 9 u 11"
     }
+  },
+  "demo": {
+    "banner": "Demo, data fittizja",
+    "bannerNote": "It-tibdiliet jitħassru awtomatikament.",
+    "title": "Agħti ħarsa mingħajr kont",
+    "intro": "Brand fittizju b'data tat-test. Agħżel kif trid tarah.",
+    "asRetailer": "Ara bħala bejjiegħ",
+    "asRetailerHint": "Fittex, lista tal-EAN, paġni tal-prodotti, downloads",
+    "asBrand": "Ara bħala brand",
+    "asBrandHint": "Katalgu, importazzjoni minn Excel, aċċess għal kull bejjiegħ, statistika",
+    "refused": "Dan mhux possibbli fid-demo.",
+    "api": "Ċavetta API għall-qari biss għall-iżviluppaturi"
   }
 }

@@ -68,7 +68,8 @@
     "retailer": "Trgovec",
     "itemSubtype": "Vrsta",
     "animalOrigin": "Netekstilni deli živalskega izvora",
-    "secondSize": "Druga velikost"
+    "secondSize": "Druga velikost",
+    "variantId": "ID različice"
   },
   "validate": {
     "required": "Izpolnite to polje.",
@@ -117,6 +118,7 @@
     "workbook_sheet_missing": "V tej datoteki Excel ni lista z imenom Products (ali Assets).",
     "workbook_too_large": "Ta datoteka Excel je prevelika (največ 100.000 vrstic in 1.000 stolpcev).",
     "unsafe_url": "Ta naslov ni dovoljen (kaže v zasebno omrežje).",
+    "idempotency_key_reused": "To je bilo že poslano z istim ključem, a drugo vsebino. Nič ni bilo spremenjeno.",
     "csrf_failed": "Vaša seja je bila osvežena. Poskusite znova.",
     "invalid_credentials": "E-poštni naslov ali geslo ni pravilno.",
     "account_blocked": "Ta račun je blokiran. Če menite, da gre za napako, se obrnite na blagovno znamko.",
@@ -140,6 +142,8 @@
     "animal_origin_unknown": "Živalski izvor ni naveden",
     "footwear_materials_missing": "Manjkajo materiali obutve",
     "fibre_percentages_not_100": "Odstotki ne dajo skupaj 100 %",
+    "material_unknown": "Materiala ni na seznamu",
+    "qualifier_deprecated": "Star zapis trajnosti",
     "workbook_invalid": "Datoteke Excel ni mogoče prebrati",
     "workbook_unsafe": "Makri ali zunanje povezave",
     "workbook_sheet_missing": "Lista ni mogoče najti",
@@ -300,9 +304,21 @@
     "styleHint": "Vaša lastna številka artikla. Identificira artikel in je pozneje ni mogoče spremeniti.",
     "styleLocked": "Številka artikla identificira ta artikel in je ni mogoče spremeniti.",
     "seasonHint": "Tako, kot jo uporabljate, na primer AW26 ali NOS.",
-    "materialsHint": "Kot na etiketi: »outer: 65% cotton, 35% polyamide; lining: 100% polyester«.",
-    "materialsInvalid": "»{{part}}« ni bilo mogoče prebrati. Navedite odstotek in material, npr. 100% cotton.",
     "materialsNot100": "Odstotki za {{parts}} ne dajo skupaj 100 %.",
+    "materialsEditorHint": "Za vsak del, kot na etiketi: odstotek, material in po potrebi, ali je vlakno organsko, reciklirano ali regenerativno.",
+    "materialPart": "Del",
+    "materialPercentage": "Odstotek",
+    "materialName": "Material",
+    "materialQualifier": "Trajnost",
+    "materialQualifierHint": "označite vse, kar velja",
+    "addFibre": "Dodaj material",
+    "addPart": "Dodaj del",
+    "removeFibre": "Odstrani material",
+    "removePart": "Odstrani del",
+    "materialsRowInvalid": "V vsaki uporabljeni vrstici izberite material. Odstotek ni obvezen; če ga navedete, je med 0 in 100.",
+    "variantIdHint": "Pustite prazno za {{id}}. ID ostane vedno enak; EAN lahko dodate ali popravite pozneje.",
+    "variantIdFixed": "Ostane vedno enak, tudi ko se EAN spremeni.",
+    "variantIdTooLong": "Največ 200 znakov. Vnesite krajši ID.",
     "careHint": "Izberite simbole z etikete za nego v vrstnem redu na etiketi.",
     "careGroup": {
       "washing": "Pranje",
@@ -379,7 +395,6 @@
     "delete": "Izbriši artikel",
     "deleteTitle": "Izbrišem {{style}}?",
     "deleteBody": "Artikel, njegove velikosti in fotografije bodo odstranjeni. Sistemi trgovcev bodo izvedeli, da je izginil. Tega ni mogoče razveljaviti.",
-    "materialsFlags": "Kjer velja, za vlakno dodajte (recycled) ali (organic): »100% polyester (recycled)«.",
     "animalOriginHint": "Na primer usnjen našitek, krznena obroba ali gumbi iz roževine. Če so, mora biti to navedeno na etiketi.",
     "footwearHint": "Obvezno na etiketi obutve: material, iz katerega je večina posameznega dela (vsaj 80 %).",
     "certificationsHint": "Neobvezno. Shema in številka licence, npr. »gots:CU 123456«; dodajte (material), če je certificiran samo material.",
@@ -929,6 +944,10 @@
     "selfServiceHint": "Da se lahko njihovi razvijalci povežejo brez vaše odobritve.",
     "languages": "Jeziki besedil o izdelkih",
     "languagesHint": "Trgovci vidijo besedila v svojem jeziku, če obstajajo, sicer v angleščini, sicer v vašem glavnem jeziku.",
+    "otherLanguage": "Drug jezik",
+    "otherLanguageHint": "Koda jezika, tudi s pisavo ali regijo: de-CH, zh-Hant, es-419.",
+    "addLanguage": "Dodaj jezik",
+    "languageTagInvalid": "To ni koda jezika. Uporabite na primer de-CH, zh-Hant ali es-419.",
     "defaultRights": "Privzete pravice uporabe",
     "defaultRightsHint": "Za fotografije, pri katerih podatki ne pravijo drugače.",
     "channels": "Kje smejo trgovci uporabljati fotografije",
@@ -1026,6 +1045,7 @@
     "filters": {
       "title": "Filtri",
       "clear": "Počisti filtre",
+      "showResults": "Prikaži rezultate",
       "new": "Novo ali spremenjeno",
       "anytime": "Kadar koli",
       "lastDays_one": "Zadnji dan",
@@ -1037,7 +1057,8 @@
       "target_group": "Za koga",
       "color": "Barva",
       "season": "Sezona",
-      "collection": "Kolekcija"
+      "collection": "Kolekcija",
+      "qualifier": "Trajnost"
     },
     "tile": {
       "colours_one": "{{count}} barva",
@@ -1289,8 +1310,6 @@
     },
     "fibre": {
       "cotton": "bombaž",
-      "organic_cotton": "organski bombaž",
-      "recycled_cotton": "reciklirani bombaž",
       "linen": "lan",
       "hemp": "konoplja",
       "silk": "svila",
@@ -1306,9 +1325,7 @@
       "cupro": "kupro",
       "acetate": "acetat",
       "polyester": "poliester",
-      "recycled_polyester": "reciklirani poliester",
       "polyamide": "poliamid",
-      "recycled_polyamide": "reciklirani poliamid",
       "elastane": "elastan",
       "acrylic": "akril",
       "polypropylene": "polipropilen",
@@ -1320,6 +1337,14 @@
       "rubber": "guma",
       "metal": "kovina",
       "other": "druga vlakna"
+    },
+    "qualifier": {
+      "organic": "organsko",
+      "in_conversion": "v preusmeritvi",
+      "recycled": "reciklirano",
+      "pre_consumer": "predpotrošniško",
+      "post_consumer": "popotrošniško",
+      "regenerative": "regenerativno"
     },
     "care": {
       "wash_95": "Pranje pri 95 °C",
@@ -1556,8 +1581,6 @@
   "article": {
     "label": "Podatki na etiketi",
     "composition": "Sestava",
-    "recycled": "reciklirano",
-    "organic": "organsko",
     "animalOrigin": "Vsebuje netekstilne dele živalskega izvora",
     "footwear": "Materiali obutve",
     "footwearPart": {
@@ -1624,5 +1647,17 @@
       "why": "Odstotki tega dela ne dajo skupaj 100 %. Sestava se navaja kot delež skupne mase vlaken.",
       "law": "Uredba (EU) št. 1007/2011, člena 9 in 11"
     }
+  },
+  "demo": {
+    "banner": "Demo, izmišljeni podatki",
+    "bannerNote": "Spremembe se samodejno razveljavijo.",
+    "title": "Oglejte si brez računa",
+    "intro": "Izmišljena blagovna znamka s preizkusnimi podatki. Izberite, kako si jo želite ogledati.",
+    "asRetailer": "Poglej kot trgovec",
+    "asRetailerHint": "Iskanje, seznam EAN, strani izdelkov, prenosi",
+    "asBrand": "Poglej kot blagovna znamka",
+    "asBrandHint": "Katalog, uvoz iz Excela, dostop po trgovcih, statistika",
+    "refused": "V predstavitvi to ni mogoče.",
+    "api": "API ključ samo za branje za razvijalce"
   }
 }

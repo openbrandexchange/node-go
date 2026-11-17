@@ -68,7 +68,8 @@
     "retailer": "Trgovac",
     "itemSubtype": "Podvrsta",
     "animalOrigin": "Netekstilni dijelovi životinjskog podrijetla",
-    "secondSize": "Druga veličina"
+    "secondSize": "Druga veličina",
+    "variantId": "ID varijante"
   },
   "validate": {
     "required": "Ispunite ovo polje.",
@@ -117,6 +118,7 @@
     "workbook_sheet_missing": "U ovoj Excel datoteci nema lista naziva Products (ili Assets).",
     "workbook_too_large": "Ova Excel datoteka je prevelika (najviše 100.000 redaka i 1.000 stupaca).",
     "unsafe_url": "Ova adresa nije dopuštena (upućuje na privatnu mrežu).",
+    "idempotency_key_reused": "Ovo je već poslano s istim ključem, ali drugim sadržajem. Ništa nije promijenjeno.",
     "csrf_failed": "Vaša sesija je osvježena. Pokušajte ponovno.",
     "invalid_credentials": "Adresa e-pošte ili lozinka nisu točni.",
     "account_blocked": "Ovaj račun je blokiran. Ako mislite da je riječ o pogrešci, obratite se marki.",
@@ -140,6 +142,8 @@
     "animal_origin_unknown": "Životinjsko podrijetlo nije navedeno",
     "footwear_materials_missing": "Nedostaju materijali obuće",
     "fibre_percentages_not_100": "Postoci ne daju ukupno 100 %",
+    "material_unknown": "Materijal nije na popisu",
+    "qualifier_deprecated": "Stari zapis održivosti",
     "workbook_invalid": "Excel datoteka nije čitljiva",
     "workbook_unsafe": "Makronaredbe ili vanjske veze",
     "workbook_sheet_missing": "List nije pronađen",
@@ -297,9 +301,21 @@
     "styleHint": "Vaš vlastiti broj artikla. Identificira artikl i kasnije se ne može promijeniti.",
     "styleLocked": "Broj artikla identificira ovaj artikl i ne može se promijeniti.",
     "seasonHint": "Onako kako je koristite, npr. AW26 ili NOS.",
-    "materialsHint": "Kao na etiketi: „outer: 65% cotton, 35% polyamide; lining: 100% polyester”.",
-    "materialsInvalid": "„{{part}}” nije moguće pročitati. Navedite postotak i materijal, npr. 100% cotton.",
     "materialsNot100": "Postoci za {{parts}} ne daju ukupno 100 %.",
+    "materialsEditorHint": "Po dijelu, kao na etiketi: postotak, materijal i, ako je primjenjivo, je li vlakno organsko, reciklirano ili regenerativno.",
+    "materialPart": "Dio",
+    "materialPercentage": "Postotak",
+    "materialName": "Materijal",
+    "materialQualifier": "Održivost",
+    "materialQualifierHint": "označite sve što vrijedi",
+    "addFibre": "Dodaj materijal",
+    "addPart": "Dodaj dio",
+    "removeFibre": "Ukloni materijal",
+    "removePart": "Ukloni dio",
+    "materialsRowInvalid": "Odaberite materijal u svakom retku koji koristite. Postotak nije obvezan; ako ga navedete, između je 0 i 100.",
+    "variantIdHint": "Ostavite prazno za {{id}}. ID ostaje zauvijek isti; EAN se može dodati ili ispraviti kasnije.",
+    "variantIdFixed": "Ostaje zauvijek isti, i kad se EAN promijeni.",
+    "variantIdTooLong": "Najviše 200 znakova. Upišite kraći ID.",
     "careHint": "Odaberite simbole s etikete za održavanje redoslijedom s etikete.",
     "careGroup": {
       "washing": "Pranje",
@@ -376,7 +392,6 @@
     "delete": "Izbriši artikl",
     "deleteTitle": "Izbrisati {{style}}?",
     "deleteBody": "Artikl, njegove veličine i fotografije bit će uklonjeni. Sustavi trgovaca saznat će da je nestao. To se ne može poništiti.",
-    "materialsFlags": "Dodajte (recycled) ili (organic) iza vlakna kad je to slučaj: „100% polyester (recycled)”.",
     "animalOriginHint": "Na primjer kožna zakrpa, obrub od krzna ili gumbi od roga. Ako ih ima, to mora pisati na etiketi.",
     "footwearHint": "Obavezno na etiketi obuće: materijal od kojeg je izrađen veći dio svakog dijela (najmanje 80 %).",
     "certificationsHint": "Neobavezno. Shema i broj licence, npr. „gots:CU 123456”; dodajte (material) ako je certificiran samo materijal.",
@@ -916,6 +931,10 @@
     "selfServiceHint": "Kako bi se njihovi programeri mogli povezati bez vašeg odobrenja.",
     "languages": "Jezici tekstova o proizvodima",
     "languagesHint": "Trgovci vide tekstove na svom jeziku ako postoje, inače na engleskom, inače na vašem glavnom jeziku.",
+    "otherLanguage": "Drugi jezik",
+    "otherLanguageHint": "Oznaka jezika, i sa pismom ili regijom: de-CH, zh-Hant, es-419.",
+    "addLanguage": "Dodaj jezik",
+    "languageTagInvalid": "To nije oznaka jezika. Koristite na primjer de-CH, zh-Hant ili es-419.",
     "defaultRights": "Standardna prava korištenja",
     "defaultRightsHint": "Za fotografije za koje podaci ne navode drukčije.",
     "channels": "Gdje trgovci smiju koristiti fotografije",
@@ -1008,6 +1027,7 @@
     "filters": {
       "title": "Filtri",
       "clear": "Očisti filtre",
+      "showResults": "Prikaži rezultate",
       "new": "Novo ili promijenjeno",
       "anytime": "Bilo kada",
       "lastDays_one": "Posljednji dan",
@@ -1018,7 +1038,8 @@
       "target_group": "Za koga",
       "color": "Boja",
       "season": "Sezona",
-      "collection": "Kolekcija"
+      "collection": "Kolekcija",
+      "qualifier": "Održivost"
     },
     "tile": {
       "colours_one": "{{count}} boja",
@@ -1259,8 +1280,6 @@
     },
     "fibre": {
       "cotton": "pamuk",
-      "organic_cotton": "organski pamuk",
-      "recycled_cotton": "reciklirani pamuk",
       "linen": "lan",
       "hemp": "konoplja",
       "silk": "svila",
@@ -1276,9 +1295,7 @@
       "cupro": "kupro",
       "acetate": "acetat",
       "polyester": "poliester",
-      "recycled_polyester": "reciklirani poliester",
       "polyamide": "poliamid",
-      "recycled_polyamide": "reciklirani poliamid",
       "elastane": "elastan",
       "acrylic": "akril",
       "polypropylene": "polipropilen",
@@ -1290,6 +1307,14 @@
       "rubber": "guma",
       "metal": "metal",
       "other": "ostala vlakna"
+    },
+    "qualifier": {
+      "organic": "organsko",
+      "in_conversion": "u prijelaznom razdoblju",
+      "recycled": "reciklirano",
+      "pre_consumer": "predpotrošačko",
+      "post_consumer": "postpotrošačko",
+      "regenerative": "regenerativno"
     },
     "care": {
       "wash_95": "Pranje na 95 °C",
@@ -1526,8 +1551,6 @@
   "article": {
     "label": "Podaci za etiketu",
     "composition": "Sastav",
-    "recycled": "reciklirano",
-    "organic": "organsko",
     "animalOrigin": "Sadrži netekstilne dijelove životinjskog podrijetla",
     "footwear": "Materijali obuće",
     "footwearPart": {
@@ -1594,5 +1617,17 @@
       "why": "Postoci ovog dijela ne daju ukupno 100 %. Sastav se navodi kao udio u ukupnoj masi vlakana.",
       "law": "Uredba (EU) br. 1007/2011, članci 9. i 11."
     }
+  },
+  "demo": {
+    "banner": "Demo, izmišljeni podaci",
+    "bannerNote": "Promjene se automatski poništavaju.",
+    "title": "Razgledajte bez računa",
+    "intro": "Izmišljena marka s testnim podacima. Odaberite kako je želite pogledati.",
+    "asRetailer": "Pogledaj kao trgovac",
+    "asRetailerHint": "Pretraživanje, popis EAN-ova, stranice proizvoda, preuzimanja",
+    "asBrand": "Pogledaj kao marka",
+    "asBrandHint": "Katalog, uvoz iz Excela, pristup po trgovcu, statistika",
+    "refused": "To nije moguće u demo verziji.",
+    "api": "API ključ samo za čitanje za programere"
   }
 }

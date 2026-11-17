@@ -68,7 +68,8 @@
     "retailer": "Miondíoltóir",
     "itemSubtype": "Fochineál",
     "animalOrigin": "Codanna neamhtheicstíle de bhunadh ainmhíoch",
-    "secondSize": "An dara méid"
+    "secondSize": "An dara méid",
+    "variantId": "Aitheantas an leagain"
   },
   "validate": {
     "required": "Líon isteach an réimse seo, le do thoil.",
@@ -117,6 +118,7 @@
     "workbook_sheet_missing": "Níl aon bhileog darb ainm Products (nó Assets) sa chomhad Excel seo.",
     "workbook_too_large": "Tá an comhad Excel seo rómhór (100,000 líne agus 1,000 colún ar a mhéad).",
     "unsafe_url": "Ní cheadaítear an seoladh seo (díríonn sé ar líonra príobháideach).",
+    "idempotency_key_reused": "Seoladh é seo cheana leis an eochair chéanna ach le hábhar eile. Níor athraíodh aon rud.",
     "csrf_failed": "Athnuadh do sheisiún. Bain triail eile as.",
     "invalid_credentials": "Níl an seoladh ríomhphoist nó an pasfhocal ceart.",
     "account_blocked": "Tá an cuntas seo blocáilte. Má cheapann tú gur botún é seo, déan teagmháil leis an mbranda.",
@@ -140,6 +142,8 @@
     "animal_origin_unknown": "Bunadh ainmhíoch gan lua",
     "footwear_materials_missing": "Ábhair an choisbhirt in easnamh",
     "fibre_percentages_not_100": "Ní ionann na céatadáin agus 100%",
+    "material_unknown": "Níl an t-ábhar ar an liosta",
+    "qualifier_deprecated": "Seannodaireacht don inbhuanaitheacht",
     "workbook_invalid": "Ní féidir an comhad Excel a léamh",
     "workbook_unsafe": "Macraí nó naisc sheachtracha",
     "workbook_sheet_missing": "Níor aimsíodh an bhileog",
@@ -303,9 +307,21 @@
     "styleHint": "D’uimhir earra féin. Aithníonn sí an t-earra agus ní féidir í a athrú ar ball.",
     "styleLocked": "Aithníonn an uimhir earra an t-earra seo agus ní féidir í a athrú.",
     "seasonHint": "Mar a úsáideann tú é, mar shampla AW26 nó NOS.",
-    "materialsHint": "Mar atá ar an lipéad: “outer: 65% cotton, 35% polyamide; lining: 100% polyester”.",
-    "materialsInvalid": "Níorbh fhéidir “{{part}}” a léamh. Tabhair céatadán agus ábhar, m.sh. 100% cotton.",
     "materialsNot100": "Ní ionann na céatadáin do {{parts}} agus 100%.",
+    "materialsEditorHint": "In aghaidh na coda, mar atá ar an lipéad: an céatadán, an t-ábhar agus, más ábhartha, an snáithín orgánach, athchúrsáilte nó athghiniúnach.",
+    "materialPart": "Cuid",
+    "materialPercentage": "Céatadán",
+    "materialName": "Ábhar",
+    "materialQualifier": "Inbhuanaitheacht",
+    "materialQualifierHint": "roghnaigh gach ceann a bhaineann leis",
+    "addFibre": "Cuir ábhar leis",
+    "addPart": "Cuir cuid leis",
+    "removeFibre": "Bain an t-ábhar",
+    "removePart": "Bain an chuid",
+    "materialsRowInvalid": "Roghnaigh ábhar ar gach líne a úsáideann tú. Is roghnach an céatadán; má thugann tú ceann, bíonn sé idir 0 agus 100.",
+    "variantIdHint": "Fág folamh chun {{id}} a úsáid. Fanann an t-aitheantas mar an gcéanna go deo; is féidir an EAN a chur leis nó a cheartú níos déanaí.",
+    "variantIdFixed": "Fanann sé mar an gcéanna go deo, fiú nuair a athraíonn an EAN.",
+    "variantIdTooLong": "200 carachtar ar a mhéad. Clóscríobh aitheantas níos giorra.",
     "careHint": "Roghnaigh na siombailí ón lipéad cúraim san ord atá ar an lipéad.",
     "careGroup": {
       "washing": "Níochán",
@@ -382,7 +398,6 @@
     "delete": "Scrios an t-earra",
     "deleteTitle": "{{style}} a scriosadh?",
     "deleteBody": "Bainfear an t-earra, a mhéideanna agus a ghrianghraif. Cuirfear in iúl do chórais na miondíoltóirí go bhfuil sé imithe. Ní féidir é seo a chealú.",
-    "materialsFlags": "Cuir (recycled) nó (organic) i ndiaidh snáithín nuair is cuí: “100% polyester (recycled)”.",
     "animalOriginHint": "Mar shampla paiste leathair, imeall fionnaidh nó cnaipí adhairce. Má tá a leithéid ann, caithfidh an lipéad é sin a lua.",
     "footwearHint": "Riachtanach ar lipéid coisbhirt: an t-ábhar as a ndéantar an chuid is mó de gach cuid (80% ar a laghad).",
     "certificationsHint": "Roghnach. Scéim agus uimhir cheadúnais, mar shampla “gots:CU 123456”; cuir (material) leis nuair nach bhfuil ach ábhar amháin deimhnithe.",
@@ -942,6 +957,10 @@
     "selfServiceHint": "Ionas gur féidir lena bhforbróirí ceangal gan do cheadú.",
     "languages": "Teangacha na dtéacsanna táirge",
     "languagesHint": "Feiceann miondíoltóirí téacsanna ina dteanga féin má tá siad ann, seachas sin i mBéarla, seachas sin i do phríomhtheanga.",
+    "otherLanguage": "Teanga eile",
+    "otherLanguageHint": "Cód teanga, le script nó réigiún freisin: de-CH, zh-Hant, es-419.",
+    "addLanguage": "Cuir teanga leis",
+    "languageTagInvalid": "Ní cód teanga é seo. Úsáid mar shampla de-CH, zh-Hant nó es-419.",
     "defaultRights": "Gnáthchearta úsáide",
     "defaultRightsHint": "Do ghrianghraif nach luann a sonraí a mhalairt.",
     "channels": "Cá háit ar féidir le miondíoltóirí na grianghraif a úsáid",
@@ -1044,6 +1063,7 @@
     "filters": {
       "title": "Scagairí",
       "clear": "Glan na scagairí",
+      "showResults": "Taispeáin na torthaí",
       "new": "Nua nó athraithe",
       "anytime": "Am ar bith",
       "lastDays_one": "An lá deireanach",
@@ -1056,7 +1076,8 @@
       "target_group": "Do ché",
       "color": "Dath",
       "season": "Séasúr",
-      "collection": "Bailiúchán"
+      "collection": "Bailiúchán",
+      "qualifier": "Inbhuanaitheacht"
     },
     "tile": {
       "colours_one": "Dathanna: {{count}}",
@@ -1319,8 +1340,6 @@
     },
     "fibre": {
       "cotton": "cadás",
-      "organic_cotton": "cadás orgánach",
-      "recycled_cotton": "cadás athchúrsáilte",
       "linen": "líon",
       "hemp": "cnáib",
       "silk": "síoda",
@@ -1336,9 +1355,7 @@
       "cupro": "cupro",
       "acetate": "aicéatáit",
       "polyester": "poileistear",
-      "recycled_polyester": "poileistear athchúrsáilte",
       "polyamide": "polaimíd",
-      "recycled_polyamide": "polaimíd athchúrsáilte",
       "elastane": "leaisteán",
       "acrylic": "aicrileach",
       "polypropylene": "polapróipiléin",
@@ -1350,6 +1367,14 @@
       "rubber": "rubar",
       "metal": "miotal",
       "other": "snáithíní eile"
+    },
+    "qualifier": {
+      "organic": "orgánach",
+      "in_conversion": "faoi thiontú",
+      "recycled": "athchúrsáilte",
+      "pre_consumer": "réamhthomhaltóra",
+      "post_consumer": "iarthomhaltóra",
+      "regenerative": "athghiniúnach"
     },
     "care": {
       "wash_95": "Nigh ag 95 °C",
@@ -1586,8 +1611,6 @@
   "article": {
     "label": "Faisnéis lipéid",
     "composition": "Comhdhéanamh",
-    "recycled": "athchúrsáilte",
-    "organic": "orgánach",
     "animalOrigin": "Tá codanna neamhtheicstíle de bhunadh ainmhíoch ann",
     "footwear": "Ábhair an choisbhirt",
     "footwearPart": {
@@ -1654,5 +1677,17 @@
       "why": "Ní ionann céatadáin na coda seo agus 100%. Tugtar an comhdhéanamh mar chion de mheáchan iomlán na snáithíní.",
       "law": "Rialachán (AE) Uimh. 1007/2011, Airteagail 9 agus 11"
     }
+  },
+  "demo": {
+    "banner": "Taispeántas, sonraí bréige",
+    "bannerNote": "Cealaítear athruithe go huathoibríoch.",
+    "title": "Breathnaigh thart gan chuntas",
+    "intro": "Branda bréige le sonraí tástála. Roghnaigh conas is mian leat breathnú air.",
+    "asRetailer": "Féach mar mhiondíoltóir",
+    "asRetailerHint": "Cuardach, liosta EAN, leathanaigh táirge, íoslódálacha",
+    "asBrand": "Féach mar bhranda",
+    "asBrandHint": "Catalóg, iompórtáil Excel, rochtain de réir miondíoltóra, staitisticí",
+    "refused": "Ní féidir é seo a dhéanamh sa taispeántas.",
+    "api": "Eochair API inléite amháin d'fhorbróirí"
   }
 }

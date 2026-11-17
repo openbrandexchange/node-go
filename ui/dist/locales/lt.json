@@ -68,7 +68,8 @@
     "retailer": "Prekybininkas",
     "itemSubtype": "Rūšis",
     "animalOrigin": "Netekstilinės gyvūninės kilmės dalys",
-    "secondSize": "Antras dydis"
+    "secondSize": "Antras dydis",
+    "variantId": "Varianto ID"
   },
   "validate": {
     "required": "Užpildykite šį lauką.",
@@ -117,6 +118,7 @@
     "workbook_sheet_missing": "Šiame Excel faile nėra lapo pavadinimu Products (arba Assets).",
     "workbook_too_large": "Šis Excel failas per didelis (daugiausia 100 000 eilučių ir 1 000 stulpelių).",
     "unsafe_url": "Šis adresas neleidžiamas (nukreipia į privatų tinklą).",
+    "idempotency_key_reused": "Tai jau buvo išsiųsta su tuo pačiu raktu, bet kitu turiniu. Niekas nepakeista.",
     "csrf_failed": "Jūsų sesija atnaujinta. Bandykite dar kartą.",
     "invalid_credentials": "Neteisingas el. pašto adresas arba slaptažodis.",
     "account_blocked": "Ši paskyra užblokuota. Jei manote, kad tai klaida, susisiekite su prekės ženklu.",
@@ -140,6 +142,8 @@
     "animal_origin_unknown": "Gyvūninė kilmė nenurodyta",
     "footwear_materials_missing": "Trūksta avalynės medžiagų",
     "fibre_percentages_not_100": "Procentai nesudaro 100 %",
+    "material_unknown": "Medžiagos nėra sąraše",
+    "qualifier_deprecated": "Senas tvarumo užrašymas",
     "workbook_invalid": "Excel failo neįmanoma perskaityti",
     "workbook_unsafe": "Makrokomandos arba išorinės nuorodos",
     "workbook_sheet_missing": "Lapas nerastas",
@@ -300,9 +304,21 @@
     "styleHint": "Jūsų prekės numeris. Jis identifikuoja prekę ir vėliau jo pakeisti negalima.",
     "styleLocked": "Prekės numeris identifikuoja šią prekę ir jo pakeisti negalima.",
     "seasonHint": "Taip, kaip naudojate, pvz., AW26 arba NOS.",
-    "materialsHint": "Kaip etiketėje: „outer: 65% cotton, 35% polyamide; lining: 100% polyester“.",
-    "materialsInvalid": "Nepavyko perskaityti „{{part}}“. Nurodykite procentą ir medžiagą, pvz., 100% cotton.",
     "materialsNot100": "Procentai daliai {{parts}} nesudaro 100 %.",
+    "materialsEditorHint": "Kiekvienai daliai kaip etiketėje: procentas, medžiaga ir, jei taikoma, ar pluoštas ekologiškas, perdirbtas ar regeneratyvus.",
+    "materialPart": "Dalis",
+    "materialPercentage": "Procentas",
+    "materialName": "Medžiaga",
+    "materialQualifier": "Tvarumas",
+    "materialQualifierHint": "pažymėkite visus tinkamus",
+    "addFibre": "Pridėti medžiagą",
+    "addPart": "Pridėti dalį",
+    "removeFibre": "Pašalinti medžiagą",
+    "removePart": "Pašalinti dalį",
+    "materialsRowInvalid": "Kiekvienoje naudojamoje eilutėje pasirinkite medžiagą. Procentas neprivalomas; jei jį nurodote, jis yra nuo 0 iki 100.",
+    "variantIdHint": "Palikite tuščią, kad būtų naudojamas {{id}}. ID visada lieka toks pat; EAN galima pridėti ar pataisyti vėliau.",
+    "variantIdFixed": "Visada lieka toks pat, net kai EAN pasikeičia.",
+    "variantIdTooLong": "Ne daugiau kaip 200 simbolių. Įveskite trumpesnį ID.",
     "careHint": "Pasirinkite priežiūros etiketės simbolius etiketės tvarka.",
     "careGroup": {
       "washing": "Skalbimas",
@@ -379,7 +395,6 @@
     "delete": "Ištrinti prekę",
     "deleteTitle": "Ištrinti {{style}}?",
     "deleteBody": "Prekė, jos dydžiai ir nuotraukos bus pašalinti. Prekybininkų sistemos sužinos, kad ji dingo. To atšaukti negalima.",
-    "materialsFlags": "Jei taikoma, po pluošto pridėkite (recycled) arba (organic): „100% polyester (recycled)“.",
     "animalOriginHint": "Pavyzdžiui, odinis antsiuvas, kailio apvadas ar raginės sagos. Jei tokių yra, tai turi būti nurodyta etiketėje.",
     "footwearHint": "Privaloma avalynės etiketėse: kiekvienos dalies pagrindinė medžiaga (ne mažiau kaip 80 %).",
     "certificationsHint": "Neprivaloma. Schema ir licencijos numeris, pvz., „gots:CU 123456“; pridėkite (material), jei sertifikuota tik medžiaga.",
@@ -929,6 +944,10 @@
     "selfServiceHint": "Kad jų programuotojai galėtų prisijungti be jūsų patvirtinimo.",
     "languages": "Produktų tekstų kalbos",
     "languagesHint": "Prekybininkai mato tekstus savo kalba, jei jie yra, kitu atveju angliškai, kitu atveju jūsų pagrindine kalba.",
+    "otherLanguage": "Kita kalba",
+    "otherLanguageHint": "Kalbos kodas, taip pat su raštu ar regionu: de-CH, zh-Hant, es-419.",
+    "addLanguage": "Pridėti kalbą",
+    "languageTagInvalid": "Tai ne kalbos kodas. Naudokite, pavyzdžiui, de-CH, zh-Hant arba es-419.",
     "defaultRights": "Standartinės naudojimo teisės",
     "defaultRightsHint": "Nuotraukoms, kurių duomenys nenurodo kitaip.",
     "channels": "Kur prekybininkai gali naudoti nuotraukas",
@@ -1026,6 +1045,7 @@
     "filters": {
       "title": "Filtrai",
       "clear": "Išvalyti filtrus",
+      "showResults": "Rodyti rezultatus",
       "new": "Nauja arba pakeista",
       "anytime": "Bet kada",
       "lastDays_one": "Paskutinė diena",
@@ -1037,7 +1057,8 @@
       "target_group": "Kam",
       "color": "Spalva",
       "season": "Sezonas",
-      "collection": "Kolekcija"
+      "collection": "Kolekcija",
+      "qualifier": "Tvarumas"
     },
     "tile": {
       "colours_one": "{{count}} spalva",
@@ -1289,8 +1310,6 @@
     },
     "fibre": {
       "cotton": "medvilnė",
-      "organic_cotton": "ekologiška medvilnė",
-      "recycled_cotton": "perdirbta medvilnė",
       "linen": "linas",
       "hemp": "kanapės",
       "silk": "šilkas",
@@ -1306,9 +1325,7 @@
       "cupro": "kupro",
       "acetate": "acetatas",
       "polyester": "poliesteris",
-      "recycled_polyester": "perdirbtas poliesteris",
       "polyamide": "poliamidas",
-      "recycled_polyamide": "perdirbtas poliamidas",
       "elastane": "elastanas",
       "acrylic": "akrilas",
       "polypropylene": "polipropilenas",
@@ -1320,6 +1337,14 @@
       "rubber": "guma",
       "metal": "metalas",
       "other": "kiti pluoštai"
+    },
+    "qualifier": {
+      "organic": "ekologiška",
+      "in_conversion": "pereinamojo laikotarpio",
+      "recycled": "perdirbta",
+      "pre_consumer": "iki vartojimo",
+      "post_consumer": "po vartojimo",
+      "regenerative": "regeneratyvi"
     },
     "care": {
       "wash_95": "Skalbti 95 °C",
@@ -1556,8 +1581,6 @@
   "article": {
     "label": "Etiketės informacija",
     "composition": "Sudėtis",
-    "recycled": "perdirbta",
-    "organic": "ekologiška",
     "animalOrigin": "Sudėtyje yra netekstilinių gyvūninės kilmės dalių",
     "footwear": "Avalynės medžiagos",
     "footwearPart": {
@@ -1624,5 +1647,17 @@
       "why": "Šios dalies procentai nesudaro 100 %. Sudėtis nurodoma kaip bendro pluoštų svorio dalis.",
       "law": "Reglamentas (ES) Nr. 1007/2011, 9 ir 11 straipsniai"
     }
+  },
+  "demo": {
+    "banner": "Demonstracinė versija, išgalvoti duomenys",
+    "bannerNote": "Pakeitimai atšaukiami automatiškai.",
+    "title": "Apsižvalgykite be paskyros",
+    "intro": "Išgalvotas prekės ženklas su bandomaisiais duomenimis. Pasirinkite, kaip norite jį peržiūrėti.",
+    "asRetailer": "Žiūrėti kaip prekybininkas",
+    "asRetailerHint": "Paieška, EAN sąrašas, produktų puslapiai, atsisiuntimai",
+    "asBrand": "Žiūrėti kaip prekės ženklas",
+    "asBrandHint": "Katalogas, Excel importas, prieiga pagal prekybininką, statistika",
+    "refused": "Demonstracinėje versijoje to padaryti negalima.",
+    "api": "Tik skaitymo API raktas kūrėjams"
   }
 }

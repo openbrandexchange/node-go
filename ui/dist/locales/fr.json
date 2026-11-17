@@ -68,7 +68,8 @@
     "retailer": "Revendeur",
     "itemSubtype": "Modèle",
     "animalOrigin": "Parties non textiles d'origine animale",
-    "secondSize": "Deuxième taille"
+    "secondSize": "Deuxième taille",
+    "variantId": "ID de variante"
   },
   "validate": {
     "required": "Veuillez remplir ce champ.",
@@ -117,6 +118,7 @@
     "workbook_sheet_missing": "Ce fichier Excel n'a pas de feuille nommée Products (ou Assets).",
     "workbook_too_large": "Ce fichier Excel est trop volumineux (100 000 lignes et 1 000 colonnes au maximum).",
     "unsafe_url": "Cette adresse n'est pas autorisée (elle pointe vers un réseau privé).",
+    "idempotency_key_reused": "Cet envoi a déjà été fait avec la même clé mais un autre contenu. Rien n'a été modifié.",
     "csrf_failed": "Votre session a été actualisée. Veuillez réessayer.",
     "invalid_credentials": "L'adresse e-mail ou le mot de passe est incorrect.",
     "account_blocked": "Ce compte a été bloqué. Contactez la marque si vous pensez qu'il s'agit d'une erreur.",
@@ -140,6 +142,8 @@
     "animal_origin_unknown": "Origine animale non indiquée",
     "footwear_materials_missing": "Matières de la chaussure manquantes",
     "fibre_percentages_not_100": "Les pourcentages ne font pas 100 %",
+    "material_unknown": "Matière absente de la liste",
+    "qualifier_deprecated": "Ancienne notation de durabilité",
     "workbook_invalid": "Fichier Excel illisible",
     "workbook_unsafe": "Macros ou liens externes",
     "workbook_sheet_missing": "Feuille introuvable",
@@ -297,9 +301,21 @@
     "styleHint": "Votre propre référence article. Elle identifie l'article et ne pourra plus être modifiée.",
     "styleLocked": "La référence identifie cet article et ne peut pas être modifiée.",
     "seasonHint": "Comme vous l'utilisez, par exemple AW26 ou NOS.",
-    "materialsHint": "Comme sur l'étiquette : « outer: 65% cotton, 35% polyamide; lining: 100% polyester ».",
-    "materialsInvalid": "Nous n'avons pas pu lire « {{part}} ». Indiquez un pourcentage et une matière, comme 100% cotton.",
     "materialsNot100": "Les pourcentages de {{parts}} ne font pas 100 %.",
+    "materialsEditorHint": "Par partie, comme sur l'étiquette : le pourcentage, la matière et, le cas échéant, si la fibre est biologique, recyclée ou régénérative.",
+    "materialPart": "Partie",
+    "materialPercentage": "Pourcentage",
+    "materialName": "Matière",
+    "materialQualifier": "Durabilité",
+    "materialQualifierHint": "cochez tout ce qui s'applique",
+    "addFibre": "Ajouter une matière",
+    "addPart": "Ajouter une partie",
+    "removeFibre": "Retirer la matière",
+    "removePart": "Retirer la partie",
+    "materialsRowInvalid": "Choisissez une matière sur chaque ligne utilisée. Le pourcentage est facultatif ; s'il est indiqué, il est compris entre 0 et 100.",
+    "variantIdHint": "Laissez vide pour utiliser {{id}}. L'ID ne change jamais ; l'EAN peut être ajouté ou corrigé plus tard.",
+    "variantIdFixed": "Ne change jamais, même si l'EAN change.",
+    "variantIdTooLong": "200 caractères au maximum. Saisissez un ID plus court.",
     "careHint": "Choisissez les symboles de l'étiquette d'entretien, dans l'ordre de l'étiquette.",
     "careGroup": {
       "washing": "Lavage",
@@ -376,7 +392,6 @@
     "delete": "Supprimer l'article",
     "deleteTitle": "Supprimer {{style}} ?",
     "deleteBody": "L'article, ses tailles et ses visuels seront supprimés. Le logiciel des revendeurs sera informé de sa disparition. Cette action est irréversible.",
-    "materialsFlags": "Ajoutez (recycled) ou (organic) après une fibre si c'est le cas : « 100% polyester (recycled) ».",
     "animalOriginHint": "Par exemple un écusson en cuir, une bordure en fourrure ou des boutons en corne. Si c'est le cas, l'étiquette doit l'indiquer.",
     "footwearHint": "Obligatoire sur l'étiquette des chaussures : la matière qui compose la majeure partie de chaque élément (au moins 80 %).",
     "certificationsHint": "Facultatif. Référentiel et numéro de licence, comme « gots:CU 123456 » ; ajoutez (material) si seule une matière est certifiée.",
@@ -916,6 +931,10 @@
     "selfServiceHint": "Pour que leurs développeurs puissent se connecter sans vous le demander.",
     "languages": "Langues de vos textes produits",
     "languagesHint": "Les revendeurs voient vos textes dans leur langue si elle existe, sinon en anglais, sinon dans votre langue principale.",
+    "otherLanguage": "Autre langue",
+    "otherLanguageHint": "Un code de langue, avec écriture ou région si besoin : de-CH, zh-Hant, es-419.",
+    "addLanguage": "Ajouter la langue",
+    "languageTagInvalid": "Ce n'est pas un code de langue. Utilisez par exemple de-CH, zh-Hant ou es-419.",
     "defaultRights": "Droits d'utilisation standard",
     "defaultRightsHint": "Pour les visuels dont les données ne disent rien d'autre.",
     "channels": "Où les revendeurs peuvent utiliser les visuels",
@@ -1008,6 +1027,7 @@
     "filters": {
       "title": "Filtres",
       "clear": "Effacer les filtres",
+      "showResults": "Voir les résultats",
       "new": "Nouveau ou modifié",
       "anytime": "Toutes dates",
       "lastDays_one": "Dernier jour",
@@ -1018,7 +1038,8 @@
       "target_group": "Pour",
       "color": "Couleur",
       "season": "Saison",
-      "collection": "Collection"
+      "collection": "Collection",
+      "qualifier": "Durabilité"
     },
     "tile": {
       "colours_one": "{{count}} couleur",
@@ -1259,8 +1280,6 @@
     },
     "fibre": {
       "cotton": "coton",
-      "organic_cotton": "coton biologique",
-      "recycled_cotton": "coton recyclé",
       "linen": "lin",
       "hemp": "chanvre",
       "silk": "soie",
@@ -1276,9 +1295,7 @@
       "cupro": "cupro",
       "acetate": "acétate",
       "polyester": "polyester",
-      "recycled_polyester": "polyester recyclé",
       "polyamide": "polyamide",
-      "recycled_polyamide": "polyamide recyclé",
       "elastane": "élasthanne",
       "acrylic": "acrylique",
       "polypropylene": "polypropylène",
@@ -1290,6 +1307,14 @@
       "rubber": "caoutchouc",
       "metal": "métal",
       "other": "autres fibres"
+    },
+    "qualifier": {
+      "organic": "biologique",
+      "in_conversion": "en conversion",
+      "recycled": "recyclé",
+      "pre_consumer": "pré-consommation",
+      "post_consumer": "post-consommation",
+      "regenerative": "régénératif"
     },
     "care": {
       "wash_95": "Lavage à 95 °C",
@@ -1526,8 +1551,6 @@
   "article": {
     "label": "Informations d'étiquette",
     "composition": "Composition",
-    "recycled": "recyclé",
-    "organic": "biologique",
     "animalOrigin": "Contient des parties non textiles d'origine animale",
     "footwear": "Matières de la chaussure",
     "footwearPart": {
@@ -1594,5 +1617,17 @@
       "why": "Les pourcentages de cet élément ne font pas 100 %. La composition est exprimée en part du poids total des fibres.",
       "law": "Règlement (UE) n° 1007/2011, art. 9 et 11"
     }
+  },
+  "demo": {
+    "banner": "Démo, données fictives",
+    "bannerNote": "Les modifications sont annulées automatiquement.",
+    "title": "Découvrir sans compte",
+    "intro": "Une marque fictive avec des données de test. Choisissez votre point de vue.",
+    "asRetailer": "Voir en tant que revendeur",
+    "asRetailerHint": "Recherche, liste EAN, fiches produit, téléchargements",
+    "asBrand": "Voir en tant que marque",
+    "asBrandHint": "Catalogue, import Excel, accès par revendeur, statistiques",
+    "refused": "Ce n'est pas possible dans la démo.",
+    "api": "Clé API en lecture seule pour les développeurs"
   }
 }

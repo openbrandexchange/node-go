@@ -68,7 +68,8 @@
     "retailer": "Prodejce",
     "itemSubtype": "Druh",
     "animalOrigin": "Netextilní části živočišného původu",
-    "secondSize": "Druhá velikost"
+    "secondSize": "Druhá velikost",
+    "variantId": "ID varianty"
   },
   "validate": {
     "required": "Vyplňte prosím toto pole.",
@@ -117,6 +118,7 @@
     "workbook_sheet_missing": "V tomto souboru Excel není list s názvem Products (ani Assets).",
     "workbook_too_large": "Tento soubor Excel je příliš velký (nejvýše 100 000 řádků a 1 000 sloupců).",
     "unsafe_url": "Tato adresa není povolena (odkazuje do soukromé sítě).",
+    "idempotency_key_reused": "Toto již bylo odesláno se stejným klíčem, ale jiným obsahem. Nic se nezměnilo.",
     "csrf_failed": "Vaše relace byla obnovena. Zkuste to znovu.",
     "invalid_credentials": "E-mailová adresa nebo heslo nejsou správné.",
     "account_blocked": "Tento účet je zablokován. Pokud si myslíte, že jde o chybu, kontaktujte značku.",
@@ -140,6 +142,8 @@
     "animal_origin_unknown": "Živočišný původ neuveden",
     "footwear_materials_missing": "Chybí materiály obuvi",
     "fibre_percentages_not_100": "Procenta nedávají dohromady 100 %",
+    "material_unknown": "Materiál není v seznamu",
+    "qualifier_deprecated": "Starý zápis udržitelnosti",
     "workbook_invalid": "Soubor Excel nelze přečíst",
     "workbook_unsafe": "Makra nebo externí odkazy",
     "workbook_sheet_missing": "List nebyl nalezen",
@@ -300,9 +304,21 @@
     "styleHint": "Vaše vlastní číslo artiklu. Identifikuje artikl a později ho nelze změnit.",
     "styleLocked": "Číslo artiklu identifikuje tento artikl a nelze ho změnit.",
     "seasonHint": "Tak, jak ji používáte, například AW26 nebo NOS.",
-    "materialsHint": "Jako na štítku: „outer: 65% cotton, 35% polyamide; lining: 100% polyester“.",
-    "materialsInvalid": "„{{part}}“ se nepodařilo přečíst. Uveďte procenta a materiál, např. 100% cotton.",
     "materialsNot100": "Procenta u {{parts}} nedávají dohromady 100 %.",
+    "materialsEditorHint": "Pro každou část jako na štítku: procento, materiál a případně, zda je vlákno bio, recyklované nebo regenerativní.",
+    "materialPart": "Část",
+    "materialPercentage": "Procento",
+    "materialName": "Materiál",
+    "materialQualifier": "Udržitelnost",
+    "materialQualifierHint": "zaškrtněte vše, co platí",
+    "addFibre": "Přidat materiál",
+    "addPart": "Přidat část",
+    "removeFibre": "Odebrat materiál",
+    "removePart": "Odebrat část",
+    "materialsRowInvalid": "Na každém použitém řádku zvolte materiál. Procento je nepovinné; pokud ho uvedete, je mezi 0 a 100.",
+    "variantIdHint": "Nechte prázdné pro {{id}}. ID zůstává navždy stejné; EAN lze doplnit nebo opravit později.",
+    "variantIdFixed": "Zůstává navždy stejné, i když se EAN změní.",
+    "variantIdTooLong": "Nejvýše 200 znaků. Zadejte kratší ID.",
     "careHint": "Vyberte symboly z ošetřovacího štítku v pořadí na štítku.",
     "careGroup": {
       "washing": "Praní",
@@ -379,7 +395,6 @@
     "delete": "Smazat artikl",
     "deleteTitle": "Smazat {{style}}?",
     "deleteBody": "Artikl, jeho velikosti a fotografie budou odstraněny. Systémy prodejců se dozví, že zmizel. Tuto akci nelze vrátit.",
-    "materialsFlags": "Za vlákno doplňte (recycled) nebo (organic), pokud to platí: „100% polyester (recycled)“.",
     "animalOriginHint": "Například kožená nášivka, kožešinový lem nebo knoflíky z rohoviny. Pokud nějaké jsou, musí to být uvedeno na štítku.",
     "footwearHint": "Povinné na štítku obuvi: materiál, ze kterého je každá část převážně vyrobena (alespoň 80 %).",
     "certificationsHint": "Nepovinné. Systém a číslo licence, např. „gots:CU 123456“; doplňte (material), pokud je certifikován jen materiál.",
@@ -929,6 +944,10 @@
     "selfServiceHint": "Aby se jejich vývojáři mohli připojit bez vašeho svolení.",
     "languages": "Jazyky produktových textů",
     "languagesHint": "Prodejci vidí texty ve svém jazyce, pokud existuje, jinak v angličtině, jinak ve vašem hlavním jazyce.",
+    "otherLanguage": "Jiný jazyk",
+    "otherLanguageHint": "Kód jazyka, i s písmem nebo regionem: de-CH, zh-Hant, es-419.",
+    "addLanguage": "Přidat jazyk",
+    "languageTagInvalid": "Toto není kód jazyka. Použijte například de-CH, zh-Hant nebo es-419.",
     "defaultRights": "Standardní práva k užití",
     "defaultRightsHint": "Pro fotografie, u kterých údaje neříkají nic jiného.",
     "channels": "Kde smějí prodejci fotografie používat",
@@ -1026,6 +1045,7 @@
     "filters": {
       "title": "Filtry",
       "clear": "Vymazat filtry",
+      "showResults": "Zobrazit výsledky",
       "new": "Nové nebo změněné",
       "anytime": "Kdykoli",
       "lastDays_one": "Poslední den",
@@ -1037,7 +1057,8 @@
       "target_group": "Pro koho",
       "color": "Barva",
       "season": "Sezóna",
-      "collection": "Kolekce"
+      "collection": "Kolekce",
+      "qualifier": "Udržitelnost"
     },
     "tile": {
       "colours_one": "{{count}} barva",
@@ -1289,8 +1310,6 @@
     },
     "fibre": {
       "cotton": "bavlna",
-      "organic_cotton": "biobavlna",
-      "recycled_cotton": "recyklovaná bavlna",
       "linen": "len",
       "hemp": "konopí",
       "silk": "hedvábí",
@@ -1306,9 +1325,7 @@
       "cupro": "cupro",
       "acetate": "acetát",
       "polyester": "polyester",
-      "recycled_polyester": "recyklovaný polyester",
       "polyamide": "polyamid",
-      "recycled_polyamide": "recyklovaný polyamid",
       "elastane": "elastan",
       "acrylic": "akryl",
       "polypropylene": "polypropylen",
@@ -1320,6 +1337,14 @@
       "rubber": "pryž",
       "metal": "kov",
       "other": "ostatní vlákna"
+    },
+    "qualifier": {
+      "organic": "bio",
+      "in_conversion": "v přechodném období",
+      "recycled": "recyklované",
+      "pre_consumer": "předspotřebitelské",
+      "post_consumer": "pospotřebitelské",
+      "regenerative": "regenerativní"
     },
     "care": {
       "wash_95": "Prát na 95 °C",
@@ -1556,8 +1581,6 @@
   "article": {
     "label": "Údaje na štítku",
     "composition": "Složení",
-    "recycled": "recyklované",
-    "organic": "bio",
     "animalOrigin": "Obsahuje netextilní části živočišného původu",
     "footwear": "Materiály obuvi",
     "footwearPart": {
@@ -1624,5 +1647,17 @@
       "why": "Procenta této části nedávají dohromady 100 %. Složení se uvádí jako podíl na celkové hmotnosti vláken.",
       "law": "Nařízení (EU) č. 1007/2011, čl. 9 a 11"
     }
+  },
+  "demo": {
+    "banner": "Demo, smyšlená data",
+    "bannerNote": "Změny se automaticky vracejí zpět.",
+    "title": "Rozhlédněte se bez účtu",
+    "intro": "Smyšlená značka s testovacími daty. Vyberte, jak se na ni chcete dívat.",
+    "asRetailer": "Zobrazit jako prodejce",
+    "asRetailerHint": "Hledání, seznam EAN, stránky produktů, stahování",
+    "asBrand": "Zobrazit jako značka",
+    "asBrandHint": "Katalog, import z Excelu, přístup podle prodejce, statistiky",
+    "refused": "V ukázkové verzi to není možné.",
+    "api": "API klíč jen pro čtení pro vývojáře"
   }
 }

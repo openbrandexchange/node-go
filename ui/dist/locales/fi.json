@@ -68,7 +68,8 @@
     "retailer": "Jälleenmyyjä",
     "itemSubtype": "Alatyyppi",
     "animalOrigin": "Eläinperäiset muut kuin tekstiiliosat",
-    "secondSize": "Toinen koko"
+    "secondSize": "Toinen koko",
+    "variantId": "Variantin tunnus"
   },
   "validate": {
     "required": "Täytä tämä kenttä.",
@@ -117,6 +118,7 @@
     "workbook_sheet_missing": "Tässä Excel-tiedostossa ei ole taulukkoa nimeltä Products (tai Assets).",
     "workbook_too_large": "Tämä Excel-tiedosto on liian suuri (enintään 100 000 riviä ja 1 000 saraketta).",
     "unsafe_url": "Tätä osoitetta ei sallita (se osoittaa yksityiseen verkkoon).",
+    "idempotency_key_reused": "Tämä on jo lähetetty samalla avaimella mutta eri sisällöllä. Mitään ei muutettu.",
     "csrf_failed": "Istuntosi uusittiin. Yritä uudelleen.",
     "invalid_credentials": "Sähköpostiosoite tai salasana on väärin.",
     "account_blocked": "Tili on estetty. Ota yhteyttä merkkiin, jos uskot tämän olevan virhe.",
@@ -140,6 +142,8 @@
     "animal_origin_unknown": "Eläinperäisyyttä ei ilmoitettu",
     "footwear_materials_missing": "Jalkineen materiaalit puuttuvat",
     "fibre_percentages_not_100": "Prosentit eivät ole yhteensä 100 %",
+    "material_unknown": "Materiaali ei ole luettelossa",
+    "qualifier_deprecated": "Vanha kestävyysmerkintä",
     "workbook_invalid": "Excel-tiedostoa ei voi lukea",
     "workbook_unsafe": "Makroja tai ulkoisia linkkejä",
     "workbook_sheet_missing": "Taulukkoa ei löytynyt",
@@ -294,9 +298,21 @@
     "styleHint": "Oma tuotenumeronne. Se yksilöi tuotteen, eikä sitä voi muuttaa myöhemmin.",
     "styleLocked": "Tuotenumero yksilöi tuotteen, eikä sitä voi muuttaa.",
     "seasonHint": "Kuten itse käytätte, esimerkiksi AW26 tai NOS.",
-    "materialsHint": "Kuten tuotelapussa: ”outer: 65% cotton, 35% polyamide; lining: 100% polyester”.",
-    "materialsInvalid": "Emme pystyneet lukemaan kohtaa ”{{part}}”. Käytä prosenttia ja materiaalia, esim. 100% cotton.",
     "materialsNot100": "Osan {{parts}} prosentit eivät ole yhteensä 100 %.",
+    "materialsEditorHint": "Osittain kuten tuotelapussa: prosentti, materiaali ja tarvittaessa, onko kuitu luomua, kierrätettyä vai regeneratiivista.",
+    "materialPart": "Osa",
+    "materialPercentage": "Prosentti",
+    "materialName": "Materiaali",
+    "materialQualifier": "Kestävyys",
+    "materialQualifierHint": "valitse kaikki sopivat",
+    "addFibre": "Lisää materiaali",
+    "addPart": "Lisää osa",
+    "removeFibre": "Poista materiaali",
+    "removePart": "Poista osa",
+    "materialsRowInvalid": "Valitse materiaali jokaiselle käyttämällesi riville. Prosentti on vapaaehtoinen; jos annat sen, se on 0–100.",
+    "variantIdHint": "Jätä tyhjäksi, niin käytetään tunnusta {{id}}. Tunnus pysyy aina samana; EAN-koodin voi lisätä tai korjata myöhemmin.",
+    "variantIdFixed": "Pysyy aina samana, myös kun EAN-koodi muuttuu.",
+    "variantIdTooLong": "Enintään 200 merkkiä. Kirjoita lyhyempi tunnus.",
     "careHint": "Valitse hoito-ohjelapun symbolit lapun järjestyksessä.",
     "careGroup": {
       "washing": "Pesu",
@@ -373,7 +389,6 @@
     "delete": "Poista tuote",
     "deleteTitle": "Poistetaanko {{style}}?",
     "deleteBody": "Tuote, sen koot ja kuvat poistetaan. Jälleenmyyjien järjestelmät saavat tiedon poistosta. Toimintoa ei voi perua.",
-    "materialsFlags": "Lisää kuidun perään (recycled) tai (organic), jos se pitää paikkansa: ”100% polyester (recycled)”.",
     "animalOriginHint": "Esimerkiksi nahkamerkki, turkisreunus tai sarvinapit. Jos niitä on, se on mainittava tuotelapussa.",
     "footwearHint": "Pakollinen jalkineiden merkinnöissä: materiaali, josta kukin osa on pääosin tehty (vähintään 80 %).",
     "certificationsHint": "Vapaaehtoinen. Sertifiointijärjestelmä ja lisenssinumero, kuten ”gots:CU 123456”; lisää (material), jos vain materiaali on sertifioitu.",
@@ -903,6 +918,10 @@
     "selfServiceHint": "Jotta heidän kehittäjänsä voivat kytkeytyä kysymättä teiltä.",
     "languages": "Tuotetekstien kielet",
     "languagesHint": "Jälleenmyyjät näkevät tekstit omalla kielellään, jos sellainen on, muuten englanniksi, muuten pääkielellänne.",
+    "otherLanguage": "Muu kieli",
+    "otherLanguageHint": "Kielikoodi, myös kirjoitusjärjestelmän tai alueen kanssa: de-CH, zh-Hant, es-419.",
+    "addLanguage": "Lisää kieli",
+    "languageTagInvalid": "Ei kielikoodi. Käytä esimerkiksi de-CH, zh-Hant tai es-419.",
     "defaultRights": "Vakiokäyttöoikeudet",
     "defaultRightsHint": "Kuville, joiden tiedoissa ei sanota muuta.",
     "channels": "Missä jälleenmyyjät saavat käyttää kuvia",
@@ -990,6 +1009,7 @@
     "filters": {
       "title": "Suodattimet",
       "clear": "Tyhjennä suodattimet",
+      "showResults": "Näytä tulokset",
       "new": "Uusi tai muuttunut",
       "anytime": "Milloin tahansa",
       "lastDays_one": "Viimeinen {{count}} päivä",
@@ -999,7 +1019,8 @@
       "target_group": "Kenelle",
       "color": "Väri",
       "season": "Sesonki",
-      "collection": "Mallisto"
+      "collection": "Mallisto",
+      "qualifier": "Kestävyys"
     },
     "tile": {
       "colours_one": "{{count}} väri",
@@ -1229,8 +1250,6 @@
     },
     "fibre": {
       "cotton": "puuvilla",
-      "organic_cotton": "luomupuuvilla",
-      "recycled_cotton": "kierrätyspuuvilla",
       "linen": "pellava",
       "hemp": "hamppu",
       "silk": "silkki",
@@ -1246,9 +1265,7 @@
       "cupro": "kupro",
       "acetate": "asetaatti",
       "polyester": "polyesteri",
-      "recycled_polyester": "kierrätetty polyesteri",
       "polyamide": "polyamidi",
-      "recycled_polyamide": "kierrätetty polyamidi",
       "elastane": "elastaani",
       "acrylic": "akryyli",
       "polypropylene": "polypropeeni",
@@ -1260,6 +1277,14 @@
       "rubber": "kumi",
       "metal": "metalli",
       "other": "muut kuidut"
+    },
+    "qualifier": {
+      "organic": "luomu",
+      "in_conversion": "siirtymävaiheen",
+      "recycled": "kierrätetty",
+      "pre_consumer": "kuluttajaa edeltävä",
+      "post_consumer": "kuluttajan jälkeinen",
+      "regenerative": "regeneratiivinen"
     },
     "care": {
       "wash_95": "Pesu 95 °C",
@@ -1496,8 +1521,6 @@
   "article": {
     "label": "Tuotelapun tiedot",
     "composition": "Koostumus",
-    "recycled": "kierrätetty",
-    "organic": "luomu",
     "animalOrigin": "Sisältää eläinperäisiä muita kuin tekstiiliosia",
     "footwear": "Jalkineen materiaalit",
     "footwearPart": {
@@ -1564,5 +1587,17 @@
       "why": "Tämän osan prosentit eivät ole yhteensä 100 %. Koostumus ilmoitetaan osuutena kuitujen kokonaispainosta.",
       "law": "Asetus (EU) N:o 1007/2011, 9 ja 11 artikla"
     }
+  },
+  "demo": {
+    "banner": "Demo, kuvitteellisia tietoja",
+    "bannerNote": "Muutokset perutaan automaattisesti.",
+    "title": "Tutustu ilman tiliä",
+    "intro": "Kuvitteellinen merkki testitiedoilla. Valitse, miten haluat tarkastella sitä.",
+    "asRetailer": "Näytä jälleenmyyjänä",
+    "asRetailerHint": "Haku, EAN-luettelo, tuotesivut, lataukset",
+    "asBrand": "Näytä merkkinä",
+    "asBrandHint": "Luettelo, Excel-tuonti, pääsy jälleenmyyjittäin, tilastot",
+    "refused": "Tämä ei ole mahdollista demossa.",
+    "api": "Vain luku -API-avain kehittäjille"
   }
 }

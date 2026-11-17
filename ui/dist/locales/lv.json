@@ -68,7 +68,8 @@
     "retailer": "Tirgotājs",
     "itemSubtype": "Tips",
     "animalOrigin": "Dzīvnieku izcelsmes netekstila daļas",
-    "secondSize": "Otrais izmērs"
+    "secondSize": "Otrais izmērs",
+    "variantId": "Varianta ID"
   },
   "validate": {
     "required": "Lūdzu, aizpildiet šo lauku.",
@@ -117,6 +118,7 @@
     "workbook_sheet_missing": "Šajā Excel failā nav lapas ar nosaukumu Products (vai Assets).",
     "workbook_too_large": "Šis Excel fails ir pārāk liels (ne vairāk kā 100 000 rindu un 1000 kolonnu).",
     "unsafe_url": "Šī adrese nav atļauta (tā norāda uz privātu tīklu).",
+    "idempotency_key_reused": "Tas jau tika nosūtīts ar to pašu atslēgu, bet citu saturu. Nekas netika mainīts.",
     "csrf_failed": "Jūsu sesija ir atjaunota. Mēģiniet vēlreiz.",
     "invalid_credentials": "E-pasta adrese vai parole nav pareiza.",
     "account_blocked": "Šis konts ir bloķēts. Ja uzskatāt, ka tā ir kļūda, sazinieties ar zīmolu.",
@@ -140,6 +142,8 @@
     "animal_origin_unknown": "Dzīvnieku izcelsme nav norādīta",
     "footwear_materials_missing": "Trūkst apavu materiālu",
     "fibre_percentages_not_100": "Procenti kopā nav 100 %",
+    "material_unknown": "Materiāls nav sarakstā",
+    "qualifier_deprecated": "Vecs ilgtspējas pieraksts",
     "workbook_invalid": "Excel failu nevar nolasīt",
     "workbook_unsafe": "Makro vai ārējas saites",
     "workbook_sheet_missing": "Lapa nav atrasta",
@@ -297,9 +301,21 @@
     "styleHint": "Jūsu preces numurs. Tas identificē preci, un vēlāk to nevar mainīt.",
     "styleLocked": "Preces numurs identificē šo preci, un to nevar mainīt.",
     "seasonHint": "Tā, kā to izmantojat, piemēram, AW26 vai NOS.",
-    "materialsHint": "Kā uz etiķetes: “outer: 65% cotton, 35% polyamide; lining: 100% polyester”.",
-    "materialsInvalid": "Nevarēja nolasīt “{{part}}”. Norādiet procentus un materiālu, piemēram, 100% cotton.",
     "materialsNot100": "Procenti daļai {{parts}} kopā nav 100 %.",
+    "materialsEditorHint": "Katrai daļai kā uz etiķetes: procenti, materiāls un, ja attiecas, vai šķiedra ir bioloģiska, pārstrādāta vai reģeneratīva.",
+    "materialPart": "Daļa",
+    "materialPercentage": "Procenti",
+    "materialName": "Materiāls",
+    "materialQualifier": "Ilgtspēja",
+    "materialQualifierHint": "atzīmējiet visu atbilstošo",
+    "addFibre": "Pievienot materiālu",
+    "addPart": "Pievienot daļu",
+    "removeFibre": "Noņemt materiālu",
+    "removePart": "Noņemt daļu",
+    "materialsRowInvalid": "Katrā izmantotajā rindā izvēlieties materiālu. Procents nav obligāts; ja to norādāt, tas ir no 0 līdz 100.",
+    "variantIdHint": "Atstājiet tukšu, lai izmantotu {{id}}. ID vienmēr paliek nemainīgs; EAN var pievienot vai labot vēlāk.",
+    "variantIdFixed": "Vienmēr paliek nemainīgs, arī ja EAN mainās.",
+    "variantIdTooLong": "Ne vairāk kā 200 rakstzīmes. Ierakstiet īsāku ID.",
     "careHint": "Izvēlieties kopšanas etiķetes simbolus tādā secībā, kā uz etiķetes.",
     "careGroup": {
       "washing": "Mazgāšana",
@@ -376,7 +392,6 @@
     "delete": "Dzēst preci",
     "deleteTitle": "Dzēst {{style}}?",
     "deleteBody": "Prece, tās izmēri un fotoattēli tiks noņemti. Tirgotāju sistēmas uzzinās, ka tā ir pazudusi. To nevar atsaukt.",
-    "materialsFlags": "Ja attiecas, aiz šķiedras pievienojiet (recycled) vai (organic): “100% polyester (recycled)”.",
     "animalOriginHint": "Piemēram, ādas uzšuve, kažokādas apmale vai raga pogas. Ja tādas ir, tas jānorāda uz etiķetes.",
     "footwearHint": "Obligāti uz apavu etiķetes: katras daļas galvenais materiāls (vismaz 80 %).",
     "certificationsHint": "Nav obligāti. Shēma un licences numurs, piemēram, “gots:CU 123456”; pievienojiet (material), ja sertificēts ir tikai materiāls.",
@@ -916,6 +931,10 @@
     "selfServiceHint": "Lai viņu izstrādātāji varētu pieslēgties bez jūsu apstiprinājuma.",
     "languages": "Produktu tekstu valodas",
     "languagesHint": "Tirgotāji redz tekstus savā valodā, ja tādi ir, citādi angliski, citādi jūsu galvenajā valodā.",
+    "otherLanguage": "Cita valoda",
+    "otherLanguageHint": "Valodas kods, arī ar rakstību vai reģionu: de-CH, zh-Hant, es-419.",
+    "addLanguage": "Pievienot valodu",
+    "languageTagInvalid": "Tas nav valodas kods. Izmantojiet, piemēram, de-CH, zh-Hant vai es-419.",
     "defaultRights": "Standarta lietošanas tiesības",
     "defaultRightsHint": "Fotoattēliem, kuru datos nav norādīts citādi.",
     "channels": "Kur tirgotāji drīkst izmantot fotoattēlus",
@@ -1008,6 +1027,7 @@
     "filters": {
       "title": "Filtri",
       "clear": "Notīrīt filtrus",
+      "showResults": "Rādīt rezultātus",
       "new": "Jauns vai mainīts",
       "anytime": "Jebkurā laikā",
       "lastDays_zero": "Pēdējās {{count}} dienās",
@@ -1018,7 +1038,8 @@
       "target_group": "Kam",
       "color": "Krāsa",
       "season": "Sezona",
-      "collection": "Kolekcija"
+      "collection": "Kolekcija",
+      "qualifier": "Ilgtspēja"
     },
     "tile": {
       "colours_zero": "{{count}} krāsu",
@@ -1259,8 +1280,6 @@
     },
     "fibre": {
       "cotton": "kokvilna",
-      "organic_cotton": "bioloģiskā kokvilna",
-      "recycled_cotton": "pārstrādāta kokvilna",
       "linen": "lins",
       "hemp": "kaņepes",
       "silk": "zīds",
@@ -1276,9 +1295,7 @@
       "cupro": "kupro",
       "acetate": "acetāts",
       "polyester": "poliesters",
-      "recycled_polyester": "pārstrādāts poliesters",
       "polyamide": "poliamīds",
-      "recycled_polyamide": "pārstrādāts poliamīds",
       "elastane": "elastāns",
       "acrylic": "akrils",
       "polypropylene": "polipropilēns",
@@ -1290,6 +1307,14 @@
       "rubber": "gumija",
       "metal": "metāls",
       "other": "citas šķiedras"
+    },
+    "qualifier": {
+      "organic": "bioloģisks",
+      "in_conversion": "pārejas periodā",
+      "recycled": "pārstrādāts",
+      "pre_consumer": "pirmspatēriņa",
+      "post_consumer": "pēcpatēriņa",
+      "regenerative": "reģeneratīvs"
     },
     "care": {
       "wash_95": "Mazgāt 95 °C",
@@ -1526,8 +1551,6 @@
   "article": {
     "label": "Etiķetes informācija",
     "composition": "Sastāvs",
-    "recycled": "pārstrādāts",
-    "organic": "bioloģisks",
     "animalOrigin": "Satur dzīvnieku izcelsmes netekstila daļas",
     "footwear": "Apavu materiāli",
     "footwearPart": {
@@ -1594,5 +1617,17 @@
       "why": "Šīs daļas procenti kopā nav 100 %. Sastāvu norāda kā daļu no kopējā šķiedru svara.",
       "law": "Regula (ES) Nr. 1007/2011, 9. un 11. pants"
     }
+  },
+  "demo": {
+    "banner": "Demo, izdomāti dati",
+    "bannerNote": "Izmaiņas tiek automātiski atsauktas.",
+    "title": "Apskatieties bez konta",
+    "intro": "Izdomāts zīmols ar testa datiem. Izvēlieties, kā vēlaties to apskatīt.",
+    "asRetailer": "Skatīt kā tirgotājs",
+    "asRetailerHint": "Meklēšana, EAN saraksts, produktu lapas, lejupielādes",
+    "asBrand": "Skatīt kā zīmols",
+    "asBrandHint": "Katalogs, Excel imports, piekļuve pa tirgotājiem, statistika",
+    "refused": "Demo versijā tas nav iespējams.",
+    "api": "Tikai lasāma API atslēga izstrādātājiem"
   }
 }

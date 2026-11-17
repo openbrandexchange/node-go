@@ -68,7 +68,8 @@
     "retailer": "Edasimüüja",
     "itemSubtype": "Alaliik",
     "animalOrigin": "Loomset päritolu mittetekstiilosad",
-    "secondSize": "Teine suurus"
+    "secondSize": "Teine suurus",
+    "variantId": "Variandi ID"
   },
   "validate": {
     "required": "Palun täitke see väli.",
@@ -117,6 +118,7 @@
     "workbook_sheet_missing": "Selles Exceli failis pole lehte nimega Products (või Assets).",
     "workbook_too_large": "See Exceli fail on liiga suur (kuni 100 000 rida ja 1000 veergu).",
     "unsafe_url": "See aadress pole lubatud (see viitab privaatvõrgule).",
+    "idempotency_key_reused": "See on juba saadetud sama võtmega, kuid teise sisuga. Midagi ei muudetud.",
     "csrf_failed": "Teie seanss uuendati. Proovige uuesti.",
     "invalid_credentials": "E-posti aadress või parool on vale.",
     "account_blocked": "See konto on blokeeritud. Kui arvate, et see on viga, võtke ühendust kaubamärgiga.",
@@ -140,6 +142,8 @@
     "animal_origin_unknown": "Loomne päritolu märkimata",
     "footwear_materials_missing": "Jalatsi materjalid puuduvad",
     "fibre_percentages_not_100": "Protsendid ei anna kokku 100%",
+    "material_unknown": "Materjal ei ole loendis",
+    "qualifier_deprecated": "Jätkusuutlikkuse vana kirjaviis",
     "workbook_invalid": "Exceli faili ei saa lugeda",
     "workbook_unsafe": "Makrod või välislingid",
     "workbook_sheet_missing": "Lehte ei leitud",
@@ -294,9 +298,21 @@
     "styleHint": "Teie enda tootekood. See tuvastab toote ja seda ei saa hiljem muuta.",
     "styleLocked": "Tootekood tuvastab selle toote ja seda ei saa muuta.",
     "seasonHint": "Nagu teie seda kasutate, näiteks AW26 või NOS.",
-    "materialsHint": "Nagu sildil: „outer: 65% cotton, 35% polyamide; lining: 100% polyester“.",
-    "materialsInvalid": "Me ei suutnud lugeda „{{part}}“. Kasutage protsenti ja materjali, näiteks 100% cotton.",
     "materialsNot100": "Osa {{parts}} protsendid ei anna kokku 100%.",
+    "materialsEditorHint": "Iga osa kohta nagu sildil: protsent, materjal ja vajaduse korral, kas kiud on mahe, taaskasutatud või regeneratiivne.",
+    "materialPart": "Osa",
+    "materialPercentage": "Protsent",
+    "materialName": "Materjal",
+    "materialQualifier": "Jätkusuutlikkus",
+    "materialQualifierHint": "märkige kõik sobivad",
+    "addFibre": "Lisa materjal",
+    "addPart": "Lisa osa",
+    "removeFibre": "Eemalda materjal",
+    "removePart": "Eemalda osa",
+    "materialsRowInvalid": "Valige igal kasutataval real materjal. Protsent ei ole kohustuslik; kui selle annate, on see 0 ja 100 vahel.",
+    "variantIdHint": "Jätke tühjaks, et kasutada {{id}}. ID jääb alatiseks samaks; EAN-i saab hiljem lisada või parandada.",
+    "variantIdFixed": "Jääb alatiseks samaks, ka siis, kui EAN muutub.",
+    "variantIdTooLong": "Kõige rohkem 200 märki. Sisestage lühem ID.",
     "careHint": "Valige hooldussildi sümbolid sildi järjekorras.",
     "careGroup": {
       "washing": "Pesemine",
@@ -373,7 +389,6 @@
     "delete": "Kustuta toode",
     "deleteTitle": "Kas kustutada {{style}}?",
     "deleteBody": "Toode, selle suurused ja pildid eemaldatakse. Edasimüüjate süsteemid saavad teada, et see on kadunud. Seda ei saa tagasi võtta.",
-    "materialsFlags": "Lisage kiu järele (recycled) või (organic), kui see kehtib: „100% polyester (recycled)“.",
     "animalOriginHint": "Näiteks nahast embleem, karusnahast ääris või sarvest nööbid. Kui need on olemas, peab see olema sildil märgitud.",
     "footwearHint": "Jalatsite sildil kohustuslik: materjal, millest on valmistatud suurem osa igast osast (vähemalt 80%).",
     "certificationsHint": "Valikuline. Sertifitseerimisskeem ja litsentsi number, näiteks „gots:CU 123456“; lisage (material), kui sertifitseeritud on ainult materjal.",
@@ -903,6 +918,10 @@
     "selfServiceHint": "Et nende arendajad saaksid ühenduse luua teilt küsimata.",
     "languages": "Tootetekstide keeled",
     "languagesHint": "Edasimüüjad näevad teie tekste oma keeles, kui see on olemas, muidu inglise keeles, muidu teie põhikeeles.",
+    "otherLanguage": "Muu keel",
+    "otherLanguageHint": "Keelekood, ka kirja või piirkonnaga: de-CH, zh-Hant, es-419.",
+    "addLanguage": "Lisa keel",
+    "languageTagInvalid": "See ei ole keelekood. Kasutage näiteks de-CH, zh-Hant või es-419.",
     "defaultRights": "Standardsed kasutusõigused",
     "defaultRightsHint": "Piltidele, mille andmetes pole teisiti öeldud.",
     "channels": "Kus edasimüüjad tohivad pilte kasutada",
@@ -990,6 +1009,7 @@
     "filters": {
       "title": "Filtrid",
       "clear": "Tühjenda filtrid",
+      "showResults": "Näita tulemusi",
       "new": "Uus või muudetud",
       "anytime": "Igal ajal",
       "lastDays_one": "Viimane {{count}} päev",
@@ -999,7 +1019,8 @@
       "target_group": "Kellele",
       "color": "Värv",
       "season": "Hooaeg",
-      "collection": "Kollektsioon"
+      "collection": "Kollektsioon",
+      "qualifier": "Jätkusuutlikkus"
     },
     "tile": {
       "colours_one": "{{count}} värv",
@@ -1229,8 +1250,6 @@
     },
     "fibre": {
       "cotton": "puuvill",
-      "organic_cotton": "mahepuuvill",
-      "recycled_cotton": "taaskasutatud puuvill",
       "linen": "lina",
       "hemp": "kanep",
       "silk": "siid",
@@ -1246,9 +1265,7 @@
       "cupro": "kupro",
       "acetate": "atsetaat",
       "polyester": "polüester",
-      "recycled_polyester": "taaskasutatud polüester",
       "polyamide": "polüamiid",
-      "recycled_polyamide": "taaskasutatud polüamiid",
       "elastane": "elastaan",
       "acrylic": "akrüül",
       "polypropylene": "polüpropüleen",
@@ -1260,6 +1277,14 @@
       "rubber": "kumm",
       "metal": "metall",
       "other": "muud kiud"
+    },
+    "qualifier": {
+      "organic": "mahe",
+      "in_conversion": "üleminekuperioodil",
+      "recycled": "taaskasutatud",
+      "pre_consumer": "tarbimiseelne",
+      "post_consumer": "tarbimisjärgne",
+      "regenerative": "regeneratiivne"
     },
     "care": {
       "wash_95": "Pesta 95 °C juures",
@@ -1496,8 +1521,6 @@
   "article": {
     "label": "Sildi teave",
     "composition": "Koostis",
-    "recycled": "taaskasutatud",
-    "organic": "mahe",
     "animalOrigin": "Sisaldab loomset päritolu mittetekstiilosi",
     "footwear": "Jalatsi materjalid",
     "footwearPart": {
@@ -1564,5 +1587,17 @@
       "why": "Selle osa protsendid ei anna kokku 100%. Koostis esitatakse osakaaluna kiudude kogumassist.",
       "law": "Määrus (EL) nr 1007/2011, artiklid 9 ja 11"
     }
+  },
+  "demo": {
+    "banner": "Demo, väljamõeldud andmed",
+    "bannerNote": "Muudatused võetakse automaatselt tagasi.",
+    "title": "Vaadake ringi ilma kontota",
+    "intro": "Väljamõeldud kaubamärk testandmetega. Valige, kuidas soovite seda vaadata.",
+    "asRetailer": "Vaata edasimüüjana",
+    "asRetailerHint": "Otsing, EAN-loend, tootelehed, allalaadimised",
+    "asBrand": "Vaata kaubamärgina",
+    "asBrandHint": "Kataloog, Exceli import, juurdepääs edasimüüjate kaupa, statistika",
+    "refused": "Demos pole see võimalik.",
+    "api": "Ainult lugemiseks API-võti arendajatele"
   }
 }
