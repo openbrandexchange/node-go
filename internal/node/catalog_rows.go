@@ -202,6 +202,17 @@ func (a *App) record(ctx context.Context, q db.Querier, r *row) *IngestRecord {
 		data["rights"] = a.effectiveRights(ctx, d.Rights)
 		data["provenance"] = effectiveProvenance(d.Provenance)
 		data["files"] = a.currentFiles(ctx, q, d.Files)
+		// The effective rights and provenance keep their extension members.
+		for _, k := range []string{"rights", "provenance"} {
+			if members := d.Ext["/"+k]; len(members) > 0 {
+				m := map[string]any{}
+				_ = json.Unmarshal(mustJSON(data[k]), &m)
+				for name, v := range members {
+					m[name] = v
+				}
+				data[k] = m
+			}
+		}
 	}
 	rec := &IngestRecord{Kind: r.Kind, ID: r.ID, ExternalID: r.ExternalID, Status: r.Status,
 		Visibility: a.visibilityOf(ctx, q, r), ETag: r.ETag, CreatedAt: r.CreatedAt, UpdatedAt: r.RecordUpdatedAt, Data: data}

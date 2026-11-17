@@ -170,12 +170,12 @@
   "variants": [
     {
       "id": "{{id}}",
-      "external_id": "2000200101017",
+      "external_id": "KT-2001-BLK-L",
       "product_id": "{{id}}",
       "brand_id": "{{id}}",
-      "gtin": "02000200101017",
-      "gtin_original": "2000200101017",
-      "sku": "KT-2001-BLK-S",
+      "gtin": "02000200101031",
+      "gtin_original": "2000200101031",
+      "sku": "KT-2001-BLK-L",
       "color": {
         "code": "BLK",
         "name": {
@@ -185,7 +185,7 @@
         "supplier_color": "Jet",
         "family": "black"
       },
-      "size": "S",
+      "size": "L",
       "size_length": null,
       "size_system": "INT",
       "measurements": null,
@@ -193,7 +193,7 @@
     },
     {
       "id": "{{id}}",
-      "external_id": "2000200101024",
+      "external_id": "KT-2001-BLK-M",
       "product_id": "{{id}}",
       "brand_id": "{{id}}",
       "gtin": "02000200101024",
@@ -216,12 +216,12 @@
     },
     {
       "id": "{{id}}",
-      "external_id": "2000200101031",
+      "external_id": "KT-2001-BLK-S",
       "product_id": "{{id}}",
       "brand_id": "{{id}}",
-      "gtin": "02000200101031",
-      "gtin_original": "2000200101031",
-      "sku": "KT-2001-BLK-L",
+      "gtin": "02000200101017",
+      "gtin_original": "2000200101017",
+      "sku": "KT-2001-BLK-S",
       "color": {
         "code": "BLK",
         "name": {
@@ -231,7 +231,7 @@
         "supplier_color": "Jet",
         "family": "black"
       },
-      "size": "L",
+      "size": "S",
       "size_length": null,
       "size_system": "INT",
       "measurements": null,

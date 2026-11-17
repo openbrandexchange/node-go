@@ -53,8 +53,8 @@
     },
     "LanguageTag": {
       "type": "string",
-      "description": "BCP 47 language tag, restricted to language or language-REGION.",
-      "pattern": "^[a-z]{2,3}(-[A-Z]{2})?$",
+      "description": "BCP 47 language tag in canonical case: language, optional script, optional region (ISO 3166-1 alpha-2 or UN M.49): nl, de-CH, zh-Hant, sr-Latn-RS, es-419. No variants, extensions or private use.",
+      "pattern": "^[a-z]{2,3}(-[A-Z][a-z]{3})?(-([A-Z]{2}|[0-9]{3}))?$",
       "examples": [
         "nl",
         "en",
@@ -213,6 +213,7 @@
         "workbook_sheet_missing",
         "workbook_too_large",
         "unsafe_url",
+        "idempotency_key_reused",
         "csrf_failed",
         "invalid_credentials",
         "account_blocked",
@@ -231,9 +232,11 @@
         "fibre_composition_missing",
         "animal_origin_unknown",
         "footwear_materials_missing",
-        "fibre_percentages_not_100"
+        "fibre_percentages_not_100",
+        "material_unknown",
+        "qualifier_deprecated"
       ],
-      "description": "Label completeness warning (see docs/import-format.md#label-completeness). Never blocks a write or publishing. Clients MUST ignore unknown codes."
+      "description": "Warning with a stable code: the label completeness warnings, material_unknown (a material code outside vocabularies/materials.json) and qualifier_deprecated (a fibre written with the draft single `qualifier`); see docs/import-format.md#label-completeness. Never blocks a write or publishing. Clients MUST ignore unknown codes."
     }
   }
 }

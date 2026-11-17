@@ -1,0 +1,226 @@
+{
+  "description": "Conformance I-IMP-12 (docs/import-format.md 1.2.1). Apply the files in order, each sent as the import's products.csv (mode upsert, no images, no assets.csv), to a node that holds the import of fixtures/kestrel. counts, errors and changes as in expected.json. products: the ProductDetail afterwards, matched like fixtures/expected, so `variants` lists every variant of KL-8101 in order (by external_id) and nothing else; the protocol `id` of each variant is the same after every file. Afterwards the runner deletes product KL-8101 through the Ingest API, so the node holds exactly the Kestrel import again.",
+  "cases": [
+    {
+      "file": "id-1-without-gtin.csv",
+      "what": "A new product without GTINs and without a variant_id column. The default external id is style-colour-size[-size_length]: 32 with length 32 and 32 with length 34 are two variants, and the size 32/34 gives ..-32_34 because an external id cannot hold a slash. Row 4 resolves to the variant of row 3: an error, the row is skipped.",
+      "counts": {
+        "rows": 4,
+        "created": 4,
+        "updated": 0,
+        "unchanged": 0,
+        "errors": 1
+      },
+      "errors": [
+        {
+          "file": "products.csv",
+          "row": 4,
+          "column": "variant_id",
+          "severity": "error",
+          "obx_error": "validation_failed",
+          "value": "KL-8101-IND-32_34"
+        }
+      ],
+      "changes": [
+        {
+          "type": "product",
+          "op": "upsert",
+          "external_id": "KL-8101"
+        },
+        {
+          "type": "variant",
+          "op": "upsert",
+          "external_id": "KL-8101-IND-32-32"
+        },
+        {
+          "type": "variant",
+          "op": "upsert",
+          "external_id": "KL-8101-IND-32-34"
+        },
+        {
+          "type": "variant",
+          "op": "upsert",
+          "external_id": "KL-8101-IND-32_34"
+        }
+      ],
+      "products": {
+        "KL-8101": {
+          "variants": [
+            {
+              "external_id": "KL-8101-IND-32-32",
+              "gtin": null,
+              "gtin_original": null,
+              "size": "32",
+              "size_length": "32"
+            },
+            {
+              "external_id": "KL-8101-IND-32-34",
+              "gtin": null,
+              "gtin_original": null,
+              "size": "32",
+              "size_length": "34"
+            },
+            {
+              "external_id": "KL-8101-IND-32_34",
+              "gtin": null,
+              "gtin_original": null,
+              "size": "32/34",
+              "size_length": null
+            }
+          ]
+        }
+      }
+    },
+    {
+      "file": "id-2-late-gtin.csv",
+      "what": "The same rows, now with their GTINs: each variant is updated in place and keeps its external id and its protocol id; no variant is created or deleted.",
+      "counts": {
+        "rows": 3,
+        "created": 0,
+        "updated": 3,
+        "unchanged": 1,
+        "errors": 0
+      },
+      "errors": [],
+      "changes": [
+        {
+          "type": "variant",
+          "op": "upsert",
+          "external_id": "KL-8101-IND-32-32"
+        },
+        {
+          "type": "variant",
+          "op": "upsert",
+          "external_id": "KL-8101-IND-32-34"
+        },
+        {
+          "type": "variant",
+          "op": "upsert",
+          "external_id": "KL-8101-IND-32_34"
+        }
+      ],
+      "products": {
+        "KL-8101": {
+          "variants": [
+            {
+              "external_id": "KL-8101-IND-32-32",
+              "gtin": "02000810101018",
+              "gtin_original": "2000810101018",
+              "size": "32",
+              "size_length": "32"
+            },
+            {
+              "external_id": "KL-8101-IND-32-34",
+              "gtin": "02000810101025",
+              "gtin_original": "2000810101025",
+              "size": "32",
+              "size_length": "34"
+            },
+            {
+              "external_id": "KL-8101-IND-32_34",
+              "gtin": "02000810101032",
+              "gtin_original": "2000810101032",
+              "size": "32/34",
+              "size_length": null
+            }
+          ]
+        }
+      }
+    },
+    {
+      "file": "id-3-gtin-finds-variant.csv",
+      "what": "A row whose GTIN belongs to a variant of this product updates that variant, also when its size changed: the variant KL-8101-IND-32-32 becomes size 33 and keeps its external id; no variant KL-8101-IND-33-32 is created.",
+      "counts": {
+        "rows": 1,
+        "created": 0,
+        "updated": 1,
+        "unchanged": 1,
+        "errors": 0
+      },
+      "errors": [],
+      "changes": [
+        {
+          "type": "variant",
+          "op": "upsert",
+          "external_id": "KL-8101-IND-32-32"
+        }
+      ],
+      "products": {
+        "KL-8101": {
+          "variants": [
+            {
+              "external_id": "KL-8101-IND-32-32",
+              "gtin": "02000810101018",
+              "gtin_original": "2000810101018",
+              "size": "33",
+              "size_length": "32"
+            },
+            {
+              "external_id": "KL-8101-IND-32-34",
+              "gtin": "02000810101025",
+              "gtin_original": "2000810101025",
+              "size": "32",
+              "size_length": "34"
+            },
+            {
+              "external_id": "KL-8101-IND-32_34",
+              "gtin": "02000810101032",
+              "gtin_original": "2000810101032",
+              "size": "32/34",
+              "size_length": null
+            }
+          ]
+        }
+      }
+    },
+    {
+      "file": "id-4-gtin-of-other-product.csv",
+      "what": "The GTIN belongs to a variant of another product (KO-1001): gtin_conflict, the row is skipped, nothing is written.",
+      "counts": {
+        "rows": 1,
+        "created": 0,
+        "updated": 0,
+        "unchanged": 0,
+        "errors": 1
+      },
+      "errors": [
+        {
+          "file": "products.csv",
+          "row": 1,
+          "column": "gtin",
+          "severity": "error",
+          "obx_error": "gtin_conflict",
+          "value": "2000100101025"
+        }
+      ],
+      "changes": [],
+      "products": {
+        "KL-8101": {
+          "variants": [
+            {
+              "external_id": "KL-8101-IND-32-32",
+              "gtin": "02000810101018",
+              "gtin_original": "2000810101018",
+              "size": "33",
+              "size_length": "32"
+            },
+            {
+              "external_id": "KL-8101-IND-32-34",
+              "gtin": "02000810101025",
+              "gtin_original": "2000810101025",
+              "size": "32",
+              "size_length": "34"
+            },
+            {
+              "external_id": "KL-8101-IND-32_34",
+              "gtin": "02000810101032",
+              "gtin_original": "2000810101032",
+              "size": "32/34",
+              "size_length": null
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

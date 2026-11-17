@@ -332,7 +332,10 @@ func formatMaterials(ms []MaterialPart) string {
 	for _, m := range ms {
 		var fs []string
 		for _, f := range m.Fibers {
-			c := strconv.FormatFloat(f.Percentage, 'f', -1, 64) + "% " + f.Material.Code
+			c := f.Material.Code
+			if f.Percentage != nil {
+				c = strconv.FormatFloat(*f.Percentage, 'f', -1, 64) + "% " + c
+			}
 			for _, q := range f.Qualifiers {
 				c += " (" + q.Code + ")"
 			}

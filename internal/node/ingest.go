@@ -533,7 +533,7 @@ func (a *App) replayIdempotent(ctx context.Context, w http.ResponseWriter, scope
 		return false
 	}
 	if h != reqHash {
-		failP(w, "conflict", "This Idempotency-Key was used for a different request.")
+		failP(w, "idempotency_key_reused", "This Idempotency-Key was used in the last 24 hours with a different request body; use a new key for a new request.")
 		return true
 	}
 	w.Header().Set("Content-Type", "application/json")

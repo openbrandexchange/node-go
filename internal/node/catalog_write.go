@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"sort"
 	"strings"
 	"time"
 	"unicode/utf8"
@@ -136,11 +135,14 @@ type prepared struct {
 	warnings  []string
 	details   []WarningDetail
 	files     map[string]FileRef
+	// deprecated is the pointer of the first fibre written with the draft
+	// single "qualifier" (warning qualifier_deprecated), or "".
+	deprecated string
 }
 
 // prepare validates doc for kind and builds the stored write model.
 func (w *writer) prepare(kind, ext string, doc map[string]any, existing *row) (*prepared, *problem.Problem) {
-	prepareArticleInput(kind, doc)
+	deprecated := prepareArticleInput(kind, doc)
 	if errs := lenientValidate(inputSchema[kind], doc); errs != nil {
 		// Map GTIN pattern failures on variants to invalid_gtin.
 		if kind == KindVariant {
@@ -152,20 +154,24 @@ func (w *writer) prepare(kind, ext string, doc map[string]any, existing *row) (*
 		}
 		return nil, validationProblem(errs)
 	}
-	p := &prepared{cols: map[string]any{}}
+	p := &prepared{cols: map[string]any{}, deprecated: deprecated}
 	known := map[string]bool{}
 	for _, k := range knownFields[kind] {
 		known[k] = true
 	}
-	var unknown []string
-	for k := range doc {
-		if !known[k] && !strings.HasPrefix(k, "x-") {
-			unknown = append(unknown, k)
+	// Unknown members at any depth are ignored with a warning naming their
+	// JSON Pointer (ingest.md §3.1); x- members where the schema allows
+	// them are extensions and are kept (ext.go).
+	for _, ptr := range schemas.Strict().UnknownMembers(inputSchema[kind], mustJSON(doc)) {
+		if top := strings.TrimPrefix(ptr, "/"); !strings.Contains(top, "/") && known[top] {
+			continue
 		}
+		p.warnings = append(p.warnings, fmt.Sprintf("unknown member %s ignored", ptr))
 	}
-	sort.Strings(unknown)
-	for _, k := range unknown {
-		p.warnings = append(p.warnings, fmt.Sprintf("unknown field %q ignored", k))
+	if p.deprecated != "" {
+		ptr := p.deprecated
+		p.details = append(p.details, WarningDetail{Code: warnQualifierDeprecated, Pointer: &ptr,
+			Detail: "the single \"qualifier\" of drafts of 0.3 was read as \"qualifiers\"; send \"qualifiers\" (a list) instead"})
 	}
 	if s, ok := doc["status"].(string); ok {
 		p.status = &s
@@ -230,7 +236,7 @@ func (w *writer) prepare(kind, ext string, doc map[string]any, existing *row) (*
 		if f := d.FootwearMaterials; f != nil && f.Upper == nil && f.LiningAndSock == nil && f.OuterSole == nil {
 			d.FootwearMaterials = nil
 		}
-		p.details = labelWarnings(&d)
+		p.details = append(p.details, labelWarnings(&d)...)
 		for _, wd := range p.details {
 			p.warnings = append(p.warnings, wd.Code+": "+wd.Detail)
 		}
@@ -256,15 +262,16 @@ func (w *writer) prepare(kind, ext string, doc map[string]any, existing *row) (*
 				return nil, problem.New("invalid_gtin", "GTIN %s has a wrong check digit.", g).Field("/gtin", "invalid_gtin", "wrong check digit")
 			}
 			n, _ := gtin.Normalize(g)
-			var other string
-			q := `SELECT external_id FROM variants WHERE gtin = ?`
+			var other, otherProduct string
+			q := `SELECT v.external_id, p.external_id FROM variants v JOIN products p ON p.id = v.product_id WHERE v.gtin = ?`
 			args := []any{n}
 			if existing != nil {
-				q += ` AND id <> ?`
+				q += ` AND v.id <> ?`
 				args = append(args, existing.ID)
 			}
-			if w.tx.QueryRow(w.ctx, q, args...).Scan(&other) == nil {
-				return nil, problem.New("gtin_conflict", "GTIN %s already belongs to variant %q.", g, other).Field("/gtin", "gtin_conflict", "already in use")
+			if w.tx.QueryRow(w.ctx, q, args...).Scan(&other, &otherProduct) == nil {
+				msg := fmt.Sprintf("GTIN %s already belongs to variant %q of product %q", g, other, otherProduct)
+				return nil, problem.New("gtin_conflict", "%s.", msg).Field("/gtin", "gtin_conflict", msg)
 			}
 			norm = n
 		}

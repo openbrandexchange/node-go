@@ -161,7 +161,7 @@
   "variants": [
     {
       "id": "{{id}}",
-      "external_id": "2000100801017",
+      "external_id": "KO-1008-BLK-CABIN",
       "product_id": "{{id}}",
       "brand_id": "{{id}}",
       "gtin": "02000100801017",
@@ -191,7 +191,7 @@
     },
     {
       "id": "{{id}}",
-      "external_id": "2000100801024",
+      "external_id": "KO-1008-BLK-CABIN PLUS",
       "product_id": "{{id}}",
       "brand_id": "{{id}}",
       "gtin": "02000100801024",

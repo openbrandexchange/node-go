@@ -100,10 +100,17 @@ type imageSource struct {
 	Manifest *manifestEntry
 }
 
+// variantPlan is one variant row. ext is the variant_id cell (empty when
+// the row has none); which variant the row is gets decided when the product
+// is applied (import-format.md §1.2.1): by ext, else by GTIN within the
+// product, else by the default id def.
 type variantPlan struct {
-	ext string
-	doc map[string]any
-	row int
+	ext     string
+	def     string
+	gtin14  string
+	gtinRaw string
+	doc     map[string]any
+	row     int
 }
 
 type productPlan struct {
@@ -129,18 +136,22 @@ type imagePlan struct {
 }
 
 type importer struct {
-	a        *App
-	ctx      context.Context
-	opts     importOptions
-	allowed  []string
-	lang     string
-	errors   []ImportRowError
-	counts   importCounts
-	plans    []*productPlan
-	byExt    map[string]*productPlan
-	extra    map[string]*productPlan // image-only products (from the node)
-	extraOrd []string
-	progress func(done, total int)
+	a       *App
+	ctx     context.Context
+	opts    importOptions
+	allowed []string
+	lang    string
+	errors  []ImportRowError
+	counts  importCounts
+	plans   []*productPlan
+	byExt   map[string]*productPlan
+	// Variants this import already addressed (by external id), and the
+	// external id each GTIN of this import resolved to.
+	seenVariant map[string]int
+	gtinExt     map[string]string
+	extra       map[string]*productPlan // image-only products (from the node)
+	extraOrd    []string
+	progress    func(done, total int)
 	// present lists the columns of products.csv (import rule 9).
 	present presentColumns
 	// workbooks holds row 1 of products.xlsx / assets.xlsx, keyed by the
@@ -593,7 +604,10 @@ func (im *importer) productDoc(row importfmt.Row, header []string, style string)
 			var fibers []any
 			for _, f := range p.Fibers {
 				// The file holds codes; the write path adds the names.
-				fib := map[string]any{"material": map[string]any{"code": f.Material}, "percentage": f.Percentage}
+				fib := map[string]any{"material": map[string]any{"code": f.Material}}
+				if f.Percentage != nil {
+					fib["percentage"] = *f.Percentage
+				}
 				if len(f.Qualifiers) > 0 {
 					qs := make([]any, len(f.Qualifiers))
 					for i, q := range f.Qualifiers {
@@ -715,12 +729,14 @@ func (im *importer) variantDoc(row importfmt.Row, header []string, plan *product
 	}
 	doc := map[string]any{"product_external_id": plan.ext}
 	gtinRaw := row.Get("gtin")
+	gtin14 := ""
 	if gtinRaw != "" {
 		g, err := importfmt.GTINCell(gtinRaw)
 		if err != nil {
 			return nil, &cellErr{"gtin", "invalid_gtin", err.Error(), gtinRaw}
 		}
 		doc["gtin"] = g
+		gtin14, _ = normalizeGTIN(g)
 	}
 	c := map[string]any{"code": color}
 	if n := importfmt.Localized(row, header, "color_name", im.lang); n != nil {
@@ -773,18 +789,10 @@ func (im *importer) variantDoc(row importfmt.Row, header []string, plan *product
 		doc["status"] = s
 	}
 	ext := row.Get("variant_id")
-	if ext == "" {
-		if g, ok := doc["gtin"].(string); ok {
-			ext = g
-		} else {
-			ext = plan.style + "-" + color
-			if s := row.Get("size"); s != "" {
-				ext += "-" + s
-			}
+	if ext != "" {
+		if _, ok := ValidExternalID(ext); !ok {
+			return nil, &cellErr{"variant_id", "validation_failed", "invalid variant id", ext}
 		}
-	}
-	if _, ok := ValidExternalID(ext); !ok {
-		return nil, &cellErr{"variant_id", "validation_failed", "invalid variant id", ext}
 	}
 	plan.colors[strings.ToLower(color)] = color
 	if fam, ok := c["family"].(string); ok {
@@ -795,7 +803,83 @@ func (im *importer) variantDoc(row importfmt.Row, header []string, plan *product
 			plan.families[color] = fam
 		}
 	}
-	return &variantPlan{ext: ext, doc: doc, row: row.Num}, nil
+	return &variantPlan{ext: ext, def: DefaultVariantID(plan.style, color, row.Get("size"), row.Get("size_length")),
+		gtin14: gtin14, gtinRaw: gtinRaw, doc: doc, row: row.Num}, nil
+}
+
+// DefaultVariantID is the external id of a variant row without variant_id
+// and without a GTIN that finds a variant (import-format.md §1.2.1):
+// <style>-<color>-<size>[-<size_length>], empty parts left out with their
+// "-", control characters and "/" written as "_", nothing else changed.
+func DefaultVariantID(style, color, size, sizeLength string) string {
+	parts := []string{strings.TrimSpace(style), strings.TrimSpace(color)}
+	for _, p := range []string{size, sizeLength} {
+		if p = strings.TrimSpace(p); p != "" {
+			parts = append(parts, p)
+		}
+	}
+	return strings.Map(func(r rune) rune {
+		if r < 0x20 || r == 0x7f || r == '/' {
+			return '_'
+		}
+		return r
+	}, strings.Join(parts, "-"))
+}
+
+// resolveVariants decides which variant each row of plan is (import-format.md
+// §1.2.1), before anything of the product is written: variant_id; else the
+// variant of this product that has the row's GTIN; else the default id. A
+// GTIN of another product's variant is gtin_conflict and a second row for
+// the same variant is an error; those rows are skipped. It returns the rows
+// that failed.
+func (im *importer) resolveVariants(w *writer, plan *productPlan) (map[int]bool, error) {
+	failed := map[int]bool{}
+	var keep []variantPlan
+	for _, v := range plan.variants {
+		ext := v.ext
+		if ext == "" && v.gtin14 != "" {
+			if e, ok := im.gtinExt[v.gtin14]; ok {
+				ext = e
+			} else {
+				var vext, pext, style string
+				err := w.tx.QueryRow(w.ctx, `SELECT v.external_id, p.external_id, p.style_number FROM variants v JOIN products p ON p.id = v.product_id WHERE v.gtin = ?`, v.gtin14).Scan(&vext, &pext, &style)
+				switch {
+				case err == nil && pext == plan.ext:
+					ext = vext
+				case err == nil:
+					im.add("products.csv", v.row, "gtin", "gtin_conflict",
+						fmt.Sprintf("GTIN %s belongs to variant %q of product %s (style %s); remove it there first", v.gtinRaw, vext, pext, style), v.gtinRaw, false)
+					failed[v.row] = true
+					continue
+				case !db.NotFound(err):
+					return nil, err
+				}
+			}
+		}
+		if ext == "" {
+			ext = v.def
+			if _, ok := ValidExternalID(ext); !ok {
+				im.add("products.csv", v.row, "variant_id", "validation_failed",
+					"the default variant id (style-colour-size-size_length) is not a valid external id (at most 200 characters); give a variant_id", ext, false)
+				failed[v.row] = true
+				continue
+			}
+		}
+		if first, dup := im.seenVariant[ext]; dup {
+			im.add("products.csv", v.row, "variant_id", "validation_failed",
+				fmt.Sprintf("this row is the same variant as row %d (%s); the first row is used", first, ext), ext, false)
+			failed[v.row] = true
+			continue
+		}
+		im.seenVariant[ext] = v.row
+		if v.gtin14 != "" {
+			im.gtinExt[v.gtin14] = ext
+		}
+		v.ext = ext
+		keep = append(keep, v)
+	}
+	plan.variants = keep
+	return failed, nil
 }
 
 // ---- assets.csv and images --------------------------------------------------------
@@ -1197,9 +1281,26 @@ func (im *importer) prepareImages(plan *productPlan) {
 // applyPlan writes one product with its variants and images.
 func (im *importer) applyPlan(w *writer, plan *productPlan) error {
 	if plan.doc != nil {
+		failedRows, err := im.resolveVariants(w, plan)
+		if err != nil {
+			return err
+		}
+		// Rows are all or nothing: a product whose rows all failed is not
+		// written; its warnings go to its first row that stands.
+		firstRow := -1
+		for _, r := range plan.rows {
+			if !failedRows[r] {
+				firstRow = r
+				break
+			}
+		}
+		if firstRow < 0 {
+			plan.failed = true
+			return nil
+		}
 		bext, prob := im.resolveBrand(w, plan)
 		if prob != nil {
-			im.add("products.csv", plan.rows[0], "brand", prob.ObxError, problemDetail(prob), plan.brandRef, false)
+			im.add("products.csv", firstRow, "brand", prob.ObxError, problemDetail(prob), plan.brandRef, false)
 			plan.failed = true
 			return nil
 		}
@@ -1209,13 +1310,14 @@ func (im *importer) applyPlan(w *writer, plan *productPlan) error {
 			return err
 		} else if existing != nil {
 			doc = keepAbsentColumns(doc, existing.Data, productColumnFields, im.present)
+			carryExtensions(doc, collectExtensions([]byte(existing.Data), productExtPaths))
 		}
 		res, prob := w.Upsert(KindProduct, plan.ext, doc, "")
 		if prob != nil {
 			if prob.ObxError == "internal_error" {
 				return prob
 			}
-			im.add("products.csv", plan.rows[0], problemColumn(prob), prob.ObxError, problemDetail(prob), "", false)
+			im.add("products.csv", firstRow, problemColumn(prob), prob.ObxError, problemDetail(prob), "", false)
 			plan.failed = true
 			return nil
 		}
@@ -1223,7 +1325,7 @@ func (im *importer) applyPlan(w *writer, plan *productPlan) error {
 		// import-format.md rule 10: the product as stored (the file's
 		// values plus what rule 9 kept), at the product's first row.
 		for _, wd := range res.WarningDetails {
-			im.add("products.csv", plan.rows[0], wd.column, wd.Code, wd.Detail, "", true)
+			im.add("products.csv", firstRow, wd.column, wd.Code, wd.Detail, wd.value, true)
 		}
 		for _, v := range plan.variants {
 			vdoc := v.doc
@@ -1231,6 +1333,7 @@ func (im *importer) applyPlan(w *writer, plan *productPlan) error {
 				return err
 			} else if existing != nil {
 				vdoc = keepAbsentColumns(vdoc, existing.Data, variantColumnFields, im.present)
+				carryExtensions(vdoc, collectExtensions([]byte(existing.Data), variantExtPaths))
 			}
 			res, prob := w.Upsert(KindVariant, v.ext, vdoc, "")
 			if prob != nil {
@@ -1265,6 +1368,7 @@ func (im *importer) applyPlan(w *writer, plan *productPlan) error {
 			return err
 		} else if existing != nil {
 			doc = keepImageFacts(doc, existing.Data)
+			carryExtensions(doc, collectExtensions([]byte(existing.Data), assetExtPaths))
 		}
 		res, prob := w.Upsert(KindAsset, ip.ext, doc, "")
 		if prob != nil {
@@ -1469,7 +1573,8 @@ func (a *App) runImportJob(jc *jobContext) (any, error) {
 		}
 	}()
 	s := a.Settings(jc.ctx)
-	im := &importer{a: a, ctx: jc.ctx, opts: p.Options, allowed: p.Allowed, byExt: map[string]*productPlan{}, extra: map[string]*productPlan{}}
+	im := &importer{a: a, ctx: jc.ctx, opts: p.Options, allowed: p.Allowed, byExt: map[string]*productPlan{}, extra: map[string]*productPlan{},
+		seenVariant: map[string]int{}, gtinExt: map[string]string{}}
 	im.lang = p.Options.DefaultLanguage
 	if im.lang == "" {
 		im.lang = s.ContentLanguages()[0]

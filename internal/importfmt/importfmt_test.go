@@ -66,20 +66,25 @@ func TestMaterialsAndCare(t *testing.T) {
 		t.Fatalf("%v %v %v", parts, warns, err)
 	}
 	fib := func(m string, pct float64, qs ...string) string {
-		return fmt.Sprintf("%v", Fiber{Material: m, Percentage: pct, Qualifiers: qs})
+		var p *float64
+		if pct > 0 {
+			p = &pct
+		}
+		return fmt.Sprintf("%s %v %v", m, ptrStr(p), qs)
 	}
+	str := func(f Fiber) string { return fmt.Sprintf("%s %v %v", f.Material, ptrStr(f.Percentage), f.Qualifiers) }
 	// 0.1 keys and qualifiers give the same normalised fibre; sums are not a parse warning.
 	for _, in := range []string{"90% organic cotton", "90% cotton (organic)", "90% Cotton (Organic)", "90% organic_cotton (organic)"} {
 		p, w, err := ParseMaterials(in)
-		if err != nil || len(w) != 0 || fmt.Sprintf("%v", p[0].Fibers[0]) != fib("cotton", 90, "organic") {
+		if err != nil || len(w) != 0 || str(p[0].Fibers[0]) != fib("cotton", 90, "organic") {
 			t.Fatalf("%s: %+v %v %v", in, p, w, err)
 		}
 	}
 	p, _, err := ParseMaterials("outer: 100% polyester (recycled) (Post-Consumer), 0.5% cotton (organic)(regenerative) (organic); lining: 100% recycled_polyamide (pre_consumer); trim: 100% Merino Wool (Regenerative)")
-	if err != nil || fmt.Sprintf("%v", p[0].Fibers[0]) != fib("polyester", 100, "recycled", "post_consumer") ||
-		fmt.Sprintf("%v", p[0].Fibers[1]) != fib("cotton", 0.5, "organic", "regenerative") ||
-		fmt.Sprintf("%v", p[1].Fibers[0]) != fib("polyamide", 100, "recycled", "pre_consumer") ||
-		fmt.Sprintf("%v", p[2].Fibers[0]) != fib("merino_wool", 100, "regenerative") {
+	if err != nil || str(p[0].Fibers[0]) != fib("polyester", 100, "recycled", "post_consumer") ||
+		str(p[0].Fibers[1]) != fib("cotton", 0.5, "organic", "regenerative") ||
+		str(p[1].Fibers[0]) != fib("polyamide", 100, "recycled", "pre_consumer") ||
+		str(p[2].Fibers[0]) != fib("merino_wool", 100, "regenerative") {
 		t.Fatalf("%+v %v", p, err)
 	}
 	// The 0.1 key's qualifier comes first; combined prefixes in the order written.
@@ -88,7 +93,7 @@ func TestMaterialsAndCare(t *testing.T) {
 		"100% organic_cotton (recycled)":          fib("cotton", 100, "organic", "recycled"),
 		"100% recycled_organic_cotton":            fib("cotton", 100, "recycled", "organic"),
 	} {
-		if p, _, err := ParseMaterials(in); err != nil || fmt.Sprintf("%v", p[0].Fibers[0]) != want {
+		if p, _, err := ParseMaterials(in); err != nil || str(p[0].Fibers[0]) != want {
 			t.Fatalf("%s: %+v %v", in, p, err)
 		}
 	}
@@ -101,8 +106,22 @@ func TestMaterialsAndCare(t *testing.T) {
 			t.Fatalf("%s: expected an error", in)
 		}
 	}
-	if _, _, err := ParseMaterials("lots of cotton"); err == nil {
-		t.Fatal("expected an error")
+	// A fibre without a percentage is null; decimal commas are refused.
+	p, _, err = ParseMaterials("outer: leather; lining: 60% cotton, polyester (recycled)")
+	if err != nil || str(p[0].Fibers[0]) != fib("leather", 0) || str(p[1].Fibers[0]) != fib("cotton", 60) || str(p[1].Fibers[1]) != fib("polyester", 0, "recycled") {
+		t.Fatalf("%+v %v", p, err)
+	}
+	if p, _, err := ParseMaterials("95.5% cotton, 4.5% elastane"); err != nil || str(p[0].Fibers[0]) != fib("cotton", 95.5) {
+		t.Fatalf("%+v %v", p, err)
+	}
+	for _, in := range []string{"95,5% cotton, 4,5% elastane", "main: 100", "lots % cotton", "0% cotton", "101% cotton"} {
+		_, _, err := ParseMaterials(in)
+		if err == nil {
+			t.Fatalf("%s: expected an error", in)
+		}
+		if strings.Contains(in, ",5") && !strings.HasPrefix(err.Error(), "decimal comma") {
+			t.Fatalf("%s: %v", in, err)
+		}
 	}
 	codes, warns, err := ParseCare("wash_30|Do Not Bleach|special_treatment")
 	if err != nil || len(codes) != 3 || codes[1] != "do_not_bleach" || len(warns) != 1 {
@@ -277,5 +296,31 @@ func TestArticleDataCells(t *testing.T) {
 		if err != nil || FormatFeature(v) != c.want {
 			t.Errorf("%s=%q: %v %v", c.key, c.cell, v, err)
 		}
+	}
+}
+
+func ptrStr(p *float64) string {
+	if p == nil {
+		return "null"
+	}
+	return fmt.Sprint(*p)
+}
+
+func TestLanguageTags(t *testing.T) {
+	for in, want := range map[string]string{"NL": "nl", "de_ch": "de-CH", "ZH_hant": "zh-Hant", "sr-latn-rs": "sr-Latn-RS", "es-419": "es-419"} {
+		if got := NormalizeLang(in); got != want || !ValidLang(got) {
+			t.Errorf("%s: %s, want %s", in, got, want)
+		}
+	}
+	if got := NormalizeHeader("Name:ZH_hant"); got != "name:zh-Hant" {
+		t.Errorf("header %s", got)
+	}
+	for _, bad := range []string{"nl-x-private", "english", "de-CH-1996"} {
+		if ValidLang(NormalizeLang(bad)) {
+			t.Errorf("%s accepted", bad)
+		}
+	}
+	if u := UnknownColumns([]string{"name:zh-Hant", "name:english"}, KnownColumns); len(u) != 1 || u[0] != "name:english" {
+		t.Errorf("unknown columns %v", u)
 	}
 }

@@ -136,53 +136,7 @@
   "variants": [
     {
       "id": "{{id}}",
-      "external_id": "2000100101018",
-      "product_id": "{{id}}",
-      "brand_id": "{{id}}",
-      "gtin": "02000100101018",
-      "gtin_original": "2000100101018",
-      "sku": "KO-1001-NVY-S",
-      "color": {
-        "code": "NVY",
-        "name": {
-          "en": "Navy",
-          "nl": "Marineblauw"
-        },
-        "supplier_color": "Deep Navy",
-        "family": "blue"
-      },
-      "size": "S",
-      "size_length": null,
-      "size_system": "INT",
-      "measurements": null,
-      "updated_at": "{{datetime}}"
-    },
-    {
-      "id": "{{id}}",
-      "external_id": "2000100101025",
-      "product_id": "{{id}}",
-      "brand_id": "{{id}}",
-      "gtin": "02000100101025",
-      "gtin_original": "2000100101025",
-      "sku": "KO-1001-NVY-M",
-      "color": {
-        "code": "NVY",
-        "name": {
-          "en": "Navy",
-          "nl": "Marineblauw"
-        },
-        "supplier_color": "Deep Navy",
-        "family": "blue"
-      },
-      "size": "M",
-      "size_length": null,
-      "size_system": "INT",
-      "measurements": null,
-      "updated_at": "{{datetime}}"
-    },
-    {
-      "id": "{{id}}",
-      "external_id": "2000100101032",
+      "external_id": "KO-1001-NVY-L",
       "product_id": "{{id}}",
       "brand_id": "{{id}}",
       "gtin": "02000100101032",
@@ -205,7 +159,53 @@
     },
     {
       "id": "{{id}}",
-      "external_id": "2000100101049",
+      "external_id": "KO-1001-NVY-M",
+      "product_id": "{{id}}",
+      "brand_id": "{{id}}",
+      "gtin": "02000100101025",
+      "gtin_original": "2000100101025",
+      "sku": "KO-1001-NVY-M",
+      "color": {
+        "code": "NVY",
+        "name": {
+          "en": "Navy",
+          "nl": "Marineblauw"
+        },
+        "supplier_color": "Deep Navy",
+        "family": "blue"
+      },
+      "size": "M",
+      "size_length": null,
+      "size_system": "INT",
+      "measurements": null,
+      "updated_at": "{{datetime}}"
+    },
+    {
+      "id": "{{id}}",
+      "external_id": "KO-1001-NVY-S",
+      "product_id": "{{id}}",
+      "brand_id": "{{id}}",
+      "gtin": "02000100101018",
+      "gtin_original": "2000100101018",
+      "sku": "KO-1001-NVY-S",
+      "color": {
+        "code": "NVY",
+        "name": {
+          "en": "Navy",
+          "nl": "Marineblauw"
+        },
+        "supplier_color": "Deep Navy",
+        "family": "blue"
+      },
+      "size": "S",
+      "size_length": null,
+      "size_system": "INT",
+      "measurements": null,
+      "updated_at": "{{datetime}}"
+    },
+    {
+      "id": "{{id}}",
+      "external_id": "KO-1001-NVY-XL",
       "product_id": "{{id}}",
       "brand_id": "{{id}}",
       "gtin": "02000100101049",
@@ -228,53 +228,7 @@
     },
     {
       "id": "{{id}}",
-      "external_id": "2000100102015",
-      "product_id": "{{id}}",
-      "brand_id": "{{id}}",
-      "gtin": "02000100102015",
-      "gtin_original": "2000100102015",
-      "sku": "KO-1001-OAT-S",
-      "color": {
-        "code": "OAT",
-        "name": {
-          "en": "Oatmeal",
-          "nl": "Havermout"
-        },
-        "supplier_color": "Oat Melange",
-        "family": "beige"
-      },
-      "size": "S",
-      "size_length": null,
-      "size_system": "INT",
-      "measurements": null,
-      "updated_at": "{{datetime}}"
-    },
-    {
-      "id": "{{id}}",
-      "external_id": "2000100102022",
-      "product_id": "{{id}}",
-      "brand_id": "{{id}}",
-      "gtin": "02000100102022",
-      "gtin_original": "2000100102022",
-      "sku": "KO-1001-OAT-M",
-      "color": {
-        "code": "OAT",
-        "name": {
-          "en": "Oatmeal",
-          "nl": "Havermout"
-        },
-        "supplier_color": "Oat Melange",
-        "family": "beige"
-      },
-      "size": "M",
-      "size_length": null,
-      "size_system": "INT",
-      "measurements": null,
-      "updated_at": "{{datetime}}"
-    },
-    {
-      "id": "{{id}}",
-      "external_id": "2000100102039",
+      "external_id": "KO-1001-OAT-L",
       "product_id": "{{id}}",
       "brand_id": "{{id}}",
       "gtin": "02000100102039",
@@ -297,7 +251,53 @@
     },
     {
       "id": "{{id}}",
-      "external_id": "2000100102046",
+      "external_id": "KO-1001-OAT-M",
+      "product_id": "{{id}}",
+      "brand_id": "{{id}}",
+      "gtin": "02000100102022",
+      "gtin_original": "2000100102022",
+      "sku": "KO-1001-OAT-M",
+      "color": {
+        "code": "OAT",
+        "name": {
+          "en": "Oatmeal",
+          "nl": "Havermout"
+        },
+        "supplier_color": "Oat Melange",
+        "family": "beige"
+      },
+      "size": "M",
+      "size_length": null,
+      "size_system": "INT",
+      "measurements": null,
+      "updated_at": "{{datetime}}"
+    },
+    {
+      "id": "{{id}}",
+      "external_id": "KO-1001-OAT-S",
+      "product_id": "{{id}}",
+      "brand_id": "{{id}}",
+      "gtin": "02000100102015",
+      "gtin_original": "2000100102015",
+      "sku": "KO-1001-OAT-S",
+      "color": {
+        "code": "OAT",
+        "name": {
+          "en": "Oatmeal",
+          "nl": "Havermout"
+        },
+        "supplier_color": "Oat Melange",
+        "family": "beige"
+      },
+      "size": "S",
+      "size_length": null,
+      "size_system": "INT",
+      "measurements": null,
+      "updated_at": "{{datetime}}"
+    },
+    {
+      "id": "{{id}}",
+      "external_id": "KO-1001-OAT-XL",
       "product_id": "{{id}}",
       "brand_id": "{{id}}",
       "gtin": "02000100102046",

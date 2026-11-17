@@ -424,7 +424,7 @@ func (a *App) handleRendition(w http.ResponseWriter, r *http.Request) {
 	if bearer(r) == "" && r.URL.Query().Get("sig") != "" {
 		tag, ok := a.verifySigned(r.URL.Path, r.URL.Query())
 		if !ok {
-			failP(w, "unauthorized", "This link is invalid or expired; read the asset again for a fresh link.")
+			failP(w, "forbidden", "This link has expired or does not match its signature; read the asset again for a fresh link.")
 			return
 		}
 		vv, p := a.viewerFromTag(ctx, tag)

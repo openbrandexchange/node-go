@@ -186,7 +186,7 @@
   "variants": [
     {
       "id": "{{id}}",
-      "external_id": "2000101001010",
+      "external_id": "KO-1010-BRN-41",
       "product_id": "{{id}}",
       "brand_id": "{{id}}",
       "gtin": "02000101001010",
@@ -212,7 +212,7 @@
     },
     {
       "id": "{{id}}",
-      "external_id": "2000101001027",
+      "external_id": "KO-1010-BRN-42",
       "product_id": "{{id}}",
       "brand_id": "{{id}}",
       "gtin": "02000101001027",
@@ -238,7 +238,7 @@
     },
     {
       "id": "{{id}}",
-      "external_id": "2000101001034",
+      "external_id": "KO-1010-BRN-43",
       "product_id": "{{id}}",
       "brand_id": "{{id}}",
       "gtin": "02000101001034",

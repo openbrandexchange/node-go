@@ -37,7 +37,25 @@ func TestArticleDataImports(t *testing.T) {
 	if err := json.Unmarshal(raw, &exp); err != nil || len(exp.Cases) != 6 {
 		t.Fatalf("expected.json: %v", err)
 	}
+	ids := map[string]any{}
 	_, cursor, _ := drainChanges(t, k.all, "", 500)
+	raw, _ = json.Marshal(readFixture(t, "imports/variant-identity.expected.json"))
+	var identity struct {
+		Cases []struct {
+			File     string                    `json:"file"`
+			Counts   map[string]float64        `json:"counts"`
+			Errors   []map[string]any          `json:"errors"`
+			Changes  []map[string]any          `json:"changes"`
+			Products map[string]map[string]any `json:"products"`
+			Variants map[string]map[string]any `json:"variants"`
+		} `json:"cases"`
+	}
+	if err := json.Unmarshal(raw, &identity); err != nil || len(identity.Cases) != 4 {
+		t.Fatalf("variant-identity.expected.json: %v", err)
+	}
+	// I-IMP-12 first (import-format.md §1.2.1), then I-IMP-7; the protocol
+	// id of each KL-8101 variant stays the same after every file.
+	exp.Cases = append(identity.Cases, exp.Cases...)
 	for _, c := range exp.Cases {
 		run := k.runImport(k.admin, map[string][]string{"csv": {importsFixture(t, c.File)}}, nil)
 		if run["status"] != "succeeded" {
@@ -63,6 +81,12 @@ func TestArticleDataImports(t *testing.T) {
 		}
 		for i, want := range c.Errors {
 			for f, v := range want {
+				if f == "detail_prefix" {
+					if d, _ := errs[i]["detail"].(string); !strings.HasPrefix(d, v.(string)) {
+						t.Errorf("%s: error %d detail %q, want prefix %q", c.File, i, d, v)
+					}
+					continue
+				}
 				if errs[i][f] != v {
 					t.Errorf("%s: error %d %s = %v, want %v (%v)", c.File, i, f, errs[i][f], v, errs[i])
 				}
@@ -80,9 +104,36 @@ func TestArticleDataImports(t *testing.T) {
 			}
 		}
 		for ext, fields := range c.Products {
-			p := k.all.must(200, "GET", "/obx/v1/products/"+k.products[ext]["id"].(string), nil)
+			id, _ := k.products[ext]["id"].(string)
+			if id == "" {
+				id = k.admin.must(200, "GET", "/admin/api/catalog/products/"+ext, nil)["record"].(map[string]any)["id"].(string)
+			}
+			p := k.all.must(200, "GET", "/obx/v1/products/"+id, nil)
 			for f, v := range fields {
+				if wantVs, ok := v.([]any); ok && f == "variants" {
+					// The listed fields of every variant, in order, and no others.
+					gotVs, _ := p[f].([]any)
+					if len(gotVs) != len(wantVs) {
+						t.Errorf("%s %s: %d variants, want %d", c.File, ext, len(gotVs), len(wantVs))
+						continue
+					}
+					for i, wv := range wantVs {
+						for k, x := range wv.(map[string]any) {
+							match(t, fmt.Sprintf("%s %s.variants/%d/%s", c.File, ext, i, k), x, gotVs[i].(map[string]any)[k], nil)
+						}
+					}
+					continue
+				}
 				match(t, c.File+" "+ext+"."+f, v, p[f], nil)
+			}
+			if vs, ok := p["variants"].([]any); ok && ext == "KL-8101" {
+				for _, v := range vs {
+					vm := v.(map[string]any)
+					if prev, seen := ids[vm["external_id"].(string)]; seen && prev != vm["id"] {
+						t.Errorf("%s: variant %s changed its id", c.File, vm["external_id"])
+					}
+					ids[vm["external_id"].(string)] = vm["id"]
+				}
 			}
 		}
 		for ext, fields := range c.Variants {
@@ -90,6 +141,11 @@ func TestArticleDataImports(t *testing.T) {
 			for f, want := range fields {
 				match(t, c.File+" "+ext+"."+f, want, v[f], nil)
 			}
+		}
+		if c.File == "id-4-gtin-of-other-product.csv" {
+			// As the conformance runner does: back to exactly the Kestrel import.
+			k.ingestToken(k.admin).must(200, "DELETE", "/obx/v1/ingest/products/KL-8101", nil)
+			_, cursor, _ = drainChanges(t, k.all, cursor, 100)
 		}
 	}
 
@@ -99,15 +155,18 @@ func TestArticleDataImports(t *testing.T) {
 			t.Fatalf("%v", run)
 		}
 		items := k.admin.must(200, "GET", "/admin/api/imports/"+run["id"].(string)+"/errors", nil)["items"].([]any)
+		fx := readFixture(t, "imports/label-warnings.expected.json").(map[string]any)
+		codes := map[any]bool{}
+		for _, c := range fx["codes"].([]any) {
+			codes[c] = true
+		}
 		var got []map[string]any
 		for _, e := range items {
-			em := e.(map[string]any)
-			switch em["obx_error"] {
-			case warnFibreCompositionMissing, warnAnimalOriginUnknown, warnFootwearMaterialsMissing, warnFibrePercentagesNot100:
+			if em := e.(map[string]any); codes[em["obx_error"]] {
 				got = append(got, em)
 			}
 		}
-		want := readFixture(t, "imports/label-warnings.expected.json").(map[string]any)["warnings"].([]any)
+		want := fx["warnings"].([]any)
 		if len(got) != len(want) {
 			t.Fatalf("label warnings %v, want %v", got, want)
 		}
@@ -230,10 +289,11 @@ func TestArticleDataIngest(t *testing.T) {
 	res := ing.must(201, "PUT", "/obx/v1/ingest/products/LG-1", product)
 	validate(t, "IngestResult", res)
 	details, _ := res["warning_details"].([]any)
-	if len(details) != 1 || details[0].(map[string]any)["code"] != warnFibrePercentagesNot100 || details[0].(map[string]any)["pointer"] != "/materials/0" {
+	if len(details) != 2 || details[0].(map[string]any)["code"] != warnFibrePercentagesNot100 || details[0].(map[string]any)["pointer"] != "/materials/0" ||
+		details[1].(map[string]any)["code"] != warnMaterialUnknown || details[1].(map[string]any)["pointer"] != "/materials/0/fibers/2/material/code" {
 		t.Fatalf("warning_details %v", res)
 	}
-	if ws, _ := res["warnings"].([]any); len(ws) != 1 || !strings.HasPrefix(ws[0].(string), warnFibrePercentagesNot100) {
+	if ws, _ := res["warnings"].([]any); len(ws) != 2 || !strings.HasPrefix(ws[0].(string), warnFibrePercentagesNot100) {
 		t.Fatalf("warnings %v", res["warnings"])
 	}
 
@@ -280,7 +340,7 @@ func TestArticleDataIngest(t *testing.T) {
 		back[k] = v
 	}
 	res = ing.must(200, "PUT", "/obx/v1/ingest/products/LG-1", back)
-	if res["result"] != "unchanged" || len(res["warning_details"].([]any)) != 1 {
+	if res["result"] != "unchanged" || len(res["warning_details"].([]any)) != 2 {
 		t.Fatalf("round trip %v", res)
 	}
 

@@ -228,8 +228,13 @@ func (a *App) viewerFromAccessToken(ctx context.Context, tok string) (*Viewer, *
 	if err != nil {
 		return nil, problem.As(err)
 	}
-	if c == nil || c.Status != "active" || c.Version != cl.V {
-		return nil, problem.New("access_revoked", "This API key was revoked or its secret was rotated.")
+	if c == nil || c.Status != "active" {
+		return nil, problem.New("access_revoked", "This API key was revoked.")
+	}
+	// A rotated secret is not a revocation (protocol.md §4.3): tokens of
+	// the old secret are invalid; the client gets a new one.
+	if c.Version != cl.V {
+		return nil, problem.New("invalid_token", "The access token was issued before the client secret was rotated; request a new token.")
 	}
 	return a.viewerForClient(ctx, c, strings.Fields(cl.S))
 }

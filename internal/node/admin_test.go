@@ -253,9 +253,16 @@ func TestAccessRequestsAndRetailers(t *testing.T) {
 		if strings.Contains(string(mustJSON(list)), old) {
 			t.Fatal("secret listed")
 		}
+		oldAccess := n.client()
+		oldAccess.bearer = n.token(id, old, "")
+		oldAccess.must(200, "GET", "/obx/v1/grant", nil)
 		rot := admin.must(200, "POST", "/admin/api/api-clients/"+cl["client"].(map[string]any)["id"].(string)+"/rotate", nil)
 		newSecret := rot["client_secret"].(string)
 		n.token(id, newSecret, "")
+		// A rotation is not a revocation: the old token is invalid_token.
+		if r := oldAccess.do("GET", "/obx/v1/grant", nil); r.Status != 401 || r.JSON(t)["obx_error"] != "invalid_token" {
+			t.Fatalf("token of the old secret: %d %s", r.Status, r.Body)
+		}
 		form := "grant_type=client_credentials"
 		req, _ := http.NewRequest("POST", n.url+"/obx/v1/oauth/token", strings.NewReader(form))
 		req.Header.Set("Content-Type", "application/x-www-form-urlencoded")

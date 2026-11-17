@@ -62,7 +62,7 @@
       "fibers": {
         "type": "array",
         "minItems": 1,
-        "description": "Percentages of one part SHOULD sum to 100.",
+        "description": "The percentages of one part SHOULD sum to 100 when every fibre states one; a fibre without a percentage has `percentage` null.",
         "items": {
           "type": "object",
           "properties": {
@@ -75,9 +75,26 @@
               "description": "Material code: the English textile fibre name of Annex I of Reg. (EU) 1007/2011 in lowercase with _ (linen for flax), e.g. cotton, wool, polyester, polyamide, elastane, viscose, lyocell; the list with names is vocabularies/materials.json. Recycled or organic content is a qualifier, not a material."
             },
             "percentage": {
-              "type": "number",
+              "type": [
+                "number",
+                "null"
+              ],
               "exclusiveMinimum": 0,
-              "maximum": 100
+              "maximum": 100,
+              "description": "Share of the part in percent, or null when the brand does not state one (leather on a bag, a trim, a composition without percentages). Responses always include the property; on write it may be left out (= null)."
+            },
+            "qualifier": {
+              "deprecated": true,
+              "writeOnly": true,
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/term"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Deprecated, write paths only: the single qualifier of drafts of 0.3. A node reads it as `qualifiers: [it]` when `qualifiers` is absent (null = none; when both are present `qualifiers` wins) and warns `qualifier_deprecated`. A response never contains it."
             },
             "qualifiers": {
               "type": "array",
@@ -88,8 +105,7 @@
             }
           },
           "required": [
-            "material",
-            "percentage"
+            "material"
           ],
           "additionalProperties": false,
           "patternProperties": {

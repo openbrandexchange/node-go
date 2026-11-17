@@ -13,12 +13,7 @@ import (
 	"github.com/openbrandexchange/node-go/internal/secure"
 )
 
-var langOK = func(l string) bool {
-	if len(l) < 2 || len(l) > 8 {
-		return false
-	}
-	return importfmt.NormalizeLang(l) == l
-}
+var langOK = func(l string) bool { return importfmt.ValidLang(l) }
 
 // publicBranding is the PublicBranding schema.
 func (a *App) publicBranding(ctx context.Context) map[string]any {

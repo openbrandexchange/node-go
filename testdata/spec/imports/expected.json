@@ -1,5 +1,5 @@
 {
-  "description": "Conformance I-IMP-7. Apply the files in order, each sent as the import's products.csv (mode upsert, no images, no assets.csv), to a node that holds exactly the import of fixtures/kestrel. counts: ImportRun.counts (other count fields not checked). errors: the ImportRowErrors with severity error, in order (warnings not checked). changes: the /changes entries the import produced, in order. products/variants: fields of the protocol objects afterwards (by external_id), matched like fixtures/expected.",
+  "description": "Conformance I-IMP-7. Apply the files in order, each sent as the import's products.csv (mode upsert, no images, no assets.csv), to a node that holds exactly the import of fixtures/kestrel. counts: ImportRun.counts (other count fields not checked). errors: the ImportRowErrors with severity error, in order (warnings not checked); when an error has detail_prefix, its detail starts with that text (detail_prefix is not a member of the ImportRowError). changes: the /changes entries the import produced, in order. products/variants: fields of the protocol objects afterwards (by external_id), matched like fixtures/expected.",
   "cases": [
     {
       "file": "1-feature-update.csv",
@@ -64,7 +64,7 @@
     },
     {
       "file": "3-measurement-update.csv",
-      "what": "One measurement column with a decimal comma changes only that measurement of that variant; the product is unchanged.",
+      "what": "One measurement column with a decimal comma changes only that measurement of that variant; the product is unchanged. The row has no variant_id and no size: the variant is found by its GTIN and keeps its external id (1.2.1).",
       "counts": {
         "rows": 1,
         "created": 0,
@@ -77,12 +77,12 @@
         {
           "type": "variant",
           "op": "upsert",
-          "external_id": "2000100801017"
+          "external_id": "KO-1008-BLK-CABIN"
         }
       ],
       "products": {},
       "variants": {
-        "2000100801017": {
+        "KO-1008-BLK-CABIN": {
           "measurements": {
             "height_cm": 55,
             "width_cm": 40,
@@ -111,13 +111,13 @@
     },
     {
       "file": "5-invalid.csv",
-      "what": "Each row has one value outside the rules: every row is skipped with an error, nothing is written, the job succeeds.",
+      "what": "Each row has one value outside the rules: every row is skipped with an error, nothing is written, the job succeeds. Row 5 writes percentages with a decimal comma: the comma separates fibres, so the detail of its error starts with detail_prefix.",
       "counts": {
-        "rows": 4,
+        "rows": 5,
         "created": 0,
         "updated": 0,
         "unchanged": 0,
-        "errors": 4
+        "errors": 5
       },
       "errors": [
         {
@@ -151,6 +151,15 @@
           "severity": "error",
           "obx_error": "validation_failed",
           "value": "upper: plastic"
+        },
+        {
+          "file": "products.csv",
+          "row": 5,
+          "column": "materials",
+          "severity": "error",
+          "obx_error": "validation_failed",
+          "detail_prefix": "materials: decimal comma",
+          "value": "main: 95,5% polyester, 4,5% elastane"
         }
       ],
       "changes": [],
@@ -177,7 +186,7 @@
         {
           "type": "variant",
           "op": "upsert",
-          "external_id": "2000100801017"
+          "external_id": "KO-1008-BLK-CABIN"
         }
       ],
       "products": {
@@ -192,7 +201,7 @@
         }
       },
       "variants": {
-        "2000100801017": {
+        "KO-1008-BLK-CABIN": {
           "measurements": {
             "height_cm": 55,
             "width_cm": 40,

@@ -82,15 +82,38 @@ func NormalizeHeader(h string) string {
 	return base + ":" + NormalizeLang(lang)
 }
 
-// NormalizeLang lowercases the language and uppercases the region.
+// NormalizeLang gives a language tag its canonical case (LocalizedText):
+// language lowercase, a four-letter script title case (Hant), a region
+// uppercase (CH) or digits (419); "_" is read as "-".
 func NormalizeLang(l string) string {
-	l = strings.ReplaceAll(strings.TrimSpace(l), "_", "-")
-	lang, region, ok := strings.Cut(l, "-")
-	if !ok {
-		return strings.ToLower(lang)
+	parts := strings.Split(strings.ReplaceAll(strings.TrimSpace(l), "_", "-"), "-")
+	for i, p := range parts {
+		switch {
+		case i == 0:
+			parts[i] = strings.ToLower(p)
+		case len(p) == 4 && isAlpha(p):
+			parts[i] = strings.ToUpper(p[:1]) + strings.ToLower(p[1:])
+		default:
+			parts[i] = strings.ToUpper(p)
+		}
 	}
-	return strings.ToLower(lang) + "-" + strings.ToUpper(region)
+	return strings.Join(parts, "-")
 }
+
+func isAlpha(s string) bool {
+	for _, r := range s {
+		if (r < 'a' || r > 'z') && (r < 'A' || r > 'Z') {
+			return false
+		}
+	}
+	return true
+}
+
+var langTagRe = regexp.MustCompile(`^[a-z]{2,3}(-[A-Z][a-z]{3})?(-([A-Z]{2}|[0-9]{3}))?$`)
+
+// ValidLang reports whether l is a language tag in canonical form:
+// language, optional script, optional region (Common.json LanguageTag).
+func ValidLang(l string) bool { return langTagRe.MatchString(l) }
 
 // DetectDelimiter picks ',' or ';' (or tab) from the header line: whichever
 // occurs more often outside quotes; ties give ','.
@@ -215,9 +238,9 @@ func Localized(r Row, header []string, base, defaultLang string) map[string]stri
 		out[defaultLang] = v
 	}
 	for _, h := range header {
-		if strings.HasPrefix(h, base+":") {
+		if lang, ok := strings.CutPrefix(h, base+":"); ok && ValidLang(lang) {
 			if v := r.Get(h); v != "" {
-				out[strings.TrimPrefix(h, base+":")] = v
+				out[lang] = v
 			}
 		}
 	}
@@ -255,7 +278,10 @@ func UnknownColumns(header []string, known map[string]bool) []string {
 	var out []string
 	seen := map[string]bool{}
 	for _, h := range header {
-		base, _, _ := strings.Cut(h, ":")
+		base, lang, hasLang := strings.Cut(h, ":")
+		if hasLang && base != "attr" && base != "feature" && !ValidLang(lang) {
+			base = h // a language tag of another form is an unknown column
+		}
 		if h == "" || known[base] || strings.HasPrefix(h, "attr:") || strings.HasPrefix(h, "feature:") || seen[h] {
 			continue
 		}
@@ -328,7 +354,7 @@ func Slug(s string) string {
 // the fibre's qualifier codes in order, without repeats (nil when none).
 type Fiber struct {
 	Material   string
-	Percentage float64
+	Percentage *float64 // nil: not stated ("outer: leather")
 	Qualifiers []string
 }
 
@@ -339,7 +365,8 @@ type Part struct {
 }
 
 var (
-	fiberRe     = regexp.MustCompile(`^([0-9]+(?:[.,][0-9]+)?)\s*%\s*(.+)$`)
+	fiberRe     = regexp.MustCompile(`^([0-9]+(?:\.[0-9]+)?)\s*%\s*(.+)$`)
+	digitsRe    = regexp.MustCompile(`^[0-9]+(?:\.[0-9]+)?\s*%?$`)
 	qualifierRe = regexp.MustCompile(`\s*\(([^()]*)\)\s*$`)
 )
 
@@ -408,16 +435,23 @@ func ParseMaterials(s string) ([]Part, []string, error) {
 			if f == "" {
 				continue
 			}
-			m := fiberRe.FindStringSubmatch(f)
-			if m == nil {
-				return nil, nil, fmt.Errorf("%q is not like \"95%% cotton\"", f)
+			// A fibre of digits only comes from a decimal comma
+			// ("95,5% cotton" splits into "95" and "5% cotton").
+			if digitsRe.MatchString(f) {
+				return nil, nil, fmt.Errorf("decimal comma: %q is a number without a material; write percentages with a decimal point (95.5%% cotton), the comma separates fibres", f)
 			}
-			pct, err := strconv.ParseFloat(strings.ReplaceAll(m[1], ",", "."), 64)
-			if err != nil || pct <= 0 || pct > 100 {
-				return nil, nil, fmt.Errorf("invalid percentage in %q", f)
+			var fib Fiber
+			rest := f
+			if m := fiberRe.FindStringSubmatch(f); m != nil {
+				pct, err := strconv.ParseFloat(m[1], 64)
+				if err != nil || pct <= 0 || pct > 100 {
+					return nil, nil, fmt.Errorf("invalid percentage in %q", f)
+				}
+				fib.Percentage = &pct
+				rest = m[2]
+			} else if strings.Contains(f, "%") {
+				return nil, nil, fmt.Errorf("%q is not like \"95%% cotton\" or \"leather\"", f)
 			}
-			fib := Fiber{Percentage: pct}
-			rest := m[2]
 			var brackets []string // right to left
 			for {
 				qm := qualifierRe.FindStringSubmatch(rest)

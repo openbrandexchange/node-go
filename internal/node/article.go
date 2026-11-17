@@ -106,8 +106,8 @@ type WarningDetail struct {
 	Code    string  `json:"code"`
 	Pointer *string `json:"pointer"`
 	Detail  string  `json:"detail"`
-	// column is the products.csv column an import names.
-	column string
+	// column is the products.csv column an import names; value its value.
+	column, value string
 }
 
 // normalizeTerms gives stored materials and care their canonical 0.3 form
@@ -201,7 +201,7 @@ func cloneString(s *string) *string {
 // prepareArticleInput applies ingest.md §3.4 to a write document before it
 // is validated: an empty measurements or features object (or members that
 // are null, "not stated") and an empty certifications list are null.
-func prepareArticleInput(kind string, doc map[string]any) {
+func prepareArticleInput(kind string, doc map[string]any) (deprecated string) {
 	emptyToNull := func(key string) {
 		m, ok := doc[key].(map[string]any)
 		if !ok {
@@ -218,7 +218,7 @@ func prepareArticleInput(kind string, doc map[string]any) {
 	}
 	switch kind {
 	case KindProduct:
-		draftQualifier(doc["materials"])
+		deprecated = draftQualifier(doc["materials"])
 		emptyToNull("features")
 		if l, ok := doc["certifications"].([]any); ok && len(l) == 0 {
 			doc["certifications"] = nil
@@ -226,18 +226,21 @@ func prepareArticleInput(kind string, doc map[string]any) {
 	case KindVariant:
 		emptyToNull("measurements")
 	}
+	return deprecated
 }
 
-// draftQualifier reads the single "qualifier" of a fibre, as the first 0.3
-// draft wrote it, as "qualifiers" with that one term (or none for null), so
-// a client written against the draft does not lose it silently (unknown
-// properties are otherwise ignored). "qualifiers" wins when both are sent.
-func draftQualifier(materials any) {
+// draftQualifier reads the single "qualifier" of a fibre, as drafts of 0.3
+// wrote it (ingest.md §3.1): without "qualifiers" it becomes qualifiers
+// [that term] (null: []); with both, "qualifiers" wins. It returns the
+// pointer of the first such fibre for the warning qualifier_deprecated
+// (once per write), or "".
+func draftQualifier(materials any) string {
+	first := ""
 	parts, _ := materials.([]any)
-	for _, p := range parts {
+	for i, p := range parts {
 		pm, _ := p.(map[string]any)
 		fibers, _ := pm["fibers"].([]any)
-		for _, f := range fibers {
+		for j, f := range fibers {
 			fm, ok := f.(map[string]any)
 			if !ok {
 				continue
@@ -246,15 +249,21 @@ func draftQualifier(materials any) {
 			if !has {
 				continue
 			}
+			if first == "" {
+				first = fmt.Sprintf("/materials/%d/fibers/%d/qualifier", i, j)
+			}
 			delete(fm, "qualifier")
 			if _, ok := fm["qualifiers"]; ok {
 				continue
 			}
 			if q != nil {
 				fm["qualifiers"] = []any{q}
+			} else {
+				fm["qualifiers"] = []any{}
 			}
 		}
 	}
+	return first
 }
 
 // Item types that get label completeness warnings (import-format.md rule 10).
@@ -279,6 +288,8 @@ const (
 	warnAnimalOriginUnknown      = "animal_origin_unknown"
 	warnFootwearMaterialsMissing = "footwear_materials_missing"
 	warnFibrePercentagesNot100   = "fibre_percentages_not_100"
+	warnMaterialUnknown          = "material_unknown"
+	warnQualifierDeprecated      = "qualifier_deprecated"
 )
 
 // labelWarnings checks a product as stored and returns what a consumer label
@@ -312,20 +323,41 @@ func labelWarnings(d *ProductData) []WarningDetail {
 				}
 			}
 		}
+		// Every fibre states a percentage and they do not sum to 100, or
+		// the stated ones exceed 100 (import-format.md rule 10).
 		for i, p := range d.Materials {
-			sum := 0.0
+			sum, all := 0.0, true
 			for _, f := range p.Fibers {
-				sum += f.Percentage
+				if f.Percentage == nil {
+					all = false
+					continue
+				}
+				sum += *f.Percentage
 			}
-			if math.Abs(sum-100) > 0.01 {
+			if (all && math.Abs(sum-100) > 0.01) || sum > 100.01 {
 				add(warnFibrePercentagesNot100, fmt.Sprintf("/materials/%d", i), "materials",
-					fmt.Sprintf("the percentages of %s add up to %g, not 100 (Regulation (EU) No 1007/2011 Art. 9)", p.Part, sum))
+					fmt.Sprintf("the percentages of %s add up to %g, not 100 (Regulation (EU) No 1007/2011 Art. 9)", p.Part.Code, sum))
 			}
 		}
 	case footwearItemTypes[it]:
 		if !d.FootwearMaterials.complete() {
 			add(warnFootwearMaterialsMissing, "/footwear_materials", "footwear_materials",
 				"the footwear materials of "+strings.Join(d.FootwearMaterials.missing(), ", ")+" are missing; they must be on the label of footwear (Directive 94/11/EC)")
+		}
+	}
+	// material_unknown for every item type, after the label warnings: once
+	// per code outside vocabularies/materials.json, at its first fibre.
+	seen := map[string]bool{}
+	for i, p := range d.Materials {
+		for j, f := range p.Fibers {
+			c := f.Material.Code
+			if _, known := vocab.Materials.Lookup(c); known || seen[c] {
+				continue
+			}
+			seen[c] = true
+			ptr := fmt.Sprintf("/materials/%d/fibers/%d/material/code", i, j)
+			out = append(out, WarningDetail{Code: warnMaterialUnknown, Pointer: &ptr, column: "materials", value: c,
+				Detail: fmt.Sprintf("material %q is not in the vocabulary (vocabularies/materials.json); it is kept as written, without a name", c)})
 		}
 	}
 	return out

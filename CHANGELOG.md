@@ -24,7 +24,28 @@ clients (allowed before 1.0); see [docs/upgrading.md](docs/upgrading.md#from-02-
 - `OBX-Version: 0.3`, `spec_version` `0.3.0`, schemas `/schemas/v0.3/`. Only 0.3 is supported:
   writes in the 0.2 shape are `422 validation_failed`.
 
+- **Variant ids in imports** (spec import-format.md §1.2.1): a row without `variant_id` finds
+  its variant by GTIN within the product, else by the default id
+  `<style>-<color>-<size>[-<size_length>]` (with `/` and control characters as `_`), **never the
+  GTIN**. A GTIN that arrives or changes later updates the same variant; a GTIN of another
+  product's variant is `gtin_conflict`; two rows for one variant are an error for the later
+  one. Existing variants keep their (GTIN-shaped) ids. The CSV export always fills `variant_id`.
+- **`percentage` of a fibre may be `null`** (not stated; `outer: leather` in the file).
+  Percentages take a decimal point only (`95,5% cotton` is `materials: decimal comma …`).
+  `fibre_percentages_not_100` only when every fibre states one, or the stated ones exceed 100.
+- **Unknown members are never a `422`**: `x-<vendor>-<name>` members are now stored and returned
+  (Ingest record, protocol, `/changes`, exports; kept by imports), other unknown members at any
+  depth are ignored with a warning naming their JSON Pointer.
+- A `limit` above the maximum is clamped instead of `400`; an expired or tampered signed URL is
+  `403 forbidden` (was `401`); after a client secret rotation old tokens get `invalid_token`
+  (was `access_revoked`); an `Idempotency-Key` reused with another body is
+  `409 idempotency_key_reused` (was `409 conflict`; `/imports` replayed without comparing).
+
 ### Added
+- Warnings `material_unknown` (a material code outside the vocabulary, imports and Ingest API)
+  and `qualifier_deprecated` (the draft single `qualifier` read as a list of one).
+- Language tags with a script and a numeric region (`zh-Hant`, `sr-Latn-RS`, `es-419`) in
+  settings and `name:<lang>` columns.
 - The specification's **vocabularies** (parts, materials, qualifiers, care codes with names in
   en, nl, de, fr, and for care the ISO 3758 category and GINETEX symbol) are embedded in the
   binary (`internal/vocab`, synced by `scripts/sync-spec.sh`). On every write path (Ingest API,
@@ -47,7 +68,7 @@ clients (allowed before 1.0); see [docs/upgrading.md](docs/upgrading.md#from-02-
   `upsert` in `/changes`. **Migration 5** adds `product_qualifiers` and rewrites products stored
   by a pre-release build of this version (one `qualifier` per fibre) to `qualifiers`, with an
   `upsert` each; its cursors stay valid. The Ingest API and admin still read such a `qualifier`
-  as a list of one.
+  as a list of one, with the warning `qualifier_deprecated`.
 - **Cursors from before the upgrade expire** (protocol.md §6.4, conformance P-FEED-7): every
   `/changes` cursor carries the node's cursor epoch; migration 4 moves it from 0 to 1, so cursors
   issued by 0.2 (and earlier export `changes_cursor`s) answer `410 cursor_expired` and consumers
@@ -57,8 +78,9 @@ clients (allowed before 1.0); see [docs/upgrading.md](docs/upgrading.md#from-02-
 ### Changed
 - Label completeness warnings and the article data CSV export use the material and qualifier
   codes (one bracket per qualifier: `100% polyester (recycled) (post_consumer)`).
-- Fixtures, schemas and vocabularies synced from spec 0.3.0 (commit 5737aa2: several qualifiers
-  per fibre, the codes `in_conversion`, `pre_consumer` and `post_consumer`);
+- Fixtures, schemas and vocabularies synced from spec 0.3.0 (commit e74ccb2: several qualifiers
+  per fibre, the codes `in_conversion`, `pre_consumer` and `post_consumer`, the review of
+  2026-11-17: Kestrel variant ids, KO-1005 leather without a percentage, new import fixtures);
   `testdata/kestrel-example.zip` has the new `products.csv`.
 - **Docker Compose runs the published image** `ghcr.io/openbrandexchange/node-go:${OBX_VERSION:-0.3}`
   instead of building on the server (`docker-compose.yml` and `docker-compose.local.yml`);
@@ -67,10 +89,9 @@ clients (allowed before 1.0); see [docs/upgrading.md](docs/upgrading.md#from-02-
   Hetzner and Docker guides follow this, point to the newest release tag (`v0.3.0`) and give a
   realistic time for a first setup (half a day to a day).
 
-### Open
-- Admin screens still are admin-ui 0.2.1: the admin-ui 0.3 build (terms with names, several
-  qualifiers per fibre, the portal's qualifier filter) is vendored once it is ready; the API
-  already serves everything it needs.
+- Admin screens: vendored admin-ui 0.3.0 (5ad8f05): materials and care as terms with names,
+  several qualifiers per fibre and fibres without a percentage, the portal's qualifier filter,
+  the default variant id for new variants, x- members kept when saving, and the new warnings.
 
 ## [0.2.1] - 2026-11-12
 

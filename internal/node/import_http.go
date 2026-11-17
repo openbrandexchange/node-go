@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"fmt"
 	"io"
 	"mime"
 	"net/http"
@@ -126,18 +127,16 @@ func (a *App) enqueueImport(ctx context.Context, req *importRequest, trigger, ow
 func (a *App) handleIngestImport(w http.ResponseWriter, r *http.Request, t *ingestToken) {
 	ctx := r.Context()
 	key := r.Header.Get("Idempotency-Key")
-	if key != "" {
-		var body string
-		if a.DB.QueryRow(ctx, `SELECT body FROM idempotency WHERE scope = ? AND key = ?`, "ingest:"+t.ID+":import", key).Scan(&body) == nil {
-			w.Header().Set("Content-Type", "application/json")
-			w.WriteHeader(http.StatusAccepted)
-			_, _ = w.Write([]byte(body))
-			return
-		}
-	}
 	req, p := a.parseImportUpload(r)
 	if p != nil {
 		problem.Write(w, p)
+		return
+	}
+	// The same key with the same parts (by sha256) and options replays the
+	// first answer; with other content it is idempotency_key_reused.
+	reqHash := importRequestHash(req)
+	if key != "" && a.replayIdempotent(ctx, w, "ingest:"+t.ID+":import", key, reqHash) {
+		a.cleanupStaged(req)
 		return
 	}
 	if req.options.Mode == "mirror" && !t.has("ingest:delete") {
@@ -152,7 +151,19 @@ func (a *App) handleIngestImport(w http.ResponseWriter, r *http.Request, t *inge
 	}
 	out := a.ingestJobJSON(ctx, job)
 	w.Header().Set("Location", a.Cfg.PublicURL+"/obx/v1/ingest/jobs/"+job.ID)
-	a.respondIdempotent(ctx, w, "ingest:"+t.ID+":import", key, "", http.StatusAccepted, out)
+	a.respondIdempotent(ctx, w, "ingest:"+t.ID+":import", key, reqHash, http.StatusAccepted, out)
+}
+
+// importRequestHash identifies an import upload by its parts (field, name,
+// sha256) and options, for Idempotency-Key.
+func importRequestHash(req *importRequest) string {
+	var b strings.Builder
+	for _, f := range req.files {
+		fmt.Fprintf(&b, "%s\x00%s\x00%s\n", f.Field, f.Name, f.SHA256)
+	}
+	b.Write(mustJSON(req.manifest))
+	b.Write(mustJSON(req.options))
+	return hashHex([]byte(b.String()))
 }
 
 func (a *App) handleIngestJobs(w http.ResponseWriter, r *http.Request, t *ingestToken) {

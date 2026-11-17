@@ -18,6 +18,7 @@ import (
 	"sync"
 
 	"github.com/santhosh-tekuri/jsonschema/v6"
+	"github.com/santhosh-tekuri/jsonschema/v6/kind"
 	"golang.org/x/text/language"
 	"golang.org/x/text/message"
 )
@@ -189,5 +190,47 @@ func escape(parts []string) []string {
 		p = strings.ReplaceAll(p, "~", "~0")
 		out[i] = strings.ReplaceAll(p, "/", "~1")
 	}
+	return out
+}
+
+// UnknownMembers returns the JSON Pointers of the members of raw that the
+// schema name does not define (additionalProperties), sorted. Used by the
+// lenient write paths to report what they ignore (ingest.md §3.1).
+func (v *Validator) UnknownMembers(name string, raw []byte) []string {
+	doc, err := jsonschema.UnmarshalJSON(bytes.NewReader(raw))
+	if err != nil {
+		return nil
+	}
+	s, err := v.schema(name)
+	if err != nil {
+		return nil
+	}
+	ve, ok := s.Validate(doc).(*jsonschema.ValidationError)
+	if !ok {
+		return nil
+	}
+	seen := map[string]bool{}
+	var out []string
+	var walk func(e *jsonschema.ValidationError)
+	walk = func(e *jsonschema.ValidationError) {
+		if ap, ok := e.ErrorKind.(*kind.AdditionalProperties); ok {
+			base := ""
+			if len(e.InstanceLocation) > 0 {
+				base = "/" + strings.Join(escape(e.InstanceLocation), "/")
+			}
+			for _, p := range ap.Properties {
+				ptr := base + "/" + escape([]string{p})[0]
+				if !seen[ptr] {
+					seen[ptr] = true
+					out = append(out, ptr)
+				}
+			}
+		}
+		for _, c := range e.Causes {
+			walk(c)
+		}
+	}
+	walk(ve)
+	sort.Strings(out)
 	return out
 }

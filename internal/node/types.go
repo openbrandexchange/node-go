@@ -58,9 +58,9 @@ type Term struct {
 // Fiber is one fibre of a material part. Qualifiers are in the brand's
 // order without repeats; none is [] (never null) in every representation.
 type Fiber struct {
-	Material   Term    `json:"material"`
-	Percentage float64 `json:"percentage"`
-	Qualifiers []Term  `json:"qualifiers"`
+	Material   Term     `json:"material"`
+	Percentage *float64 `json:"percentage"` // nil: not stated (null)
+	Qualifiers []Term   `json:"qualifiers"`
 }
 
 // MarshalJSON writes no qualifiers as [].
@@ -105,6 +105,7 @@ type BrandData struct {
 	LogoURL     *string       `json:"logo_url"`
 	Website     *string       `json:"website"`
 	Description LocalizedText `json:"description"`
+	Ext         Extensions    `json:"-"` // x- members (ext.go)
 }
 
 // ProductData is the stored ProductInput (without status).
@@ -128,6 +129,7 @@ type ProductData struct {
 	DPPURL               *string            `json:"dpp_url"`
 	Features             Features           `json:"features"`
 	Attributes           map[string]any     `json:"attributes"`
+	Ext                  Extensions         `json:"-"` // x- members (ext.go)
 }
 
 // VariantData is the stored VariantInput (without status).
@@ -140,6 +142,7 @@ type VariantData struct {
 	SizeLength        *string       `json:"size_length"`
 	SizeSystem        *string       `json:"size_system"`
 	Measurements      *Measurements `json:"measurements"`
+	Ext               Extensions    `json:"-"` // x- members (ext.go)
 }
 
 // FileRef references a blob in AssetData.files.
@@ -164,6 +167,7 @@ type AssetData struct {
 	Rights             map[string]json.RawMessage `json:"rights"`
 	Provenance         map[string]json.RawMessage `json:"provenance"`
 	Files              map[string]FileRef         `json:"files"`
+	Ext                Extensions                 `json:"-"` // x- members (ext.go)
 }
 
 // ---- protocol representations -------------------------------------------------
@@ -177,6 +181,7 @@ type Brand struct {
 	Website     *string       `json:"website"`
 	Description LocalizedText `json:"description"`
 	UpdatedAt   string        `json:"updated_at"`
+	Ext         Extensions    `json:"-"` // x- members (ext.go)
 }
 
 // Product is the protocol Product (Variants/Assets set = ProductDetail).
@@ -206,6 +211,7 @@ type Product struct {
 	UpdatedAt            string             `json:"updated_at"`
 	Variants             *[]Variant         `json:"variants,omitempty"`
 	Assets               *[]Asset           `json:"assets,omitempty"`
+	Ext                  Extensions         `json:"-"` // x- members (ext.go)
 }
 
 // Variant is the protocol Variant.
@@ -223,6 +229,7 @@ type Variant struct {
 	SizeSystem   *string       `json:"size_system"`
 	Measurements *Measurements `json:"measurements"`
 	UpdatedAt    string        `json:"updated_at"`
+	Ext          Extensions    `json:"-"` // x- members (ext.go)
 }
 
 // Rights is the effective rights object.
@@ -282,6 +289,7 @@ type Asset struct {
 	Provenance  Provenance            `json:"provenance"`
 	Renditions  map[string]*Rendition `json:"renditions"`
 	UpdatedAt   string                `json:"updated_at"`
+	Ext         Extensions            `json:"-"` // x- members (ext.go)
 }
 
 // LiveFile is one resolved file of an asset (stored in assets.live_files).

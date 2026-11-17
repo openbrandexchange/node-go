@@ -172,11 +172,16 @@ func limitParam(r *http.Request, def, maxv int) (int, *problem.Problem) {
 	if s == "" {
 		return def, nil
 	}
+	// Above the maximum is clamped (protocol.md §2.1); not an integer or
+	// below 1 is invalid_request.
 	n, err := strconv.Atoi(s)
-	if err != nil || n < 1 || n > maxv {
-		return 0, problem.New("invalid_request", "limit must be between 1 and %d.", maxv).Field("", "invalid_request", "limit")
+	if err != nil && len(s) > 0 && strings.Trim(s, "0123456789") == "" {
+		n, err = maxv, nil // an integer too large for int
 	}
-	return n, nil
+	if err != nil || n < 1 {
+		return 0, problem.New("invalid_request", "limit must be an integer of at least 1 (at most %d is used).", maxv).Field("", "invalid_request", "limit")
+	}
+	return min(n, maxv), nil
 }
 
 // sanitizeFilename keeps a safe file name for Content-Disposition and zips.

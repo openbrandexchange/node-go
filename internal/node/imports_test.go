@@ -231,6 +231,10 @@ func TestImports(t *testing.T) {
 		if j1["id"] != j2["id"] {
 			t.Fatalf("different jobs %v %v", j1["id"], j2["id"])
 		}
+		other, ct2 := multipartBody(t, map[string][]string{"csv": {importsFixture(t, "label-warnings.csv")}}, map[string]string{"options": `{"dry_run":true}`})
+		if r := ing.do("POST", "/obx/v1/ingest/imports", other, "Content-Type", ct2, "Idempotency-Key", "imp-1"); r.Status != 409 || r.JSON(t)["obx_error"] != "idempotency_key_reused" {
+			t.Fatalf("same key, other file: %d %s", r.Status, r.Body)
+		}
 		validate(t, "IngestJob", j1)
 		k.app.RunJobsNow(t.Context())
 		j := ing.must(200, "GET", "/obx/v1/ingest/jobs/"+j1["id"].(string), nil)

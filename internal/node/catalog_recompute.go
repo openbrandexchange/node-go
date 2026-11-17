@@ -104,7 +104,7 @@ func (w *writer) recompute(r *row) error {
 	case KindBrand:
 		var d BrandData
 		_ = json.Unmarshal([]byte(r.Data), &d)
-		rep = Brand{ID: r.ID, ExternalID: r.ExternalID, Name: d.Name, LogoURL: d.LogoURL, Website: d.Website, Description: d.Description}
+		rep = Brand{ID: r.ID, ExternalID: r.ExternalID, Name: d.Name, LogoURL: d.LogoURL, Website: d.Website, Description: d.Description, Ext: d.Ext}
 	case KindProduct:
 		var d ProductData
 		_ = json.Unmarshal([]byte(r.Data), &d)
@@ -141,7 +141,7 @@ func (w *writer) recompute(r *row) error {
 		visible = visible && w.parentVisible(KindProduct, r.ProductID) && files != nil && !expired(rights.ExpiresAt, w.a.now())
 		asset := Asset{ID: r.ID, ExternalID: r.ExternalID, ProductID: r.ProductID, BrandID: r.BrandID, MediaType: "image",
 			ColorCode: d.ColorCode, Role: d.Role, View: d.View, Position: d.Position, AltText: d.AltText,
-			Rights: rights, Provenance: effectiveProvenance(d.Provenance)}
+			Rights: rights, Provenance: effectiveProvenance(d.Provenance), Ext: d.Ext}
 		if len(d.VariantExternalIDs) > 0 {
 			asset.VariantIDs = []string{}
 			for _, ve := range d.VariantExternalIDs {
@@ -206,13 +206,13 @@ func productRep(r *row, d *ProductData) Product {
 		Description: d.Description, ItemType: d.ItemType, ItemSubtype: d.ItemSubtype, GPCBrick: d.GPCBrick, TargetGroup: d.TargetGroup,
 		Season: d.Season, Collection: d.Collection, Materials: d.Materials, ContainsAnimalOrigin: d.ContainsAnimalOrigin,
 		FootwearMaterials: d.FootwearMaterials, Care: d.Care, CountryOfOrigin: d.CountryOfOrigin, Certifications: d.Certifications,
-		DPPURL: d.DPPURL, Features: d.Features, Attributes: d.Attributes, CreatedAt: r.CreatedAt}
+		DPPURL: d.DPPURL, Features: d.Features, Attributes: d.Attributes, CreatedAt: r.CreatedAt, Ext: d.Ext}
 }
 
 // variantRep is the protocol Variant of a stored variant.
 func variantRep(r *row, d *VariantData) Variant {
 	v := Variant{ID: r.ID, ExternalID: r.ExternalID, ProductID: r.ProductID, BrandID: r.BrandID, GTINOriginal: d.GTIN,
-		SKU: d.SKU, Color: d.Color, Size: d.Size, SizeLength: d.SizeLength, SizeSystem: d.SizeSystem, Measurements: d.Measurements}
+		SKU: d.SKU, Color: d.Color, Size: d.Size, SizeLength: d.SizeLength, SizeSystem: d.SizeSystem, Measurements: d.Measurements, Ext: d.Ext}
 	if d.GTIN != nil {
 		if n, ok := normalizeGTIN(*d.GTIN); ok {
 			v.GTIN = &n

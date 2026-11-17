@@ -39,7 +39,7 @@
               "fr": "Cuir"
             }
           },
-          "percentage": 100,
+          "percentage": null,
           "qualifiers": []
         }
       ]
@@ -153,7 +153,7 @@
   "variants": [
     {
       "id": "{{id}}",
-      "external_id": "2000100501016",
+      "external_id": "KO-1005-COG-ONE SIZE",
       "product_id": "{{id}}",
       "brand_id": "{{id}}",
       "gtin": "02000100501016",

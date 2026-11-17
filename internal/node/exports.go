@@ -137,7 +137,7 @@ func (a *App) exportViewer(w http.ResponseWriter, r *http.Request, scope string)
 	if bearer(r) == "" && r.URL.Query().Get("sig") != "" {
 		tag, ok := a.verifySigned(r.URL.Path, r.URL.Query())
 		if !ok {
-			failP(w, "unauthorized", "This link is invalid or expired.")
+			failP(w, "forbidden", "This link has expired or does not match its signature; read the export again for a fresh link.")
 			return nil, nil, false
 		}
 		vv, p := a.viewerFromTag(r.Context(), tag)

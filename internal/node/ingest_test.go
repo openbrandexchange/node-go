@@ -237,6 +237,9 @@ func TestIngestReplay(t *testing.T) {
 	if b1["id"] != b2["id"] {
 		t.Fatalf("idempotency key returned different jobs: %v %v", b1["id"], b2["id"])
 	}
+	if r := ing.do("POST", "/obx/v1/ingest/batch", `[{"op":"unpublish","kind":"product","external_id":"IDEM-1"}]`, "Idempotency-Key", key); r.Status != 409 || r.JSON(t)["obx_error"] != "idempotency_key_reused" {
+		t.Fatalf("same key, other body: %d %s", r.Status, r.Body)
+	}
 	validate(t, "IngestJob", b1)
 	n.app.RunJobsNow(t.Context())
 	job := ing.must(200, "GET", "/obx/v1/ingest/jobs/"+b1["id"].(string), nil)

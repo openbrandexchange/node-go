@@ -12,6 +12,7 @@ import (
 	"net/url"
 	"os"
 	"path/filepath"
+	"regexp"
 	"strings"
 	"testing"
 )
@@ -228,11 +229,33 @@ func TestKestrelProtocol(t *testing.T) {
 		if nm.Status != 304 {
 			t.Errorf("if-none-match: %d", nm.Status)
 		}
-		// Tampered signature is refused.
+		// A tampered or expired signature is 403 forbidden, no credentials
+		// at all 401; a valid token is served whatever the signature says.
 		bad := strings.Replace(orig["url"].(string), "sig=", "sig=00", 1)
-		if b := plain.do("GET", bad, nil); b.Status != 401 {
-			t.Errorf("tampered signature: %d", b.Status)
+		if b := plain.do("GET", bad, nil); b.Status != 403 || b.JSON(t)["obx_error"] != "forbidden" {
+			t.Errorf("tampered signature: %d %s", b.Status, b.Body)
 		}
+		expired := regexp.MustCompile(`exp=[0-9]+`).ReplaceAllString(orig["url"].(string), "exp=1000000000")
+		if b := plain.do("GET", expired, nil); b.Status != 403 {
+			t.Errorf("expired signature: %d", b.Status)
+		}
+		bare := strings.SplitN(orig["url"].(string), "?", 2)[0]
+		if b := plain.do("GET", bare, nil); b.Status != 401 || b.JSON(t)["obx_error"] != "unauthorized" {
+			t.Errorf("no signature, no token: %d %s", b.Status, b.Body)
+		}
+		if b := k.all.do("GET", bad, nil); b.Status != 200 {
+			t.Errorf("valid token with a tampered signature: %d", b.Status)
+		}
+		// limit: above the maximum is clamped; 0 or not a number is 400.
+		if l := k.all.must(200, "GET", "/obx/v1/products?limit=100000", nil); len(l["items"].([]any)) == 0 {
+			t.Errorf("clamped limit: %v", l)
+		}
+		for _, bad := range []string{"0", "abc", "-1"} {
+			if r := k.all.do("GET", "/obx/v1/products?limit="+bad, nil); r.Status != 400 || r.JSON(t)["obx_error"] != "invalid_request" {
+				t.Errorf("limit=%s: %d %s", bad, r.Status, r.Body)
+			}
+		}
+		k.all.must(200, "GET", "/obx/v1/changes?limit=999999999999999999999", nil)
 		for name, max := range map[string]int{"web": 2000, "thumb": 600, "square": 2000} {
 			rd := rends[name].(map[string]any)
 			rr := k.all.do("GET", "/obx/v1/assets/"+a["id"].(string)+"/renditions/"+name, nil)
