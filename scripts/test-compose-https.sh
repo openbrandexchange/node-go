@@ -4,7 +4,9 @@
 # issues a certificate from its own local authority instead of Let's Encrypt
 # (a real domain additionally needs DNS pointing at the server; the Caddy
 # configuration is the same). Checks HTTPS, the security headers, the full
-# smoke test through Caddy, and that a restart keeps the data.
+# smoke test through Caddy, and that a restart keeps the data. The node is
+# built from this checkout (docker-compose.build.yml), so the test covers the
+# code under test rather than the last published image.
 #
 #   scripts/test-compose-https.sh     (needs Docker with compose, curl and jq)
 #
@@ -14,7 +16,7 @@ HERE="$(cd "$(dirname "$0")/.." && pwd)"
 PROJECT=obx-compose-test
 export DOMAIN=localhost ADMIN_EMAIL=ops@kestrel.example HTTPS_PORT="${HTTPS_PORT:-18443}" HTTP_PORT="${HTTP_PORT:-18080}"
 export OBX_SETUP_CODE=COMP-OSET-ESTC
-dc() { docker compose -p "$PROJECT" -f "$HERE/docker-compose.yml" "$@"; }
+dc() { docker compose -p "$PROJECT" -f "$HERE/docker-compose.yml" -f "$HERE/docker-compose.build.yml" "$@"; }
 trap 'dc down -v >/dev/null 2>&1 || true' EXIT
 # Start from zero; only DOMAIN and ADMIN_EMAIL (+ the test's own setup code and ports).
 dc up -d --build --wait --wait-timeout 180 >/dev/null

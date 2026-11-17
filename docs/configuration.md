@@ -40,6 +40,7 @@ Retention of personal data (download statistics, the audit log, access requests)
 | `DOMAIN` | required: the portal's domain, e.g. `images.yourbrand.com` (sets `OBX_PUBLIC_URL=https://$DOMAIN` and Caddy's certificate) |
 | `ADMIN_EMAIL` | required: your address for Let's Encrypt (certificate expiry notices) |
 | `HTTP_PORT`, `HTTPS_PORT` | `80`, `443`; change only when something else uses them (Let's Encrypt needs 80 or 443 reachable) |
+| `OBX_VERSION` | the tag of `ghcr.io/openbrandexchange/node-go` to run; default `0.3` (the newest 0.3.x release). Building from source instead: add `-f docker-compose.build.yml` |
 | the `OBX_…` and `LITESTREAM_…` variables above | passed on to the node when set (see `.env.example`) |
 
 ## Limits

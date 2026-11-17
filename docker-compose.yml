@@ -7,6 +7,11 @@
 #
 # ADMIN_EMAIL is the address Let's Encrypt writes to about the certificate.
 # For a quick local try without a domain: docker compose -f docker-compose.local.yml up
+#
+# The node runs the published image ghcr.io/openbrandexchange/node-go (the
+# newest 0.3.x; OBX_VERSION picks another tag, e.g. 0.3.0). To build it from
+# this folder instead:
+#   docker compose -f docker-compose.yml -f docker-compose.build.yml up -d --build
 
 x-logging: &logging
   driver: json-file
@@ -16,8 +21,7 @@ x-logging: &logging
 
 services:
   node:
-    build: .
-    image: obx-node-go:local
+    image: ghcr.io/openbrandexchange/node-go:${OBX_VERSION:-0.3}
     restart: unless-stopped
     environment:
       OBX_PUBLIC_URL: https://${DOMAIN:?set DOMAIN, e.g. images.yourbrand.com}

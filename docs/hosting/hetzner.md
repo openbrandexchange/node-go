@@ -1,7 +1,9 @@
 # Your portal on Hetzner (Germany or Finland)
 
-A brand portal on a Hetzner Cloud server in the EU, with Docker, automatic HTTPS and backups. About
-30 minutes. This guide uses only what is in this repository: `docker-compose.yml` (the portal and
+A brand portal on a Hetzner Cloud server in the EU, with Docker, automatic HTTPS and backups. Count
+on half a day to a day the first time: creating the accounts, waiting for DNS, the e-mail
+settings, importing your catalog and testing a backup restore take longer than the commands.
+This guide uses only what is in this repository: `docker-compose.yml` (the portal and
 Caddy for HTTPS), `.env.example` and `node-go backup`. The same compose file is started and checked
 end to end by `scripts/test-compose-https.sh` in CI.
 
@@ -45,6 +47,9 @@ curl -fsSL https://get.docker.com | sh
 
 ## 4. Start the portal
 
+Use the newest release: `v0.3.0` below, or the tag at the top of the
+[releases page](https://github.com/openbrandexchange/node-go/releases) if there is a newer one.
+
 ```sh
 git clone --branch v0.3.0 https://github.com/openbrandexchange/node-go && cd node-go
 cp .env.example .env
@@ -53,8 +58,11 @@ nano .env        # set DOMAIN=images.yourbrand.com and ADMIN_EMAIL=you@yourbrand
 docker compose up -d
 ```
 
-The first start builds the portal from source; on the smallest server that takes a few minutes.
-Caddy then gets a Let's Encrypt certificate for your domain and redirects http to https.
+The portal runs the published image `ghcr.io/openbrandexchange/node-go:0.3` (amd64 and arm64),
+which the first start downloads in under a minute; nothing is compiled on the server. To build
+it from source instead (for example to run your own changes), start with
+`docker compose -f docker-compose.yml -f docker-compose.build.yml up -d --build`; on the smallest
+server that takes a few minutes. Caddy then gets a Let's Encrypt certificate for your domain and redirects http to https.
 
 Keep a copy of `OBX_SECRET_KEY` from `.env` in your password manager: it encrypts stored
 import passwords and signs download links, and cannot be changed once there is data.
@@ -120,9 +128,13 @@ How to restore, and how to test a restore: [operations.md](../operations.md#back
 
 ```sh
 cd /root/node-go
-git fetch --tags && git checkout v0.3.0     # the release you want; see the releases page
-docker compose up -d --build
+docker compose pull && docker compose up -d     # the newest 0.3.x release
 ```
+
+For a new minor version, check out its release tag first (`git fetch --tags && git checkout
+v0.4.0`, see the releases page), then the same two commands. Built from source: `git fetch --tags
+&& git checkout <tag> && docker compose -f docker-compose.yml -f docker-compose.build.yml up -d
+--build`.
 
 The database migrates itself on start. Read the release notes first: [upgrading.md](../upgrading.md).
 

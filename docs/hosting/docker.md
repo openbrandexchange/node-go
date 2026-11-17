@@ -9,9 +9,11 @@ At your DNS provider, add an `A` record (and `AAAA` for IPv6) for `images.yourbr
 ## 2. Start
 
 ```sh
-git clone https://github.com/openbrandexchange/node-go && cd node-go
+git clone --branch v0.3.0 https://github.com/openbrandexchange/node-go && cd node-go
 DOMAIN=images.yourbrand.com ADMIN_EMAIL=you@yourbrand.com docker compose up -d
 ```
+
+The clone only provides the Compose file and the Caddy configuration: the portal itself is the published image `ghcr.io/openbrandexchange/node-go:0.3` (amd64 and arm64), so nothing is compiled on the server. The newest release is on the [releases page](https://github.com/openbrandexchange/node-go/releases); use its tag in `--branch`. To build the image from source instead, start with `docker compose -f docker-compose.yml -f docker-compose.build.yml up -d --build`.
 
 Those two settings are all it needs. Caddy obtains a Let's Encrypt certificate for the domain (`ADMIN_EMAIL` receives expiry notices, which you should never get because Caddy renews automatically) and redirects http to https. To keep the settings for later commands, put them in a `.env` file instead (`cp .env.example .env`); it also has the optional ones (e-mail, backups, metrics).
 
@@ -29,18 +31,18 @@ The node's secret key is generated into the data volume on first start. For a po
 
 | Container | Does |
 |---|---|
-| `node` | the portal (image built from this folder); data in the volume `obx-data` (`/data`); limited to 1 GB memory and 2 CPUs; JSON logs rotated at 5 × 20 MB |
+| `node` | the portal (the published image `ghcr.io/openbrandexchange/node-go`, or built from this folder with `docker-compose.build.yml`); data in the volume `obx-data` (`/data`); limited to 1 GB memory and 2 CPUs; JSON logs rotated at 5 × 20 MB |
 | `caddy` | HTTPS on 80/443 (HTTP/3 too), certificates in the volume `caddy-data`, forwards to the node, health checks `/readyz` |
 
-`scripts/test-compose-https.sh` (run in CI) starts exactly this file with only `DOMAIN` and `ADMIN_EMAIL` set (with `DOMAIN=localhost`, for which Caddy uses its own local certificate authority instead of Let's Encrypt), then checks HTTPS, the security headers, the redirect from http, a complete setup and import through Caddy, and that a restart keeps the data.
+`scripts/test-compose-https.sh` (run in CI) starts exactly this file (with the image built from the checkout) with only `DOMAIN` and `ADMIN_EMAIL` set (with `DOMAIN=localhost`, for which Caddy uses its own local certificate authority instead of Let's Encrypt), then checks HTTPS, the security headers, the redirect from http, a complete setup and import through Caddy, and that a restart keeps the data.
 
 ## Updating
 
 ```sh
-git pull && docker compose up -d --build
+git pull && docker compose pull && docker compose up -d
 ```
 
-The database migrates itself on start. See [upgrading.md](../upgrading.md).
+`pull` fetches the newest patch release of the image tag in use (`0.3`); for a new minor version, check out the new release tag (whose `docker-compose.yml` names it) or set `OBX_VERSION`. Built from source: `git pull && docker compose -f docker-compose.yml -f docker-compose.build.yml up -d --build`. The database migrates itself on start. See [upgrading.md](../upgrading.md).
 
 ## Backups
 

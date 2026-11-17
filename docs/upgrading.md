@@ -15,7 +15,8 @@ Releases follow [Semantic Versioning](https://semver.org/). Within a major versi
 
 | Hosting | Command |
 |---|---|
-| Docker Compose (this repository) | `git pull && docker compose up -d --build` |
+| Docker Compose (this repository, published image) | `git pull && docker compose pull && docker compose up -d` (a patch release comes with `pull`; for a new minor version set `OBX_VERSION` or pull the new `docker-compose.yml`) |
+| Docker Compose, built from source | `git pull && docker compose -f docker-compose.yml -f docker-compose.build.yml up -d --build` |
 | Docker with a published image | change the tag (`ghcr.io/openbrandexchange/node-go:0.3.0`) and `docker compose up -d` |
 | Google Cloud Run | `git pull && ./deploy/cloudrun.sh` (same settings as the first time) |
 | Fly.io | `git pull && fly deploy` |

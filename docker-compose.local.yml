@@ -1,9 +1,11 @@
 # Try the portal on your own computer: docker compose -f docker-compose.local.yml up
 # Then open http://localhost:8080 and use the setup code printed in the output.
+# Runs the published image; to build from this folder instead:
+#   docker compose -f docker-compose.local.yml -f docker-compose.build.yml up --build
+# Without Docker: go run . dev (see the README).
 services:
   node:
-    build: .
-    image: obx-node-go:local
+    image: ghcr.io/openbrandexchange/node-go:${OBX_VERSION:-0.3}
     ports:
       - "8080:8080"
     environment:

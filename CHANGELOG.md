@@ -60,6 +60,12 @@ clients (allowed before 1.0); see [docs/upgrading.md](docs/upgrading.md#from-02-
 - Fixtures, schemas and vocabularies synced from spec 0.3.0 (commit 5737aa2: several qualifiers
   per fibre, the codes `in_conversion`, `pre_consumer` and `post_consumer`);
   `testdata/kestrel-example.zip` has the new `products.csv`.
+- **Docker Compose runs the published image** `ghcr.io/openbrandexchange/node-go:${OBX_VERSION:-0.3}`
+  instead of building on the server (`docker-compose.yml` and `docker-compose.local.yml`);
+  building from source stays one flag away with the new override `docker-compose.build.yml`
+  (CI's Compose test uses it). Updating is `docker compose pull && docker compose up -d`. The
+  Hetzner and Docker guides follow this, point to the newest release tag (`v0.3.0`) and give a
+  realistic time for a first setup (half a day to a day).
 
 ### Open
 - Admin screens still are admin-ui 0.2.1: the admin-ui 0.3 build (terms with names, several
