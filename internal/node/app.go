@@ -31,7 +31,7 @@ const (
 )
 
 // Version is set at build time (-ldflags "-X .../node.Version=...").
-var Version = "0.3.0-dev"
+var Version = "0.3.0"
 
 // App holds the node's shared state.
 type App struct {

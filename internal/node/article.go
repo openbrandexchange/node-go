@@ -112,8 +112,8 @@ type WarningDetail struct {
 
 // normalizeTerms gives stored materials and care their canonical 0.3 form
 // (protocol.md §5.9.1, ingest.md §3.4): a 0.1 key recycled_<fibre> or
-// organic_<fibre> becomes the material with that qualifier (the key wins
-// over a qualifier that was sent); a known code gets the vocabulary's name
+// organic_<fibre> becomes the material with that qualifier (first in
+// qualifiers, before the ones that were sent; repeats are dropped); a known code gets the vocabulary's name
 // (and for care its category and symbol), whatever was sent; an unknown code
 // keeps what was sent, or null. A language without a name is left out.
 func normalizeTerms(ms []MaterialPart, care []CareItem) {
@@ -121,17 +121,29 @@ func normalizeTerms(ms []MaterialPart, care []CareItem) {
 		fillTerm(&ms[i].Part, vocab.Parts)
 		for j := range ms[i].Fibers {
 			f := &ms[i].Fibers[j]
-			code, q := importfmt.NormalizeMaterial(f.Material.Code)
+			code, qs := importfmt.NormalizeMaterial(f.Material.Code)
 			if code != f.Material.Code {
 				f.Material = Term{Code: code}
 			}
-			if q != "" {
-				f.Qualifier = &Term{Code: q}
-			}
 			fillTerm(&f.Material, vocab.Materials)
-			if f.Qualifier != nil {
-				fillTerm(f.Qualifier, vocab.Qualifiers)
+			// The 0.1 key's qualifiers come first; then the sent ones in
+			// order, each code once (the first occurrence wins).
+			list := make([]Term, 0, len(qs)+len(f.Qualifiers))
+			seen := map[string]bool{}
+			for _, q := range qs {
+				seen[q] = true
+				list = append(list, Term{Code: q})
 			}
+			for _, q := range f.Qualifiers {
+				if !seen[q.Code] {
+					seen[q.Code] = true
+					list = append(list, q)
+				}
+			}
+			for k := range list {
+				fillTerm(&list[k], vocab.Qualifiers)
+			}
+			f.Qualifiers = list
 		}
 	}
 	for i := range care {
@@ -206,12 +218,42 @@ func prepareArticleInput(kind string, doc map[string]any) {
 	}
 	switch kind {
 	case KindProduct:
+		draftQualifier(doc["materials"])
 		emptyToNull("features")
 		if l, ok := doc["certifications"].([]any); ok && len(l) == 0 {
 			doc["certifications"] = nil
 		}
 	case KindVariant:
 		emptyToNull("measurements")
+	}
+}
+
+// draftQualifier reads the single "qualifier" of a fibre, as the first 0.3
+// draft wrote it, as "qualifiers" with that one term (or none for null), so
+// a client written against the draft does not lose it silently (unknown
+// properties are otherwise ignored). "qualifiers" wins when both are sent.
+func draftQualifier(materials any) {
+	parts, _ := materials.([]any)
+	for _, p := range parts {
+		pm, _ := p.(map[string]any)
+		fibers, _ := pm["fibers"].([]any)
+		for _, f := range fibers {
+			fm, ok := f.(map[string]any)
+			if !ok {
+				continue
+			}
+			q, has := fm["qualifier"]
+			if !has {
+				continue
+			}
+			delete(fm, "qualifier")
+			if _, ok := fm["qualifiers"]; ok {
+				continue
+			}
+			if q != nil {
+				fm["qualifiers"] = []any{q}
+			}
+		}
 	}
 }
 

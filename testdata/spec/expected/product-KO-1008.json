@@ -40,7 +40,7 @@
             }
           },
           "percentage": 100,
-          "qualifier": null
+          "qualifiers": []
         }
       ]
     },
@@ -66,15 +66,17 @@
             }
           },
           "percentage": 100,
-          "qualifier": {
-            "code": "recycled",
-            "name": {
-              "en": "Recycled",
-              "nl": "Gerecycled",
-              "de": "Recycelt",
-              "fr": "Recyclé"
+          "qualifiers": [
+            {
+              "code": "recycled",
+              "name": {
+                "en": "Recycled",
+                "nl": "Gerecycled",
+                "de": "Recycelt",
+                "fr": "Recyclé"
+              }
             }
-          }
+          ]
         }
       ]
     }

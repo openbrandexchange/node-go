@@ -3,6 +3,7 @@
 // for the brand's own automation, in one binary.
 //
 //	node-go serve                                   start the node
+//	node-go dev                                     try it locally with the Kestrel demo catalog
 //	node-go import --csv products.csv --images dir  import from local files
 //	node-go admin reset-password --email you@example.com
 //	node-go admin create-ingest-token --name "Nightly PIM sync"
@@ -39,6 +40,8 @@ func usage() {
 
 Usage:
   node-go serve                          Start the portal (configuration via environment, see README)
+  node-go dev [--fresh]                  Try it locally: SQLite in ./data-dev, setup done with a known
+                                         login, the Kestrel demo catalog imported (run in the repository)
   node-go import [flags]                 Import a canonical CSV and/or images from local files
       --csv FILE            products.csv
       --assets FILE         assets.csv (rights, AI provenance, alt text)
@@ -69,6 +72,8 @@ func main() {
 	switch os.Args[1] {
 	case "serve":
 		err = serve()
+	case "dev":
+		err = dev(os.Args[2:])
 	case "import":
 		err = runImport(os.Args[2:])
 	case "admin":
@@ -168,6 +173,85 @@ func serve() error {
 	app.Stop()
 	app.Log.Info("stopped")
 	return nil
+}
+
+// Local try-out (node-go dev): known login, demo catalog, no Docker.
+const (
+	devDataDir   = "./data-dev"
+	devSetupCode = "DEMO-DEMO-DEMO"
+	devEmail     = "admin@kestrel.example"
+	devPassword  = "kestrel demo password"
+	devPackage   = "testdata/kestrel-example.zip"
+)
+
+// dev starts the node for a local try-out: SQLite and files in ./data-dev
+// (unless OBX_DATA_DIR / OBX_DATABASE_URL say otherwise), the first-run
+// setup done with a known login, the Kestrel demo catalog imported on the
+// first start, e-mails written to the log. Then it serves like "serve".
+func dev(args []string) error {
+	fs := flag.NewFlagSet("dev", flag.ContinueOnError)
+	fresh := fs.Bool("fresh", false, "delete "+devDataDir+" first and start over")
+	if err := fs.Parse(args); err != nil {
+		return err
+	}
+	defaults := map[string]string{"OBX_DATA_DIR": devDataDir, "OBX_SETUP_CODE": devSetupCode, "OBX_MAIL_LOG_BODIES": "true"}
+	if os.Getenv("OBX_PUBLIC_URL") == "" {
+		port := os.Getenv("PORT")
+		if port == "" {
+			port = "8080"
+		}
+		defaults["OBX_PUBLIC_URL"] = "http://localhost:" + port
+	}
+	for k, v := range defaults {
+		if os.Getenv(k) == "" {
+			_ = os.Setenv(k, v)
+		}
+	}
+	if *fresh {
+		if os.Getenv("OBX_DATA_DIR") != devDataDir {
+			return errors.New("--fresh only deletes " + devDataDir + "; unset OBX_DATA_DIR or delete your directory yourself")
+		}
+		if err := os.RemoveAll(devDataDir); err != nil {
+			return err
+		}
+	}
+	ctx := context.Background()
+	app, err := open(ctx)
+	if err != nil {
+		return err
+	}
+	first := !app.SetupDone(ctx)
+	if first {
+		if _, err := os.Stat(devPackage); err != nil {
+			app.Close()
+			return fmt.Errorf("%s not found: run node-go dev in the node-go repository", devPackage)
+		}
+		err = app.DevSetup(ctx, node.DevAccount{SetupCode: os.Getenv("OBX_SETUP_CODE"), Company: "Kestrel Outfitters", Brand: "Kestrel",
+			Name: "Demo Admin", Email: devEmail, Password: devPassword})
+		if err == nil {
+			var run map[string]any
+			run, err = app.ImportLocal(ctx, node.LocalImport{Package: devPackage, Mode: "upsert"})
+			if err == nil && run["status"] != "succeeded" {
+				err = fmt.Errorf("the demo import %v: %v", run["status"], app.ImportErrors(ctx, run["id"].(string), 10))
+			}
+			if err == nil {
+				c := run["counts"].(map[string]any)
+				fmt.Printf("Imported the Kestrel demo catalog: %v objects created, %v images\n", c["created"], c["files"])
+			}
+		}
+	}
+	url := app.Cfg.PublicURL
+	app.Close()
+	if err != nil {
+		return err
+	}
+	login := "  login:   " + devEmail + " / " + devPassword + "\n"
+	if !first {
+		login = "  login:   " + devEmail + " / " + devPassword + " (if you kept the demo account; start over with --fresh)\n"
+	}
+	fmt.Printf("\n  OBX node-go %s, local try-out\n  open:    %s\n%s  data:    %s (SQLite and files)\n  retailer view: \"View as retailer\" in the admin; e-mails are written to this output\n\n",
+		node.Version, url, login, os.Getenv("OBX_DATA_DIR"))
+	return serve()
 }
 
 func runImport(args []string) error {

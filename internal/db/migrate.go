@@ -179,6 +179,19 @@ INSERT INTO meta (key, value) VALUES ('upgrade_article_data', '0.2');
 INSERT INTO meta (key, value) VALUES ('upgrade_terms', '0.3');
 INSERT INTO meta (key, value) VALUES ('cursor_epoch', '1');
 `,
+	// 5: spec 0.3 final: a fibre has a list of qualifiers instead of one.
+	// Marks the products for the same one-time rewrite (a stored
+	// "qualifier" becomes "qualifiers"), which also fills
+	// product_qualifiers: the qualifier codes of each product's fibres, for
+	// the portal's qualifier filter and facet. Objects of this shape were
+	// never released, and every rewritten product gets an upsert, so the
+	// cursor epoch stays.
+	`
+CREATE TABLE product_qualifiers (product_id TEXT NOT NULL, code TEXT NOT NULL, PRIMARY KEY (product_id, code));
+CREATE INDEX product_qualifiers_code ON product_qualifiers(code, product_id);
+DELETE FROM meta WHERE key = 'upgrade_terms';
+INSERT INTO meta (key, value) VALUES ('upgrade_terms', '0.3');
+`,
 }
 
 // SchemaVersion is the newest schema this binary knows.

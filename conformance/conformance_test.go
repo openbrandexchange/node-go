@@ -55,7 +55,10 @@ func TestConformance(t *testing.T) {
 	// moves the /changes cursor epoch as a 0.2 -> 0.3 upgrade does.
 	op := conformance.OperatorFunc(func(ctx context.Context, a conformance.Action) (map[string]string, error) {
 		if a.Name == "simulate_spec_upgrade" {
-			return nil, app.SimulateSpecUpgrade(ctx)
+			if err := app.SimulateSpecUpgrade(ctx); err != nil {
+				return nil, err
+			}
+			return map[string]string{"simulated": "true"}, nil
 		}
 		return nil, fmt.Errorf("operator action %s: node-go does this through its admin and Ingest APIs", a.Name)
 	})

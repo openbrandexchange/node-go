@@ -5,9 +5,11 @@ import (
 	"bytes"
 	"context"
 	"encoding/csv"
+	"encoding/json"
 	"io"
 	"net/http"
 	"slices"
+	"sort"
 	"strings"
 	"testing"
 	"testing/fstest"
@@ -343,6 +345,56 @@ func TestPortal(t *testing.T) {
 		if len(facets["brands"].([]any)) != 1 || len(facets["item_types"].([]any)) == 0 {
 			t.Fatalf("facets %v", facets)
 		}
+		// Qualifier filter: any fibre of any part has any given code; OR
+		// within the parameter, AND with the others.
+		for query, want := range map[string][]string{
+			"qualifier=recycled":                             {"KO-1008", "KO-1009"},
+			"qualifier=organic&qualifier=post_consumer":      {"KO-1003", "KO-1009"},
+			"qualifier=organic,post_consumer":                {"KO-1003", "KO-1009"},
+			"qualifier=recycled&item_type=bag":               {"KO-1009"},
+			"qualifier=regenerative&qualifier=in_conversion": {"KO-1003"},
+			"qualifier=in_conversion":                        {},
+		} {
+			got := []string{}
+			for _, p := range u.must(200, "GET", "/admin/api/portal/products?"+query, nil)["items"].([]any) {
+				got = append(got, p.(map[string]any)["style_number"].(string))
+			}
+			sort.Strings(got)
+			if strings.Join(got, ",") != strings.Join(want, ",") {
+				t.Errorf("%s: %v, want %v", query, got, want)
+			}
+		}
+		qf := func(query string) string {
+			b, _ := json.Marshal(u.must(200, "GET", "/admin/api/portal/facets"+query, nil)["qualifiers"])
+			return string(b)
+		}
+		all := `[{"count":1,"label":{"de":"Bio","en":"Organic","fr":"Biologique","nl":"Biologisch"},"value":"organic"},` +
+			`{"count":1,"label":{"de":"Post-Consumer","en":"Post-consumer","fr":"Post-consommation","nl":"Post-consumer"},"value":"post_consumer"},` +
+			`{"count":2,"label":{"de":"Recycelt","en":"Recycled","fr":"Recyclé","nl":"Gerecycled"},"value":"recycled"},` +
+			`{"count":1,"label":{"de":"Regenerativ","en":"Regenerative","fr":"Régénératif","nl":"Regeneratief"},"value":"regenerative"}]`
+		if got := qf(""); got != all {
+			t.Errorf("qualifier facet\n%s\nwant\n%s", got, all)
+		}
+		// The facet ignores its own dimension and follows the others.
+		if got := qf("?qualifier=organic"); got != all {
+			t.Errorf("qualifier facet with a qualifier filter: %s", got)
+		}
+		if got := qf("?item_type=bag"); !strings.Contains(got, `"value":"post_consumer"`) || strings.Contains(got, `"value":"organic"`) {
+			t.Errorf("qualifier facet for bags: %s", got)
+		}
+		if its, _ := json.Marshal(u.must(200, "GET", "/admin/api/portal/facets?qualifier=organic", nil)["item_types"]); string(its) != `[{"count":1,"value":"t_shirt"}]` {
+			t.Errorf("item_types with qualifier=organic: %s", its)
+		}
+		csv := u.do("GET", "/admin/api/portal/products/data.csv?qualifier=post_consumer", nil)
+		if csv.Status != 200 || !strings.Contains(string(csv.Body), "outer: 100% polyester (recycled) (post_consumer); lining: 100% polyamide") ||
+			strings.Contains(string(csv.Body), "KO-1003") {
+			t.Errorf("data.csv?qualifier=post_consumer: %d %s", csv.Status, csv.Body)
+		}
+		if r := u.do("POST", "/admin/api/portal/download-jobs", map[string]any{"source": "filter", "variant": "web",
+			"filter": map[string]any{"qualifier": []string{"in_conversion"}}}); r.Status != 422 {
+			t.Errorf("download job for a qualifier no product has: %d %s", r.Status, r.Body)
+		}
+
 		detail := u.must(200, "GET", "/admin/api/portal/products/"+k.products["KO-1001"]["id"].(string), nil)
 		validate(t, "ProductDetail", detail)
 		if r := u.do("GET", "/admin/api/portal/products/"+k.products["KT-2001"]["id"].(string), nil); r.Status != 404 {
@@ -435,7 +487,7 @@ func TestPortal(t *testing.T) {
 	t.Run("statistics count retailer downloads, not admin previews", func(t *testing.T) {
 		stats := k.admin.must(200, "GET", "/admin/api/stats?days=7", nil)
 		totals := stats["totals"].(map[string]any)
-		if totals["zips"].(float64) < 2 || totals["csv_exports"].(float64) != 1 {
+		if totals["zips"].(float64) < 2 || totals["csv_exports"].(float64) != 2 { // data.csv?qualifier= and the selection CSV
 			t.Fatalf("totals %v", totals)
 		}
 		before := totals["downloads"].(float64)

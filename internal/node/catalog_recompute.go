@@ -384,7 +384,52 @@ func (w *writer) refreshProductIndex(productID string) error {
 	rs.Close()
 	text := strings.ToLower(strings.Join(parts, " "))
 	nameSort := strings.ToLower(d.Name.Pick(w.settings.Portal.DefaultLanguage))
-	_, err = w.tx.Exec(w.ctx, `UPDATE products SET search_text = ?, name_sort = ?, style_number = ?, item_type = ?, target_group = ?, season = ?, collection = ? WHERE id = ?`,
-		text, nameSort, d.StyleNumber, d.ItemType, d.TargetGroup, d.Season, d.Collection, productID)
-	return err
+	if _, err = w.tx.Exec(w.ctx, `UPDATE products SET search_text = ?, name_sort = ?, style_number = ?, item_type = ?, target_group = ?, season = ?, collection = ? WHERE id = ?`,
+		text, nameSort, d.StyleNumber, d.ItemType, d.TargetGroup, d.Season, d.Collection, productID); err != nil {
+		return err
+	}
+	return w.refreshProductQualifiers(productID, d.Materials)
+}
+
+// refreshProductQualifiers stores the qualifier codes of a product's fibres
+// in product_qualifiers (the portal's qualifier filter and facet), only
+// when they changed.
+func (w *writer) refreshProductQualifiers(productID string, ms []MaterialPart) error {
+	want := map[string]bool{}
+	for _, m := range ms {
+		for _, f := range m.Fibers {
+			for _, q := range f.Qualifiers {
+				want[q.Code] = true
+			}
+		}
+	}
+	rs, err := w.tx.Query(w.ctx, `SELECT code FROM product_qualifiers WHERE product_id = ?`, productID)
+	if err != nil {
+		return err
+	}
+	have := map[string]bool{}
+	for rs.Next() {
+		var c string
+		if err := rs.Scan(&c); err != nil {
+			rs.Close()
+			return err
+		}
+		have[c] = true
+	}
+	rs.Close()
+	for c := range have {
+		if !want[c] {
+			if _, err := w.tx.Exec(w.ctx, `DELETE FROM product_qualifiers WHERE product_id = ? AND code = ?`, productID, c); err != nil {
+				return err
+			}
+		}
+	}
+	for c := range want {
+		if !have[c] {
+			if _, err := w.tx.Exec(w.ctx, `INSERT INTO product_qualifiers (product_id, code) VALUES (?, ?)`, productID, c); err != nil {
+				return err
+			}
+		}
+	}
+	return nil
 }

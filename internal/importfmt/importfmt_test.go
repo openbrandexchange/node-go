@@ -4,6 +4,7 @@ import (
 	"archive/zip"
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"os"
 	"strconv"
 	"strings"
@@ -64,24 +65,38 @@ func TestMaterialsAndCare(t *testing.T) {
 	if err != nil || len(parts) != 2 || parts[0].Name != "outer" || parts[0].Fibers[0].Material != "cotton" || len(warns) != 0 {
 		t.Fatalf("%v %v %v", parts, warns, err)
 	}
+	fib := func(m string, pct float64, qs ...string) string {
+		return fmt.Sprintf("%v", Fiber{Material: m, Percentage: pct, Qualifiers: qs})
+	}
 	// 0.1 keys and qualifiers give the same normalised fibre; sums are not a parse warning.
-	for _, in := range []string{"90% organic cotton", "90% cotton (organic)", "90% Cotton (Organic)", "90% organic_cotton (recycled)"} {
+	for _, in := range []string{"90% organic cotton", "90% cotton (organic)", "90% Cotton (Organic)", "90% organic_cotton (organic)"} {
 		p, w, err := ParseMaterials(in)
-		if err != nil || len(w) != 0 || p[0].Fibers[0] != (Fiber{Material: "cotton", Percentage: 90, Qualifier: "organic"}) {
+		if err != nil || len(w) != 0 || fmt.Sprintf("%v", p[0].Fibers[0]) != fib("cotton", 90, "organic") {
 			t.Fatalf("%s: %+v %v %v", in, p, w, err)
 		}
 	}
-	p, _, err := ParseMaterials("outer: 100% polyester (recycled); lining: 100% recycled_polyamide; trim: 100% Merino Wool (Regenerative)")
-	if err != nil || p[0].Fibers[0] != (Fiber{Material: "polyester", Percentage: 100, Qualifier: "recycled"}) ||
-		p[1].Fibers[0] != (Fiber{Material: "polyamide", Percentage: 100, Qualifier: "recycled"}) ||
-		p[2].Fibers[0] != (Fiber{Material: "merino_wool", Percentage: 100, Qualifier: "regenerative"}) {
+	p, _, err := ParseMaterials("outer: 100% polyester (recycled) (Post-Consumer), 0.5% cotton (organic)(regenerative) (organic); lining: 100% recycled_polyamide (pre_consumer); trim: 100% Merino Wool (Regenerative)")
+	if err != nil || fmt.Sprintf("%v", p[0].Fibers[0]) != fib("polyester", 100, "recycled", "post_consumer") ||
+		fmt.Sprintf("%v", p[0].Fibers[1]) != fib("cotton", 0.5, "organic", "regenerative") ||
+		fmt.Sprintf("%v", p[1].Fibers[0]) != fib("polyamide", 100, "recycled", "pre_consumer") ||
+		fmt.Sprintf("%v", p[2].Fibers[0]) != fib("merino_wool", 100, "regenerative") {
 		t.Fatalf("%+v %v", p, err)
 	}
-	if p, _, err := ParseMaterials("100% cotton"); err != nil || p[0].Fibers[0].Qualifier != "" {
+	// The 0.1 key's qualifier comes first; combined prefixes in the order written.
+	for in, want := range map[string]string{
+		"100% recycled_polyester (post_consumer)": fib("polyester", 100, "recycled", "post_consumer"),
+		"100% organic_cotton (recycled)":          fib("cotton", 100, "organic", "recycled"),
+		"100% recycled_organic_cotton":            fib("cotton", 100, "recycled", "organic"),
+	} {
+		if p, _, err := ParseMaterials(in); err != nil || fmt.Sprintf("%v", p[0].Fibers[0]) != want {
+			t.Fatalf("%s: %+v %v", in, p, err)
+		}
+	}
+	if p, _, err := ParseMaterials("100% cotton"); err != nil || p[0].Fibers[0].Qualifiers != nil {
 		t.Fatalf("%+v %v", p, err)
 	}
-	// One qualifier per fibre.
-	for _, in := range []string{"100% cotton (organic) (recycled)", "100% cotton ()", "100% cotton (?!)"} {
+	// One code per bracket: the comma separates fibres.
+	for _, in := range []string{"100% cotton (organic, recycled)", "50% cotton (organic,recycled), 50% wool", "100% cotton ()", "100% cotton (?!)", "100% cotton (organic"} {
 		if _, _, err := ParseMaterials(in); err == nil {
 			t.Fatalf("%s: expected an error", in)
 		}

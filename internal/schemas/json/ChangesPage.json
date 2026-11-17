@@ -3,20 +3,22 @@
   "$id": "https://openbrandexchange.com/schemas/v0.3/ChangesPage.json",
   "type": "object",
   "title": "ChangesPage",
+  "description": "One page of the change feed. Paginated: while has_more is true, request the next page with cursor=next_cursor right away; when it is false, store next_cursor and poll later (or on a changes.available webhook). See docs/protocol.md section 2.1 (Pagination).",
   "properties": {
     "changes": {
       "type": "array",
       "items": {
         "$ref": "Change.json"
-      }
+      },
+      "description": "This page's entries in seq order; possibly fewer than limit, or none, even when has_more is true."
     },
     "next_cursor": {
       "$ref": "Common.json#/$defs/Cursor",
-      "description": "Always present. Pass it on the next call (immediately when has_more, later otherwise)."
+      "description": "Always present. Pass it as cursor on the next call: immediately when has_more is true, on the next poll otherwise. Never parse it."
     },
     "has_more": {
       "type": "boolean",
-      "description": "True when more entries are available right now."
+      "description": "True when more entries are available right now: keep paging. False: you are up to date."
     },
     "phase": {
       "type": "string",

@@ -747,6 +747,7 @@ func (w *writer) Delete(kind, ext string) (*IngestResult, *problem.Problem) {
 				return res, problem.As(err)
 			}
 		}
+		_, _ = w.tx.Exec(w.ctx, `DELETE FROM product_qualifiers WHERE product_id = ?`, existing.ID)
 		_, _ = w.tx.Exec(w.ctx, `DELETE FROM products WHERE id = ?`, existing.ID)
 	case KindVariant:
 		if err := w.deleteRow(existing); err != nil {

@@ -324,12 +324,12 @@ func Slug(s string) string {
 }
 
 // Fiber is one fibre of a part, normalised (0.1 keys recycled_<fibre> and
-// organic_<fibre> become the material with that qualifier). Qualifier is ""
-// when the fibre has none.
+// organic_<fibre> become the material with that qualifier). Qualifiers are
+// the fibre's qualifier codes in order, without repeats (nil when none).
 type Fiber struct {
 	Material   string
 	Percentage float64
-	Qualifier  string
+	Qualifiers []string
 }
 
 // Part is one material part.
@@ -343,12 +343,48 @@ var (
 	qualifierRe = regexp.MustCompile(`\s*\(([^()]*)\)\s*$`)
 )
 
+// splitFibers splits a part on the commas outside brackets, so that
+// "(organic, recycled)" stays one fibre and can be refused as such.
+func splitFibers(s string) []string {
+	var out []string
+	depth, start := 0, 0
+	for i, r := range s {
+		switch r {
+		case '(':
+			depth++
+		case ')':
+			if depth > 0 {
+				depth--
+			}
+		case ',':
+			if depth == 0 {
+				out = append(out, s[start:i])
+				start = i + 1
+			}
+		}
+	}
+	return append(out, s[start:])
+}
+
+// AppendQualifier adds code to list unless it is there already (a fibre
+// names each qualifier once; the first occurrence keeps its place).
+func AppendQualifier(list []string, code string) []string {
+	for _, x := range list {
+		if x == code {
+			return list
+		}
+	}
+	return append(list, code)
+}
+
 // ParseMaterials parses "outer: 65% cotton, 35% polyamide; lining: 100%
-// polyester (recycled)" (import-format.md §1.4). A qualifier in brackets
-// sets the fibre's qualifier, one per fibre; a 0.1 key recycled_<fibre> or
-// organic_<fibre> wins over a bracket. Whether the percentages of a part add
-// up to 100 is a label completeness check of the stored product
-// (import-format.md rule 10), not a parse warning.
+// polyester (recycled) (post_consumer)" (import-format.md §1.4). Each
+// qualifier in brackets adds one code to the fibre's qualifiers, in order; a
+// repeated code counts once; a bracket holds one code ("(organic, recycled)"
+// is an error). A 0.1 key recycled_<fibre> or organic_<fibre> puts its
+// qualifier first. Whether the percentages of a part add up to 100 is a
+// label completeness check of the stored product (import-format.md rule
+// 10), not a parse warning.
 func ParseMaterials(s string) ([]Part, []string, error) {
 	var parts []Part
 	var warnings []string
@@ -367,7 +403,7 @@ func ParseMaterials(s string) ([]Part, []string, error) {
 			return nil, nil, fmt.Errorf("invalid part name %q", name)
 		}
 		part := Part{Name: name}
-		for _, f := range strings.Split(body, ",") {
+		for _, f := range splitFibers(body) {
 			f = strings.TrimSpace(f)
 			if f == "" {
 				continue
@@ -382,25 +418,29 @@ func ParseMaterials(s string) ([]Part, []string, error) {
 			}
 			fib := Fiber{Percentage: pct}
 			rest := m[2]
-			if qm := qualifierRe.FindStringSubmatch(rest); qm != nil {
+			var brackets []string // right to left
+			for {
+				qm := qualifierRe.FindStringSubmatch(rest)
+				if qm == nil {
+					break
+				}
+				if strings.Contains(qm[1], ",") {
+					return nil, nil, fmt.Errorf("%q: one qualifier per bracket, e.g. \"(recycled) (post_consumer)\"", f)
+				}
 				q := Key(qm[1])
 				if !ValidKey(q) {
 					return nil, nil, fmt.Errorf("invalid qualifier %q in %q", qm[1], f)
 				}
-				fib.Qualifier = q
+				brackets = append(brackets, q)
 				rest = rest[:len(rest)-len(qm[0])]
-				if qualifierRe.MatchString(rest) {
-					return nil, nil, fmt.Errorf("%q has more than one qualifier; a fibre has one", f)
-				}
 			}
 			key := Key(rest)
 			if !ValidKey(key) {
 				return nil, nil, fmt.Errorf("invalid material %q", rest)
 			}
-			var q string
-			fib.Material, q = NormalizeMaterial(key)
-			if q != "" {
-				fib.Qualifier = q
+			fib.Material, fib.Qualifiers = NormalizeMaterial(key)
+			for i := len(brackets) - 1; i >= 0; i-- {
+				fib.Qualifiers = AppendQualifier(fib.Qualifiers, brackets[i])
 			}
 			part.Fibers = append(part.Fibers, fib)
 		}

@@ -5,18 +5,20 @@ follows [Semantic Versioning](https://semver.org/): the major version changes wh
 more than replacing the software (see [docs/upgrading.md](docs/upgrading.md)); database migrations
 are always forward-only and applied automatically on start.
 
-## [Unreleased] - 0.3.0
+## [0.3.0] - 2026-11-17
 
 Implements Open Brand Exchange protocol 0.3 (spec 0.3.0, [proposal 0004](https://github.com/openbrandexchange/spec/blob/main/docs/proposals/0004-terms-with-names.md):
 materials and care as terms with names). **Breaking** for retailers' software and Ingest API
 clients (allowed before 1.0); see [docs/upgrading.md](docs/upgrading.md#from-02-to-03).
 
 ### Changed (breaking)
-- **`materials`**: `part`, the fibre's `material` and its `qualifier` are terms `{code, name}`
-  with the name per language (`null` for the part `main` and for unknown codes without a name).
-  A fibre is `{"material": {...}, "percentage": 95, "qualifier": {...} | null}`; `fiber` and the
-  flags `recycled`/`organic` are gone; one qualifier per fibre (`organic`, `recycled`,
-  `regenerative` or another code).
+- **`materials`**: `part`, the fibre's `material` and each of its `qualifiers` are terms
+  `{code, name}` with the name per language (`null` for the part `main` and for unknown codes
+  without a name). A fibre is `{"material": {...}, "percentage": 95, "qualifiers": [{...}, ...]}`
+  (`[]` when none; on write it may be left out); `fiber` and the flags `recycled`/`organic` are
+  gone. A fibre has any number of qualifiers in the brand's order, repeats dropped: `organic`,
+  `in_conversion`, `recycled`, `pre_consumer`, `post_consumer`, `regenerative` or another code.
+  A 0.1 key `recycled_<fibre>`/`organic_<fibre>` puts its qualifier first.
 - **`care`**: every entry has `code`, `category`, `symbol`, `name` and `text` (now only the
   brand's own extra text).
 - `OBX-Version: 0.3`, `spec_version` `0.3.0`, schemas `/schemas/v0.3/`. Only 0.3 is supported:
@@ -28,12 +30,24 @@ clients (allowed before 1.0); see [docs/upgrading.md](docs/upgrading.md#from-02-
   binary (`internal/vocab`, synced by `scripts/sync-spec.sh`). On every write path (Ingest API,
   admin, imports) known codes get the vocabulary's names, category and symbol; unknown codes
   keep what was sent, or `null`. A language without a name is left out, never `""`.
-- Imports: `(<qualifier>)` after a fibre, e.g. `100% wool (regenerative)`; `(recycled)`,
-  `(organic)` and the 0.1 keys `recycled_*`/`organic_*` keep working. Two qualifiers on one
-  fibre are an error. The care code list comes from the vocabulary.
+- Imports (CSV and Excel): qualifiers in brackets after a fibre, one code per bracket, e.g.
+  `100% polyester (recycled) (post_consumer)` or `100% wool (regenerative)`; `(recycled)`,
+  `(organic)` and the 0.1 keys `recycled_*`/`organic_*` keep working. `(organic, recycled)` is
+  `validation_failed` (the comma separates fibres). The care code list comes from the vocabulary.
+- **Portal filter on qualifiers** (Node Admin API): `qualifier` (repeatable; any fibre of any
+  part has any given code) on `/admin/api/portal/products`, `/admin/api/portal/facets`, the
+  article data CSV and `DownloadJobInput.filter`, and the facet `qualifiers` (code, vocabulary
+  name, product count). Backed by the indexed table `product_qualifiers` (SQLite and
+  PostgreSQL).
+- **`node-go dev`**: a local try-out without Docker in one command (`go run . dev`): SQLite in
+  `./data-dev`, the setup done with a known login, the Kestrel demo catalog imported, the URL and
+  login printed; `--fresh` starts over. See "Run it locally" in the README.
 - **Migration 4** rewrites stored products once on start from the 0.1/0.2 shapes to 0.3 (flags
-  become the qualifier, care entries get category, symbol and name); rewritten products get an
-  `upsert` in `/changes`.
+  become qualifiers, care entries get category, symbol and name); rewritten products get an
+  `upsert` in `/changes`. **Migration 5** adds `product_qualifiers` and rewrites products stored
+  by a pre-release build of this version (one `qualifier` per fibre) to `qualifiers`, with an
+  `upsert` each; its cursors stay valid. The Ingest API and admin still read such a `qualifier`
+  as a list of one.
 - **Cursors from before the upgrade expire** (protocol.md §6.4, conformance P-FEED-7): every
   `/changes` cursor carries the node's cursor epoch; migration 4 moves it from 0 to 1, so cursors
   issued by 0.2 (and earlier export `changes_cursor`s) answer `410 cursor_expired` and consumers
@@ -42,11 +56,15 @@ clients (allowed before 1.0); see [docs/upgrading.md](docs/upgrading.md#from-02-
 
 ### Changed
 - Label completeness warnings and the article data CSV export use the material and qualifier
-  codes.
-- Fixtures and schemas synced from spec 0.3.0.
+  codes (one bracket per qualifier: `100% polyester (recycled) (post_consumer)`).
+- Fixtures, schemas and vocabularies synced from spec 0.3.0 (commit 5737aa2: several qualifiers
+  per fibre, the codes `in_conversion`, `pre_consumer` and `post_consumer`);
+  `testdata/kestrel-example.zip` has the new `products.csv`.
 
 ### Open
-- Admin screens still are admin-ui 0.2.1; re-vendor admin-ui 0.3 once it is released.
+- Admin screens still are admin-ui 0.2.1: the admin-ui 0.3 build (terms with names, several
+  qualifiers per fibre, the portal's qualifier filter) is vendored once it is ready; the API
+  already serves everything it needs.
 
 ## [0.2.1] - 2026-11-12
 

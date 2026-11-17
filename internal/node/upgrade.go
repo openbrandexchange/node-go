@@ -79,10 +79,13 @@ func (a *App) upgradeArticleData(ctx context.Context) error {
 // upgradeTerms rewrites the stored products once after migration 4 (spec
 // 0.3, proposal 0004): materials and care in the write model change from the
 // 0.1/0.2 shapes (part and fiber strings, the flags recycled and organic,
-// care {code, text}) to terms with names from the vocabularies. A fibre
-// with both flags keeps one qualifier, recycled. Every product whose
-// representation changed gets an upsert in /changes, so consumers fetch the
-// new shape. It runs before upgradeArticleData, which decodes the 0.3 shape.
+// care {code, text}) to terms with names from the vocabularies; the flags
+// become qualifiers (recycled, then organic). Migration 5 runs it again for
+// products stored by the first 0.3 draft, whose single "qualifier" becomes
+// the list "qualifiers". It also fills product_qualifiers. Every product
+// whose representation changed gets an upsert in /changes, so consumers
+// fetch the new shape. It runs before upgradeArticleData, which decodes the
+// 0.3 shape.
 func (a *App) upgradeTerms(ctx context.Context) error {
 	pending, err := getMeta(ctx, a.DB, "upgrade_terms")
 	if err != nil || pending == "" {
@@ -113,6 +116,9 @@ func (a *App) upgradeTerms(ctx context.Context) error {
 				if _, err := tx.Exec(ctx, `UPDATE products SET data = ?, etag = ? WHERE id = ?`, r.Data, r.ETag, r.ID); err != nil {
 					return err
 				}
+			}
+			if err := w.refreshProductIndex(r.ID); err != nil {
+				return err
 			}
 			var old any
 			_ = json.Unmarshal([]byte(r.Rep), &old)
@@ -153,14 +159,20 @@ func upgradeMaterialsJSON(v any) any {
 			if s, ok := fm["fiber"].(string); ok {
 				fm["material"] = map[string]any{"code": s}
 			}
-			if _, ok := fm["qualifier"]; !ok {
-				switch {
-				case fm["recycled"] == true:
-					fm["qualifier"] = map[string]any{"code": "recycled"}
-				case fm["organic"] == true:
-					fm["qualifier"] = map[string]any{"code": "organic"}
+			if _, ok := fm["qualifiers"]; !ok {
+				qs := []any{}
+				if q, ok := fm["qualifier"].(map[string]any); ok {
+					qs = append(qs, q) // the first 0.3 draft: one qualifier
 				}
+				if fm["recycled"] == true {
+					qs = append(qs, map[string]any{"code": "recycled"})
+				}
+				if fm["organic"] == true {
+					qs = append(qs, map[string]any{"code": "organic"})
+				}
+				fm["qualifiers"] = qs
 			}
+			delete(fm, "qualifier")
 			delete(fm, "fiber")
 			delete(fm, "recycled")
 			delete(fm, "organic")

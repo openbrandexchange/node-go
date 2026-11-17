@@ -40,15 +40,26 @@
             }
           },
           "percentage": 100,
-          "qualifier": {
-            "code": "recycled",
-            "name": {
-              "en": "Recycled",
-              "nl": "Gerecycled",
-              "de": "Recycelt",
-              "fr": "Recyclé"
+          "qualifiers": [
+            {
+              "code": "recycled",
+              "name": {
+                "en": "Recycled",
+                "nl": "Gerecycled",
+                "de": "Recycelt",
+                "fr": "Recyclé"
+              }
+            },
+            {
+              "code": "post_consumer",
+              "name": {
+                "en": "Post-consumer",
+                "nl": "Post-consumer",
+                "de": "Post-Consumer",
+                "fr": "Post-consommation"
+              }
             }
-          }
+          ]
         }
       ]
     },
@@ -74,7 +85,7 @@
             }
           },
           "percentage": 100,
-          "qualifier": null
+          "qualifiers": []
         }
       ]
     }

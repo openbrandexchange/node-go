@@ -48,19 +48,28 @@ func (t LocalizedText) Pick(lang string, order ...string) string {
 }
 
 // Term is a stable code with its name per language (protocol.md §5.9.1):
-// the part, material and qualifier of materials. Name is nil (null) when
+// the part, material and qualifiers of materials. Name is nil (null) when
 // there is none.
 type Term struct {
 	Code string        `json:"code"`
 	Name LocalizedText `json:"name"`
 }
 
-// Fiber is one fibre of a material part; Qualifier is nil (null) when the
-// fibre has none.
+// Fiber is one fibre of a material part. Qualifiers are in the brand's
+// order without repeats; none is [] (never null) in every representation.
 type Fiber struct {
 	Material   Term    `json:"material"`
 	Percentage float64 `json:"percentage"`
-	Qualifier  *Term   `json:"qualifier"`
+	Qualifiers []Term  `json:"qualifiers"`
+}
+
+// MarshalJSON writes no qualifiers as [].
+func (f Fiber) MarshalJSON() ([]byte, error) {
+	type plain Fiber
+	if f.Qualifiers == nil {
+		f.Qualifiers = []Term{}
+	}
+	return json.Marshal(plain(f))
 }
 
 // MaterialPart is the composition of one part.

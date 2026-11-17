@@ -79,16 +79,12 @@
               "exclusiveMinimum": 0,
               "maximum": 100
             },
-            "qualifier": {
-              "anyOf": [
-                {
-                  "$ref": "#/$defs/term"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "description": "What the fibre is, apart from which fibre: organic, recycled, regenerative (vocabularies/qualifiers.json; unknown codes are allowed). null = none."
+            "qualifiers": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/term"
+              },
+              "description": "What the fibre is, apart from which fibre, in the order the brand states it: organic, in_conversion, recycled, pre_consumer, post_consumer, regenerative (vocabularies/qualifiers.json; unknown codes are allowed, a code appears at most once). Empty = none. A node returns [] when the fibre has none; on write the property may be left out (= none)."
             }
           },
           "required": [

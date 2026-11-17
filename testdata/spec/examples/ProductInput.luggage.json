@@ -32,9 +32,14 @@
             "code": "polyester"
           },
           "percentage": 100,
-          "qualifier": {
-            "code": "recycled"
-          }
+          "qualifiers": [
+            {
+              "code": "recycled"
+            },
+            {
+              "code": "post_consumer"
+            }
+          ]
         }
       ]
     }

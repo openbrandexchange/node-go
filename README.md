@@ -2,6 +2,23 @@
 
 **Your own brand portal for retailers, in one program.** Retailers log in, find your products, paste a list of EANs, and download images and article data. Their shop software can fetch the same content automatically. You publish by uploading a spreadsheet and photos, or let your own systems do it for you.
 
+## Run it locally (2 minutes)
+
+No Docker needed, only [Go 1.26 or newer](https://go.dev/dl/) (it fetches the exact toolchain of `go.mod` itself). In a checkout of this repository:
+
+```sh
+go run . dev
+```
+
+This starts the portal with SQLite and files in `./data-dev`, completes the first-run setup (setup code `DEMO-DEMO-DEMO`) and imports the demo catalog of the fictional brand Kestrel Outfitters (11 articles, 35 images). It prints:
+
+```
+  open:    http://localhost:8080
+  login:   admin@kestrel.example / kestrel demo password
+```
+
+Open the address, log in, and click **View as retailer** to see the portal as a retailer does. E-mails are not sent but written to the output. Stop with Ctrl+C; `go run . dev` again continues with the same data, `go run . dev --fresh` starts over. Another port: `PORT=9090 go run . dev`. This is for trying it out only: for a real portal use `serve` and the setup wizard below.
+
 This is `node-go`: the Go edition of an [Open Brand Exchange](https://openbrandexchange.com) node. It runs as a single program with no other services required, on Google Cloud Run, any Docker host, Fly.io, Railway, Render or a plain Linux server.
 
 | For | What they get |
@@ -70,7 +87,7 @@ Your photos and product data probably live in a PIM, ERP, DAM or a shared folder
 
 The spreadsheet format is one row per size, and images are named `{style}_{colour}_{position}.jpg`: see the [import format](https://github.com/openbrandexchange/spec/blob/main/docs/import-format.md).
 
-Besides names, descriptions, sizes and EANs, the portal carries the article data retailers need for their labels and filters (OBX 0.3): composition per part with recycled, organic and regenerative fibres and care instructions, both with their names in English, Dutch, German and French, country of origin, "contains non-textile parts of animal origin", footwear materials (upper, lining and sock, outer sole), certifications, the article kind (`item_subtype`, for example `cabin` or `ankle_boot`), features (shell, wheels, lock, expandable, closure, laptop compartment, water resistance, detachable and adjustable parts, fit, sleeve length, neckline) and, per size, a second size, a colour family and measurements (height, width, depth, weight, volume, handle drop, strap length, laptop size, heel and shaft height, inside leg). Each has its own column in the spreadsheet; imports warn when a label would miss what EU law asks for, without blocking anything.
+Besides names, descriptions, sizes and EANs, the portal carries the article data retailers need for their labels and filters (OBX 0.3): composition per part, with qualifiers per fibre such as recycled (pre- or post-consumer), organic (or in conversion) and regenerative, and care instructions, both with their names in English, Dutch, German and French, country of origin, "contains non-textile parts of animal origin", footwear materials (upper, lining and sock, outer sole), certifications, the article kind (`item_subtype`, for example `cabin` or `ankle_boot`), features (shell, wheels, lock, expandable, closure, laptop compartment, water resistance, detachable and adjustable parts, fit, sleeve length, neckline) and, per size, a second size, a colour family and measurements (height, width, depth, weight, volume, handle drop, strap length, laptop size, heel and shaft height, inside leg). Each has its own column in the spreadsheet; imports warn when a label would miss what EU law asks for, without blocking anything.
 
 ## For developers
 

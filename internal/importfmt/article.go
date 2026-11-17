@@ -71,10 +71,10 @@ func contains(list []string, s string) bool {
 
 // NormalizeMaterial turns a 0.1 fibre key recycled_<fibre> or
 // organic_<fibre> into the material and its qualifier (protocol.md §5.9.1):
-// recycled_polyester → polyester, recycled. A fibre has one qualifier: when
-// the prefixes are combined, the outermost one is the qualifier. qualifier is
-// "" for a key without a prefix.
-func NormalizeMaterial(key string) (material, qualifier string) {
+// recycled_polyester → polyester, [recycled]. Combined prefixes give their
+// qualifiers in the order written (recycled_organic_cotton → cotton,
+// [recycled, organic]). qualifiers is nil for a key without a prefix.
+func NormalizeMaterial(key string) (material string, qualifiers []string) {
 	for {
 		var q string
 		switch {
@@ -83,12 +83,10 @@ func NormalizeMaterial(key string) (material, qualifier string) {
 		case strings.HasPrefix(key, "organic_") && len(key) > len("organic_"):
 			q = "organic"
 		default:
-			return key, qualifier
+			return key, qualifiers
 		}
 		key = strings.TrimPrefix(key, q+"_")
-		if qualifier == "" {
-			qualifier = q
-		}
+		qualifiers = AppendQualifier(qualifiers, q)
 	}
 }
 

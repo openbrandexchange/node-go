@@ -46,7 +46,7 @@ curl -fsSL https://get.docker.com | sh
 ## 4. Start the portal
 
 ```sh
-git clone --branch v0.2.1 https://github.com/openbrandexchange/node-go && cd node-go
+git clone --branch v0.3.0 https://github.com/openbrandexchange/node-go && cd node-go
 cp .env.example .env
 sed -i "s|^OBX_SECRET_KEY=.*|OBX_SECRET_KEY=$(openssl rand -base64 48 | tr -d '\n')|" .env
 nano .env        # set DOMAIN=images.yourbrand.com and ADMIN_EMAIL=you@yourbrand.com
@@ -120,7 +120,7 @@ How to restore, and how to test a restore: [operations.md](../operations.md#back
 
 ```sh
 cd /root/node-go
-git fetch --tags && git checkout v0.2.1     # the release you want; see the releases page
+git fetch --tags && git checkout v0.3.0     # the release you want; see the releases page
 docker compose up -d --build
 ```
 

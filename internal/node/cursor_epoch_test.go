@@ -25,9 +25,12 @@ func expectCursorExpired(t *testing.T, c *client, cursor, what string) {
 func TestCursorsExpireOnSpecUpgrade(t *testing.T) {
 	k := newKestrelNode(t)
 	ctx := context.Background()
-	// Back to the state of a 0.2 node: migration 4 not applied, no epoch.
+	// Back to the state of a 0.2 node: migrations 4 and 5 not applied, no epoch.
 	if err := k.app.DB.WriteTx(ctx, func(tx *db.Tx) error {
-		if _, err := tx.Exec(ctx, `DELETE FROM schema_migrations WHERE version = 4`); err != nil {
+		if _, err := tx.Exec(ctx, `DELETE FROM schema_migrations WHERE version >= 4`); err != nil {
+			return err
+		}
+		if _, err := tx.Exec(ctx, `DROP TABLE product_qualifiers`); err != nil {
 			return err
 		}
 		_, err := tx.Exec(ctx, `DELETE FROM meta WHERE key IN ('cursor_epoch', 'upgrade_terms')`)
@@ -44,7 +47,7 @@ func TestCursorsExpireOnSpecUpgrade(t *testing.T) {
 	// The 0.2 node's cursors work before the upgrade.
 	k.all.must(200, "GET", "/obx/v1/changes?cursor="+url.QueryEscape(live), nil)
 
-	// Upgrade: migration 4 and the one-time rewrite, as on start.
+	// Upgrade: migrations 4 and 5 and the one-time rewrite, as on start.
 	if err := k.app.DB.Migrate(ctx); err != nil {
 		t.Fatal(err)
 	}

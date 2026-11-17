@@ -13,6 +13,7 @@ import (
 
 	"github.com/openbrandexchange/node-go/internal/db"
 	"github.com/openbrandexchange/node-go/internal/problem"
+	"github.com/openbrandexchange/node-go/internal/vocab"
 )
 
 const (
@@ -82,6 +83,7 @@ type portalFilter struct {
 	Season       []string `json:"season"`
 	Collection   []string `json:"collection"`
 	TargetGroup  []string `json:"target_group"`
+	Qualifier    []string `json:"qualifier"`
 	UpdatedSince string   `json:"updated_since"`
 }
 
@@ -103,7 +105,7 @@ func filterFromQuery(q url.Values) portalFilter {
 		return out
 	}
 	return portalFilter{Q: strings.TrimSpace(q.Get("q")), BrandID: multi("brand_id"), ItemType: multi("item_type"), Color: multi("color"),
-		Season: multi("season"), Collection: multi("collection"), TargetGroup: multi("target_group"), UpdatedSince: q.Get("updated_since")}
+		Season: multi("season"), Collection: multi("collection"), TargetGroup: multi("target_group"), Qualifier: multi("qualifier"), UpdatedSince: q.Get("updated_since")}
 }
 
 // where builds the SQL for f; skip names a dimension to leave out (facets).
@@ -134,6 +136,14 @@ func (f portalFilter) where(v *Viewer, skip string) (string, []any) {
 	if len(f.Color) > 0 && skip != "color" {
 		w += ` AND EXISTS (SELECT 1 FROM variants v WHERE v.product_id = p.id AND v.visible = 1 AND v.color_code IN ` + db.In(len(f.Color)) + `)`
 		for _, x := range f.Color {
+			args = append(args, x)
+		}
+	}
+	// Qualifier codes (node-admin.yaml): any fibre of any part has any of
+	// them, on the (code, product_id) index of product_qualifiers.
+	if len(f.Qualifier) > 0 && skip != "qualifier" {
+		w += ` AND EXISTS (SELECT 1 FROM product_qualifiers pq WHERE pq.product_id = p.id AND pq.code IN ` + db.In(len(f.Qualifier)) + `)`
+		for _, x := range f.Qualifier {
 			args = append(args, x)
 		}
 	}
@@ -351,7 +361,36 @@ func (a *App) handlePortalFacets(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 	writeJSON(w, 200, map[string]any{"brands": brands, "item_types": facet("p.item_type", "item_type"), "colors": colors,
-		"seasons": facet("p.season", "season"), "collections": facet("p.collection", "collection"), "target_groups": facet("p.target_group", "target_group")})
+		"seasons": facet("p.season", "season"), "collections": facet("p.collection", "collection"), "target_groups": facet("p.target_group", "target_group"),
+		"qualifiers": a.qualifierFacet(ctx, v, f)})
+}
+
+// qualifierFacet counts the products per material qualifier code (any
+// fibre of any part), with every filter except the qualifier itself; the
+// label is the vocabulary's name (none for a code outside it).
+func (a *App) qualifierFacet(ctx context.Context, v *Viewer, f portalFilter) []map[string]any {
+	where, args := f.where(v, "qualifier")
+	out := []map[string]any{}
+	rs, err := a.DB.Query(ctx, `SELECT pq.code, COUNT(*) FROM products p JOIN product_qualifiers pq ON pq.product_id = p.id`+where+` GROUP BY pq.code ORDER BY pq.code`, args...)
+	if err != nil {
+		return out
+	}
+	defer rs.Close()
+	for rs.Next() {
+		var code string
+		var n int
+		if rs.Scan(&code, &n) != nil {
+			continue
+		}
+		fv := map[string]any{"value": code, "count": n}
+		if e, ok := vocab.Qualifiers.Lookup(code); ok {
+			if name := vocabName(e.Name); name != nil {
+				fv["label"] = name
+			}
+		}
+		out = append(out, fv)
+	}
+	return out
 }
 
 func (a *App) handlePortalProduct(w http.ResponseWriter, r *http.Request) {
