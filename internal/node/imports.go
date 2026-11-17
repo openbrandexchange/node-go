@@ -149,6 +149,7 @@ type importer struct {
 	// external id each GTIN of this import resolved to.
 	seenVariant map[string]int
 	gtinExt     map[string]string
+	gtinRow     map[string]int
 	extra       map[string]*productPlan // image-only products (from the node)
 	extraOrd    []string
 	progress    func(done, total int)
@@ -837,6 +838,14 @@ func (im *importer) resolveVariants(w *writer, plan *productPlan) (map[int]bool,
 	var keep []variantPlan
 	for _, v := range plan.variants {
 		ext := v.ext
+		// The same GTIN on two rows of one file: gtin_conflict for the later
+		// row (obx-go NOTES 8), whichever way the rows name their variant.
+		if first, dup := im.gtinRow[v.gtin14]; v.gtin14 != "" && dup {
+			im.add("products.csv", v.row, "gtin", "gtin_conflict",
+				fmt.Sprintf("GTIN %s is also used on row %d of this file", v.gtinRaw, first), v.gtinRaw, false)
+			failed[v.row] = true
+			continue
+		}
 		if ext == "" && v.gtin14 != "" {
 			if e, ok := im.gtinExt[v.gtin14]; ok {
 				ext = e
@@ -874,6 +883,7 @@ func (im *importer) resolveVariants(w *writer, plan *productPlan) (map[int]bool,
 		im.seenVariant[ext] = v.row
 		if v.gtin14 != "" {
 			im.gtinExt[v.gtin14] = ext
+			im.gtinRow[v.gtin14] = v.row
 		}
 		v.ext = ext
 		keep = append(keep, v)
@@ -1574,7 +1584,7 @@ func (a *App) runImportJob(jc *jobContext) (any, error) {
 	}()
 	s := a.Settings(jc.ctx)
 	im := &importer{a: a, ctx: jc.ctx, opts: p.Options, allowed: p.Allowed, byExt: map[string]*productPlan{}, extra: map[string]*productPlan{},
-		seenVariant: map[string]int{}, gtinExt: map[string]string{}}
+		seenVariant: map[string]int{}, gtinExt: map[string]string{}, gtinRow: map[string]int{}}
 	im.lang = p.Options.DefaultLanguage
 	if im.lang == "" {
 		im.lang = s.ContentLanguages()[0]

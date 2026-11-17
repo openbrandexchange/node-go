@@ -3,6 +3,7 @@ package node
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"sort"
 	"strings"
@@ -735,20 +736,42 @@ func (a *App) rotateClient(w http.ResponseWriter, r *http.Request, retailerID st
 		failP(w, "not_found", "API key not found.")
 		return
 	}
-	secret := secure.Token("obxs_")
-	if _, err := a.DB.Exec(ctx, `UPDATE api_clients SET secret_hash = ?, secret_version = secret_version + 1 WHERE id = ?`, secure.HashToken(secret), c.ID); err != nil {
-		a.fail(w, r, err)
-		return
-	}
-	// A key made on approval waits for the requester's software. Once it is renewed (the brand
-	// hands it over itself, e.g. when the retailer asked on the web form), that waiting secret no
-	// longer works, so a later poll of the access request must not hand it out.
-	if _, err := a.DB.Exec(ctx, `UPDATE access_requests SET claimed = 1, client_secret_enc = NULL WHERE api_client_id = ? AND client_secret_enc IS NOT NULL`, c.ID); err != nil {
+	secret, err := a.rotateSecret(ctx, c.ID)
+	if err != nil {
 		a.fail(w, r, err)
 		return
 	}
 	c.Version++
 	writeJSON(w, 200, a.clientWithSecret(c, secret))
+}
+
+// rotateSecret gives the API client with row id a new secret; tokens of the
+// old one stop working (invalid_token).
+func (a *App) rotateSecret(ctx context.Context, id string) (string, error) {
+	secret := secure.Token("obxs_")
+	if _, err := a.DB.Exec(ctx, `UPDATE api_clients SET secret_hash = ?, secret_version = secret_version + 1 WHERE id = ?`, secure.HashToken(secret), id); err != nil {
+		return "", err
+	}
+	// A key made on approval waits for the requester's software. Once it is renewed (the brand
+	// hands it over itself, e.g. when the retailer asked on the web form), that waiting secret no
+	// longer works, so a later poll of the access request must not hand it out.
+	if _, err := a.DB.Exec(ctx, `UPDATE access_requests SET claimed = 1, client_secret_enc = NULL WHERE api_client_id = ? AND client_secret_enc IS NOT NULL`, id); err != nil {
+		return "", err
+	}
+	return secret, nil
+}
+
+// RotateClientSecret rotates the secret of the active API client with this
+// client_id (the conformance operator action rotate_client_secret).
+func (a *App) RotateClientSecret(ctx context.Context, clientID string) (string, error) {
+	c, err := a.loadClient(ctx, a.DB, "client_id = ?", clientID)
+	if err != nil {
+		return "", err
+	}
+	if c == nil || c.Status != "active" {
+		return "", fmt.Errorf("no active API key with client_id %s", clientID)
+	}
+	return a.rotateSecret(ctx, c.ID)
 }
 
 func (a *App) revokeClient(w http.ResponseWriter, r *http.Request, retailerID string) {

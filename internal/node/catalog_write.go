@@ -223,7 +223,7 @@ func (w *writer) prepare(kind, ext string, doc map[string]any, existing *row) (*
 		// canonical 0.3 form (0.1 fibre keys become the material with its
 		// qualifier, names from the vocabularies); empty features and
 		// certifications are null.
-		normalizeTerms(d.Materials, d.Care)
+		normalizeTerms(d.Materials, d.Care, d.Ext)
 		if len(d.Features) == 0 {
 			d.Features = nil
 		} else {

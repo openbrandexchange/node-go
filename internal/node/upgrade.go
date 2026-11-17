@@ -35,7 +35,7 @@ func (a *App) upgradeArticleData(ctx context.Context) error {
 				case KindProduct:
 					var d ProductData
 					_ = json.Unmarshal([]byte(r.Data), &d)
-					normalizeTerms(d.Materials, d.Care)
+					normalizeTerms(d.Materials, d.Care, d.Ext)
 					if len(d.Features) == 0 {
 						d.Features = nil
 					}
@@ -109,7 +109,7 @@ func (a *App) upgradeTerms(ctx context.Context) error {
 			}
 			// A 0.2 care entry {code, text} decodes as it is; normalizeTerms
 			// adds category, symbol and name.
-			normalizeTerms(d.Materials, d.Care)
+			normalizeTerms(d.Materials, d.Care, d.Ext)
 			data := string(mustJSON(d))
 			if data != r.Data {
 				r.Data, r.ETag = data, etagFor(r.Status, data)

@@ -1,8 +1,10 @@
 package node
 
 import (
+	"encoding/json"
 	"fmt"
 	"math"
+	"strconv"
 	"strings"
 
 	"github.com/openbrandexchange/node-go/internal/importfmt"
@@ -116,7 +118,11 @@ type WarningDetail struct {
 // qualifiers, before the ones that were sent; repeats are dropped); a known code gets the vocabulary's name
 // (and for care its category and symbol), whatever was sent; an unknown code
 // keeps what was sent, or null. A language without a name is left out.
-func normalizeTerms(ms []MaterialPart, care []CareItem) {
+//
+// ext are the product's extension members: those of qualifier terms move
+// with their term when the list is reordered or deduplicated (a sent term
+// that repeats a 0.1 key's qualifier lends it its members).
+func normalizeTerms(ms []MaterialPart, care []CareItem, ext Extensions) {
 	for i := range ms {
 		fillTerm(&ms[i].Part, vocab.Parts)
 		for j := range ms[i].Fibers {
@@ -129,21 +135,29 @@ func normalizeTerms(ms []MaterialPart, care []CareItem) {
 			// The 0.1 key's qualifiers come first; then the sent ones in
 			// order, each code once (the first occurrence wins).
 			list := make([]Term, 0, len(qs)+len(f.Qualifiers))
-			seen := map[string]bool{}
+			src := make([]int, 0, cap(list)) // index in the sent list, -1 for a 0.1 key's
+			at := map[string]int{}
 			for _, q := range qs {
-				seen[q] = true
+				at[q] = len(list)
 				list = append(list, Term{Code: q})
+				src = append(src, -1)
 			}
-			for _, q := range f.Qualifiers {
-				if !seen[q.Code] {
-					seen[q.Code] = true
-					list = append(list, q)
+			for j, q := range f.Qualifiers {
+				if k, dup := at[q.Code]; dup {
+					if src[k] == -1 {
+						src[k] = j
+					}
+					continue
 				}
+				at[q.Code] = len(list)
+				list = append(list, q)
+				src = append(src, j)
 			}
 			for k := range list {
 				fillTerm(&list[k], vocab.Qualifiers)
 			}
 			f.Qualifiers = list
+			moveQualifierExtensions(ext, fmt.Sprintf("/materials/%d/fibers/%d/qualifiers/", i, j), src)
 		}
 	}
 	for i := range care {
@@ -154,6 +168,26 @@ func normalizeTerms(ms []MaterialPart, care []CareItem) {
 			c.Name = cleanText(c.Name)
 		}
 		c.Text = cleanText(c.Text)
+	}
+}
+
+// moveQualifierExtensions renumbers the extension members of the qualifier
+// terms below prefix: the new term k gets those of sent term src[k]; the
+// members of a dropped repeat are dropped.
+func moveQualifierExtensions(ext Extensions, prefix string, src []int) {
+	old := map[int]map[string]json.RawMessage{}
+	for p, m := range ext {
+		if rest, ok := strings.CutPrefix(p, prefix); ok {
+			if n, err := strconv.Atoi(rest); err == nil {
+				old[n] = m
+				delete(ext, p)
+			}
+		}
+	}
+	for k, j := range src {
+		if m, ok := old[j]; ok && j >= 0 {
+			ext[prefix+strconv.Itoa(k)] = m
+		}
 	}
 }
 

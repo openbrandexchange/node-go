@@ -2,6 +2,7 @@ package node
 
 import (
 	"encoding/json"
+	"fmt"
 	"strings"
 	"testing"
 )
@@ -69,6 +70,25 @@ func TestExtensions(t *testing.T) {
 	}
 	if ch, _, _ := drainChanges(t, k.all, cursor, 100); len(ch) != 1 {
 		t.Fatalf("changes after the patch %v", ch)
+	}
+
+	// Members of qualifier terms move with their term when a 0.1 key puts
+	// its qualifier first and a repeat is dropped.
+	q := readFixture(t, "examples/ProductInput.extension.json").(map[string]any)
+	q["brand_external_id"] = "kestrel"
+	q["style_number"] = "QX-1"
+	q["materials"] = []any{map[string]any{"part": map[string]any{"code": "main"}, "fibers": []any{map[string]any{
+		"material": map[string]any{"code": "recycled_polyester"}, "percentage": 100, "qualifiers": []any{
+			map[string]any{"code": "post_consumer", "x-kestrel-src": "a"}, map[string]any{"code": "recycled", "x-kestrel-src": "b"}}}}}}
+	ing.must(201, "PUT", "/obx/v1/ingest/products/QX-1", q)
+	qd := ing.must(200, "GET", "/obx/v1/ingest/products/QX-1", nil)["data"].(map[string]any)
+	qs := qd["materials"].([]any)[0].(map[string]any)["fibers"].([]any)[0].(map[string]any)["qualifiers"].([]any)
+	if len(qs) != 2 || qs[0].(map[string]any)["code"] != "recycled" || qs[0].(map[string]any)["x-kestrel-src"] != "b" ||
+		qs[1].(map[string]any)["x-kestrel-src"] != "a" {
+		t.Fatalf("qualifier members %s", asJSON(qs))
+	}
+	if r := ing.must(200, "PUT", "/obx/v1/ingest/products/QX-1", qd); r["result"] != "unchanged" {
+		t.Fatalf("qualifier members round trip %v", r)
 	}
 
 	// Variants (color, measurements) and assets (rights, provenance).
@@ -151,3 +171,29 @@ func TestDraftQualifier(t *testing.T) {
 }
 
 func asJSONString(v any) string { b, _ := json.Marshal(v); return string(b) }
+
+// TestSameGTINTwiceInOneFile: the later row is gtin_conflict on gtin and is
+// skipped; a product whose variant rows are all refused is not written.
+func TestSameGTINTwiceInOneFile(t *testing.T) {
+	k := newKestrelNode(t)
+	csv := "brand,style_number,name:en,gtin,color_code,size\n" +
+		"Kestrel,KL-9001,Twice,2000900100013,BLK,S\n" +
+		"Kestrel,KL-9001,Twice,2000900100013,BLK,M\n" +
+		"Kestrel,KL-9002,Other product,2000100101025,BLK,S\n"
+	run := k.runImport(k.admin, map[string][]string{"csv": {writeTemp(t, "products.csv", []byte(csv))}}, nil)
+	items := k.admin.must(200, "GET", "/admin/api/imports/"+run["id"].(string)+"/errors", nil)["items"].([]any)
+	var got []string
+	for _, e := range items {
+		em := e.(map[string]any)
+		got = append(got, fmt.Sprint(em["row"], " ", em["column"], " ", em["obx_error"], " ", em["value"]))
+	}
+	if strings.Join(got, "|") != "2 gtin gtin_conflict 2000900100013|3 gtin gtin_conflict 2000100101025" {
+		t.Fatalf("errors %v", got)
+	}
+	if r := k.admin.do("GET", "/admin/api/catalog/products/KL-9002", nil); r.Status != 404 {
+		t.Fatalf("KL-9002 was written: %d", r.Status)
+	}
+	if c := run["counts"].(map[string]any); c["created"].(float64) != 2 {
+		t.Fatalf("counts %v", c)
+	}
+}

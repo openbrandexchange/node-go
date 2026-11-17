@@ -54,6 +54,13 @@ func TestConformance(t *testing.T) {
 	// operator only does what no API offers: simulate_spec_upgrade (P-FEED-7)
 	// moves the /changes cursor epoch as a 0.2 -> 0.3 upgrade does.
 	op := conformance.OperatorFunc(func(ctx context.Context, a conformance.Action) (map[string]string, error) {
+		if a.Name == conformance.ActRotateClientSecret {
+			secret, err := app.RotateClientSecret(ctx, a.Params["client_id"])
+			if err != nil {
+				return nil, err
+			}
+			return map[string]string{"client_secret": secret}, nil
+		}
 		if a.Name == "simulate_spec_upgrade" {
 			if err := app.SimulateSpecUpgrade(ctx); err != nil {
 				return nil, err
@@ -74,5 +81,8 @@ func TestConformance(t *testing.T) {
 			t.Logf("%s skipped: %s (%s)", r.ID, r.Title, strings.Join(r.Messages, "; "))
 		}
 	}
-	t.Logf("passed %d, failed %d, skipped %d in %d ms", rep.Passed, rep.Failed, rep.Skipped, rep.Millis)
+	t.Logf("verdict %s: passed %d, failed %d, skipped %d in %d ms", rep.Verdict, rep.Passed, rep.Failed, rep.Skipped, rep.Millis)
+	if rep.Verdict != conformance.VerdictConformant {
+		t.Errorf("verdict %s (required skipped: %v)", rep.Verdict, rep.RequiredSkipped())
+	}
 }
