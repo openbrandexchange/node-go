@@ -4,16 +4,16 @@
 #
 #   scripts/update-ui.sh [path-to-admin-ui-checkout]   (default: ../admin-ui)
 #
-# Set BUILD=1 to run "npm ci && npm run build" in the admin-ui checkout first;
+# Set BUILD=1 to run "bun install --frozen-lockfile && bun run build" in the admin-ui checkout first;
 # otherwise its committed dist/ is used as is.
 set -eu
 HERE="$(cd "$(dirname "$0")/.." && pwd)"
 UI="${1:-$HERE/../admin-ui}"
 if [ "${BUILD:-0}" = "1" ]; then
-  (cd "$UI" && npm ci && npm run build)
+  (cd "$UI" && bun install --frozen-lockfile && bun run build)
 fi
 if [ ! -f "$UI/dist/index.html" ] || [ ! -f "$UI/dist/locales/en.json" ]; then
-  echo "no admin-ui build found at $UI/dist (run with BUILD=1, or npm ci && npm run build there)" >&2
+  echo "no admin-ui build found at $UI/dist (run with BUILD=1, or bun install --frozen-lockfile && bun run build there)" >&2
   exit 1
 fi
 rm -rf "$HERE/ui/dist"
