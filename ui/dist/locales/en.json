@@ -422,7 +422,7 @@
     "intro": "Upload a CSV or Excel file and your images. Only what changed is updated.",
     "automateLink": "Do this automatically",
     "uploadTitle": "Upload",
-    "uploadIntro": "A products.csv or products.xlsx with one line per size, plus images named like KO-1001_NVY_1.jpg. A zip with everything works too.",
+    "uploadIntro": "A products.csv or products.xlsx with one line per size, plus images named like MN-1001_NVY_1.jpg. A zip with everything works too.",
     "template": "Download CSV template",
     "drop": "Drop your CSV, Excel file, zip or images here",
     "dropHint": "Folders don't matter, file names do. Images you uploaded before are recognised and not sent again.",

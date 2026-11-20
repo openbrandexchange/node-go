@@ -425,7 +425,7 @@
     "intro": "Envoyez un fichier CSV ou Excel et vos visuels. Seul ce qui a changé est mis à jour.",
     "automateLink": "Automatiser cette tâche",
     "uploadTitle": "Envoyer",
-    "uploadIntro": "Un products.csv ou products.xlsx avec une ligne par taille, et des visuels nommés comme KO-1001_NVY_1.jpg. Un zip contenant le tout fonctionne aussi.",
+    "uploadIntro": "Un products.csv ou products.xlsx avec une ligne par taille, et des visuels nommés comme MN-1001_NVY_1.jpg. Un zip contenant le tout fonctionne aussi.",
     "template": "Télécharger le modèle CSV",
     "drop": "Déposez ici votre CSV, votre fichier Excel, votre zip ou vos visuels",
     "dropHint": "Les dossiers n'ont pas d'importance, les noms de fichiers si. Les visuels déjà envoyés sont reconnus et ne sont pas renvoyés.",

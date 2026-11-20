@@ -428,7 +428,7 @@
     "intro": "Naložite datoteko CSV ali Excel in fotografije. Posodobi se samo to, kar se je spremenilo.",
     "automateLink": "To izvajaj samodejno",
     "uploadTitle": "Naloži",
-    "uploadIntro": "Datoteka products.csv ali products.xlsx z eno vrstico na velikost in fotografije z imeni, kot je KO-1001_NVY_1.jpg. Deluje tudi en zip z vsem.",
+    "uploadIntro": "Datoteka products.csv ali products.xlsx z eno vrstico na velikost in fotografije z imeni, kot je MN-1001_NVY_1.jpg. Deluje tudi en zip z vsem.",
     "template": "Prenesi predlogo CSV",
     "drop": "Sem povlecite CSV, datoteko Excel, zip ali fotografije",
     "dropHint": "Mape niso pomembne, imena datotek pa. Že naložene fotografije se prepoznajo in se ne pošiljajo znova.",

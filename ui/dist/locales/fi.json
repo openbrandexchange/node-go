@@ -422,7 +422,7 @@
     "intro": "Lataa CSV- tai Excel-tiedosto ja kuvat. Vain muuttuneet tiedot päivitetään.",
     "automateLink": "Tee tämä automaattisesti",
     "uploadTitle": "Lataa",
-    "uploadIntro": "products.csv tai products.xlsx, jossa yksi rivi kokoa kohden, sekä kuvat nimillä kuten KO-1001_NVY_1.jpg. Myös zip-tiedosto, jossa on kaikki, käy.",
+    "uploadIntro": "products.csv tai products.xlsx, jossa yksi rivi kokoa kohden, sekä kuvat nimillä kuten MN-1001_NVY_1.jpg. Myös zip-tiedosto, jossa on kaikki, käy.",
     "template": "Lataa CSV-malli",
     "drop": "Pudota CSV, Excel-tiedosto, zip tai kuvat tähän",
     "dropHint": "Kansioilla ei ole väliä, tiedostonimillä on. Aiemmin ladatut kuvat tunnistetaan, eikä niitä lähetetä uudelleen.",

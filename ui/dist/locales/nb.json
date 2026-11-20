@@ -422,7 +422,7 @@
     "intro": "Last opp en CSV- eller Excel-fil og bildene deres. Bare det som er endret, oppdateres.",
     "automateLink": "Gjør det automatisk",
     "uploadTitle": "Last opp",
-    "uploadIntro": "En products.csv eller products.xlsx med én linje per størrelse, pluss bilder med navn som KO-1001_NVY_1.jpg. En zip med alt fungerer også.",
+    "uploadIntro": "En products.csv eller products.xlsx med én linje per størrelse, pluss bilder med navn som MN-1001_NVY_1.jpg. En zip med alt fungerer også.",
     "template": "Last ned CSV-mal",
     "drop": "Slipp CSV, Excel-fil, zip eller bilder her",
     "dropHint": "Mapper spiller ingen rolle, filnavn gjør det. Bilder du har lastet opp før, gjenkjennes og sendes ikke på nytt.",

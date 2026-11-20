@@ -422,7 +422,7 @@
     "intro": "Laadige üles CSV- või Exceli fail ja pildid. Uuendatakse ainult muutunud andmeid.",
     "automateLink": "Tee seda automaatselt",
     "uploadTitle": "Üleslaadimine",
-    "uploadIntro": "products.csv või products.xlsx, kus on üks rida suuruse kohta, ning pildid nimedega nagu KO-1001_NVY_1.jpg. Sobib ka kõike sisaldav zip.",
+    "uploadIntro": "products.csv või products.xlsx, kus on üks rida suuruse kohta, ning pildid nimedega nagu MN-1001_NVY_1.jpg. Sobib ka kõike sisaldav zip.",
     "template": "Laadi alla CSV-mall",
     "drop": "Lohistage siia oma CSV, Exceli fail, zip või pildid",
     "dropHint": "Kaustad pole olulised, failinimed on. Varem üles laaditud pildid tuvastatakse ja neid ei saadeta uuesti.",

@@ -422,7 +422,7 @@
     "intro": "Laden Sie eine CSV- oder Excel-Datei und Ihre Bilder hoch. Nur Geändertes wird aktualisiert.",
     "automateLink": "Das automatisch erledigen",
     "uploadTitle": "Hochladen",
-    "uploadIntro": "Eine products.csv oder products.xlsx mit einer Zeile pro Größe und Bilder mit Namen wie KO-1001_NVY_1.jpg. Eine ZIP-Datei mit allem funktioniert auch.",
+    "uploadIntro": "Eine products.csv oder products.xlsx mit einer Zeile pro Größe und Bilder mit Namen wie MN-1001_NVY_1.jpg. Eine ZIP-Datei mit allem funktioniert auch.",
     "template": "CSV-Vorlage herunterladen",
     "drop": "Ziehen Sie Ihre CSV, Excel-Datei, ZIP oder Bilder hierher",
     "dropHint": "Ordner spielen keine Rolle, Dateinamen schon. Bereits hochgeladene Bilder werden erkannt und nicht erneut gesendet.",

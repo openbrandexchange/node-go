@@ -14,7 +14,7 @@ This starts the portal with SQLite and files in `./data-dev`, completes the firs
 
 ```
   open:    http://localhost:8080
-  login:   admin@maison-noor.example / maison-noor demo password
+  login:   admin@maison-noor.example / noor demo password
 ```
 
 Open the address, log in, and click **View as retailer** to see the portal as a retailer does. E-mails are not sent but written to the output. Stop with Ctrl+C; `go run . dev` again continues with the same data, `go run . dev --fresh` starts over. Another port: `PORT=9090 go run . dev`. This is for trying it out only: for a real portal use `serve` and the setup wizard below.

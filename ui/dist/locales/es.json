@@ -425,7 +425,7 @@
     "intro": "Sube un archivo CSV o Excel y tus imágenes. Solo se actualiza lo que ha cambiado.",
     "automateLink": "Hacerlo automáticamente",
     "uploadTitle": "Subir",
-    "uploadIntro": "Un products.csv o products.xlsx con una línea por talla, más imágenes con nombres como KO-1001_NVY_1.jpg. También sirve un zip con todo.",
+    "uploadIntro": "Un products.csv o products.xlsx con una línea por talla, más imágenes con nombres como MN-1001_NVY_1.jpg. También sirve un zip con todo.",
     "template": "Descargar plantilla CSV",
     "drop": "Arrastra aquí tu CSV, Excel, zip o imágenes",
     "dropHint": "Las carpetas dan igual, los nombres de archivo no. Las imágenes que ya subiste se reconocen y no se vuelven a enviar.",

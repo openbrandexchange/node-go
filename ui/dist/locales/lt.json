@@ -428,7 +428,7 @@
     "intro": "Įkelkite CSV arba Excel failą ir nuotraukas. Atnaujinama tik tai, kas pasikeitė.",
     "automateLink": "Daryti tai automatiškai",
     "uploadTitle": "Įkelti",
-    "uploadIntro": "Failas products.csv arba products.xlsx su viena eilute kiekvienam dydžiui ir nuotraukos su pavadinimais kaip KO-1001_NVY_1.jpg. Tinka ir vienas zip su viskuo.",
+    "uploadIntro": "Failas products.csv arba products.xlsx su viena eilute kiekvienam dydžiui ir nuotraukos su pavadinimais kaip MN-1001_NVY_1.jpg. Tinka ir vienas zip su viskuo.",
     "template": "Atsisiųsti CSV šabloną",
     "drop": "Numeskite čia CSV, Excel failą, zip arba nuotraukas",
     "dropHint": "Aplankai nesvarbu, failų pavadinimai – svarbu. Anksčiau įkeltos nuotraukos atpažįstamos ir iš naujo nesiunčiamos.",

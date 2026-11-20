@@ -422,7 +422,7 @@
     "intro": "Ladda upp en CSV- eller Excel-fil och era bilder. Bara det som har ändrats uppdateras.",
     "automateLink": "Gör det automatiskt",
     "uploadTitle": "Ladda upp",
-    "uploadIntro": "En products.csv eller products.xlsx med en rad per storlek, plus bilder med namn som KO-1001_NVY_1.jpg. En zip med allt fungerar också.",
+    "uploadIntro": "En products.csv eller products.xlsx med en rad per storlek, plus bilder med namn som MN-1001_NVY_1.jpg. En zip med allt fungerar också.",
     "template": "Ladda ner CSV-mall",
     "drop": "Släpp din CSV, Excel-fil, zip eller dina bilder här",
     "dropHint": "Mappar spelar ingen roll, filnamn gör det. Bilder som du redan har laddat upp känns igen och skickas inte igen.",

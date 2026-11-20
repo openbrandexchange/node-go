@@ -31,7 +31,7 @@ src/fonts/<font>/OFL.txt and in dist/THIRD-PARTY-LICENSES.txt.
 Built copies (dist/) include third-party software; their licences and notices
 are listed in dist/THIRD-PARTY-LICENSES.txt.
 
-The mock mode (bun run mock, not part of dist/) uses the fictional Kestrel
+The mock mode (bun run mock, not part of dist/) uses the fictional MAISON NOOR
 Outfitters fixtures of the Open Brand Exchange specification
 (https://github.com/openbrandexchange/spec), licensed under CC-BY-4.0. Its
 themed showroom (the fictional MAISON NOOR) uses images drawn by

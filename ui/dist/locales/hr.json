@@ -425,7 +425,7 @@
     "intro": "Učitajte CSV ili Excel datoteku i fotografije. Ažurira se samo ono što se promijenilo.",
     "automateLink": "Radi to automatski",
     "uploadTitle": "Učitaj",
-    "uploadIntro": "Datoteka products.csv ili products.xlsx s jednim retkom po veličini i fotografije s nazivima poput KO-1001_NVY_1.jpg. Radi i jedan zip sa svime.",
+    "uploadIntro": "Datoteka products.csv ili products.xlsx s jednim retkom po veličini i fotografije s nazivima poput MN-1001_NVY_1.jpg. Radi i jedan zip sa svime.",
     "template": "Preuzmi CSV predložak",
     "drop": "Ovdje ispustite CSV, Excel datoteku, zip ili fotografije",
     "dropHint": "Mape nisu važne, nazivi datoteka jesu. Ranije učitane fotografije prepoznaju se i ne šalju ponovno.",

@@ -428,7 +428,7 @@
     "intro": "Nahrajte soubor CSV nebo Excel a fotografie. Aktualizuje se jen to, co se změnilo.",
     "automateLink": "Dělat to automaticky",
     "uploadTitle": "Nahrát",
-    "uploadIntro": "Soubor products.csv nebo products.xlsx s jedním řádkem na velikost a fotografie s názvy jako KO-1001_NVY_1.jpg. Funguje i jeden zip se vším.",
+    "uploadIntro": "Soubor products.csv nebo products.xlsx s jedním řádkem na velikost a fotografie s názvy jako MN-1001_NVY_1.jpg. Funguje i jeden zip se vším.",
     "template": "Stáhnout šablonu CSV",
     "drop": "Přetáhněte sem CSV, soubor Excel, zip nebo fotografie",
     "dropHint": "Na složkách nezáleží, na názvech souborů ano. Dříve nahrané fotografie se rozpoznají a znovu se neodesílají.",

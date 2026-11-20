@@ -422,7 +422,7 @@
     "intro": "Upload en CSV- eller Excel-fil og jeres billeder. Kun det, der er ændret, opdateres.",
     "automateLink": "Gør det automatisk",
     "uploadTitle": "Upload",
-    "uploadIntro": "En products.csv eller products.xlsx med én linje pr. størrelse plus billeder med navne som KO-1001_NVY_1.jpg. En zip med det hele virker også.",
+    "uploadIntro": "En products.csv eller products.xlsx med én linje pr. størrelse plus billeder med navne som MN-1001_NVY_1.jpg. En zip med det hele virker også.",
     "template": "Download CSV-skabelon",
     "drop": "Træk din CSV, Excel-fil, zip eller dine billeder hertil",
     "dropHint": "Mapper er ligegyldige, filnavne er ikke. Billeder, du har uploadet før, genkendes og sendes ikke igen.",

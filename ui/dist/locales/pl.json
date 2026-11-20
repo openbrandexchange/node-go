@@ -428,7 +428,7 @@
     "intro": "Prześlij plik CSV lub Excel i zdjęcia. Aktualizowane jest tylko to, co się zmieniło.",
     "automateLink": "Zrób to automatycznie",
     "uploadTitle": "Prześlij",
-    "uploadIntro": "Plik products.csv lub products.xlsx z jednym wierszem na rozmiar oraz zdjęcia o nazwach takich jak KO-1001_NVY_1.jpg. Można też przesłać wszystko w jednym pliku zip.",
+    "uploadIntro": "Plik products.csv lub products.xlsx z jednym wierszem na rozmiar oraz zdjęcia o nazwach takich jak MN-1001_NVY_1.jpg. Można też przesłać wszystko w jednym pliku zip.",
     "template": "Pobierz szablon CSV",
     "drop": "Upuść tutaj CSV, plik Excel, zip lub zdjęcia",
     "dropHint": "Foldery nie mają znaczenia, nazwy plików tak. Wcześniej przesłane zdjęcia są rozpoznawane i nie są wysyłane ponownie.",

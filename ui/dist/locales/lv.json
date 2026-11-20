@@ -425,7 +425,7 @@
     "intro": "Augšupielādējiet CSV vai Excel failu un fotoattēlus. Tiek atjaunināts tikai tas, kas mainījies.",
     "automateLink": "Darīt to automātiski",
     "uploadTitle": "Augšupielādēt",
-    "uploadIntro": "Fails products.csv vai products.xlsx ar vienu rindu katram izmēram un fotoattēli ar nosaukumiem kā KO-1001_NVY_1.jpg. Der arī viens zip ar visu.",
+    "uploadIntro": "Fails products.csv vai products.xlsx ar vienu rindu katram izmēram un fotoattēli ar nosaukumiem kā MN-1001_NVY_1.jpg. Der arī viens zip ar visu.",
     "template": "Lejupielādēt CSV veidni",
     "drop": "Nometiet šeit CSV, Excel failu, zip vai fotoattēlus",
     "dropHint": "Mapes nav svarīgas, failu nosaukumi ir. Iepriekš augšupielādētie fotoattēli tiek atpazīti un netiek sūtīti atkārtoti.",

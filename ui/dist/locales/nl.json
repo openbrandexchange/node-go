@@ -422,7 +422,7 @@
     "intro": "Upload een CSV- of Excel-bestand en je beelden. Alleen wat veranderd is wordt bijgewerkt.",
     "automateLink": "Doe dit automatisch",
     "uploadTitle": "Uploaden",
-    "uploadIntro": "Een products.csv of products.xlsx met één regel per maat, plus beelden met namen als KO-1001_NVY_1.jpg. Een zip met alles erin werkt ook.",
+    "uploadIntro": "Een products.csv of products.xlsx met één regel per maat, plus beelden met namen als MN-1001_NVY_1.jpg. Een zip met alles erin werkt ook.",
     "template": "CSV-voorbeeld downloaden",
     "drop": "Sleep je CSV, Excel-bestand, zip of beelden hierheen",
     "dropHint": "Mappen maken niet uit, bestandsnamen wel. Beelden die je eerder hebt geüpload worden herkend en niet opnieuw verstuurd.",

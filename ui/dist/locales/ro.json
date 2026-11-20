@@ -425,7 +425,7 @@
     "intro": "Încărcați un fișier CSV sau Excel și fotografii. Se actualizează doar ce s-a schimbat.",
     "automateLink": "Fă asta automat",
     "uploadTitle": "Încarcă",
-    "uploadIntro": "Un fișier products.csv sau products.xlsx cu un rând pe mărime și fotografii cu nume precum KO-1001_NVY_1.jpg. Funcționează și un singur zip cu tot.",
+    "uploadIntro": "Un fișier products.csv sau products.xlsx cu un rând pe mărime și fotografii cu nume precum MN-1001_NVY_1.jpg. Funcționează și un singur zip cu tot.",
     "template": "Descarcă șablonul CSV",
     "drop": "Plasați aici CSV-ul, fișierul Excel, zip-ul sau fotografiile",
     "dropHint": "Dosarele nu contează, numele fișierelor da. Fotografiile încărcate anterior sunt recunoscute și nu se trimit din nou.",

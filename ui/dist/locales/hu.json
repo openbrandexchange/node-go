@@ -422,7 +422,7 @@
     "intro": "Töltsön fel egy CSV- vagy Excel-fájlt és fotókat. Csak az frissül, ami változott.",
     "automateLink": "Automatikusan",
     "uploadTitle": "Feltöltés",
-    "uploadIntro": "Egy products.csv vagy products.xlsx fájl méretenként egy sorral, és fotók KO-1001_NVY_1.jpg formájú nevekkel. Egyetlen zip is működik mindennel.",
+    "uploadIntro": "Egy products.csv vagy products.xlsx fájl méretenként egy sorral, és fotók MN-1001_NVY_1.jpg formájú nevekkel. Egyetlen zip is működik mindennel.",
     "template": "CSV-sablon letöltése",
     "drop": "Húzza ide a CSV-t, az Excel-fájlt, a zipet vagy a fotókat",
     "dropHint": "A mappák nem számítanak, a fájlnevek igen. A korábban feltöltött fotók felismerésre kerülnek, és nem küldjük el őket újra.",

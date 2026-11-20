@@ -425,7 +425,7 @@
     "intro": "Carica un file CSV o Excel e le tue immagini. Si aggiorna solo ciò che è cambiato.",
     "automateLink": "Fallo in automatico",
     "uploadTitle": "Carica",
-    "uploadIntro": "Un products.csv o products.xlsx con una riga per taglia, più immagini con nomi come KO-1001_NVY_1.jpg. Va bene anche uno zip con tutto.",
+    "uploadIntro": "Un products.csv o products.xlsx con una riga per taglia, più immagini con nomi come MN-1001_NVY_1.jpg. Va bene anche uno zip con tutto.",
     "template": "Scarica il modello CSV",
     "drop": "Trascina qui CSV, file Excel, zip o immagini",
     "dropHint": "Le cartelle non contano, i nomi dei file sì. Le immagini già caricate vengono riconosciute e non vengono reinviate.",

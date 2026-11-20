@@ -180,7 +180,7 @@ const (
 	devDataDir   = "./data-dev"
 	devSetupCode = "DEMO-DEMO-DEMO"
 	devEmail     = "admin@maison-noor.example"
-	devPassword  = "maison-noor demo password"
+	devPassword  = "noor demo password"
 	devPackage   = "testdata/maison-noor-example.zip"
 )
 

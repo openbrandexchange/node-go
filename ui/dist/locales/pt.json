@@ -425,7 +425,7 @@
     "intro": "Envie um ficheiro CSV ou Excel e as suas imagens. Só o que mudou é atualizado.",
     "automateLink": "Fazer isto automaticamente",
     "uploadTitle": "Enviar",
-    "uploadIntro": "Um products.csv ou products.xlsx com uma linha por tamanho, mais imagens com nomes como KO-1001_NVY_1.jpg. Um zip com tudo também serve.",
+    "uploadIntro": "Um products.csv ou products.xlsx com uma linha por tamanho, mais imagens com nomes como MN-1001_NVY_1.jpg. Um zip com tudo também serve.",
     "template": "Transferir modelo CSV",
     "drop": "Arraste para aqui o CSV, o ficheiro Excel, o zip ou as imagens",
     "dropHint": "As pastas não importam, os nomes dos ficheiros sim. As imagens já enviadas são reconhecidas e não são reenviadas.",

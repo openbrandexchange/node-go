@@ -431,7 +431,7 @@
     "intro": "Uaslódáil comhad CSV nó Excel agus grianghraif. Ní nuashonraítear ach an méid a d’athraigh.",
     "automateLink": "Déan é seo go huathoibríoch",
     "uploadTitle": "Uaslódáil",
-    "uploadIntro": "Comhad products.csv nó products.xlsx le líne amháin in aghaidh na méide, agus grianghraif le hainmneacha mar KO-1001_NVY_1.jpg. Oibríonn zip amháin le gach rud ann freisin.",
+    "uploadIntro": "Comhad products.csv nó products.xlsx le líne amháin in aghaidh na méide, agus grianghraif le hainmneacha mar MN-1001_NVY_1.jpg. Oibríonn zip amháin le gach rud ann freisin.",
     "template": "Íoslódáil teimpléad CSV",
     "drop": "Scaoil CSV, comhad Excel, zip nó grianghraif anseo",
     "dropHint": "Ní bhaineann fillteáin le hábhar, ach baineann ainmneacha comhad. Aithnítear grianghraif a uaslódáladh cheana agus ní sheoltar arís iad.",
