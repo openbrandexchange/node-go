@@ -30,7 +30,8 @@
     "retry": "Mēģināt vēlreiz",
     "secret": "Slepenā atslēga",
     "shownOnce": "Nokopējiet to tagad un glabājiet drošā vietā. Drošības apsvērumu dēļ tā tiek parādīta tikai tagad.",
-    "worksWith": "Darbojas ar Open Brand Exchange"
+    "worksWith": "Darbojas ar Open Brand Exchange",
+    "opensInNewTab": "atveras jaunā cilnē"
   },
   "fields": {
     "email": "E-pasta adrese",
@@ -239,7 +240,8 @@
       "viewPortal": "Skatīt kā tirgotājs",
       "pendingCount_zero": "{{count}} gaida",
       "pendingCount_one": "{{count}} gaida",
-      "pendingCount_other": "{{count}} gaida"
+      "pendingCount_other": "{{count}} gaida",
+      "appearance": "Izskats"
     }
   },
   "dashboard": {
@@ -984,7 +986,8 @@
       "ean": "EAN saraksts",
       "selection": "Izlase",
       "downloads": "Lejupielādes",
-      "account": "Konts"
+      "account": "Konts",
+      "home": "Sākums"
     },
     "preview": {
       "banner": "Jūs redzat portālu tā, kā to redz jūsu tirgotāji. Jūsu lejupielādes šeit netiek skaitītas.",
@@ -997,7 +1000,7 @@
       "search": "Meklēt",
       "searchPlaceholder": "Meklējiet pēc preces numura, nosaukuma, krāsas vai EAN",
       "density": "Flīžu izmērs",
-      "comfortable": "Lielas",
+      "comfortable": "Vidējas",
       "compact": "Mazas",
       "results": "Preces",
       "count_zero": "{{formatted}} preču",
@@ -1022,7 +1025,9 @@
       "empty": "Zīmols vēl nav publicējis nevienu preci.",
       "selectedPill_zero": "Atlasītas {{count}} · Skatīt",
       "selectedPill_one": "Atlasīta {{count}} · Skatīt",
-      "selectedPill_other": "Atlasītas {{count}} · Skatīt"
+      "selectedPill_other": "Atlasītas {{count}} · Skatīt",
+      "title": "Katalogs",
+      "editorial": "Lielas"
     },
     "filters": {
       "title": "Filtri",
@@ -1039,7 +1044,12 @@
       "color": "Krāsa",
       "season": "Sezona",
       "collection": "Kolekcija",
-      "qualifier": "Ilgtspēja"
+      "qualifier": "Ilgtspēja",
+      "active": "Izvēlētie filtri",
+      "remove": "Noņemt filtru",
+      "showCount_zero": "Rādīt {{count}} preces",
+      "showCount_one": "Rādīt {{count}} preci",
+      "showCount_other": "Rādīt {{count}} preces"
     },
     "tile": {
       "colours_zero": "{{count}} krāsu",
@@ -1048,7 +1058,10 @@
       "images_zero": "{{count}} fotoattēlu",
       "images_one": "{{count}} fotoattēls",
       "images_other": "{{count}} fotoattēli",
-      "select": "Atlasīt {{name}}"
+      "select": "Atlasīt {{name}}",
+      "quickView": "Ātrais skats",
+      "showColour": "Rādīt krāsu {{colour}}",
+      "openArticle": "Atvērt preces lapu"
     },
     "variant": {
       "label": "Faila versija",
@@ -1092,7 +1105,10 @@
       "passport": "Produkta pase",
       "passportOpen": "Atvērt digitālo produkta pasi",
       "noImages": "Vēl nav fotoattēlu",
-      "noImagesHint": "Preces dati jau ir pieejami, fotoattēli sekos vēlāk."
+      "noImagesHint": "Preces dati jau ir pieejami, fotoattēli sekos vēlāk.",
+      "zoom": "Skatīt fotoattēlu pilnekrāna režīmā",
+      "previousImage": "Iepriekšējais fotoattēls",
+      "nextImage": "Nākamais fotoattēls"
     },
     "selection": {
       "title": "Jūsu izlase",
@@ -1172,7 +1188,11 @@
         "expired": "Beidzies"
       }
     },
-    "excel": "Preču dati (Excel)"
+    "excel": "Preču dati (Excel)",
+    "home": {
+      "title": "Sākumlapa",
+      "contact": "Kontakti"
+    }
   },
   "enum": {
     "role": {

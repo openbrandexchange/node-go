@@ -8,6 +8,8 @@ are always forward-only and applied automatically on start.
 ## [Unreleased]
 
 ### Added
+- The web interface is admin-ui 9bbfe9f: the showroom redesign (theme engine, Appearance editor in the settings,
+  start page, quick view).
 - **Portal appearance** (node-admin 0.3.x, additive): `branding.theme` (colours, fonts, radius,
   density, card style, image fit), `branding.login` (layout, background image, texts) and
   `branding.home` (start page blocks: hero, tiles, text, image_text, products, announcement,

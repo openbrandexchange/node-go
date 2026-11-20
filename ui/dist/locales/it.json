@@ -30,7 +30,8 @@
     "retry": "Riprova",
     "secret": "Segreto",
     "shownOnce": "Copialo ora e conservalo in un posto sicuro. Per la tua sicurezza viene mostrato solo questa volta.",
-    "worksWith": "Funziona con Open Brand Exchange"
+    "worksWith": "Funziona con Open Brand Exchange",
+    "opensInNewTab": "si apre in una nuova scheda"
   },
   "fields": {
     "email": "Indirizzo email",
@@ -239,7 +240,8 @@
       "viewPortal": "Vedi come rivenditore",
       "pendingCount_one": "{{count}} in attesa",
       "pendingCount_many": "{{count}} in attesa",
-      "pendingCount_other": "{{count}} in attesa"
+      "pendingCount_other": "{{count}} in attesa",
+      "appearance": "Aspetto"
     }
   },
   "dashboard": {
@@ -984,7 +986,8 @@
       "ean": "Elenco EAN",
       "selection": "Selezione",
       "downloads": "Download",
-      "account": "Account"
+      "account": "Account",
+      "home": "Inizio"
     },
     "preview": {
       "banner": "Stai vedendo l'area come la vedono i tuoi rivenditori. I tuoi download qui non vengono conteggiati.",
@@ -997,7 +1000,7 @@
       "search": "Cerca",
       "searchPlaceholder": "Cerca per codice articolo, nome, colore o EAN",
       "density": "Dimensione delle schede",
-      "comfortable": "Grandi",
+      "comfortable": "Medie",
       "compact": "Piccole",
       "results": "Articoli",
       "count_one": "{{formatted}} articolo",
@@ -1022,7 +1025,9 @@
       "empty": "Il marchio non ha ancora pubblicato articoli.",
       "selectedPill_one": "{{count}} articolo selezionato · Vedi",
       "selectedPill_many": "{{count}} articoli selezionati · Vedi",
-      "selectedPill_other": "{{count}} articoli selezionati · Vedi"
+      "selectedPill_other": "{{count}} articoli selezionati · Vedi",
+      "title": "Catalogo",
+      "editorial": "Grandi"
     },
     "filters": {
       "title": "Filtri",
@@ -1039,7 +1044,12 @@
       "color": "Colore",
       "season": "Stagione",
       "collection": "Collezione",
-      "qualifier": "Sostenibilità"
+      "qualifier": "Sostenibilità",
+      "active": "Filtri scelti",
+      "remove": "Rimuovi filtro",
+      "showCount_one": "Mostra {{count}} articolo",
+      "showCount_many": "Mostra {{count}} articoli",
+      "showCount_other": "Mostra {{count}} articoli"
     },
     "tile": {
       "colours_one": "{{count}} colore",
@@ -1048,7 +1058,10 @@
       "images_one": "{{count}} immagine",
       "images_many": "{{count}} immagini",
       "images_other": "{{count}} immagini",
-      "select": "Seleziona {{name}}"
+      "select": "Seleziona {{name}}",
+      "quickView": "Anteprima rapida",
+      "showColour": "Mostra il colore {{colour}}",
+      "openArticle": "Apri la pagina dell'articolo"
     },
     "variant": {
       "label": "Versione del file",
@@ -1092,7 +1105,10 @@
       "passport": "Passaporto del prodotto",
       "passportOpen": "Apri il passaporto digitale del prodotto",
       "noImages": "Ancora nessuna immagine",
-      "noImagesHint": "I dati articolo sono già disponibili; le immagini arriveranno più tardi."
+      "noImagesHint": "I dati articolo sono già disponibili; le immagini arriveranno più tardi.",
+      "zoom": "Visualizza l'immagine a schermo intero",
+      "previousImage": "Immagine precedente",
+      "nextImage": "Immagine successiva"
     },
     "selection": {
       "title": "La tua selezione",
@@ -1172,7 +1188,11 @@
         "expired": "Scaduto"
       }
     },
-    "excel": "Dati articolo (Excel)"
+    "excel": "Dati articolo (Excel)",
+    "home": {
+      "title": "Pagina iniziale",
+      "contact": "Contatti"
+    }
   },
   "enum": {
     "role": {

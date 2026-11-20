@@ -30,7 +30,8 @@
     "retry": "Opnieuw proberen",
     "secret": "Geheim",
     "shownOnce": "Kopieer het nu en bewaar het op een veilige plek. Voor je veiligheid tonen we het maar één keer.",
-    "worksWith": "Werkt met Open Brand Exchange"
+    "worksWith": "Werkt met Open Brand Exchange",
+    "opensInNewTab": "opent in een nieuw tabblad"
   },
   "fields": {
     "email": "E-mailadres",
@@ -238,7 +239,8 @@
       "settings": "Instellingen",
       "viewPortal": "Bekijk als retailer",
       "pendingCount_one": "{{count}} wacht",
-      "pendingCount_other": "{{count}} wachten"
+      "pendingCount_other": "{{count}} wachten",
+      "appearance": "Uiterlijk"
     }
   },
   "dashboard": {
@@ -971,7 +973,8 @@
       "ean": "EAN-lijst",
       "selection": "Selectie",
       "downloads": "Downloads",
-      "account": "Account"
+      "account": "Account",
+      "home": "Start"
     },
     "preview": {
       "banner": "Je bekijkt de beeldbank zoals je retailers hem zien. Je downloads hier worden niet meegeteld.",
@@ -984,7 +987,7 @@
       "search": "Zoeken",
       "searchPlaceholder": "Zoek op artikelnummer, naam, kleur of EAN",
       "density": "Tegelgrootte",
-      "comfortable": "Groot",
+      "comfortable": "Middel",
       "compact": "Klein",
       "results": "Artikelen",
       "count_one": "{{formatted}} artikel",
@@ -1004,7 +1007,9 @@
       "emptyFiltered": "Probeer andere filters of een andere zoekterm.",
       "empty": "Het merk heeft nog geen artikelen gepubliceerd.",
       "selectedPill_one": "{{count}} artikel geselecteerd · Bekijken",
-      "selectedPill_other": "{{count}} artikelen geselecteerd · Bekijken"
+      "selectedPill_other": "{{count}} artikelen geselecteerd · Bekijken",
+      "title": "Catalogus",
+      "editorial": "Groot"
     },
     "filters": {
       "title": "Filters",
@@ -1020,14 +1025,21 @@
       "color": "Kleur",
       "season": "Seizoen",
       "collection": "Collectie",
-      "qualifier": "Duurzaamheid"
+      "qualifier": "Duurzaamheid",
+      "active": "Gekozen filters",
+      "remove": "Filter verwijderen",
+      "showCount_one": "Toon {{count}} artikel",
+      "showCount_other": "Toon {{count}} artikelen"
     },
     "tile": {
       "colours_one": "{{count}} kleur",
       "colours_other": "{{count}} kleuren",
       "images_one": "{{count}} beeld",
       "images_other": "{{count}} beelden",
-      "select": "{{name}} selecteren"
+      "select": "{{name}} selecteren",
+      "quickView": "Snel bekijken",
+      "showColour": "Kleur {{colour}} tonen",
+      "openArticle": "Artikelpagina openen"
     },
     "variant": {
       "label": "Bestandsversie",
@@ -1070,7 +1082,10 @@
       "passport": "Productpaspoort",
       "passportOpen": "Het digitale productpaspoort openen",
       "noImages": "Nog geen beelden",
-      "noImagesHint": "De artikeldata is al beschikbaar; beelden volgen later."
+      "noImagesHint": "De artikeldata is al beschikbaar; beelden volgen later.",
+      "zoom": "Beeld schermvullend bekijken",
+      "previousImage": "Vorig beeld",
+      "nextImage": "Volgend beeld"
     },
     "selection": {
       "title": "Je selectie",
@@ -1142,7 +1157,11 @@
         "expired": "Verlopen"
       }
     },
-    "excel": "Artikeldata (Excel)"
+    "excel": "Artikeldata (Excel)",
+    "home": {
+      "title": "Startpagina",
+      "contact": "Contact"
+    }
   },
   "enum": {
     "role": {

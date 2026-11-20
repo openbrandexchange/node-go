@@ -30,7 +30,8 @@
     "retry": "Bain triail eile as",
     "secret": "Eochair rúnda",
     "shownOnce": "Cóipeáil anois í agus coinnigh in áit shábháilte í. Ar chúiseanna slándála, ní thaispeántar í ach an uair seo.",
-    "worksWith": "Oibríonn sé le Open Brand Exchange"
+    "worksWith": "Oibríonn sé le Open Brand Exchange",
+    "opensInNewTab": "osclaítear i gcluaisín nua é"
   },
   "fields": {
     "email": "Seoladh ríomhphoist",
@@ -241,7 +242,8 @@
       "pendingCount_two": "Ag fanacht: {{count}}",
       "pendingCount_few": "Ag fanacht: {{count}}",
       "pendingCount_many": "Ag fanacht: {{count}}",
-      "pendingCount_other": "Ag fanacht: {{count}}"
+      "pendingCount_other": "Ag fanacht: {{count}}",
+      "appearance": "Cuma"
     }
   },
   "dashboard": {
@@ -1010,7 +1012,8 @@
       "ean": "Liosta EAN",
       "selection": "Rogha",
       "downloads": "Íoslódálacha",
-      "account": "Cuntas"
+      "account": "Cuntas",
+      "home": "Baile"
     },
     "preview": {
       "banner": "Tá tú ag féachaint ar an tairseach mar a fheiceann do mhiondíoltóirí í. Ní áirítear d’íoslódálacha anseo.",
@@ -1023,7 +1026,7 @@
       "search": "Cuardaigh",
       "searchPlaceholder": "Cuardaigh de réir uimhir earra, ainm, dath nó EAN",
       "density": "Méid na dtíleanna",
-      "comfortable": "Mór",
+      "comfortable": "Meánach",
       "compact": "Beag",
       "results": "Earraí",
       "count_one": "Earraí: {{formatted}}",
@@ -1058,7 +1061,9 @@
       "selectedPill_two": "Roghnaithe: {{count}} · Féach",
       "selectedPill_few": "Roghnaithe: {{count}} · Féach",
       "selectedPill_many": "Roghnaithe: {{count}} · Féach",
-      "selectedPill_other": "Roghnaithe: {{count}} · Féach"
+      "selectedPill_other": "Roghnaithe: {{count}} · Féach",
+      "title": "Catalóg",
+      "editorial": "Mór"
     },
     "filters": {
       "title": "Scagairí",
@@ -1077,7 +1082,14 @@
       "color": "Dath",
       "season": "Séasúr",
       "collection": "Bailiúchán",
-      "qualifier": "Inbhuanaitheacht"
+      "qualifier": "Inbhuanaitheacht",
+      "active": "Scagairí roghnaithe",
+      "remove": "Bain an scagaire",
+      "showCount_one": "Taispeáin earraí: {{count}}",
+      "showCount_two": "Taispeáin earraí: {{count}}",
+      "showCount_few": "Taispeáin earraí: {{count}}",
+      "showCount_many": "Taispeáin earraí: {{count}}",
+      "showCount_other": "Taispeáin earraí: {{count}}"
     },
     "tile": {
       "colours_one": "Dathanna: {{count}}",
@@ -1090,7 +1102,10 @@
       "images_few": "Grianghraif: {{count}}",
       "images_many": "Grianghraif: {{count}}",
       "images_other": "Grianghraif: {{count}}",
-      "select": "Roghnaigh {{name}}"
+      "select": "Roghnaigh {{name}}",
+      "quickView": "Amharc tapa",
+      "showColour": "Taispeáin an dath {{colour}}",
+      "openArticle": "Oscail leathanach an earra"
     },
     "variant": {
       "label": "Leagan comhaid",
@@ -1136,7 +1151,10 @@
       "passport": "Pas táirge",
       "passportOpen": "Oscail pas digiteach an táirge",
       "noImages": "Gan ghrianghraif fós",
-      "noImagesHint": "Tá sonraí an earra ar fáil cheana; tiocfaidh na grianghraif ar ball."
+      "noImagesHint": "Tá sonraí an earra ar fáil cheana; tiocfaidh na grianghraif ar ball.",
+      "zoom": "Féach ar an ngrianghraf ar an scáileán iomlán",
+      "previousImage": "An grianghraf roimhe seo",
+      "nextImage": "An chéad ghrianghraf eile"
     },
     "selection": {
       "title": "Do rogha",
@@ -1232,7 +1250,11 @@
         "expired": "Imithe in éag"
       }
     },
-    "excel": "Sonraí earraí (Excel)"
+    "excel": "Sonraí earraí (Excel)",
+    "home": {
+      "title": "Leathanach tosaigh",
+      "contact": "Teagmháil"
+    }
   },
   "enum": {
     "role": {

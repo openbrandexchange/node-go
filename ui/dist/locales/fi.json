@@ -30,7 +30,8 @@
     "retry": "Yritä uudelleen",
     "secret": "Salaisuus",
     "shownOnce": "Kopioi se nyt ja säilytä turvallisessa paikassa. Turvallisuussyistä se näytetään vain tämän kerran.",
-    "worksWith": "Toimii Open Brand Exchangen kanssa"
+    "worksWith": "Toimii Open Brand Exchangen kanssa",
+    "opensInNewTab": "avautuu uuteen välilehteen"
   },
   "fields": {
     "email": "Sähköpostiosoite",
@@ -238,7 +239,8 @@
       "settings": "Asetukset",
       "viewPortal": "Näytä jälleenmyyjänä",
       "pendingCount_one": "{{count}} odottaa",
-      "pendingCount_other": "{{count}} odottaa"
+      "pendingCount_other": "{{count}} odottaa",
+      "appearance": "Ulkoasu"
     }
   },
   "dashboard": {
@@ -971,7 +973,8 @@
       "ean": "EAN-lista",
       "selection": "Valikoima",
       "downloads": "Lataukset",
-      "account": "Tili"
+      "account": "Tili",
+      "home": "Etusivu"
     },
     "preview": {
       "banner": "Näet portaalin niin kuin jälleenmyyjänne sen näkevät. Latauksiasi täällä ei lasketa.",
@@ -984,7 +987,7 @@
       "search": "Haku",
       "searchPlaceholder": "Hae tuotenumerolla, nimellä, värillä tai EAN-koodilla",
       "density": "Ruutujen koko",
-      "comfortable": "Suuret",
+      "comfortable": "Keskikokoiset",
       "compact": "Pienet",
       "results": "Tuotteet",
       "count_one": "{{formatted}} tuote",
@@ -1004,7 +1007,9 @@
       "emptyFiltered": "Kokeile muita suodattimia tai toista hakua.",
       "empty": "Merkki ei ole vielä julkaissut tuotteita.",
       "selectedPill_one": "{{count}} tuote valittu · Näytä",
-      "selectedPill_other": "{{count}} tuotetta valittu · Näytä"
+      "selectedPill_other": "{{count}} tuotetta valittu · Näytä",
+      "title": "Luettelo",
+      "editorial": "Suuret"
     },
     "filters": {
       "title": "Suodattimet",
@@ -1020,14 +1025,21 @@
       "color": "Väri",
       "season": "Sesonki",
       "collection": "Mallisto",
-      "qualifier": "Kestävyys"
+      "qualifier": "Kestävyys",
+      "active": "Valitut suodattimet",
+      "remove": "Poista suodatin",
+      "showCount_one": "Näytä {{count}} tuote",
+      "showCount_other": "Näytä {{count}} tuotetta"
     },
     "tile": {
       "colours_one": "{{count}} väri",
       "colours_other": "{{count}} väriä",
       "images_one": "{{count}} kuva",
       "images_other": "{{count}} kuvaa",
-      "select": "Valitse {{name}}"
+      "select": "Valitse {{name}}",
+      "quickView": "Pikakatselu",
+      "showColour": "Näytä väri {{colour}}",
+      "openArticle": "Avaa tuotesivu"
     },
     "variant": {
       "label": "Tiedostoversio",
@@ -1070,7 +1082,10 @@
       "passport": "Tuotepassi",
       "passportOpen": "Avaa digitaalinen tuotepassi",
       "noImages": "Ei vielä kuvia",
-      "noImagesHint": "Tuotetiedot ovat jo saatavilla; kuvat tulevat myöhemmin."
+      "noImagesHint": "Tuotetiedot ovat jo saatavilla; kuvat tulevat myöhemmin.",
+      "zoom": "Näytä kuva koko näytöllä",
+      "previousImage": "Edellinen kuva",
+      "nextImage": "Seuraava kuva"
     },
     "selection": {
       "title": "Valikoimasi",
@@ -1142,7 +1157,11 @@
         "expired": "Vanhentunut"
       }
     },
-    "excel": "Tuotetiedot (Excel)"
+    "excel": "Tuotetiedot (Excel)",
+    "home": {
+      "title": "Etusivu",
+      "contact": "Yhteystiedot"
+    }
   },
   "enum": {
     "role": {

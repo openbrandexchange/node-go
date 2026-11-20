@@ -30,7 +30,8 @@
     "retry": "Skúsiť znova",
     "secret": "Tajný kľúč",
     "shownOnce": "Skopírujte si ho hneď a uložte na bezpečné miesto. Z bezpečnostných dôvodov sa zobrazí len teraz.",
-    "worksWith": "Funguje s Open Brand Exchange"
+    "worksWith": "Funguje s Open Brand Exchange",
+    "opensInNewTab": "otvorí sa na novej karte"
   },
   "fields": {
     "email": "E-mailová adresa",
@@ -240,7 +241,8 @@
       "pendingCount_one": "{{count}} čaká",
       "pendingCount_few": "{{count}} čakajú",
       "pendingCount_many": "{{count}} čaká",
-      "pendingCount_other": "{{count}} čaká"
+      "pendingCount_other": "{{count}} čaká",
+      "appearance": "Vzhľad"
     }
   },
   "dashboard": {
@@ -997,7 +999,8 @@
       "ean": "Zoznam EAN",
       "selection": "Výber",
       "downloads": "Sťahovanie",
-      "account": "Účet"
+      "account": "Účet",
+      "home": "Úvod"
     },
     "preview": {
       "banner": "Vidíte portál tak, ako ho vidia vaši predajcovia. Vaše sťahovania sa tu nezapočítavajú.",
@@ -1010,7 +1013,7 @@
       "search": "Hľadať",
       "searchPlaceholder": "Hľadať podľa čísla tovaru, názvu, farby alebo EAN",
       "density": "Veľkosť dlaždíc",
-      "comfortable": "Veľké",
+      "comfortable": "Stredné",
       "compact": "Malé",
       "results": "Tovar",
       "count_one": "{{formatted}} tovar",
@@ -1040,7 +1043,9 @@
       "selectedPill_one": "Vybraný {{count}} tovar · Zobraziť",
       "selectedPill_few": "Vybrané {{count}} tovary · Zobraziť",
       "selectedPill_many": "Vybraných {{count}} tovaru · Zobraziť",
-      "selectedPill_other": "Vybraných {{count}} tovarov · Zobraziť"
+      "selectedPill_other": "Vybraných {{count}} tovarov · Zobraziť",
+      "title": "Katalóg",
+      "editorial": "Veľké"
     },
     "filters": {
       "title": "Filtre",
@@ -1058,7 +1063,13 @@
       "color": "Farba",
       "season": "Sezóna",
       "collection": "Kolekcia",
-      "qualifier": "Udržateľnosť"
+      "qualifier": "Udržateľnosť",
+      "active": "Vybrané filtre",
+      "remove": "Odstrániť filter",
+      "showCount_one": "Zobraziť {{count}} tovar",
+      "showCount_few": "Zobraziť {{count}} tovary",
+      "showCount_many": "Zobraziť {{count}} tovaru",
+      "showCount_other": "Zobraziť {{count}} tovarov"
     },
     "tile": {
       "colours_one": "{{count}} farba",
@@ -1069,7 +1080,10 @@
       "images_few": "{{count}} fotografie",
       "images_many": "{{count}} fotografie",
       "images_other": "{{count}} fotografií",
-      "select": "Vybrať {{name}}"
+      "select": "Vybrať {{name}}",
+      "quickView": "Rýchly náhľad",
+      "showColour": "Zobraziť farbu {{colour}}",
+      "openArticle": "Otvoriť stránku tovaru"
     },
     "variant": {
       "label": "Verzia súboru",
@@ -1114,7 +1128,10 @@
       "passport": "Produktový pas",
       "passportOpen": "Otvoriť digitálny produktový pas",
       "noImages": "Zatiaľ žiadne fotografie",
-      "noImagesHint": "Údaje o tovare sú už k dispozícii, fotografie prídu neskôr."
+      "noImagesHint": "Údaje o tovare sú už k dispozícii, fotografie prídu neskôr.",
+      "zoom": "Zobraziť fotografiu na celú obrazovku",
+      "previousImage": "Predchádzajúca fotografia",
+      "nextImage": "Ďalšia fotografia"
     },
     "selection": {
       "title": "Váš výber",
@@ -1202,7 +1219,11 @@
         "expired": "Vypršalo"
       }
     },
-    "excel": "Údaje o tovare (Excel)"
+    "excel": "Údaje o tovare (Excel)",
+    "home": {
+      "title": "Úvodná stránka",
+      "contact": "Kontakt"
+    }
   },
   "enum": {
     "role": {

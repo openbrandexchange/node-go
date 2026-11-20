@@ -30,7 +30,8 @@
     "retry": "Δοκιμάστε ξανά",
     "secret": "Μυστικό κλειδί",
     "shownOnce": "Αντιγράψτε το τώρα και φυλάξτε το σε ασφαλές σημείο. Για λόγους ασφαλείας εμφανίζεται μόνο αυτή τη φορά.",
-    "worksWith": "Λειτουργεί με το Open Brand Exchange"
+    "worksWith": "Λειτουργεί με το Open Brand Exchange",
+    "opensInNewTab": "ανοίγει σε νέα καρτέλα"
   },
   "fields": {
     "email": "Διεύθυνση email",
@@ -238,7 +239,8 @@
       "settings": "Ρυθμίσεις",
       "viewPortal": "Προβολή ως μεταπωλητής",
       "pendingCount_one": "{{count}} σε αναμονή",
-      "pendingCount_other": "{{count}} σε αναμονή"
+      "pendingCount_other": "{{count}} σε αναμονή",
+      "appearance": "Εμφάνιση"
     }
   },
   "dashboard": {
@@ -971,7 +973,8 @@
       "ean": "Λίστα EAN",
       "selection": "Επιλογή",
       "downloads": "Λήψεις",
-      "account": "Λογαριασμός"
+      "account": "Λογαριασμός",
+      "home": "Αρχική"
     },
     "preview": {
       "banner": "Βλέπετε την πύλη όπως τη βλέπουν οι μεταπωλητές σας. Οι λήψεις σας δεν μετρώνται εδώ.",
@@ -984,7 +987,7 @@
       "search": "Αναζήτηση",
       "searchPlaceholder": "Αναζήτηση με κωδικό είδους, όνομα, χρώμα ή EAN",
       "density": "Μέγεθος πλακιδίων",
-      "comfortable": "Μεγάλα",
+      "comfortable": "Μεσαία",
       "compact": "Μικρά",
       "results": "Είδη",
       "count_one": "{{formatted}} είδος",
@@ -1004,7 +1007,9 @@
       "emptyFiltered": "Δοκιμάστε άλλα φίλτρα ή άλλη αναζήτηση.",
       "empty": "Το brand δεν έχει δημοσιεύσει ακόμη είδη.",
       "selectedPill_one": "{{count}} επιλεγμένο · Προβολή",
-      "selectedPill_other": "{{count}} επιλεγμένα · Προβολή"
+      "selectedPill_other": "{{count}} επιλεγμένα · Προβολή",
+      "title": "Κατάλογος",
+      "editorial": "Μεγάλα"
     },
     "filters": {
       "title": "Φίλτρα",
@@ -1020,14 +1025,21 @@
       "color": "Χρώμα",
       "season": "Σεζόν",
       "collection": "Συλλογή",
-      "qualifier": "Βιωσιμότητα"
+      "qualifier": "Βιωσιμότητα",
+      "active": "Επιλεγμένα φίλτρα",
+      "remove": "Αφαίρεση φίλτρου",
+      "showCount_one": "Εμφάνιση {{count}} είδους",
+      "showCount_other": "Εμφάνιση {{count}} ειδών"
     },
     "tile": {
       "colours_one": "{{count}} χρώμα",
       "colours_other": "{{count}} χρώματα",
       "images_one": "{{count}} φωτογραφία",
       "images_other": "{{count}} φωτογραφίες",
-      "select": "Επιλογή {{name}}"
+      "select": "Επιλογή {{name}}",
+      "quickView": "Γρήγορη προβολή",
+      "showColour": "Εμφάνιση χρώματος {{colour}}",
+      "openArticle": "Άνοιγμα σελίδας είδους"
     },
     "variant": {
       "label": "Έκδοση αρχείου",
@@ -1070,7 +1082,10 @@
       "passport": "Διαβατήριο προϊόντος",
       "passportOpen": "Άνοιγμα ψηφιακού διαβατηρίου προϊόντος",
       "noImages": "Καμία φωτογραφία ακόμη",
-      "noImagesHint": "Τα στοιχεία του είδους είναι ήδη διαθέσιμα, οι φωτογραφίες θα ακολουθήσουν."
+      "noImagesHint": "Τα στοιχεία του είδους είναι ήδη διαθέσιμα, οι φωτογραφίες θα ακολουθήσουν.",
+      "zoom": "Προβολή φωτογραφίας σε πλήρη οθόνη",
+      "previousImage": "Προηγούμενη φωτογραφία",
+      "nextImage": "Επόμενη φωτογραφία"
     },
     "selection": {
       "title": "Η επιλογή σας",
@@ -1142,7 +1157,11 @@
         "expired": "Έληξε"
       }
     },
-    "excel": "Στοιχεία ειδών (Excel)"
+    "excel": "Στοιχεία ειδών (Excel)",
+    "home": {
+      "title": "Αρχική σελίδα",
+      "contact": "Επικοινωνία"
+    }
   },
   "enum": {
     "role": {

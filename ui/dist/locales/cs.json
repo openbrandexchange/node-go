@@ -30,7 +30,8 @@
     "retry": "Zkusit znovu",
     "secret": "Tajný klíč",
     "shownOnce": "Zkopírujte si ho hned a uložte na bezpečné místo. Z bezpečnostních důvodů se zobrazí jen tentokrát.",
-    "worksWith": "Funguje s Open Brand Exchange"
+    "worksWith": "Funguje s Open Brand Exchange",
+    "opensInNewTab": "otevře se na nové kartě"
   },
   "fields": {
     "email": "E-mailová adresa",
@@ -240,7 +241,8 @@
       "pendingCount_one": "{{count}} čeká",
       "pendingCount_few": "{{count}} čekají",
       "pendingCount_many": "{{count}} čeká",
-      "pendingCount_other": "{{count}} čeká"
+      "pendingCount_other": "{{count}} čeká",
+      "appearance": "Vzhled"
     }
   },
   "dashboard": {
@@ -997,7 +999,8 @@
       "ean": "Seznam EAN",
       "selection": "Výběr",
       "downloads": "Stahování",
-      "account": "Účet"
+      "account": "Účet",
+      "home": "Úvod"
     },
     "preview": {
       "banner": "Vidíte portál tak, jak ho vidí vaši prodejci. Vaše stahování se zde nezapočítávají.",
@@ -1010,7 +1013,7 @@
       "search": "Hledat",
       "searchPlaceholder": "Hledat podle čísla artiklu, názvu, barvy nebo EAN",
       "density": "Velikost dlaždic",
-      "comfortable": "Velké",
+      "comfortable": "Střední",
       "compact": "Malé",
       "results": "Artikly",
       "count_one": "{{formatted}} artikl",
@@ -1040,7 +1043,9 @@
       "selectedPill_one": "Vybrán {{count}} artikl · Zobrazit",
       "selectedPill_few": "Vybrány {{count}} artikly · Zobrazit",
       "selectedPill_many": "Vybráno {{count}} artiklu · Zobrazit",
-      "selectedPill_other": "Vybráno {{count}} artiklů · Zobrazit"
+      "selectedPill_other": "Vybráno {{count}} artiklů · Zobrazit",
+      "title": "Katalog",
+      "editorial": "Velké"
     },
     "filters": {
       "title": "Filtry",
@@ -1058,7 +1063,13 @@
       "color": "Barva",
       "season": "Sezóna",
       "collection": "Kolekce",
-      "qualifier": "Udržitelnost"
+      "qualifier": "Udržitelnost",
+      "active": "Vybrané filtry",
+      "remove": "Odebrat filtr",
+      "showCount_one": "Zobrazit {{count}} artikl",
+      "showCount_few": "Zobrazit {{count}} artikly",
+      "showCount_many": "Zobrazit {{count}} artiklu",
+      "showCount_other": "Zobrazit {{count}} artiklů"
     },
     "tile": {
       "colours_one": "{{count}} barva",
@@ -1069,7 +1080,10 @@
       "images_few": "{{count}} fotografie",
       "images_many": "{{count}} fotografie",
       "images_other": "{{count}} fotografií",
-      "select": "Vybrat {{name}}"
+      "select": "Vybrat {{name}}",
+      "quickView": "Rychlý náhled",
+      "showColour": "Zobrazit barvu {{colour}}",
+      "openArticle": "Otevřít stránku artiklu"
     },
     "variant": {
       "label": "Verze souboru",
@@ -1114,7 +1128,10 @@
       "passport": "Produktový pas",
       "passportOpen": "Otevřít digitální produktový pas",
       "noImages": "Zatím žádné fotografie",
-      "noImagesHint": "Údaje o artiklu jsou už k dispozici, fotografie přijdou později."
+      "noImagesHint": "Údaje o artiklu jsou už k dispozici, fotografie přijdou později.",
+      "zoom": "Zobrazit fotografii na celou obrazovku",
+      "previousImage": "Předchozí fotografie",
+      "nextImage": "Další fotografie"
     },
     "selection": {
       "title": "Váš výběr",
@@ -1202,7 +1219,11 @@
         "expired": "Vypršelo"
       }
     },
-    "excel": "Údaje o artiklech (Excel)"
+    "excel": "Údaje o artiklech (Excel)",
+    "home": {
+      "title": "Úvodní stránka",
+      "contact": "Kontakt"
+    }
   },
   "enum": {
     "role": {

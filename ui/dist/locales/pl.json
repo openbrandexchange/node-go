@@ -30,7 +30,8 @@
     "retry": "Spróbuj ponownie",
     "secret": "Sekret",
     "shownOnce": "Skopiuj go teraz i przechowuj w bezpiecznym miejscu. Ze względów bezpieczeństwa pokazujemy go tylko ten jeden raz.",
-    "worksWith": "Działa z Open Brand Exchange"
+    "worksWith": "Działa z Open Brand Exchange",
+    "opensInNewTab": "otwiera się w nowej karcie"
   },
   "fields": {
     "email": "Adres e-mail",
@@ -240,7 +241,8 @@
       "pendingCount_one": "{{count}} oczekuje",
       "pendingCount_few": "{{count}} oczekują",
       "pendingCount_many": "{{count}} oczekuje",
-      "pendingCount_other": "{{count}} oczekuje"
+      "pendingCount_other": "{{count}} oczekuje",
+      "appearance": "Wygląd"
     }
   },
   "dashboard": {
@@ -997,7 +999,8 @@
       "ean": "Lista EAN",
       "selection": "Wybór",
       "downloads": "Pobrania",
-      "account": "Konto"
+      "account": "Konto",
+      "home": "Strona główna"
     },
     "preview": {
       "banner": "Widzisz portal tak, jak widzą go Twoi sprzedawcy. Twoje pobrania tutaj nie są liczone.",
@@ -1010,7 +1013,7 @@
       "search": "Szukaj",
       "searchPlaceholder": "Szukaj po numerze artykułu, nazwie, kolorze lub EAN",
       "density": "Rozmiar kafelków",
-      "comfortable": "Duże",
+      "comfortable": "Średnie",
       "compact": "Małe",
       "results": "Artykuły",
       "count_one": "{{formatted}} artykuł",
@@ -1040,7 +1043,9 @@
       "selectedPill_one": "Wybrano {{count}} artykuł · Zobacz",
       "selectedPill_few": "Wybrano {{count}} artykuły · Zobacz",
       "selectedPill_many": "Wybrano {{count}} artykułów · Zobacz",
-      "selectedPill_other": "Wybrano {{count}} artykułu · Zobacz"
+      "selectedPill_other": "Wybrano {{count}} artykułu · Zobacz",
+      "title": "Katalog",
+      "editorial": "Duże"
     },
     "filters": {
       "title": "Filtry",
@@ -1058,7 +1063,13 @@
       "color": "Kolor",
       "season": "Sezon",
       "collection": "Kolekcja",
-      "qualifier": "Zrównoważony rozwój"
+      "qualifier": "Zrównoważony rozwój",
+      "active": "Wybrane filtry",
+      "remove": "Usuń filtr",
+      "showCount_one": "Pokaż {{count}} artykuł",
+      "showCount_few": "Pokaż {{count}} artykuły",
+      "showCount_many": "Pokaż {{count}} artykułów",
+      "showCount_other": "Pokaż {{count}} artykułu"
     },
     "tile": {
       "colours_one": "{{count}} kolor",
@@ -1069,7 +1080,10 @@
       "images_few": "{{count}} zdjęcia",
       "images_many": "{{count}} zdjęć",
       "images_other": "{{count}} zdjęcia",
-      "select": "Wybierz {{name}}"
+      "select": "Wybierz {{name}}",
+      "quickView": "Szybki podgląd",
+      "showColour": "Pokaż kolor {{colour}}",
+      "openArticle": "Otwórz stronę artykułu"
     },
     "variant": {
       "label": "Wersja pliku",
@@ -1114,7 +1128,10 @@
       "passport": "Paszport produktu",
       "passportOpen": "Otwórz cyfrowy paszport produktu",
       "noImages": "Brak zdjęć",
-      "noImagesHint": "Dane artykułu są już dostępne; zdjęcia pojawią się później."
+      "noImagesHint": "Dane artykułu są już dostępne; zdjęcia pojawią się później.",
+      "zoom": "Pokaż zdjęcie na pełnym ekranie",
+      "previousImage": "Poprzednie zdjęcie",
+      "nextImage": "Następne zdjęcie"
     },
     "selection": {
       "title": "Twój wybór",
@@ -1202,7 +1219,11 @@
         "expired": "Wygasło"
       }
     },
-    "excel": "Dane artykułów (Excel)"
+    "excel": "Dane artykułów (Excel)",
+    "home": {
+      "title": "Strona startowa",
+      "contact": "Kontakt"
+    }
   },
   "enum": {
     "role": {

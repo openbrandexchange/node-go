@@ -30,7 +30,8 @@
     "retry": "Erġa’ pprova",
     "secret": "Ċavetta sigrieta",
     "shownOnce": "Ikkopjaha issa u żommha f’post sigur. Għal raġunijiet ta’ sigurtà, tintwera biss din id-darba.",
-    "worksWith": "Jaħdem ma’ Open Brand Exchange"
+    "worksWith": "Jaħdem ma’ Open Brand Exchange",
+    "opensInNewTab": "jinfetaħ f’tab ġdida"
   },
   "fields": {
     "email": "Indirizz tal-email",
@@ -241,7 +242,8 @@
       "pendingCount_two": "Qed jistennew: {{count}}",
       "pendingCount_few": "Qed jistennew: {{count}}",
       "pendingCount_many": "Qed jistennew: {{count}}",
-      "pendingCount_other": "Qed jistennew: {{count}}"
+      "pendingCount_other": "Qed jistennew: {{count}}",
+      "appearance": "Dehra"
     }
   },
   "dashboard": {
@@ -1010,7 +1012,8 @@
       "ean": "Lista tal-EAN",
       "selection": "Għażla",
       "downloads": "Downloads",
-      "account": "Kont"
+      "account": "Kont",
+      "home": "Paġna tal-bidu"
     },
     "preview": {
       "banner": "Qed tara l-portal kif jarawh il-bejjiegħa tiegħek. Id-downloads tiegħek ma jingħaddux hawn.",
@@ -1023,7 +1026,7 @@
       "search": "Fittex",
       "searchPlaceholder": "Fittex bin-numru tal-oġġett, l-isem, il-kulur jew l-EAN",
       "density": "Daqs tal-madum",
-      "comfortable": "Kbar",
+      "comfortable": "Medji",
       "compact": "Żgħar",
       "results": "Oġġetti",
       "count_one": "Oġġetti: {{formatted}}",
@@ -1058,7 +1061,9 @@
       "selectedPill_two": "Magħżula: {{count}} · Ara",
       "selectedPill_few": "Magħżula: {{count}} · Ara",
       "selectedPill_many": "Magħżula: {{count}} · Ara",
-      "selectedPill_other": "Magħżula: {{count}} · Ara"
+      "selectedPill_other": "Magħżula: {{count}} · Ara",
+      "title": "Katalgu",
+      "editorial": "Kbar"
     },
     "filters": {
       "title": "Filtri",
@@ -1077,7 +1082,14 @@
       "color": "Kulur",
       "season": "Staġun",
       "collection": "Kollezzjoni",
-      "qualifier": "Sostenibbiltà"
+      "qualifier": "Sostenibbiltà",
+      "active": "Filtri magħżula",
+      "remove": "Neħħi l-filtru",
+      "showCount_one": "Uri oġġetti: {{count}}",
+      "showCount_two": "Uri oġġetti: {{count}}",
+      "showCount_few": "Uri oġġetti: {{count}}",
+      "showCount_many": "Uri oġġetti: {{count}}",
+      "showCount_other": "Uri oġġetti: {{count}}"
     },
     "tile": {
       "colours_one": "Kuluri: {{count}}",
@@ -1090,7 +1102,10 @@
       "images_few": "Ritratti: {{count}}",
       "images_many": "Ritratti: {{count}}",
       "images_other": "Ritratti: {{count}}",
-      "select": "Agħżel {{name}}"
+      "select": "Agħżel {{name}}",
+      "quickView": "Ħarsa malajr",
+      "showColour": "Uri l-kulur {{colour}}",
+      "openArticle": "Iftaħ il-paġna tal-oġġett"
     },
     "variant": {
       "label": "Verżjoni tal-fajl",
@@ -1136,7 +1151,10 @@
       "passport": "Passaport tal-prodott",
       "passportOpen": "Iftaħ il-passaport diġitali tal-prodott",
       "noImages": "Għad m’hemmx ritratti",
-      "noImagesHint": "Id-dettalji tal-oġġett diġà disponibbli; ir-ritratti jiġu aktar tard."
+      "noImagesHint": "Id-dettalji tal-oġġett diġà disponibbli; ir-ritratti jiġu aktar tard.",
+      "zoom": "Ara r-ritratt fuq l-iskrin kollu",
+      "previousImage": "Ir-ritratt ta’ qabel",
+      "nextImage": "Ir-ritratt li jmiss"
     },
     "selection": {
       "title": "L-għażla tiegħek",
@@ -1232,7 +1250,11 @@
         "expired": "Skada"
       }
     },
-    "excel": "Dettalji tal-oġġetti (Excel)"
+    "excel": "Dettalji tal-oġġetti (Excel)",
+    "home": {
+      "title": "Paġna tal-bidu",
+      "contact": "Kuntatt"
+    }
   },
   "enum": {
     "role": {

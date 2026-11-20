@@ -30,7 +30,8 @@
     "retry": "Опитай отново",
     "secret": "Таен ключ",
     "shownOnce": "Копирайте го сега и го пазете на сигурно място. От съображения за сигурност се показва само сега.",
-    "worksWith": "Работи с Open Brand Exchange"
+    "worksWith": "Работи с Open Brand Exchange",
+    "opensInNewTab": "отваря се в нов раздел"
   },
   "fields": {
     "email": "Имейл адрес",
@@ -238,7 +239,8 @@
       "settings": "Настройки",
       "viewPortal": "Виж като търговец",
       "pendingCount_one": "{{count}} чака",
-      "pendingCount_other": "{{count}} чакат"
+      "pendingCount_other": "{{count}} чакат",
+      "appearance": "Облик"
     }
   },
   "dashboard": {
@@ -971,7 +973,8 @@
       "ean": "Списък с EAN",
       "selection": "Селекция",
       "downloads": "Изтегляния",
-      "account": "Профил"
+      "account": "Профил",
+      "home": "Начало"
     },
     "preview": {
       "banner": "Виждате портала така, както го виждат вашите търговци. Вашите изтегляния не се броят тук.",
@@ -984,7 +987,7 @@
       "search": "Търсене",
       "searchPlaceholder": "Търсете по номер на артикул, име, цвят или EAN",
       "density": "Размер на плочките",
-      "comfortable": "Големи",
+      "comfortable": "Средни",
       "compact": "Малки",
       "results": "Артикули",
       "count_one": "{{formatted}} артикул",
@@ -1004,7 +1007,9 @@
       "emptyFiltered": "Опитайте с други филтри или друго търсене.",
       "empty": "Марката все още не е публикувала артикули.",
       "selectedPill_one": "{{count}} избран · Виж",
-      "selectedPill_other": "{{count}} избрани · Виж"
+      "selectedPill_other": "{{count}} избрани · Виж",
+      "title": "Каталог",
+      "editorial": "Големи"
     },
     "filters": {
       "title": "Филтри",
@@ -1020,14 +1025,21 @@
       "color": "Цвят",
       "season": "Сезон",
       "collection": "Колекция",
-      "qualifier": "Устойчивост"
+      "qualifier": "Устойчивост",
+      "active": "Избрани филтри",
+      "remove": "Премахни филтъра",
+      "showCount_one": "Покажи {{count}} артикул",
+      "showCount_other": "Покажи {{count}} артикула"
     },
     "tile": {
       "colours_one": "{{count}} цвят",
       "colours_other": "{{count}} цвята",
       "images_one": "{{count}} снимка",
       "images_other": "{{count}} снимки",
-      "select": "Избери {{name}}"
+      "select": "Избери {{name}}",
+      "quickView": "Бърз преглед",
+      "showColour": "Покажи цвят {{colour}}",
+      "openArticle": "Отвори страницата на артикула"
     },
     "variant": {
       "label": "Версия на файла",
@@ -1070,7 +1082,10 @@
       "passport": "Паспорт на продукта",
       "passportOpen": "Отвори цифровия паспорт на продукта",
       "noImages": "Все още няма снимки",
-      "noImagesHint": "Данните за артикула вече са налични, снимките ще дойдат по-късно."
+      "noImagesHint": "Данните за артикула вече са налични, снимките ще дойдат по-късно.",
+      "zoom": "Виж снимката на цял екран",
+      "previousImage": "Предишна снимка",
+      "nextImage": "Следваща снимка"
     },
     "selection": {
       "title": "Вашата селекция",
@@ -1142,7 +1157,11 @@
         "expired": "Изтекло"
       }
     },
-    "excel": "Данни за артикулите (Excel)"
+    "excel": "Данни за артикулите (Excel)",
+    "home": {
+      "title": "Начална страница",
+      "contact": "Контакт"
+    }
   },
   "enum": {
     "role": {

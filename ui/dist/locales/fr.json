@@ -30,7 +30,8 @@
     "retry": "Réessayer",
     "secret": "Secret",
     "shownOnce": "Copiez-le maintenant et conservez-le en lieu sûr. Pour votre sécurité, il ne s'affiche qu'une seule fois.",
-    "worksWith": "Compatible Open Brand Exchange"
+    "worksWith": "Compatible Open Brand Exchange",
+    "opensInNewTab": "s'ouvre dans un nouvel onglet"
   },
   "fields": {
     "email": "Adresse e-mail",
@@ -239,7 +240,8 @@
       "viewPortal": "Voir comme un revendeur",
       "pendingCount_one": "{{count}} en attente",
       "pendingCount_many": "{{count}} en attente",
-      "pendingCount_other": "{{count}} en attente"
+      "pendingCount_other": "{{count}} en attente",
+      "appearance": "Apparence"
     }
   },
   "dashboard": {
@@ -984,7 +986,8 @@
       "ean": "Liste d'EAN",
       "selection": "Sélection",
       "downloads": "Téléchargements",
-      "account": "Compte"
+      "account": "Compte",
+      "home": "Accueil"
     },
     "preview": {
       "banner": "Vous voyez l'espace tel que vos revendeurs le voient. Vos téléchargements ici ne sont pas comptés.",
@@ -997,7 +1000,7 @@
       "search": "Rechercher",
       "searchPlaceholder": "Rechercher par référence, nom, couleur ou EAN",
       "density": "Taille des vignettes",
-      "comfortable": "Grandes",
+      "comfortable": "Moyennes",
       "compact": "Petites",
       "results": "Articles",
       "count_one": "{{formatted}} article",
@@ -1022,7 +1025,9 @@
       "empty": "La marque n'a pas encore publié d'articles.",
       "selectedPill_one": "{{count}} article sélectionné · Voir",
       "selectedPill_many": "{{count}} articles sélectionnés · Voir",
-      "selectedPill_other": "{{count}} articles sélectionnés · Voir"
+      "selectedPill_other": "{{count}} articles sélectionnés · Voir",
+      "title": "Catalogue",
+      "editorial": "Grandes"
     },
     "filters": {
       "title": "Filtres",
@@ -1039,7 +1044,12 @@
       "color": "Couleur",
       "season": "Saison",
       "collection": "Collection",
-      "qualifier": "Durabilité"
+      "qualifier": "Durabilité",
+      "active": "Filtres choisis",
+      "remove": "Retirer le filtre",
+      "showCount_one": "Voir {{count}} article",
+      "showCount_many": "Voir {{count}} articles",
+      "showCount_other": "Voir {{count}} articles"
     },
     "tile": {
       "colours_one": "{{count}} couleur",
@@ -1048,7 +1058,10 @@
       "images_one": "{{count}} visuel",
       "images_many": "{{count}} visuels",
       "images_other": "{{count}} visuels",
-      "select": "Sélectionner {{name}}"
+      "select": "Sélectionner {{name}}",
+      "quickView": "Aperçu rapide",
+      "showColour": "Afficher la couleur {{colour}}",
+      "openArticle": "Ouvrir la fiche article"
     },
     "variant": {
       "label": "Version du fichier",
@@ -1092,7 +1105,10 @@
       "passport": "Passeport produit",
       "passportOpen": "Ouvrir le passeport numérique du produit",
       "noImages": "Pas encore de visuels",
-      "noImagesHint": "Les données articles sont déjà disponibles ; les visuels suivront."
+      "noImagesHint": "Les données articles sont déjà disponibles ; les visuels suivront.",
+      "zoom": "Afficher le visuel en plein écran",
+      "previousImage": "Visuel précédent",
+      "nextImage": "Visuel suivant"
     },
     "selection": {
       "title": "Votre sélection",
@@ -1172,7 +1188,11 @@
         "expired": "Expiré"
       }
     },
-    "excel": "Données articles (Excel)"
+    "excel": "Données articles (Excel)",
+    "home": {
+      "title": "Page d'accueil",
+      "contact": "Contact"
+    }
   },
   "enum": {
     "role": {

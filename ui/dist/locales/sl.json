@@ -30,7 +30,8 @@
     "retry": "Poskusi znova",
     "secret": "Skrivni ključ",
     "shownOnce": "Takoj ga kopirajte in shranite na varno mesto. Iz varnostnih razlogov je prikazan samo zdaj.",
-    "worksWith": "Deluje z Open Brand Exchange"
+    "worksWith": "Deluje z Open Brand Exchange",
+    "opensInNewTab": "odpre se v novem zavihku"
   },
   "fields": {
     "email": "E-poštni naslov",
@@ -240,7 +241,8 @@
       "pendingCount_one": "{{count}} čaka",
       "pendingCount_two": "{{count}} čakata",
       "pendingCount_few": "{{count}} čakajo",
-      "pendingCount_other": "{{count}} čaka"
+      "pendingCount_other": "{{count}} čaka",
+      "appearance": "Videz"
     }
   },
   "dashboard": {
@@ -997,7 +999,8 @@
       "ean": "Seznam EAN",
       "selection": "Izbor",
       "downloads": "Prenosi",
-      "account": "Račun"
+      "account": "Račun",
+      "home": "Začetna stran"
     },
     "preview": {
       "banner": "Portal vidite tako, kot ga vidijo vaši trgovci. Vaši prenosi se tukaj ne štejejo.",
@@ -1010,7 +1013,7 @@
       "search": "Iskanje",
       "searchPlaceholder": "Iščite po številki artikla, imenu, barvi ali EAN",
       "density": "Velikost ploščic",
-      "comfortable": "Velike",
+      "comfortable": "Srednje",
       "compact": "Majhne",
       "results": "Artikli",
       "count_one": "{{formatted}} artikel",
@@ -1040,7 +1043,9 @@
       "selectedPill_one": "Izbran {{count}} artikel · Pokaži",
       "selectedPill_two": "Izbrana {{count}} artikla · Pokaži",
       "selectedPill_few": "Izbrani {{count}} artikli · Pokaži",
-      "selectedPill_other": "Izbranih {{count}} artiklov · Pokaži"
+      "selectedPill_other": "Izbranih {{count}} artiklov · Pokaži",
+      "title": "Katalog",
+      "editorial": "Velike"
     },
     "filters": {
       "title": "Filtri",
@@ -1058,7 +1063,13 @@
       "color": "Barva",
       "season": "Sezona",
       "collection": "Kolekcija",
-      "qualifier": "Trajnost"
+      "qualifier": "Trajnost",
+      "active": "Izbrani filtri",
+      "remove": "Odstrani filter",
+      "showCount_one": "Pokaži {{count}} artikel",
+      "showCount_two": "Pokaži {{count}} artikla",
+      "showCount_few": "Pokaži {{count}} artikle",
+      "showCount_other": "Pokaži {{count}} artiklov"
     },
     "tile": {
       "colours_one": "{{count}} barva",
@@ -1069,7 +1080,10 @@
       "images_two": "{{count}} fotografiji",
       "images_few": "{{count}} fotografije",
       "images_other": "{{count}} fotografij",
-      "select": "Izberi {{name}}"
+      "select": "Izberi {{name}}",
+      "quickView": "Hitri ogled",
+      "showColour": "Pokaži barvo {{colour}}",
+      "openArticle": "Odpri stran artikla"
     },
     "variant": {
       "label": "Različica datoteke",
@@ -1114,7 +1128,10 @@
       "passport": "Potni list izdelka",
       "passportOpen": "Odpri digitalni potni list izdelka",
       "noImages": "Še ni fotografij",
-      "noImagesHint": "Podatki o artiklu so že na voljo, fotografije pridejo pozneje."
+      "noImagesHint": "Podatki o artiklu so že na voljo, fotografije pridejo pozneje.",
+      "zoom": "Pokaži fotografijo čez cel zaslon",
+      "previousImage": "Prejšnja fotografija",
+      "nextImage": "Naslednja fotografija"
     },
     "selection": {
       "title": "Vaš izbor",
@@ -1202,7 +1219,11 @@
         "expired": "Poteklo"
       }
     },
-    "excel": "Podatki o artiklih (Excel)"
+    "excel": "Podatki o artiklih (Excel)",
+    "home": {
+      "title": "Začetna stran",
+      "contact": "Kontakt"
+    }
   },
   "enum": {
     "role": {

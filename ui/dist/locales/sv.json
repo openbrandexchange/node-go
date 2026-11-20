@@ -30,7 +30,8 @@
     "retry": "Försök igen",
     "secret": "Hemlighet",
     "shownOnce": "Kopiera den nu och spara den på ett säkert ställe. Av säkerhetsskäl visas den bara den här gången.",
-    "worksWith": "Fungerar med Open Brand Exchange"
+    "worksWith": "Fungerar med Open Brand Exchange",
+    "opensInNewTab": "öppnas i en ny flik"
   },
   "fields": {
     "email": "E-postadress",
@@ -238,7 +239,8 @@
       "settings": "Inställningar",
       "viewPortal": "Visa som återförsäljare",
       "pendingCount_one": "{{count}} väntar",
-      "pendingCount_other": "{{count}} väntar"
+      "pendingCount_other": "{{count}} väntar",
+      "appearance": "Utseende"
     }
   },
   "dashboard": {
@@ -971,7 +973,8 @@
       "ean": "EAN-lista",
       "selection": "Urval",
       "downloads": "Nedladdningar",
-      "account": "Konto"
+      "account": "Konto",
+      "home": "Start"
     },
     "preview": {
       "banner": "Du ser portalen som era återförsäljare ser den. Dina nedladdningar här räknas inte.",
@@ -984,7 +987,7 @@
       "search": "Sök",
       "searchPlaceholder": "Sök på artikelnummer, namn, färg eller EAN",
       "density": "Brickstorlek",
-      "comfortable": "Stora",
+      "comfortable": "Mellan",
       "compact": "Små",
       "results": "Artiklar",
       "count_one": "{{formatted}} artikel",
@@ -1004,7 +1007,9 @@
       "emptyFiltered": "Prova andra filter eller en annan sökning.",
       "empty": "Varumärket har inte publicerat några artiklar än.",
       "selectedPill_one": "{{count}} artikel vald · Visa",
-      "selectedPill_other": "{{count}} artiklar valda · Visa"
+      "selectedPill_other": "{{count}} artiklar valda · Visa",
+      "title": "Katalog",
+      "editorial": "Stora"
     },
     "filters": {
       "title": "Filter",
@@ -1020,14 +1025,21 @@
       "color": "Färg",
       "season": "Säsong",
       "collection": "Kollektion",
-      "qualifier": "Hållbarhet"
+      "qualifier": "Hållbarhet",
+      "active": "Valda filter",
+      "remove": "Ta bort filter",
+      "showCount_one": "Visa {{count}} artikel",
+      "showCount_other": "Visa {{count}} artiklar"
     },
     "tile": {
       "colours_one": "{{count}} färg",
       "colours_other": "{{count}} färger",
       "images_one": "{{count}} bild",
       "images_other": "{{count}} bilder",
-      "select": "Välj {{name}}"
+      "select": "Välj {{name}}",
+      "quickView": "Snabbvy",
+      "showColour": "Visa färgen {{colour}}",
+      "openArticle": "Öppna artikelsidan"
     },
     "variant": {
       "label": "Filversion",
@@ -1070,7 +1082,10 @@
       "passport": "Produktpass",
       "passportOpen": "Öppna det digitala produktpasset",
       "noImages": "Inga bilder än",
-      "noImagesHint": "Artikeldata finns redan; bilderna kommer senare."
+      "noImagesHint": "Artikeldata finns redan; bilderna kommer senare.",
+      "zoom": "Visa bilden i helskärm",
+      "previousImage": "Föregående bild",
+      "nextImage": "Nästa bild"
     },
     "selection": {
       "title": "Ditt urval",
@@ -1142,7 +1157,11 @@
         "expired": "Utgången"
       }
     },
-    "excel": "Artikeldata (Excel)"
+    "excel": "Artikeldata (Excel)",
+    "home": {
+      "title": "Startsida",
+      "contact": "Kontakt"
+    }
   },
   "enum": {
     "role": {

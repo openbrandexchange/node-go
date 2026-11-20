@@ -30,7 +30,8 @@
     "retry": "Próbálja újra",
     "secret": "Titkos kulcs",
     "shownOnce": "Másolja ki most, és tárolja biztonságos helyen. Biztonsági okokból csak most jelenik meg.",
-    "worksWith": "Működik az Open Brand Exchange-dzsel"
+    "worksWith": "Működik az Open Brand Exchange-dzsel",
+    "opensInNewTab": "új lapon nyílik meg"
   },
   "fields": {
     "email": "E-mail-cím",
@@ -238,7 +239,8 @@
       "settings": "Beállítások",
       "viewPortal": "Megtekintés viszonteladóként",
       "pendingCount_one": "{{count}} függőben",
-      "pendingCount_other": "{{count}} függőben"
+      "pendingCount_other": "{{count}} függőben",
+      "appearance": "Megjelenés"
     }
   },
   "dashboard": {
@@ -971,7 +973,8 @@
       "ean": "EAN-lista",
       "selection": "Válogatás",
       "downloads": "Letöltések",
-      "account": "Fiók"
+      "account": "Fiók",
+      "home": "Kezdőoldal"
     },
     "preview": {
       "banner": "Úgy látja a portált, ahogy a viszonteladói. Az Ön letöltései itt nem számítanak bele.",
@@ -984,7 +987,7 @@
       "search": "Keresés",
       "searchPlaceholder": "Keresés cikkszám, név, szín vagy EAN szerint",
       "density": "Csempeméret",
-      "comfortable": "Nagy",
+      "comfortable": "Közepes",
       "compact": "Kicsi",
       "results": "Termékek",
       "count_one": "{{formatted}} termék",
@@ -1004,7 +1007,9 @@
       "emptyFiltered": "Próbáljon más szűrőket vagy más keresést.",
       "empty": "A márka még nem tett közzé termékeket.",
       "selectedPill_one": "{{count}} kiválasztva · Megtekintés",
-      "selectedPill_other": "{{count}} kiválasztva · Megtekintés"
+      "selectedPill_other": "{{count}} kiválasztva · Megtekintés",
+      "title": "Katalógus",
+      "editorial": "Nagy"
     },
     "filters": {
       "title": "Szűrők",
@@ -1020,14 +1025,21 @@
       "color": "Szín",
       "season": "Szezon",
       "collection": "Kollekció",
-      "qualifier": "Fenntarthatóság"
+      "qualifier": "Fenntarthatóság",
+      "active": "Kiválasztott szűrők",
+      "remove": "Szűrő eltávolítása",
+      "showCount_one": "{{count}} termék megjelenítése",
+      "showCount_other": "{{count}} termék megjelenítése"
     },
     "tile": {
       "colours_one": "{{count}} szín",
       "colours_other": "{{count}} szín",
       "images_one": "{{count}} fotó",
       "images_other": "{{count}} fotó",
-      "select": "{{name}} kiválasztása"
+      "select": "{{name}} kiválasztása",
+      "quickView": "Gyorsnézet",
+      "showColour": "{{colour}} szín megjelenítése",
+      "openArticle": "Termékoldal megnyitása"
     },
     "variant": {
       "label": "Fájlváltozat",
@@ -1070,7 +1082,10 @@
       "passport": "Termékútlevél",
       "passportOpen": "Digitális termékútlevél megnyitása",
       "noImages": "Még nincsenek fotók",
-      "noImagesHint": "A termékadatok már elérhetők, a fotók később érkeznek."
+      "noImagesHint": "A termékadatok már elérhetők, a fotók később érkeznek.",
+      "zoom": "Fotó megtekintése teljes képernyőn",
+      "previousImage": "Előző fotó",
+      "nextImage": "Következő fotó"
     },
     "selection": {
       "title": "Az Ön válogatása",
@@ -1142,7 +1157,11 @@
         "expired": "Lejárt"
       }
     },
-    "excel": "Termékadatok (Excel)"
+    "excel": "Termékadatok (Excel)",
+    "home": {
+      "title": "Kezdőoldal",
+      "contact": "Kapcsolat"
+    }
   },
   "enum": {
     "role": {

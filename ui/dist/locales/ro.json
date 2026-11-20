@@ -30,7 +30,8 @@
     "retry": "Încearcă din nou",
     "secret": "Cheie secretă",
     "shownOnce": "Copiați-o acum și păstrați-o într-un loc sigur. Din motive de securitate, este afișată doar acum.",
-    "worksWith": "Funcționează cu Open Brand Exchange"
+    "worksWith": "Funcționează cu Open Brand Exchange",
+    "opensInNewTab": "se deschide într-o filă nouă"
   },
   "fields": {
     "email": "Adresă de e-mail",
@@ -239,7 +240,8 @@
       "viewPortal": "Vezi ca un comerciant",
       "pendingCount_one": "{{count}} în așteptare",
       "pendingCount_few": "{{count}} în așteptare",
-      "pendingCount_other": "{{count}} în așteptare"
+      "pendingCount_other": "{{count}} în așteptare",
+      "appearance": "Aspect"
     }
   },
   "dashboard": {
@@ -984,7 +986,8 @@
       "ean": "Listă EAN",
       "selection": "Selecție",
       "downloads": "Descărcări",
-      "account": "Cont"
+      "account": "Cont",
+      "home": "Pagina de start"
     },
     "preview": {
       "banner": "Vedeți portalul așa cum îl văd comercianții dvs. Descărcările dvs. nu sunt numărate aici.",
@@ -997,7 +1000,7 @@
       "search": "Căutare",
       "searchPlaceholder": "Căutați după cod articol, nume, culoare sau EAN",
       "density": "Mărimea plăcilor",
-      "comfortable": "Mari",
+      "comfortable": "Medii",
       "compact": "Mici",
       "results": "Articole",
       "count_one": "{{formatted}} articol",
@@ -1022,7 +1025,9 @@
       "empty": "Marca nu a publicat încă niciun articol.",
       "selectedPill_one": "{{count}} selectat · Vezi",
       "selectedPill_few": "{{count}} selectate · Vezi",
-      "selectedPill_other": "{{count}} de selectate · Vezi"
+      "selectedPill_other": "{{count}} de selectate · Vezi",
+      "title": "Catalog",
+      "editorial": "Mari"
     },
     "filters": {
       "title": "Filtre",
@@ -1039,7 +1044,12 @@
       "color": "Culoare",
       "season": "Sezon",
       "collection": "Colecție",
-      "qualifier": "Sustenabilitate"
+      "qualifier": "Sustenabilitate",
+      "active": "Filtre alese",
+      "remove": "Elimină filtrul",
+      "showCount_one": "Afișează {{count}} articol",
+      "showCount_few": "Afișează {{count}} articole",
+      "showCount_other": "Afișează {{count}} de articole"
     },
     "tile": {
       "colours_one": "{{count}} culoare",
@@ -1048,7 +1058,10 @@
       "images_one": "{{count}} fotografie",
       "images_few": "{{count}} fotografii",
       "images_other": "{{count}} de fotografii",
-      "select": "Selectează {{name}}"
+      "select": "Selectează {{name}}",
+      "quickView": "Previzualizare rapidă",
+      "showColour": "Afișează culoarea {{colour}}",
+      "openArticle": "Deschide pagina articolului"
     },
     "variant": {
       "label": "Versiunea fișierului",
@@ -1092,7 +1105,10 @@
       "passport": "Pașaportul produsului",
       "passportOpen": "Deschide pașaportul digital al produsului",
       "noImages": "Încă nicio fotografie",
-      "noImagesHint": "Datele articolului sunt deja disponibile, fotografiile urmează."
+      "noImagesHint": "Datele articolului sunt deja disponibile, fotografiile urmează.",
+      "zoom": "Vezi fotografia pe tot ecranul",
+      "previousImage": "Fotografia anterioară",
+      "nextImage": "Fotografia următoare"
     },
     "selection": {
       "title": "Selecția dvs.",
@@ -1172,7 +1188,11 @@
         "expired": "Expirat"
       }
     },
-    "excel": "Date despre articole (Excel)"
+    "excel": "Date despre articole (Excel)",
+    "home": {
+      "title": "Pagina de start",
+      "contact": "Contact"
+    }
   },
   "enum": {
     "role": {

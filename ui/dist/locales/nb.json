@@ -30,7 +30,8 @@
     "retry": "Prøv igjen",
     "secret": "Hemmelighet",
     "shownOnce": "Kopier den nå og oppbevar den et trygt sted. Av sikkerhetshensyn vises den bare denne ene gangen.",
-    "worksWith": "Fungerer med Open Brand Exchange"
+    "worksWith": "Fungerer med Open Brand Exchange",
+    "opensInNewTab": "åpnes i en ny fane"
   },
   "fields": {
     "email": "E-postadresse",
@@ -238,7 +239,8 @@
       "settings": "Innstillinger",
       "viewPortal": "Se som forhandler",
       "pendingCount_one": "{{count}} venter",
-      "pendingCount_other": "{{count}} venter"
+      "pendingCount_other": "{{count}} venter",
+      "appearance": "Utseende"
     }
   },
   "dashboard": {
@@ -971,7 +973,8 @@
       "ean": "EAN-liste",
       "selection": "Utvalg",
       "downloads": "Nedlastinger",
-      "account": "Konto"
+      "account": "Konto",
+      "home": "Startside"
     },
     "preview": {
       "banner": "Du ser portalen slik forhandlerne ser den. Nedlastingene dine her telles ikke.",
@@ -984,7 +987,7 @@
       "search": "Søk",
       "searchPlaceholder": "Søk etter varenummer, navn, farge eller EAN",
       "density": "Flisstørrelse",
-      "comfortable": "Store",
+      "comfortable": "Middels",
       "compact": "Små",
       "results": "Varer",
       "count_one": "{{formatted}} vare",
@@ -1004,7 +1007,9 @@
       "emptyFiltered": "Prøv andre filtre eller et annet søk.",
       "empty": "Merket har ikke publisert noen varer ennå.",
       "selectedPill_one": "{{count}} vare valgt · Vis",
-      "selectedPill_other": "{{count}} varer valgt · Vis"
+      "selectedPill_other": "{{count}} varer valgt · Vis",
+      "title": "Katalog",
+      "editorial": "Store"
     },
     "filters": {
       "title": "Filtre",
@@ -1020,14 +1025,21 @@
       "color": "Farge",
       "season": "Sesong",
       "collection": "Kolleksjon",
-      "qualifier": "Bærekraft"
+      "qualifier": "Bærekraft",
+      "active": "Valgte filtre",
+      "remove": "Fjern filter",
+      "showCount_one": "Vis {{count}} vare",
+      "showCount_other": "Vis {{count}} varer"
     },
     "tile": {
       "colours_one": "{{count}} farge",
       "colours_other": "{{count}} farger",
       "images_one": "{{count}} bilde",
       "images_other": "{{count}} bilder",
-      "select": "Velg {{name}}"
+      "select": "Velg {{name}}",
+      "quickView": "Hurtigvisning",
+      "showColour": "Vis fargen {{colour}}",
+      "openArticle": "Åpne varesiden"
     },
     "variant": {
       "label": "Filversjon",
@@ -1070,7 +1082,10 @@
       "passport": "Produktpass",
       "passportOpen": "Åpne det digitale produktpasset",
       "noImages": "Ingen bilder ennå",
-      "noImagesHint": "Varedataene er allerede tilgjengelige; bildene kommer senere."
+      "noImagesHint": "Varedataene er allerede tilgjengelige; bildene kommer senere.",
+      "zoom": "Vis bildet i fullskjerm",
+      "previousImage": "Forrige bilde",
+      "nextImage": "Neste bilde"
     },
     "selection": {
       "title": "Utvalget ditt",
@@ -1142,7 +1157,11 @@
         "expired": "Utløpt"
       }
     },
-    "excel": "Varedata (Excel)"
+    "excel": "Varedata (Excel)",
+    "home": {
+      "title": "Startside",
+      "contact": "Kontakt"
+    }
   },
   "enum": {
     "role": {

@@ -30,7 +30,8 @@
     "retry": "Bandyti dar kartą",
     "secret": "Slaptas raktas",
     "shownOnce": "Nukopijuokite jį dabar ir laikykite saugioje vietoje. Saugumo sumetimais jis rodomas tik dabar.",
-    "worksWith": "Veikia su Open Brand Exchange"
+    "worksWith": "Veikia su Open Brand Exchange",
+    "opensInNewTab": "atsidaro naujame skirtuke"
   },
   "fields": {
     "email": "El. pašto adresas",
@@ -240,7 +241,8 @@
       "pendingCount_one": "{{count}} laukia",
       "pendingCount_few": "{{count}} laukia",
       "pendingCount_many": "{{count}} laukia",
-      "pendingCount_other": "{{count}} laukia"
+      "pendingCount_other": "{{count}} laukia",
+      "appearance": "Išvaizda"
     }
   },
   "dashboard": {
@@ -997,7 +999,8 @@
       "ean": "EAN sąrašas",
       "selection": "Pasirinkimas",
       "downloads": "Atsisiuntimai",
-      "account": "Paskyra"
+      "account": "Paskyra",
+      "home": "Pradžia"
     },
     "preview": {
       "banner": "Matote portalą taip, kaip jį mato jūsų prekybininkai. Jūsų atsisiuntimai čia neskaičiuojami.",
@@ -1010,7 +1013,7 @@
       "search": "Paieška",
       "searchPlaceholder": "Ieškokite pagal prekės numerį, pavadinimą, spalvą arba EAN",
       "density": "Plytelių dydis",
-      "comfortable": "Didelės",
+      "comfortable": "Vidutinės",
       "compact": "Mažos",
       "results": "Prekės",
       "count_one": "{{formatted}} prekė",
@@ -1040,7 +1043,9 @@
       "selectedPill_one": "Pasirinkta {{count}} · Peržiūrėti",
       "selectedPill_few": "Pasirinktos {{count}} · Peržiūrėti",
       "selectedPill_many": "Pasirinkta {{count}} · Peržiūrėti",
-      "selectedPill_other": "Pasirinkta {{count}} · Peržiūrėti"
+      "selectedPill_other": "Pasirinkta {{count}} · Peržiūrėti",
+      "title": "Katalogas",
+      "editorial": "Didelės"
     },
     "filters": {
       "title": "Filtrai",
@@ -1058,7 +1063,13 @@
       "color": "Spalva",
       "season": "Sezonas",
       "collection": "Kolekcija",
-      "qualifier": "Tvarumas"
+      "qualifier": "Tvarumas",
+      "active": "Pasirinkti filtrai",
+      "remove": "Pašalinti filtrą",
+      "showCount_one": "Rodyti {{count}} prekę",
+      "showCount_few": "Rodyti {{count}} prekes",
+      "showCount_many": "Rodyti {{count}} prekės",
+      "showCount_other": "Rodyti {{count}} prekių"
     },
     "tile": {
       "colours_one": "{{count}} spalva",
@@ -1069,7 +1080,10 @@
       "images_few": "{{count}} nuotraukos",
       "images_many": "{{count}} nuotraukos",
       "images_other": "{{count}} nuotraukų",
-      "select": "Pasirinkti {{name}}"
+      "select": "Pasirinkti {{name}}",
+      "quickView": "Greita peržiūra",
+      "showColour": "Rodyti spalvą {{colour}}",
+      "openArticle": "Atidaryti prekės puslapį"
     },
     "variant": {
       "label": "Failo versija",
@@ -1114,7 +1128,10 @@
       "passport": "Produkto pasas",
       "passportOpen": "Atidaryti skaitmeninį produkto pasą",
       "noImages": "Nuotraukų dar nėra",
-      "noImagesHint": "Prekės duomenys jau prieinami, nuotraukos bus vėliau."
+      "noImagesHint": "Prekės duomenys jau prieinami, nuotraukos bus vėliau.",
+      "zoom": "Rodyti nuotrauką per visą ekraną",
+      "previousImage": "Ankstesnė nuotrauka",
+      "nextImage": "Kita nuotrauka"
     },
     "selection": {
       "title": "Jūsų pasirinkimas",
@@ -1202,7 +1219,11 @@
         "expired": "Nebegalioja"
       }
     },
-    "excel": "Prekių duomenys (Excel)"
+    "excel": "Prekių duomenys (Excel)",
+    "home": {
+      "title": "Pradinis puslapis",
+      "contact": "Kontaktai"
+    }
   },
   "enum": {
     "role": {

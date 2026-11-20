@@ -30,7 +30,8 @@
     "retry": "Proovi uuesti",
     "secret": "Saladus",
     "shownOnce": "Kopeerige see kohe ja hoidke turvalises kohas. Turvalisuse huvides näidatakse seda ainult ühe korra.",
-    "worksWith": "Töötab koos Open Brand Exchange'iga"
+    "worksWith": "Töötab koos Open Brand Exchange'iga",
+    "opensInNewTab": "avaneb uuel vahekaardil"
   },
   "fields": {
     "email": "E-posti aadress",
@@ -238,7 +239,8 @@
       "settings": "Seaded",
       "viewPortal": "Vaata edasimüüjana",
       "pendingCount_one": "{{count}} ootab",
-      "pendingCount_other": "{{count}} ootab"
+      "pendingCount_other": "{{count}} ootab",
+      "appearance": "Välimus"
     }
   },
   "dashboard": {
@@ -971,7 +973,8 @@
       "ean": "EAN-loend",
       "selection": "Valik",
       "downloads": "Allalaadimised",
-      "account": "Konto"
+      "account": "Konto",
+      "home": "Avaleht"
     },
     "preview": {
       "banner": "Näete portaali nii, nagu teie edasimüüjad seda näevad. Teie siinseid allalaadimisi ei loeta.",
@@ -984,7 +987,7 @@
       "search": "Otsi",
       "searchPlaceholder": "Otsi tootekoodi, nime, värvi või EAN-i järgi",
       "density": "Paani suurus",
-      "comfortable": "Suured",
+      "comfortable": "Keskmised",
       "compact": "Väikesed",
       "results": "Tooted",
       "count_one": "{{formatted}} toode",
@@ -1004,7 +1007,9 @@
       "emptyFiltered": "Proovige teisi filtreid või teist otsingut.",
       "empty": "Kaubamärk pole veel tooteid avaldanud.",
       "selectedPill_one": "{{count}} toode valitud · Vaata",
-      "selectedPill_other": "{{count}} toodet valitud · Vaata"
+      "selectedPill_other": "{{count}} toodet valitud · Vaata",
+      "title": "Kataloog",
+      "editorial": "Suured"
     },
     "filters": {
       "title": "Filtrid",
@@ -1020,14 +1025,21 @@
       "color": "Värv",
       "season": "Hooaeg",
       "collection": "Kollektsioon",
-      "qualifier": "Jätkusuutlikkus"
+      "qualifier": "Jätkusuutlikkus",
+      "active": "Valitud filtrid",
+      "remove": "Eemalda filter",
+      "showCount_one": "Näita {{count}} toode",
+      "showCount_other": "Näita {{count}} toodet"
     },
     "tile": {
       "colours_one": "{{count}} värv",
       "colours_other": "{{count}} värvi",
       "images_one": "{{count}} pilt",
       "images_other": "{{count}} pilti",
-      "select": "Vali {{name}}"
+      "select": "Vali {{name}}",
+      "quickView": "Kiirvaade",
+      "showColour": "Näita värvi {{colour}}",
+      "openArticle": "Ava tooteleht"
     },
     "variant": {
       "label": "Faili versioon",
@@ -1070,7 +1082,10 @@
       "passport": "Tootepass",
       "passportOpen": "Ava digitaalne tootepass",
       "noImages": "Pilte veel pole",
-      "noImagesHint": "Tooteandmed on juba saadaval; pildid tulevad hiljem."
+      "noImagesHint": "Tooteandmed on juba saadaval; pildid tulevad hiljem.",
+      "zoom": "Vaata pilti täisekraanil",
+      "previousImage": "Eelmine pilt",
+      "nextImage": "Järgmine pilt"
     },
     "selection": {
       "title": "Teie valik",
@@ -1142,7 +1157,11 @@
         "expired": "Aegunud"
       }
     },
-    "excel": "Tooteandmed (Excel)"
+    "excel": "Tooteandmed (Excel)",
+    "home": {
+      "title": "Avaleht",
+      "contact": "Kontakt"
+    }
   },
   "enum": {
     "role": {
