@@ -18,7 +18,7 @@ Google Cloud & Docker"). Everyone taking part follows the [Code of Conduct](CODE
 go vet ./... && go test ./...                    # unit and HTTP integration tests (SQLite)
 OBX_TEST_DATABASE_URL=postgres://… go test ./internal/node   # the same on PostgreSQL
 (cd conformance && go test ./...)                # the OBX conformance suite (needs ../obx-go)
-e2e/run.sh                                       # browser tests incl. axe (needs Node.js)
+e2e/run.sh                                       # browser tests incl. axe (needs Bun)
 scripts/test-docker.sh                           # the image, Litestream restore, backup/restore
 ```
 

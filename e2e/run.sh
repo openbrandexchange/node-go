@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 # Builds node-go, starts a fresh node on a temporary data directory and walks
 # the brand admin + retailer portal in a headless browser.
-#   e2e/run.sh            (needs Go, Node.js and zip; installs Playwright on first run)
+#   e2e/run.sh            (needs Go, Bun and zip; installs Playwright on first run)
 set -eu
 HERE="$(cd "$(dirname "$0")" && pwd)"
 ROOT="$(cd "$HERE/.." && pwd)"
@@ -16,7 +16,7 @@ mkdir -p "$TMP/export"
 cp -R "$ROOT/testdata/spec/kestrel/." "$TMP/export/"
 sed 's/Merino Crew Sweater/Merino Crew Jumper/' "$ROOT/testdata/spec/kestrel/products.csv" >"$TMP/export/products.csv"
 (cd "$TMP/export" && zip -qr "$TMP/package.zip" products.csv assets.csv images)
-[ -d "$HERE/node_modules" ] || (cd "$HERE" && npm ci && npx playwright install chromium)
+[ -d "$HERE/node_modules" ] || (cd "$HERE" && bun install --frozen-lockfile && bunx playwright install chromium)
 
 URL="http://localhost:$PORT"
 OBX_DATA_DIR="$TMP/data" PORT="$PORT" OBX_PUBLIC_URL="$URL" \
@@ -31,4 +31,4 @@ until curl -sf "http://localhost:$PORT/healthz" >/dev/null; do
 done
 cd "$HERE"
 OBX_E2E_URL="http://localhost:$PORT" OBX_E2E_NODE_LOG="$TMP/node.log" OBX_E2E_IMAGES_ZIP="$TMP/images.zip" OBX_E2E_PACKAGE_ZIP="$TMP/package.zip" \
-  npx playwright test "$@"
+  bunx playwright test "$@"

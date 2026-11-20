@@ -192,6 +192,14 @@ CREATE INDEX product_qualifiers_code ON product_qualifiers(code, product_id);
 DELETE FROM meta WHERE key = 'upgrade_terms';
 INSERT INTO meta (key, value) VALUES ('upgrade_terms', '0.3');
 `,
+	// 6: portal appearance (node-admin 0.3.x): images uploaded for the
+	// login page and the retailer home page. The bytes are ordinary blobs;
+	// an id is never reused, so its public URL can be cached immutably.
+	`
+CREATE TABLE branding_images (
+  id TEXT PRIMARY KEY, sha256 TEXT NOT NULL, content_type TEXT NOT NULL, width INTEGER NOT NULL, height INTEGER NOT NULL,
+  bytes BIGINT NOT NULL, created_at TEXT NOT NULL);
+`,
 }
 
 // SchemaVersion is the newest schema this binary knows.

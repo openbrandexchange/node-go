@@ -110,6 +110,8 @@ func (a *App) routes(m *http.ServeMux) {
 	setup := func(h http.HandlerFunc) http.HandlerFunc { return a.adminAPI("setup", h) }
 	m.HandleFunc("GET /admin/api/public/branding", setup(a.handlePublicBranding))
 	m.HandleFunc("GET /admin/api/public/logo", setup(a.handlePublicLogo))
+	m.HandleFunc("GET /admin/api/public/favicon", setup(a.handlePublicFavicon))
+	m.HandleFunc("GET /admin/api/public/images/{id}", setup(a.handlePublicImage))
 	m.HandleFunc("GET /admin/api/setup", setup(a.handleSetupGet))
 	m.HandleFunc("POST /admin/api/setup", setup(a.handleSetup))
 	m.HandleFunc("GET /admin/api/session", setup(a.handleSession))
@@ -126,6 +128,11 @@ func (a *App) routes(m *http.ServeMux) {
 	m.HandleFunc("PATCH /admin/api/settings", adm(a.adminSettingsPatch))
 	m.HandleFunc("PUT /admin/api/settings/logo", adm(a.adminLogoPut))
 	m.HandleFunc("DELETE /admin/api/settings/logo", adm(a.adminLogoDelete))
+	m.HandleFunc("PUT /admin/api/settings/favicon", adm(a.adminFaviconPut))
+	m.HandleFunc("DELETE /admin/api/settings/favicon", adm(a.adminFaviconDelete))
+	m.HandleFunc("GET /admin/api/settings/images", adm(a.adminImageList))
+	m.HandleFunc("POST /admin/api/settings/images", adm(a.adminImageUpload))
+	m.HandleFunc("DELETE /admin/api/settings/images/{id}", adm(a.adminImageDelete))
 
 	m.HandleFunc("GET /admin/api/catalog/brands", adm(a.adminBrands))
 	m.HandleFunc("GET /admin/api/catalog/products", adm(a.adminProducts))

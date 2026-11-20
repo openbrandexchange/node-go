@@ -1,0 +1,155 @@
+{
+  "display_name": "Kestrel",
+  "accent_color": "#1f4e5f",
+  "portal_name": {
+    "en": "Trade portal",
+    "nl": "Dealerportaal",
+    "de": "Händlerportal"
+  },
+  "theme": {
+    "color_scheme": "light",
+    "colors": {
+      "primary": "#1f4e5f",
+      "secondary": "#c8a46a",
+      "background": "#faf8f4",
+      "surface": "#ffffff",
+      "text": "#1c1b19"
+    },
+    "heading_font": "fraunces",
+    "body_font": "inter",
+    "radius": "small",
+    "grid_density": "comfortable",
+    "card_style": "plain",
+    "image_fit": "contain",
+    "image_background": "#f2efe9"
+  },
+  "login": {
+    "layout": "split",
+    "background_image": "img_kestrel_login",
+    "title": {
+      "en": "Kestrel trade portal",
+      "nl": "Kestrel dealerportaal",
+      "de": "Kestrel Händlerportal"
+    },
+    "text": {
+      "en": "Product images and data for our retailers.",
+      "nl": "Productbeelden en -gegevens voor onze dealers.",
+      "de": "Produktbilder und -daten für unsere Händler."
+    }
+  },
+  "home": {
+    "blocks": [
+      {
+        "id": "hero",
+        "type": "hero",
+        "image": "img_kestrel_hero",
+        "title": {
+          "en": "Autumn/Winter 2026 — Built for the long way round",
+          "nl": "Herfst/winter 2026 — Gemaakt voor de lange weg",
+          "de": "Herbst/Winter 2026 — Gemacht für den langen Weg"
+        },
+        "text": {
+          "en": "Merino knits, waxed cotton and leather that only gets better with the miles.",
+          "nl": "Merino breisels, gewaxt katoen en leer dat met elke kilometer mooier wordt.",
+          "de": "Merino-Strick, gewachste Baumwolle und Leder, das mit jedem Kilometer schöner wird."
+        },
+        "button_label": {
+          "en": "View the collection",
+          "nl": "Bekijk de collectie",
+          "de": "Kollektion ansehen"
+        },
+        "link": "/catalog?season=AW26",
+        "align": "left",
+        "height": "large",
+        "overlay": "dark"
+      },
+      {
+        "id": "order-window",
+        "type": "announcement",
+        "text": {
+          "en": "Pre-orders for Spring/Summer 2027 are open until 15 January 2027. Images of the new styles follow in December.",
+          "nl": "Voororders voor lente/zomer 2027 kunnen tot 15 januari 2027. Beelden van de nieuwe modellen volgen in december.",
+          "de": "Vororders für Frühjahr/Sommer 2027 sind bis zum 15. Januar 2027 möglich. Bilder der neuen Modelle folgen im Dezember."
+        },
+        "tone": "info"
+      },
+      {
+        "id": "categories",
+        "type": "tiles",
+        "title": {
+          "en": "Shop the categories",
+          "nl": "Bekijk per categorie",
+          "de": "Nach Kategorie"
+        },
+        "columns": 4,
+        "items": [
+          {
+            "image": "img_kestrel_knitwear",
+            "title": {"en": "Knitwear", "nl": "Breigoed", "de": "Strick"},
+            "link": "/catalog?item_type=sweater"
+          },
+          {
+            "image": "img_kestrel_denim",
+            "title": {"en": "Denim", "nl": "Denim", "de": "Denim"},
+            "link": "/catalog?collection=Denim"
+          },
+          {
+            "image": "img_kestrel_outerwear",
+            "title": {"en": "Outerwear", "nl": "Jassen", "de": "Jacken"},
+            "link": "/catalog?item_type=jacket"
+          },
+          {
+            "image": "img_kestrel_bags",
+            "title": {"en": "Bags & luggage", "nl": "Tassen & koffers", "de": "Taschen & Koffer"},
+            "link": "/catalog?item_type=bag&item_type=luggage"
+          }
+        ]
+      },
+      {
+        "id": "new-this-season",
+        "type": "products",
+        "title": {
+          "en": "New this season",
+          "nl": "Nieuw dit seizoen",
+          "de": "Neu in dieser Saison"
+        },
+        "query": "season=AW26",
+        "max": 8
+      },
+      {
+        "id": "materials",
+        "type": "image_text",
+        "image": "img_kestrel_materials",
+        "image_side": "right",
+        "title": {
+          "en": "Organic and recycled, where it counts",
+          "nl": "Biologisch en gerecycled, waar het telt",
+          "de": "Bio und recycelt, wo es zählt"
+        },
+        "text": {
+          "en": "Our tees are made from organic cotton, our trail range from recycled polyester and polyamide. Every fibre and its qualifiers are in the product data, ready for your shop.",
+          "nl": "Onze T-shirts zijn van biologisch katoen, onze trailcollectie van gerecycled polyester en polyamide. Elke vezel en de bijbehorende kenmerken staan in de productgegevens, klaar voor je webshop.",
+          "de": "Unsere T-Shirts sind aus Bio-Baumwolle, unsere Trail-Linie aus recyceltem Polyester und Polyamid. Jede Faser und ihre Merkmale stehen in den Produktdaten, bereit für Ihren Shop."
+        },
+        "button_label": {
+          "en": "See organic styles",
+          "nl": "Bekijk biologische modellen",
+          "de": "Bio-Modelle ansehen"
+        },
+        "link": "/catalog?qualifier=organic"
+      },
+      {
+        "id": "account-manager",
+        "type": "contact",
+        "title": {
+          "en": "Your account manager",
+          "nl": "Je accountmanager",
+          "de": "Ihre Ansprechpartnerin"
+        },
+        "name": "Maren Holt",
+        "email": "trade@kestrel.example",
+        "phone": "+31 20 555 0142"
+      }
+    ]
+  }
+}

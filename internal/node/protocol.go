@@ -513,7 +513,9 @@ func (a *App) serveBlob(w http.ResponseWriter, r *http.Request, sha, contentType
 	h.Set("ETag", `"`+sha+`"`)
 	h.Set("OBX-Content-SHA256", sha)
 	h.Set("Accept-Ranges", "bytes")
-	h.Set("Cache-Control", "private, max-age=3600")
+	if c := h.Get("Cache-Control"); c == "" || c == "no-store" {
+		h.Set("Cache-Control", "private, max-age=3600")
+	}
 	h.Set("X-Content-Type-Options", "nosniff")
 	if disposition != "" {
 		h.Set("Content-Disposition", disposition)

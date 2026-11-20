@@ -86,12 +86,12 @@ jobs:
         run: go run golang.org/x/vuln/cmd/govulncheck@v1.8.0 ./...
       - name: Dependency licences
         run: scripts/check-licenses.sh
-      - uses: actions/setup-node@v7
+      - uses: oven-sh/setup-bun@v2
         with:
-          node-version: 24
-      - name: npm audit (browser tests; nothing of it ships)
+          bun-version: "1.3.14"
+      - name: bun audit (browser tests; nothing of it ships)
         working-directory: e2e
-        run: npm ci && npm audit --omit=dev && npm audit --audit-level=high
+        run: bun install --frozen-lockfile && bun audit --audit-level=high
 
   load:
     runs-on: ubuntu-latest
@@ -117,12 +117,12 @@ jobs:
       - uses: actions/setup-go@v7
         with:
           go-version-file: go.mod
-      - uses: actions/setup-node@v7
+      - uses: oven-sh/setup-bun@v2
         with:
-          node-version: 24
+          bun-version: "1.3.14"
       - name: Install Playwright
         working-directory: e2e
-        run: npm ci && npx playwright install --with-deps chromium
+        run: bun install --frozen-lockfile && bunx playwright install --with-deps chromium
       - name: Browser tests (every task, axe on every screen, keyboard only)
         run: e2e/run.sh
       - uses: actions/upload-artifact@v7

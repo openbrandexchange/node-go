@@ -35,7 +35,8 @@ func (a *App) publicBranding(ctx context.Context) map[string]any {
 	}
 	return map[string]any{"name": name, "logo_url": a.logoURL(s), "accent_color": s.Branding.AccentColor, "welcome_text": s.Branding.WelcomeText,
 		"languages": s.ContentLanguages(), "default_language": s.ContentLanguages()[0], "access_requests_enabled": s.Portal.AccessRequestsEnabled,
-		"setup_required": !a.SetupDone(ctx), "brands": brands, "portal_name": s.Branding.PortalName}
+		"setup_required": !a.SetupDone(ctx), "brands": brands, "portal_name": s.Branding.PortalName,
+		"favicon_url": a.faviconURL(s), "theme": s.Branding.Theme, "login": publicLogin(s, a.brandingImageSet(ctx))}
 }
 
 func (a *App) handlePublicBranding(w http.ResponseWriter, r *http.Request) {

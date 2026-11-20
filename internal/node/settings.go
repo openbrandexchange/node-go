@@ -25,6 +25,14 @@ type Settings struct {
 		// PortalName overrides the local word in "<Brand> · <local word>",
 		// per language (optional; same shape as admin-ui expects).
 		PortalName LocalizedText `json:"portal_name"`
+		// FaviconURL is computed (PUT /admin/api/settings/favicon).
+		FaviconURL *string `json:"favicon_url"`
+		// Theme, Login and Home (portal appearance) are kept as sent, so
+		// members this node does not know (newer clients) survive a round
+		// trip; branding.go validates the members it knows.
+		Theme map[string]any `json:"theme"`
+		Login map[string]any `json:"login"`
+		Home  map[string]any `json:"home"`
 	} `json:"branding"`
 	Portal struct {
 		AccessRequestsEnabled  bool     `json:"access_requests_enabled"`
@@ -49,6 +57,9 @@ type Settings struct {
 	LogoSHA string `json:"logo_sha,omitempty"`
 	// LogoType is the logo media type (internal).
 	LogoType string `json:"logo_type,omitempty"`
+	// FaviconSHA and FaviconType are the uploaded favicon (internal).
+	FaviconSHA  string `json:"favicon_sha,omitempty"`
+	FaviconType string `json:"favicon_type,omitempty"`
 }
 
 // DefaultRights are the protocol default rights (docs/protocol.md §5.6).

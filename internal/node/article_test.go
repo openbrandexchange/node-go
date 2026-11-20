@@ -611,8 +611,8 @@ func TestUpgradeFromSingleQualifier(t *testing.T) {
 				return err
 			}
 		}
-		// The schema of the first 0.3 draft: migration 5 not applied.
-		for _, q := range []string{`DELETE FROM schema_migrations WHERE version = 5`, `DROP TABLE product_qualifiers`} {
+		// The schema of the first 0.3 draft: migration 5 (and later) not applied.
+		for _, q := range []string{`DELETE FROM schema_migrations WHERE version >= 5`, `DROP TABLE product_qualifiers`, `DROP TABLE branding_images`} {
 			if _, err := tx.Exec(ctx, q); err != nil {
 				return err
 			}

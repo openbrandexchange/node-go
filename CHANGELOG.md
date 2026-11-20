@@ -5,6 +5,25 @@ follows [Semantic Versioning](https://semver.org/): the major version changes wh
 more than replacing the software (see [docs/upgrading.md](docs/upgrading.md)); database migrations
 are always forward-only and applied automatically on start.
 
+## [Unreleased]
+
+### Added
+- **Portal appearance** (node-admin 0.3.x, additive): `branding.theme` (colours, fonts, radius,
+  density, card style, image fit), `branding.login` (layout, background image, texts) and
+  `branding.home` (start page blocks: hero, tiles, text, image_text, products, announcement,
+  contact) in the settings, validated with a pointer per error; unknown members and block types
+  are kept. Favicon upload (`PUT`/`DELETE /admin/api/settings/favicon`), branding images
+  (`POST`/`GET /admin/api/settings/images`, `DELETE …/{id}` with `409` while in use) served
+  publicly at `/admin/api/public/images/{id}` with immutable caching. Public branding and the
+  portal viewer return the appearance with image URLs. Migration 6 adds `branding_images`.
+
+### Changed
+- Browser tests (`e2e/`) run on Bun: `bun.lock`, `bun install --frozen-lockfile`, `bunx
+  playwright`, `bun audit` in CI, Dependabot ecosystem `bun`.
+
+### Fixed
+- The public logo is cached as `public, max-age=86400` as intended (it was sent as `private`).
+
 ## [0.3.0] - 2026-11-17
 
 Implements Open Brand Exchange protocol 0.3 (spec 0.3.0, [proposal 0004](https://github.com/openbrandexchange/spec/blob/main/docs/proposals/0004-terms-with-names.md):

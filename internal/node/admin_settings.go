@@ -19,8 +19,11 @@ func (a *App) settingsJSON(ctx context.Context) map[string]any {
 	_ = json.Unmarshal(mustJSON(s), &m)
 	delete(m, "logo_sha")
 	delete(m, "logo_type")
+	delete(m, "favicon_sha")
+	delete(m, "favicon_type")
 	if b, ok := m["branding"].(map[string]any); ok {
 		b["logo_url"] = a.logoURL(s)
+		b["favicon_url"] = a.faviconURL(s)
 	}
 	help := a.Cfg.CustomDomainHelp
 	if help == "" {
@@ -38,22 +41,27 @@ func (a *App) adminSettingsGet(w http.ResponseWriter, r *http.Request) {
 }
 
 // applySettingsPatch validates a merge patch against the current settings.
-func (a *App) applySettingsPatch(cur *Settings, patch map[string]any) (*Settings, *problem.Problem) {
+func (a *App) applySettingsPatch(ctx context.Context, cur *Settings, patch map[string]any) (*Settings, *problem.Problem) {
 	for _, k := range []string{"node"} {
 		delete(patch, k)
 	}
 	if b, ok := patch["branding"].(map[string]any); ok {
 		delete(b, "logo_url")
+		delete(b, "favicon_url")
 	}
 	base := map[string]any{}
 	_ = json.Unmarshal(mustJSON(cur), &base)
 	merged := mergePatch(base, patch).(map[string]any)
+	p := problem.New("validation_failed", "Please check the highlighted fields.")
+	if fatal := a.validateAppearance(ctx, merged["branding"], p); fatal {
+		return nil, p
+	}
 	var next Settings
 	if err := decodeInto(merged, &next); err != nil {
 		return nil, problem.New("validation_failed", "Settings are not valid: %s", err.Error())
 	}
 	next.LogoSHA, next.LogoType = cur.LogoSHA, cur.LogoType
-	p := problem.New("validation_failed", "Please check the highlighted fields.")
+	next.FaviconSHA, next.FaviconType = cur.FaviconSHA, cur.FaviconType
 	if strings.TrimSpace(next.Company.Name) == "" {
 		p.Field("/company/name", "validation_failed", "required")
 	}
@@ -133,7 +141,7 @@ func (a *App) adminSettingsPatch(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	cur := a.Settings(ctx).clone()
-	next, p := a.applySettingsPatch(cur, patch)
+	next, p := a.applySettingsPatch(ctx, cur, patch)
 	if p != nil {
 		problem.Write(w, p)
 		return

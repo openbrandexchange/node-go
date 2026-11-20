@@ -61,13 +61,15 @@ func (a *App) handlePortalViewer(w http.ResponseWriter, r *http.Request) {
 		retailer = map[string]any{"id": v.RetailerID, "name": v.RetailerName}
 	}
 	sel := a.selectionIDs(ctx, sessionFrom(ctx).User.ID)
+	branding := a.publicBranding(ctx)
+	branding["home"] = resolvedHome(s, a.brandingImageSet(ctx))
 	writeJSON(w, 200, map[string]any{
 		"preview":  v.Preview(),
 		"retailer": retailer,
 		"brands":   brands,
 		"permissions": map[string]any{"original_download": v.OriginalAllowed && (v.Preview() || s.Portal.AllowOriginalDownload),
 			"article_data_export": s.Portal.AllowArticleDataExport, "api_self_service": s.Portal.RetailerAPISelfService && !v.Preview()},
-		"branding":        a.publicBranding(ctx),
+		"branding":        branding,
 		"languages":       s.ContentLanguages(),
 		"selection_count": len(sel),
 		"limits":          map[string]any{"selection_max_products": selectionMax, "sync_zip_max_images": syncZipMaxFiles, "gtin_lookup_max": 2000},

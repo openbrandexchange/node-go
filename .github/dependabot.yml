@@ -8,7 +8,7 @@ updates:
     groups:
       golang-x:
         patterns: ["golang.org/x/*"]
-  - package-ecosystem: npm
+  - package-ecosystem: bun
     directory: /e2e
     schedule:
       interval: monthly

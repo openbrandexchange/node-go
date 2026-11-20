@@ -30,8 +30,10 @@ func TestCursorsExpireOnSpecUpgrade(t *testing.T) {
 		if _, err := tx.Exec(ctx, `DELETE FROM schema_migrations WHERE version >= 4`); err != nil {
 			return err
 		}
-		if _, err := tx.Exec(ctx, `DROP TABLE product_qualifiers`); err != nil {
-			return err
+		for _, table := range []string{"product_qualifiers", "branding_images"} {
+			if _, err := tx.Exec(ctx, `DROP TABLE `+table); err != nil {
+				return err
+			}
 		}
 		_, err := tx.Exec(ctx, `DELETE FROM meta WHERE key IN ('cursor_epoch', 'upgrade_terms')`)
 		return err
