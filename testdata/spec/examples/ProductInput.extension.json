@@ -1,5 +1,5 @@
 {
-  "style_number": "KO-1007",
+  "style_number": "MN-1007",
   "name": {
     "en": "Linen Shirt"
   },
@@ -12,15 +12,15 @@
         {
           "material": {
             "code": "linen",
-            "x-kestrel-mill": "Mill 7"
+            "x-noor-mill": "Mill 7"
           },
           "percentage": 100
         }
       ]
     }
   ],
-  "x-kestrel-fabric-weight-gsm": 180,
-  "x-kestrel-care-note": {
+  "x-noor-fabric-weight-gsm": 180,
+  "x-noor-care-note": {
     "en": "Wrinkles are part of the look"
   }
 }

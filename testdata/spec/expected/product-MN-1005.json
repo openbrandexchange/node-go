@@ -1,0 +1,443 @@
+{
+  "id": "{{id}}",
+  "external_id": "MN-1005",
+  "brand_id": "{{id}}",
+  "style_number": "MN-1005",
+  "name": {
+    "en": "Full-Grain Leather Weekender",
+    "nl": "Weekendtas van volnerf leer"
+  },
+  "description": {
+    "en": "Structured weekender in full-grain leather with a cotton lining and a detachable shoulder strap.",
+    "nl": "Gestructureerde weekendtas van volnerf leer met katoenen voering en afneembare schouderband."
+  },
+  "item_type": "bag",
+  "item_subtype": "weekender",
+  "gpc_brick": null,
+  "target_group": "women",
+  "season": "NOS",
+  "collection": "Voyage",
+  "materials": [
+    {
+      "part": {
+        "code": "outer",
+        "name": {
+          "en": "Outer fabric",
+          "nl": "Buitenstof",
+          "de": "Oberstoff",
+          "fr": "Tissu extérieur"
+        }
+      },
+      "fibers": [
+        {
+          "material": {
+            "code": "leather",
+            "name": {
+              "en": "Leather",
+              "nl": "Leer",
+              "de": "Leder",
+              "fr": "Cuir"
+            }
+          },
+          "percentage": null,
+          "qualifiers": []
+        }
+      ]
+    },
+    {
+      "part": {
+        "code": "lining",
+        "name": {
+          "en": "Lining",
+          "nl": "Voering",
+          "de": "Futter",
+          "fr": "Doublure"
+        }
+      },
+      "fibers": [
+        {
+          "material": {
+            "code": "cotton",
+            "name": {
+              "en": "Cotton",
+              "nl": "Katoen",
+              "de": "Baumwolle",
+              "fr": "Coton"
+            }
+          },
+          "percentage": 100,
+          "qualifiers": []
+        }
+      ]
+    }
+  ],
+  "contains_animal_origin": true,
+  "footwear_materials": null,
+  "care": [
+    {
+      "code": "do_not_wash",
+      "category": "washing",
+      "symbol": "1_X",
+      "name": {
+        "en": "Do not wash",
+        "nl": "Niet wassen",
+        "de": "Nicht waschen",
+        "fr": "Ne pas laver"
+      },
+      "text": null
+    },
+    {
+      "code": "do_not_bleach",
+      "category": "bleaching",
+      "symbol": "2_X",
+      "name": {
+        "en": "Do not bleach",
+        "nl": "Niet bleken",
+        "de": "Nicht bleichen",
+        "fr": "Ne pas blanchir"
+      },
+      "text": null
+    },
+    {
+      "code": "do_not_tumble_dry",
+      "category": "drying",
+      "symbol": "3_X",
+      "name": {
+        "en": "Do not tumble dry",
+        "nl": "Niet in de droger",
+        "de": "Nicht im Wäschetrockner trocknen",
+        "fr": "Ne pas sécher en tambour"
+      },
+      "text": null
+    },
+    {
+      "code": "do_not_iron",
+      "category": "ironing",
+      "symbol": "4_X",
+      "name": {
+        "en": "Do not iron",
+        "nl": "Niet strijken",
+        "de": "Nicht bügeln",
+        "fr": "Ne pas repasser"
+      },
+      "text": null
+    },
+    {
+      "code": "do_not_dry_clean",
+      "category": "professional_care",
+      "symbol": "5_X",
+      "name": {
+        "en": "Do not dry clean",
+        "nl": "Niet chemisch reinigen",
+        "de": "Nicht chemisch reinigen",
+        "fr": "Ne pas nettoyer à sec"
+      },
+      "text": null
+    }
+  ],
+  "country_of_origin": "IT",
+  "certifications": null,
+  "dpp_url": null,
+  "features": {
+    "closure": "zip",
+    "detachable_parts": [
+      "shoulder_strap"
+    ],
+    "adjustable_parts": [
+      "shoulder_strap"
+    ]
+  },
+  "attributes": null,
+  "created_at": "{{datetime}}",
+  "updated_at": "{{datetime}}",
+  "variants": [
+    {
+      "id": "{{id}}",
+      "external_id": "MN-1005-COG-ONE SIZE",
+      "product_id": "{{id}}",
+      "brand_id": "{{id}}",
+      "gtin": "02000100501016",
+      "gtin_original": "2000100501016",
+      "sku": "MN-1005-COG-ONESIZE",
+      "color": {
+        "code": "COG",
+        "name": {
+          "en": "Cognac",
+          "nl": "Cognac"
+        },
+        "supplier_color": "Saddle",
+        "family": "brown"
+      },
+      "size": "ONE SIZE",
+      "size_length": null,
+      "size_system": null,
+      "measurements": {
+        "height_cm": 32,
+        "width_cm": 52,
+        "depth_cm": 26,
+        "weight_kg": 1.8,
+        "volume_l": 40,
+        "handle_drop_cm": 20,
+        "strap_length_cm": {
+          "min": 100,
+          "max": 130
+        }
+      },
+      "updated_at": "{{datetime}}"
+    }
+  ],
+  "assets": [
+    {
+      "id": "{{id}}",
+      "external_id": "MN-1005_COG_1",
+      "product_id": "{{id}}",
+      "brand_id": "{{id}}",
+      "media_type": "image",
+      "color_code": "COG",
+      "variant_ids": null,
+      "role": "packshot",
+      "view": "front",
+      "position": 1,
+      "filename": "MN-1005_COG_1_front.png",
+      "alt_text": null,
+      "content_type": "image/png",
+      "width": 1200,
+      "height": 1500,
+      "bytes": 10984,
+      "sha256": "199d4b67923a71509bc8149eba3f775c408f8075b74dd3c466be8c52f2e4d639",
+      "rights": {
+        "license": "retailer-use",
+        "license_text": null,
+        "channels": [
+          "webshop",
+          "marketplace",
+          "social"
+        ],
+        "territories": null,
+        "embargo_until": null,
+        "expires_at": null,
+        "credit": null,
+        "model_release": null
+      },
+      "provenance": {
+        "ai_generated": false,
+        "ai_edited": false,
+        "source": "photo",
+        "c2pa": "none",
+        "c2pa_manifest_url": null,
+        "generator": null
+      },
+      "renditions": {
+        "original": {
+          "name": "original",
+          "url": "{{url}}",
+          "url_expires_at": "{{datetime|null}}",
+          "content_type": "image/png",
+          "width": 1200,
+          "height": 1500,
+          "bytes": 10984,
+          "sha256": "199d4b67923a71509bc8149eba3f775c408f8075b74dd3c466be8c52f2e4d639"
+        },
+        "web": {
+          "name": "web",
+          "url": "{{url}}",
+          "url_expires_at": "{{datetime|null}}",
+          "content_type": "image/jpeg",
+          "width": 1200,
+          "height": 1500,
+          "bytes": "{{int}}",
+          "sha256": "{{sha256}}"
+        },
+        "square": {
+          "name": "square",
+          "url": "{{url}}",
+          "url_expires_at": "{{datetime|null}}",
+          "content_type": "image/jpeg",
+          "width": 1500,
+          "height": 1500,
+          "bytes": "{{int}}",
+          "sha256": "{{sha256}}"
+        },
+        "thumb": {
+          "name": "thumb",
+          "url": "{{url}}",
+          "url_expires_at": "{{datetime|null}}",
+          "content_type": "image/jpeg",
+          "width": 480,
+          "height": 600,
+          "bytes": "{{int}}",
+          "sha256": "{{sha256}}"
+        }
+      },
+      "updated_at": "{{datetime}}"
+    },
+    {
+      "id": "{{id}}",
+      "external_id": "MN-1005_COG_2",
+      "product_id": "{{id}}",
+      "brand_id": "{{id}}",
+      "media_type": "image",
+      "color_code": "COG",
+      "variant_ids": null,
+      "role": "packshot",
+      "view": "side",
+      "position": 2,
+      "filename": "MN-1005_COG_2_side.png",
+      "alt_text": null,
+      "content_type": "image/png",
+      "width": 1200,
+      "height": 1500,
+      "bytes": 10890,
+      "sha256": "1f2e818b860e6e92c1ba61104345c13ea889aa8494193a7b99b2f7492149b2c5",
+      "rights": {
+        "license": "retailer-use",
+        "license_text": null,
+        "channels": [
+          "webshop",
+          "marketplace",
+          "social"
+        ],
+        "territories": null,
+        "embargo_until": null,
+        "expires_at": null,
+        "credit": null,
+        "model_release": null
+      },
+      "provenance": {
+        "ai_generated": false,
+        "ai_edited": false,
+        "source": "photo",
+        "c2pa": "none",
+        "c2pa_manifest_url": null,
+        "generator": null
+      },
+      "renditions": {
+        "original": {
+          "name": "original",
+          "url": "{{url}}",
+          "url_expires_at": "{{datetime|null}}",
+          "content_type": "image/png",
+          "width": 1200,
+          "height": 1500,
+          "bytes": 10890,
+          "sha256": "1f2e818b860e6e92c1ba61104345c13ea889aa8494193a7b99b2f7492149b2c5"
+        },
+        "web": {
+          "name": "web",
+          "url": "{{url}}",
+          "url_expires_at": "{{datetime|null}}",
+          "content_type": "image/jpeg",
+          "width": 1200,
+          "height": 1500,
+          "bytes": "{{int}}",
+          "sha256": "{{sha256}}"
+        },
+        "square": {
+          "name": "square",
+          "url": "{{url}}",
+          "url_expires_at": "{{datetime|null}}",
+          "content_type": "image/jpeg",
+          "width": 1500,
+          "height": 1500,
+          "bytes": "{{int}}",
+          "sha256": "{{sha256}}"
+        },
+        "thumb": {
+          "name": "thumb",
+          "url": "{{url}}",
+          "url_expires_at": "{{datetime|null}}",
+          "content_type": "image/jpeg",
+          "width": 480,
+          "height": 600,
+          "bytes": "{{int}}",
+          "sha256": "{{sha256}}"
+        }
+      },
+      "updated_at": "{{datetime}}"
+    },
+    {
+      "id": "{{id}}",
+      "external_id": "MN-1005_COG_3",
+      "product_id": "{{id}}",
+      "brand_id": "{{id}}",
+      "media_type": "image",
+      "color_code": "COG",
+      "variant_ids": null,
+      "role": "packshot",
+      "view": "inside",
+      "position": 3,
+      "filename": "MN-1005_COG_3_inside.png",
+      "alt_text": null,
+      "content_type": "image/png",
+      "width": 1200,
+      "height": 1500,
+      "bytes": 11054,
+      "sha256": "818c22aac3a278e448fecbb5dd8013ec30f119c7906f4aac6cef1aaad277ef08",
+      "rights": {
+        "license": "retailer-use",
+        "license_text": null,
+        "channels": [
+          "webshop",
+          "marketplace",
+          "social"
+        ],
+        "territories": null,
+        "embargo_until": null,
+        "expires_at": null,
+        "credit": null,
+        "model_release": null
+      },
+      "provenance": {
+        "ai_generated": false,
+        "ai_edited": false,
+        "source": "photo",
+        "c2pa": "none",
+        "c2pa_manifest_url": null,
+        "generator": null
+      },
+      "renditions": {
+        "original": {
+          "name": "original",
+          "url": "{{url}}",
+          "url_expires_at": "{{datetime|null}}",
+          "content_type": "image/png",
+          "width": 1200,
+          "height": 1500,
+          "bytes": 11054,
+          "sha256": "818c22aac3a278e448fecbb5dd8013ec30f119c7906f4aac6cef1aaad277ef08"
+        },
+        "web": {
+          "name": "web",
+          "url": "{{url}}",
+          "url_expires_at": "{{datetime|null}}",
+          "content_type": "image/jpeg",
+          "width": 1200,
+          "height": 1500,
+          "bytes": "{{int}}",
+          "sha256": "{{sha256}}"
+        },
+        "square": {
+          "name": "square",
+          "url": "{{url}}",
+          "url_expires_at": "{{datetime|null}}",
+          "content_type": "image/jpeg",
+          "width": 1500,
+          "height": 1500,
+          "bytes": "{{int}}",
+          "sha256": "{{sha256}}"
+        },
+        "thumb": {
+          "name": "thumb",
+          "url": "{{url}}",
+          "url_expires_at": "{{datetime|null}}",
+          "content_type": "image/jpeg",
+          "width": 480,
+          "height": 600,
+          "bytes": "{{int}}",
+          "sha256": "{{sha256}}"
+        }
+      },
+      "updated_at": "{{datetime}}"
+    }
+  ]
+}

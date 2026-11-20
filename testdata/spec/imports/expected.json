@@ -1,9 +1,9 @@
 {
-  "description": "Conformance I-IMP-7. Apply the files in order, each sent as the import's products.csv (mode upsert, no images, no assets.csv), to a node that holds exactly the import of fixtures/kestrel. counts: ImportRun.counts (other count fields not checked). errors: the ImportRowErrors with severity error, in order (warnings not checked); when an error has detail_prefix, its detail starts with that text (detail_prefix is not a member of the ImportRowError). changes: the /changes entries the import produced, in order. products/variants: fields of the protocol objects afterwards (by external_id), matched like fixtures/expected.",
+  "description": "Conformance I-IMP-7. Apply the files in order, each sent as the import's products.csv (mode upsert, no images, no assets.csv), to a node that holds exactly the import of fixtures/maison-noor. counts: ImportRun.counts (other count fields not checked). errors: the ImportRowErrors with severity error, in order (warnings not checked); when an error has detail_prefix, its detail starts with that text (detail_prefix is not a member of the ImportRowError). changes: the /changes entries the import produced, in order. products/variants: fields of the protocol objects afterwards (by external_id), matched like fixtures/expected.",
   "cases": [
     {
       "file": "1-feature-update.csv",
-      "what": "A file with one feature column changes only that feature; the other features of KO-1008 stay (rule 9, per key).",
+      "what": "A file with one feature column changes only that feature; the other features of MN-1008 stay (rule 9, per key).",
       "counts": {
         "rows": 1,
         "created": 0,
@@ -16,11 +16,11 @@
         {
           "type": "product",
           "op": "upsert",
-          "external_id": "KO-1008"
+          "external_id": "MN-1008"
         }
       ],
       "products": {
-        "KO-1008": {
+        "MN-1008": {
           "features": {
             "shell": "hard",
             "wheels": 2,
@@ -47,11 +47,11 @@
         {
           "type": "product",
           "op": "upsert",
-          "external_id": "KO-1008"
+          "external_id": "MN-1008"
         }
       ],
       "products": {
-        "KO-1008": {
+        "MN-1008": {
           "features": {
             "shell": "hard",
             "lock": "tsa_combination",
@@ -77,12 +77,12 @@
         {
           "type": "variant",
           "op": "upsert",
-          "external_id": "KO-1008-BLK-CABIN"
+          "external_id": "MN-1008-BLK-CABIN"
         }
       ],
       "products": {},
       "variants": {
-        "KO-1008-BLK-CABIN": {
+        "MN-1008-BLK-CABIN": {
           "measurements": {
             "height_cm": 55,
             "width_cm": 40,
@@ -168,7 +168,7 @@
     },
     {
       "file": "6-restore.csv",
-      "what": "kestrel/products.csv again (the same bytes): restores wheels 4 and weight 2.6; everything else is unchanged.",
+      "what": "maison-noor/products.csv again (the same bytes): restores wheels 4 and weight 2.6; everything else is unchanged.",
       "counts": {
         "rows": 46,
         "created": 0,
@@ -181,16 +181,16 @@
         {
           "type": "product",
           "op": "upsert",
-          "external_id": "KO-1008"
+          "external_id": "MN-1008"
         },
         {
           "type": "variant",
           "op": "upsert",
-          "external_id": "KO-1008-BLK-CABIN"
+          "external_id": "MN-1008-BLK-CABIN"
         }
       ],
       "products": {
-        "KO-1008": {
+        "MN-1008": {
           "features": {
             "shell": "hard",
             "wheels": 4,
@@ -201,7 +201,7 @@
         }
       },
       "variants": {
-        "KO-1008-BLK-CABIN": {
+        "MN-1008-BLK-CABIN": {
           "measurements": {
             "height_cm": 55,
             "width_cm": 40,

@@ -5,7 +5,7 @@
     "name": "Example Store"
   },
   "brand_ids": [
-    "brd_kestrel"
+    "brd_maison_noor"
   ],
   "scopes": [
     "catalog:read",

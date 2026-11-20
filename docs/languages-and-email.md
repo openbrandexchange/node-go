@@ -23,7 +23,7 @@ Texts come from the admin-ui locale files `ui/dist/locales/<lang>.json`, the sam
 
 | Placeholder | Value |
 |---|---|
-| `{{portal}}` | the portal name, "<Brand> · <local word>" (for example "Kestrel · Beeldbank"); the word is the brand's own `portal_name` for that language, or `glossary.portal` from the locale file |
+| `{{portal}}` | the portal name, "<Brand> · <local word>" (for example "MAISON NOOR · Beeldbank"); the word is the brand's own `portal_name` for that language, or `glossary.portal` from the locale file |
 | `{{brand}}` | the brand's display name |
 | `{{name}}` | the recipient's name |
 | `{{retailer}}`, `{{contact}}` | the requesting company and person (access requests) |

@@ -63,7 +63,7 @@
     },
     "filename": {
       "type": "string",
-      "description": "Suggested download filename for the original, e.g. KO-1001_NVY_1.jpg.",
+      "description": "Suggested download filename for the original, e.g. MN-1001_NVY_1.jpg.",
       "minLength": 1,
       "maxLength": 255
     },

@@ -1,0 +1,477 @@
+{
+  "id": "{{id}}",
+  "external_id": "MN-1008",
+  "brand_id": "{{id}}",
+  "style_number": "MN-1008",
+  "name": {
+    "en": "Voyage Hardshell Cabin Case",
+    "nl": "Harde handbagagekoffer Voyage"
+  },
+  "description": {
+    "en": "Four-wheel hardshell cabin case with a TSA lock and an expansion zip.",
+    "nl": "Harde handbagagekoffer met vier wielen, TSA-slot en uitbreidingsrits."
+  },
+  "item_type": "luggage",
+  "item_subtype": "cabin",
+  "gpc_brick": null,
+  "target_group": "unisex",
+  "season": "NOS",
+  "collection": "Voyage",
+  "materials": [
+    {
+      "part": {
+        "code": "shell",
+        "name": {
+          "en": "Shell",
+          "nl": "Schaal",
+          "de": "Schale",
+          "fr": "Coque"
+        }
+      },
+      "fibers": [
+        {
+          "material": {
+            "code": "polypropylene",
+            "name": {
+              "en": "Polypropylene",
+              "nl": "Polypropyleen",
+              "de": "Polypropylen",
+              "fr": "Polypropylène"
+            }
+          },
+          "percentage": 100,
+          "qualifiers": []
+        }
+      ]
+    },
+    {
+      "part": {
+        "code": "lining",
+        "name": {
+          "en": "Lining",
+          "nl": "Voering",
+          "de": "Futter",
+          "fr": "Doublure"
+        }
+      },
+      "fibers": [
+        {
+          "material": {
+            "code": "polyester",
+            "name": {
+              "en": "Polyester",
+              "nl": "Polyester",
+              "de": "Polyester",
+              "fr": "Polyester"
+            }
+          },
+          "percentage": 100,
+          "qualifiers": [
+            {
+              "code": "recycled",
+              "name": {
+                "en": "Recycled",
+                "nl": "Gerecycled",
+                "de": "Recycelt",
+                "fr": "Recyclé"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "contains_animal_origin": null,
+  "footwear_materials": null,
+  "care": [
+    {
+      "code": "do_not_wash",
+      "category": "washing",
+      "symbol": "1_X",
+      "name": {
+        "en": "Do not wash",
+        "nl": "Niet wassen",
+        "de": "Nicht waschen",
+        "fr": "Ne pas laver"
+      },
+      "text": null
+    },
+    {
+      "code": "do_not_bleach",
+      "category": "bleaching",
+      "symbol": "2_X",
+      "name": {
+        "en": "Do not bleach",
+        "nl": "Niet bleken",
+        "de": "Nicht bleichen",
+        "fr": "Ne pas blanchir"
+      },
+      "text": null
+    },
+    {
+      "code": "do_not_tumble_dry",
+      "category": "drying",
+      "symbol": "3_X",
+      "name": {
+        "en": "Do not tumble dry",
+        "nl": "Niet in de droger",
+        "de": "Nicht im Wäschetrockner trocknen",
+        "fr": "Ne pas sécher en tambour"
+      },
+      "text": null
+    },
+    {
+      "code": "do_not_iron",
+      "category": "ironing",
+      "symbol": "4_X",
+      "name": {
+        "en": "Do not iron",
+        "nl": "Niet strijken",
+        "de": "Nicht bügeln",
+        "fr": "Ne pas repasser"
+      },
+      "text": null
+    },
+    {
+      "code": "do_not_dry_clean",
+      "category": "professional_care",
+      "symbol": "5_X",
+      "name": {
+        "en": "Do not dry clean",
+        "nl": "Niet chemisch reinigen",
+        "de": "Nicht chemisch reinigen",
+        "fr": "Ne pas nettoyer à sec"
+      },
+      "text": null
+    }
+  ],
+  "country_of_origin": "CN",
+  "certifications": null,
+  "dpp_url": null,
+  "features": {
+    "shell": "hard",
+    "wheels": 4,
+    "lock": "tsa_combination",
+    "expandable": true,
+    "closure": "zip"
+  },
+  "attributes": null,
+  "created_at": "{{datetime}}",
+  "updated_at": "{{datetime}}",
+  "variants": [
+    {
+      "id": "{{id}}",
+      "external_id": "MN-1008-BLK-CABIN",
+      "product_id": "{{id}}",
+      "brand_id": "{{id}}",
+      "gtin": "02000100801017",
+      "gtin_original": "2000100801017",
+      "sku": "MN-1008-BLK-CABIN",
+      "color": {
+        "code": "BLK",
+        "name": {
+          "en": "Black",
+          "nl": "Zwart"
+        },
+        "supplier_color": "Ink",
+        "family": "black"
+      },
+      "size": "CABIN",
+      "size_length": null,
+      "size_system": null,
+      "measurements": {
+        "height_cm": 55,
+        "width_cm": 40,
+        "depth_cm": 20,
+        "weight_kg": 2.6,
+        "volume_l": 36,
+        "volume_expanded_l": 42
+      },
+      "updated_at": "{{datetime}}"
+    },
+    {
+      "id": "{{id}}",
+      "external_id": "MN-1008-BLK-CABIN PLUS",
+      "product_id": "{{id}}",
+      "brand_id": "{{id}}",
+      "gtin": "02000100801024",
+      "gtin_original": "2000100801024",
+      "sku": "MN-1008-BLK-CABINPLUS",
+      "color": {
+        "code": "BLK",
+        "name": {
+          "en": "Black",
+          "nl": "Zwart"
+        },
+        "supplier_color": "Ink",
+        "family": "black"
+      },
+      "size": "CABIN PLUS",
+      "size_length": null,
+      "size_system": null,
+      "measurements": {
+        "height_cm": 55,
+        "width_cm": 40,
+        "depth_cm": 23,
+        "weight_kg": 2.8,
+        "volume_l": 42,
+        "volume_expanded_l": 48
+      },
+      "updated_at": "{{datetime}}"
+    }
+  ],
+  "assets": [
+    {
+      "id": "{{id}}",
+      "external_id": "MN-1008_BLK_1",
+      "product_id": "{{id}}",
+      "brand_id": "{{id}}",
+      "media_type": "image",
+      "color_code": "BLK",
+      "variant_ids": null,
+      "role": "packshot",
+      "view": "front",
+      "position": 1,
+      "filename": "MN-1008_BLK_1_front.png",
+      "alt_text": null,
+      "content_type": "image/png",
+      "width": 1200,
+      "height": 1500,
+      "bytes": 12083,
+      "sha256": "02b23df9775c943b6a51ee7a079cab1ba38404ff13999dcffeba83ea82efa519",
+      "rights": {
+        "license": "retailer-use",
+        "license_text": null,
+        "channels": [
+          "webshop",
+          "marketplace",
+          "social"
+        ],
+        "territories": null,
+        "embargo_until": null,
+        "expires_at": null,
+        "credit": null,
+        "model_release": null
+      },
+      "provenance": {
+        "ai_generated": false,
+        "ai_edited": false,
+        "source": "photo",
+        "c2pa": "none",
+        "c2pa_manifest_url": null,
+        "generator": null
+      },
+      "renditions": {
+        "original": {
+          "name": "original",
+          "url": "{{url}}",
+          "url_expires_at": "{{datetime|null}}",
+          "content_type": "image/png",
+          "width": 1200,
+          "height": 1500,
+          "bytes": 12083,
+          "sha256": "02b23df9775c943b6a51ee7a079cab1ba38404ff13999dcffeba83ea82efa519"
+        },
+        "web": {
+          "name": "web",
+          "url": "{{url}}",
+          "url_expires_at": "{{datetime|null}}",
+          "content_type": "image/jpeg",
+          "width": 1200,
+          "height": 1500,
+          "bytes": "{{int}}",
+          "sha256": "{{sha256}}"
+        },
+        "square": {
+          "name": "square",
+          "url": "{{url}}",
+          "url_expires_at": "{{datetime|null}}",
+          "content_type": "image/jpeg",
+          "width": 1500,
+          "height": 1500,
+          "bytes": "{{int}}",
+          "sha256": "{{sha256}}"
+        },
+        "thumb": {
+          "name": "thumb",
+          "url": "{{url}}",
+          "url_expires_at": "{{datetime|null}}",
+          "content_type": "image/jpeg",
+          "width": 480,
+          "height": 600,
+          "bytes": "{{int}}",
+          "sha256": "{{sha256}}"
+        }
+      },
+      "updated_at": "{{datetime}}"
+    },
+    {
+      "id": "{{id}}",
+      "external_id": "MN-1008_BLK_2",
+      "product_id": "{{id}}",
+      "brand_id": "{{id}}",
+      "media_type": "image",
+      "color_code": "BLK",
+      "variant_ids": null,
+      "role": "packshot",
+      "view": "side",
+      "position": 2,
+      "filename": "MN-1008_BLK_2_side.png",
+      "alt_text": null,
+      "content_type": "image/png",
+      "width": 1200,
+      "height": 1500,
+      "bytes": 12001,
+      "sha256": "87d08d60767983a764ad7960d637744eb95abd720c7003d9c01e0dcb9c26a869",
+      "rights": {
+        "license": "retailer-use",
+        "license_text": null,
+        "channels": [
+          "webshop",
+          "marketplace",
+          "social"
+        ],
+        "territories": null,
+        "embargo_until": null,
+        "expires_at": null,
+        "credit": null,
+        "model_release": null
+      },
+      "provenance": {
+        "ai_generated": false,
+        "ai_edited": false,
+        "source": "photo",
+        "c2pa": "none",
+        "c2pa_manifest_url": null,
+        "generator": null
+      },
+      "renditions": {
+        "original": {
+          "name": "original",
+          "url": "{{url}}",
+          "url_expires_at": "{{datetime|null}}",
+          "content_type": "image/png",
+          "width": 1200,
+          "height": 1500,
+          "bytes": 12001,
+          "sha256": "87d08d60767983a764ad7960d637744eb95abd720c7003d9c01e0dcb9c26a869"
+        },
+        "web": {
+          "name": "web",
+          "url": "{{url}}",
+          "url_expires_at": "{{datetime|null}}",
+          "content_type": "image/jpeg",
+          "width": 1200,
+          "height": 1500,
+          "bytes": "{{int}}",
+          "sha256": "{{sha256}}"
+        },
+        "square": {
+          "name": "square",
+          "url": "{{url}}",
+          "url_expires_at": "{{datetime|null}}",
+          "content_type": "image/jpeg",
+          "width": 1500,
+          "height": 1500,
+          "bytes": "{{int}}",
+          "sha256": "{{sha256}}"
+        },
+        "thumb": {
+          "name": "thumb",
+          "url": "{{url}}",
+          "url_expires_at": "{{datetime|null}}",
+          "content_type": "image/jpeg",
+          "width": 480,
+          "height": 600,
+          "bytes": "{{int}}",
+          "sha256": "{{sha256}}"
+        }
+      },
+      "updated_at": "{{datetime}}"
+    },
+    {
+      "id": "{{id}}",
+      "external_id": "MN-1008_BLK_3",
+      "product_id": "{{id}}",
+      "brand_id": "{{id}}",
+      "media_type": "image",
+      "color_code": "BLK",
+      "variant_ids": null,
+      "role": "packshot",
+      "view": "inside",
+      "position": 3,
+      "filename": "MN-1008_BLK_3_inside.png",
+      "alt_text": null,
+      "content_type": "image/png",
+      "width": 1200,
+      "height": 1500,
+      "bytes": 12157,
+      "sha256": "c4d90f354f1dc21b0abadefdf922901e1ffcbec7a6d5d46934ff39dd2c1ff9c8",
+      "rights": {
+        "license": "retailer-use",
+        "license_text": null,
+        "channels": [
+          "webshop",
+          "marketplace",
+          "social"
+        ],
+        "territories": null,
+        "embargo_until": null,
+        "expires_at": null,
+        "credit": null,
+        "model_release": null
+      },
+      "provenance": {
+        "ai_generated": false,
+        "ai_edited": false,
+        "source": "photo",
+        "c2pa": "none",
+        "c2pa_manifest_url": null,
+        "generator": null
+      },
+      "renditions": {
+        "original": {
+          "name": "original",
+          "url": "{{url}}",
+          "url_expires_at": "{{datetime|null}}",
+          "content_type": "image/png",
+          "width": 1200,
+          "height": 1500,
+          "bytes": 12157,
+          "sha256": "c4d90f354f1dc21b0abadefdf922901e1ffcbec7a6d5d46934ff39dd2c1ff9c8"
+        },
+        "web": {
+          "name": "web",
+          "url": "{{url}}",
+          "url_expires_at": "{{datetime|null}}",
+          "content_type": "image/jpeg",
+          "width": 1200,
+          "height": 1500,
+          "bytes": "{{int}}",
+          "sha256": "{{sha256}}"
+        },
+        "square": {
+          "name": "square",
+          "url": "{{url}}",
+          "url_expires_at": "{{datetime|null}}",
+          "content_type": "image/jpeg",
+          "width": 1500,
+          "height": 1500,
+          "bytes": "{{int}}",
+          "sha256": "{{sha256}}"
+        },
+        "thumb": {
+          "name": "thumb",
+          "url": "{{url}}",
+          "url_expires_at": "{{datetime|null}}",
+          "content_type": "image/jpeg",
+          "width": 480,
+          "height": 600,
+          "bytes": "{{int}}",
+          "sha256": "{{sha256}}"
+        }
+      },
+      "updated_at": "{{datetime}}"
+    }
+  ]
+}

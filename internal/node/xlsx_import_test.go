@@ -96,7 +96,7 @@ func sortRowErrors(errs []map[string]any) {
 }
 
 func TestWorkbookImports(t *testing.T) {
-	k := newKestrelNode(t)
+	k := newMaisonNoorNode(t)
 	counts := func(run map[string]any) map[string]any { return run["counts"].(map[string]any) }
 	_, cursor, _ := drainChanges(t, k.all, "", 500)
 	noChanges := func(t *testing.T, what string) {
@@ -107,8 +107,8 @@ func TestWorkbookImports(t *testing.T) {
 			t.Errorf("%s wrote %d change entries: %v", what, len(ch), ch)
 		}
 	}
-	kestrel := filepath.Join(specDir(t), "kestrel")
-	images, _ := filepath.Glob(filepath.Join(kestrel, "images", "*.png"))
+	fixtures := filepath.Join(specDir(t), "maison-noor")
+	images, _ := filepath.Glob(filepath.Join(fixtures, "images", "*.png"))
 
 	for _, c := range xlsxCases(t) {
 		t.Run(c.File, func(t *testing.T) {
@@ -122,7 +122,7 @@ func TestWorkbookImports(t *testing.T) {
 			if m := c.Send.ImagesManifest; len(m) > 0 {
 				var manifest []map[string]any
 				for _, f := range m {
-					data, err := os.ReadFile(filepath.Join(kestrel, "images", f))
+					data, err := os.ReadFile(filepath.Join(fixtures, "images", f))
 					if err != nil {
 						t.Fatal(err)
 					}
@@ -194,7 +194,7 @@ func TestWorkbookImports(t *testing.T) {
 
 	t.Run("the template without dry_run is all unchanged, as products.csv", func(t *testing.T) {
 		x := counts(k.runImport(k.admin, map[string][]string{"csv": {xlsxFixture(t, "products-template.xlsx")}}, nil))
-		c := counts(k.runImport(k.admin, map[string][]string{"csv": {filepath.Join(kestrel, "products.csv")}}, nil))
+		c := counts(k.runImport(k.admin, map[string][]string{"csv": {filepath.Join(fixtures, "products.csv")}}, nil))
 		for _, f := range []string{"rows", "created", "updated", "unchanged", "errors", "warnings"} {
 			if x[f] != c[f] {
 				t.Errorf("counts %s: workbook %v, csv %v", f, x[f], c[f])
@@ -218,7 +218,7 @@ func TestWorkbookImports(t *testing.T) {
 			t.Fatalf("%v", run)
 		}
 		noChanges(t, "an unchanged package")
-		csv, _ := os.ReadFile(filepath.Join(kestrel, "products.csv"))
+		csv, _ := os.ReadFile(filepath.Join(fixtures, "products.csv"))
 		run = k.runImport(k.admin, map[string][]string{"package": {writeTemp(t, "package.zip", zipOf(t, map[string][]byte{"products.csv": csv, "products.xlsx": tpl}))}}, nil)
 		if run["status"] != "failed" || run["error"].(map[string]any)["obx_error"] != "import_invalid" {
 			t.Fatalf("products.csv and products.xlsx in one package: %v", run)
@@ -236,7 +236,7 @@ func TestWorkbookImports(t *testing.T) {
 
 	t.Run("a refused workbook fails the whole import: nothing of it is written", func(t *testing.T) {
 		bad, _ := os.ReadFile(xlsxFixture(t, "macro-enabled.xlsx"))
-		zf := map[string][]byte{"products.xlsx": bad, "assets.csv": mustRead(t, filepath.Join(kestrel, "assets.csv"))}
+		zf := map[string][]byte{"products.xlsx": bad, "assets.csv": mustRead(t, filepath.Join(fixtures, "assets.csv"))}
 		for _, p := range images {
 			zf["photos/"+filepath.Base(p)] = mustRead(t, p)
 		}
@@ -325,7 +325,7 @@ func TestWorkbookImportEndToEnd(t *testing.T) {
 	all, _ := n.apiClient(admin, "All Brands Store", map[string]any{})
 	run := n.runImport(admin, map[string][]string{"csv": {xlsxFixture(t, "products-template.xlsx")}}, nil)
 	c := run["counts"].(map[string]any)
-	// 11 products, 46 variants and the brand Kestrel Trail.
+	// 11 products, 46 variants and the brand NOOR ATELIER.
 	if run["status"] != "succeeded" || c["errors"].(float64) != 0 || c["created"].(float64) != 11+46+1 || c["rows"].(float64) != 46 {
 		t.Fatalf("%v", run)
 	}
@@ -336,12 +336,12 @@ func TestWorkbookImportEndToEnd(t *testing.T) {
 			seen[e["data"].(map[string]any)["external_id"].(string)] = true
 		}
 	}
-	for _, ext := range []string{"KO-1001", "KO-1005", "KT-2001"} {
+	for _, ext := range []string{"MN-1001", "MN-1005", "NA-2001"} {
 		if !seen[ext] {
 			t.Errorf("%s from the workbook is not in /changes", ext)
 		}
 	}
-	csvRun := n.runImport(admin, map[string][]string{"csv": {filepath.Join(specDir(t), "kestrel", "products.csv")}}, nil)
+	csvRun := n.runImport(admin, map[string][]string{"csv": {filepath.Join(specDir(t), "maison-noor", "products.csv")}}, nil)
 	if c := csvRun["counts"].(map[string]any); c["created"].(float64) != 0 || c["updated"].(float64) != 0 || c["unchanged"].(float64) != 11+46 {
 		t.Fatalf("products.csv after the workbook is not all unchanged: %v", c)
 	}

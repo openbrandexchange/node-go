@@ -48,13 +48,13 @@ echo "$dry" | grep -q "nothing was created or changed" || { echo "FAIL dry run: 
 if echo "$dry" | grep -q "very-secret"; then echo "FAIL dry run: printed a secret"; exit 1; fi
 
 run first
-run update SHIM_EXISTS=1 DOMAIN=images.kestrel.example DATABASE_URL='postgres://p:x@/db?host=/cloudsql/demo-project:europe-west4:db' \
-  CLOUDSQL_INSTANCE=demo-project:europe-west4:db SMTP_URL='smtp://u:p@smtp.example:587' MAIL_FROM=portal@kestrel.example ALWAYS_ON=0 MEMORY=4Gi
+run update SHIM_EXISTS=1 DOMAIN=images.maison-noor.example DATABASE_URL='postgres://p:x@/db?host=/cloudsql/demo-project:europe-west4:db' \
+  CLOUDSQL_INSTANCE=demo-project:europe-west4:db SMTP_URL='smtp://u:p@smtp.example:587' MAIL_FROM=portal@maison-noor.example ALWAYS_ON=0 MEMORY=4Gi
 
 # The first deploy must go out with the final public address and probes.
 grep -q "OBX_PUBLIC_URL=https://brand-portal-123456789012.europe-west4.run.app" "$WORK/first.log" || { echo "FAIL: public URL not set on the first deploy"; exit 1; }
 grep -q "startup-probe httpGet.path=/readyz" "$WORK/first.log" || { echo "FAIL: no readiness startup probe"; exit 1; }
-grep -q "OBX_PUBLIC_URL=https://images.kestrel.example" "$WORK/update.log" || { echo "FAIL: DOMAIN not used"; exit 1; }
+grep -q "OBX_PUBLIC_URL=https://images.maison-noor.example" "$WORK/update.log" || { echo "FAIL: DOMAIN not used"; exit 1; }
 grep -q "GOMEMLIMIT=2048MiB" "$WORK/update.log" || { echo "FAIL: GOMEMLIMIT for 4Gi"; exit 1; }
 if grep -q "LITESTREAM_REPLICA_URL" "$WORK/update.log"; then echo "FAIL: Litestream with PostgreSQL"; exit 1; fi
 

@@ -225,9 +225,9 @@ func TestIngestReplay(t *testing.T) {
 	}
 
 	// I-IDEM-1: repeating an upsert is unchanged and writes nothing.
-	ing.must(201, "PUT", "/obx/v1/ingest/products/IDEM-1", map[string]any{"brand_external_id": "kestrel", "style_number": "IDEM-1", "name": map[string]any{"en": "Idempotent"}})
+	ing.must(201, "PUT", "/obx/v1/ingest/products/IDEM-1", map[string]any{"brand_external_id": "maison-noor", "style_number": "IDEM-1", "name": map[string]any{"en": "Idempotent"}})
 	readNew()
-	r := ing.must(200, "PUT", "/obx/v1/ingest/products/IDEM-1", map[string]any{"brand_external_id": "kestrel", "style_number": "IDEM-1", "name": map[string]any{"en": "Idempotent"}})
+	r := ing.must(200, "PUT", "/obx/v1/ingest/products/IDEM-1", map[string]any{"brand_external_id": "maison-noor", "style_number": "IDEM-1", "name": map[string]any{"en": "Idempotent"}})
 	if r["result"] != "unchanged" || len(readNew()) != 0 {
 		t.Fatalf("repeat: %v", r)
 	}
@@ -257,7 +257,7 @@ func TestIngestFilesAndValidation(t *testing.T) {
 	n := newTestNode(t)
 	admin := n.setup()
 	ing := n.ingestToken(admin)
-	img, _ := os.ReadFile(filepath.Join(specDir(t), "ingest", "files", "KL-9001_GRN_1.png"))
+	img, _ := os.ReadFile(filepath.Join(specDir(t), "ingest", "files", "ML-9001_GRN_1.png"))
 	sum := sha256.Sum256(img)
 	sha := hex.EncodeToString(sum[:])
 
@@ -348,7 +348,7 @@ func TestIngestFilesAndValidation(t *testing.T) {
 	})
 
 	t.Run("asset order swaps positions", func(t *testing.T) {
-		img2, _ := os.ReadFile(filepath.Join(specDir(t), "ingest", "files", "KL-9001_GRN_2.png"))
+		img2, _ := os.ReadFile(filepath.Join(specDir(t), "ingest", "files", "ML-9001_GRN_2.png"))
 		s2 := sha256.Sum256(img2)
 		ing.must(201, "PUT", "/obx/v1/ingest/blobs/"+hex.EncodeToString(s2[:]), img2)
 		ing.must(201, "PUT", "/obx/v1/ingest/assets/V-1_BLK_2", map[string]any{"product_external_id": "V-1", "color_code": "BLK", "role": "packshot", "position": 2, "files": map[string]any{"original": map[string]any{"sha256": hex.EncodeToString(s2[:])}}})
@@ -406,7 +406,7 @@ func TestIngestFilesAndValidation(t *testing.T) {
 			t.Fatalf("%d %s", r.Status, r.Body)
 		}
 		ing.must(201, "PUT", "/obx/v1/ingest/brands/other", map[string]any{"name": "Other"})
-		m := admin.must(201, "POST", "/admin/api/ingest-tokens", map[string]any{"name": "Kestrel only", "scopes": []string{"ingest:read", "ingest:write"}, "brand_external_ids": []string{"kestrel"}})
+		m := admin.must(201, "POST", "/admin/api/ingest-tokens", map[string]any{"name": "MAISON NOOR only", "scopes": []string{"ingest:read", "ingest:write"}, "brand_external_ids": []string{"maison-noor"}})
 		restricted := n.client()
 		restricted.bearer = m["secret"].(string)
 		r = restricted.do("PUT", "/obx/v1/ingest/products/X-2", map[string]any{"brand_external_id": "other", "style_number": "X-2", "name": map[string]any{"en": "x"}})

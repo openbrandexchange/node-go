@@ -5,7 +5,7 @@ import { expect, test, type Page } from '@playwright/test'
 // the node it set up: every main portal and admin screen is checked with axe
 // (WCAG 2.1 A and AA), and the key tasks are done with the keyboard only.
 
-const admin = { email: 'admin@kestrel.example', password: 'kestrel-admin-2026!' }
+const admin = { email: 'admin@maison-noor.example', password: 'maison-noor-admin-2026!' }
 const retailer = { email: 'buyer@harbour.example', password: 'harbour-shop-2026!' }
 
 
@@ -66,7 +66,7 @@ test('retailer portal screens pass axe', async ({ page }) => {
 test('admin screens pass axe', async ({ page }) => {
   await logIn(page, admin)
   for (const [path, name] of [
-    ['/admin', 'dashboard'], ['/admin/catalog', 'catalog'], ['/admin/catalog/KO-1001', 'article'], ['/admin/imports', 'imports'],
+    ['/admin', 'dashboard'], ['/admin/catalog', 'catalog'], ['/admin/catalog/MN-1001', 'article'], ['/admin/imports', 'imports'],
     ['/admin/automation', 'automation'], ['/admin/retailers', 'retailers'], ['/admin/requests', 'access requests'],
     ['/admin/stats', 'statistics'], ['/admin/settings', 'settings'],
   ]) {

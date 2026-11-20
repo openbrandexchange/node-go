@@ -1,10 +1,10 @@
 brand,style_number,name:en,item_type,materials,contains_animal_origin,footwear_materials
-Kestrel,KL-8001,Label Test Tee,t_shirt,,no,
-Kestrel,KL-8002,Label Test Scarf,scarf,main: 100% wool,,
-Kestrel,KL-8003,Label Test Sneaker,sneakers,upper: 100% polyester,,
-Kestrel,KL-8004,Label Test Shirt,shirt,"main: 60% cotton, 30% polyester",no,
-Kestrel,KL-8005,Label Test Sandal,sandals,,,upper: leather; lining_and_sock: leather
-Kestrel,KL-8006,Label Test Complete,t_shirt,main: 100% cotton,no,
-Kestrel,KL-8007,Label Test Dutch,t_shirt,"main: 95% katoen, 5% elastane",no,
-Kestrel,KL-8008,Label Test No Percentage,bag,"outer: leather; lining: 60% cotton, polyester",yes,
-Kestrel,KL-8009,Label Test Too Much,shirt,"main: 70% cotton, 40% polyester, elastane",no,
+MAISON NOOR,ML-8001,Label Test Tee,t_shirt,,no,
+MAISON NOOR,ML-8002,Label Test Scarf,scarf,main: 100% wool,,
+MAISON NOOR,ML-8003,Label Test Sneaker,sneakers,upper: 100% polyester,,
+MAISON NOOR,ML-8004,Label Test Shirt,shirt,"main: 60% cotton, 30% polyester",no,
+MAISON NOOR,ML-8005,Label Test Sandal,sandals,,,upper: leather; lining_and_sock: leather
+MAISON NOOR,ML-8006,Label Test Complete,t_shirt,main: 100% cotton,no,
+MAISON NOOR,ML-8007,Label Test Dutch,t_shirt,"main: 95% katoen, 5% elastane",no,
+MAISON NOOR,ML-8008,Label Test No Percentage,bag,"outer: leather; lining: 60% cotton, polyester",yes,
+MAISON NOOR,ML-8009,Label Test Too Much,shirt,"main: 70% cotton, 40% polyester, elastane",no,

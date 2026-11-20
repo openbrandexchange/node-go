@@ -6,7 +6,7 @@ import (
 )
 
 func BenchmarkRender(b *testing.B) {
-	data, err := os.ReadFile("../../testdata/spec/kestrel/images/KO-1002_OLV_1_front.png")
+	data, err := os.ReadFile("../../testdata/spec/maison-noor/images/MN-1002_OLV_1_front.png")
 	if err != nil {
 		b.Fatal(err)
 	}

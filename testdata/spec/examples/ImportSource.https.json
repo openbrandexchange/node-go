@@ -11,7 +11,7 @@
   "allow_mass_unpublish": false,
   "config": {
     "kind": "https_url",
-    "url": "https://pim.kestrel.example/exports/obx-package.zip",
+    "url": "https://pim.maison-noor.example/exports/obx-package.zip",
     "images_url": null
   },
   "credentials_set": {

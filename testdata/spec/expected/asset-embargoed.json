@@ -1,6 +1,6 @@
 {
   "id": "{{id}}",
-  "external_id": "KO-1002_BLK_2",
+  "external_id": "MN-1002_BLK_2",
   "product_id": "{{id}}",
   "brand_id": "{{id}}",
   "media_type": "image",
@@ -9,13 +9,13 @@
   "role": "packshot",
   "view": "back",
   "position": 2,
-  "filename": "KO-1002_BLK_2_back.png",
+  "filename": "MN-1002_BLK_2_back.png",
   "alt_text": null,
   "content_type": "image/png",
   "width": 1200,
   "height": 1500,
-  "bytes": 11997,
-  "sha256": "d79b5326aa2254dd631f5858df985b86c7ee5fd4f5df9c2f33a84d3799b3b4e6",
+  "bytes": 11999,
+  "sha256": "ac3eee80995780a99efce15b3a49c6ca4ed9d1d45f0273b68e52505baa94d90d",
   "rights": {
     "license": "retailer-use",
     "license_text": null,
@@ -27,7 +27,7 @@
     "territories": null,
     "embargo_until": "2030-01-01T00:00:00Z",
     "expires_at": null,
-    "credit": "Photo: Kestrel Studio",
+    "credit": "Photo: MAISON NOOR Studio",
     "model_release": null
   },
   "provenance": {
@@ -46,8 +46,8 @@
       "content_type": "image/png",
       "width": 1200,
       "height": 1500,
-      "bytes": 11997,
-      "sha256": "d79b5326aa2254dd631f5858df985b86c7ee5fd4f5df9c2f33a84d3799b3b4e6"
+      "bytes": 11999,
+      "sha256": "ac3eee80995780a99efce15b3a49c6ca4ed9d1d45f0273b68e52505baa94d90d"
     },
     "web": {
       "name": "web",

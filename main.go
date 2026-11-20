@@ -3,7 +3,7 @@
 // for the brand's own automation, in one binary.
 //
 //	node-go serve                                   start the node
-//	node-go dev                                     try it locally with the Kestrel demo catalog
+//	node-go dev                                     try it locally with the MAISON NOOR demo catalog
 //	node-go import --csv products.csv --images dir  import from local files
 //	node-go admin reset-password --email you@example.com
 //	node-go admin create-ingest-token --name "Nightly PIM sync"
@@ -41,7 +41,7 @@ func usage() {
 Usage:
   node-go serve                          Start the portal (configuration via environment, see README)
   node-go dev [--fresh]                  Try it locally: SQLite in ./data-dev, setup done with a known
-                                         login, the Kestrel demo catalog imported (run in the repository)
+                                         login, the MAISON NOOR demo catalog imported (run in the repository)
   node-go import [flags]                 Import a canonical CSV and/or images from local files
       --csv FILE            products.csv
       --assets FILE         assets.csv (rights, AI provenance, alt text)
@@ -179,14 +179,14 @@ func serve() error {
 const (
 	devDataDir   = "./data-dev"
 	devSetupCode = "DEMO-DEMO-DEMO"
-	devEmail     = "admin@kestrel.example"
-	devPassword  = "kestrel demo password"
-	devPackage   = "testdata/kestrel-example.zip"
+	devEmail     = "admin@maison-noor.example"
+	devPassword  = "maison-noor demo password"
+	devPackage   = "testdata/maison-noor-example.zip"
 )
 
 // dev starts the node for a local try-out: SQLite and files in ./data-dev
 // (unless OBX_DATA_DIR / OBX_DATABASE_URL say otherwise), the first-run
-// setup done with a known login, the Kestrel demo catalog imported on the
+// setup done with a known login, the MAISON NOOR demo catalog imported on the
 // first start, e-mails written to the log. Then it serves like "serve".
 func dev(args []string) error {
 	fs := flag.NewFlagSet("dev", flag.ContinueOnError)
@@ -226,7 +226,7 @@ func dev(args []string) error {
 			app.Close()
 			return fmt.Errorf("%s not found: run node-go dev in the node-go repository", devPackage)
 		}
-		err = app.DevSetup(ctx, node.DevAccount{SetupCode: os.Getenv("OBX_SETUP_CODE"), Company: "Kestrel Outfitters", Brand: "Kestrel",
+		err = app.DevSetup(ctx, node.DevAccount{SetupCode: os.Getenv("OBX_SETUP_CODE"), Company: "MAISON NOOR Group", Brand: "MAISON NOOR",
 			Name: "Demo Admin", Email: devEmail, Password: devPassword})
 		if err == nil {
 			var run map[string]any
@@ -236,7 +236,7 @@ func dev(args []string) error {
 			}
 			if err == nil {
 				c := run["counts"].(map[string]any)
-				fmt.Printf("Imported the Kestrel demo catalog: %v objects created, %v images\n", c["created"], c["files"])
+				fmt.Printf("Imported the MAISON NOOR demo catalog: %v objects created, %v images\n", c["created"], c["files"])
 			}
 		}
 	}

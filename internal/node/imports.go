@@ -996,7 +996,7 @@ func (im *importer) planImages(images []*imageSource, assetRows map[string]*asse
 }
 
 // colourlessCode stands for "all colours" in image file names and asset
-// external ids: KO-1001_ALL_1.jpg is an image of the style, not of one
+// external ids: MN-1001_ALL_1.jpg is an image of the style, not of one
 // colour (docs/import-format.md).
 const colourlessCode = "ALL"
 

@@ -14,7 +14,7 @@
 set -euo pipefail
 HERE="$(cd "$(dirname "$0")/.." && pwd)"
 PROJECT=obx-compose-test
-export DOMAIN=localhost ADMIN_EMAIL=ops@kestrel.example HTTPS_PORT="${HTTPS_PORT:-18443}" HTTP_PORT="${HTTP_PORT:-18080}"
+export DOMAIN=localhost ADMIN_EMAIL=ops@maison-noor.example HTTPS_PORT="${HTTPS_PORT:-18443}" HTTP_PORT="${HTTP_PORT:-18080}"
 export OBX_SETUP_CODE=COMP-OSET-ESTC
 dc() { docker compose -p "$PROJECT" -f "$HERE/docker-compose.yml" -f "$HERE/docker-compose.build.yml" "$@"; }
 trap 'dc down -v >/dev/null 2>&1 || true' EXIT

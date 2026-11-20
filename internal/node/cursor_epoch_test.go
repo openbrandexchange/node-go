@@ -23,7 +23,7 @@ func expectCursorExpired(t *testing.T, c *client, cursor, what string) {
 // (spec 0.3) then runs, and both cursors answer 410 cursor_expired, while a
 // feed started without a cursor works and its cursors keep working.
 func TestCursorsExpireOnSpecUpgrade(t *testing.T) {
-	k := newKestrelNode(t)
+	k := newMaisonNoorNode(t)
 	ctx := context.Background()
 	// Back to the state of a 0.2 node: migrations 4 and 5 not applied, no epoch.
 	if err := k.app.DB.WriteTx(ctx, func(tx *db.Tx) error {
@@ -72,7 +72,7 @@ func TestCursorsExpireOnSpecUpgrade(t *testing.T) {
 // TestSimulateSpecUpgrade is the operator action simulate_spec_upgrade:
 // every cursor issued so far expires, new ones work.
 func TestSimulateSpecUpgrade(t *testing.T) {
-	k := newKestrelNode(t)
+	k := newMaisonNoorNode(t)
 	ctx := context.Background()
 	_, live, _ := drainChanges(t, k.all, "", 500)
 	if err := k.app.SimulateSpecUpgrade(ctx); err != nil {

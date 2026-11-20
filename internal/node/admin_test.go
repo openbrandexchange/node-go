@@ -299,7 +299,7 @@ func TestAccessRequestsAndRetailers(t *testing.T) {
 		}
 		src := admin.must(201, "POST", "/admin/api/import-sources", map[string]any{"name": "Nightly bucket", "kind": "s3",
 			"schedule":    map[string]any{"frequency": "daily", "time": "02:30", "timezone": "Europe/Amsterdam"},
-			"config":      map[string]any{"region": "eu-west-1", "bucket": "kestrel-exports", "prefix": "obx/"},
+			"config":      map[string]any{"region": "eu-west-1", "bucket": "maison-noor-exports", "prefix": "obx/"},
 			"credentials": map[string]any{"access_key_id": "AKIAFAKE", "secret_access_key": "super-secret-value"}})
 		validate(t, "ImportSource", src)
 		body := string(mustJSON(src))
@@ -313,8 +313,8 @@ func TestAccessRequestsAndRetailers(t *testing.T) {
 }
 
 func TestPortal(t *testing.T) {
-	k := newKestrelNode(t)
-	ret := k.admin.must(201, "POST", "/admin/api/retailers", map[string]any{"name": "Portal Store", "brand_ids": []string{k.brands["kestrel"]}})
+	k := newMaisonNoorNode(t)
+	ret := k.admin.must(201, "POST", "/admin/api/retailers", map[string]any{"name": "Portal Store", "brand_ids": []string{k.brands["maison-noor"]}})
 	inv := k.admin.must(201, "POST", "/admin/api/users/invites", map[string]any{"email": "pia@portal.example", "name": "Pia", "role": "retailer", "retailer_id": ret["id"], "language": "de"})
 	link := inv["invite_url"].(string)
 	u := k.client()
@@ -333,7 +333,7 @@ func TestPortal(t *testing.T) {
 		}
 		for _, p := range list["items"].([]any) {
 			if strings.HasPrefix(p.(map[string]any)["style_number"].(string), "KT-") {
-				t.Fatal("kestrel-trail product visible to a kestrel-only retailer")
+				t.Fatal("noor-atelier product visible to a maison-noor-only retailer")
 			}
 		}
 		f := u.must(200, "GET", "/admin/api/portal/products?item_type=jacket", nil)
@@ -355,11 +355,11 @@ func TestPortal(t *testing.T) {
 		// Qualifier filter: any fibre of any part has any given code; OR
 		// within the parameter, AND with the others.
 		for query, want := range map[string][]string{
-			"qualifier=recycled":                             {"KO-1008", "KO-1009"},
-			"qualifier=organic&qualifier=post_consumer":      {"KO-1003", "KO-1009"},
-			"qualifier=organic,post_consumer":                {"KO-1003", "KO-1009"},
-			"qualifier=recycled&item_type=bag":               {"KO-1009"},
-			"qualifier=regenerative&qualifier=in_conversion": {"KO-1003"},
+			"qualifier=recycled":                             {"MN-1008", "MN-1009"},
+			"qualifier=organic&qualifier=post_consumer":      {"MN-1003", "MN-1009"},
+			"qualifier=organic,post_consumer":                {"MN-1003", "MN-1009"},
+			"qualifier=recycled&item_type=bag":               {"MN-1009"},
+			"qualifier=regenerative&qualifier=in_conversion": {"MN-1003"},
 			"qualifier=in_conversion":                        {},
 		} {
 			got := []string{}
@@ -394,7 +394,7 @@ func TestPortal(t *testing.T) {
 		}
 		csv := u.do("GET", "/admin/api/portal/products/data.csv?qualifier=post_consumer", nil)
 		if csv.Status != 200 || !strings.Contains(string(csv.Body), "outer: 100% polyester (recycled) (post_consumer); lining: 100% polyamide") ||
-			strings.Contains(string(csv.Body), "KO-1003") {
+			strings.Contains(string(csv.Body), "MN-1003") {
 			t.Errorf("data.csv?qualifier=post_consumer: %d %s", csv.Status, csv.Body)
 		}
 		if r := u.do("POST", "/admin/api/portal/download-jobs", map[string]any{"source": "filter", "variant": "web",
@@ -402,9 +402,9 @@ func TestPortal(t *testing.T) {
 			t.Errorf("download job for a qualifier no product has: %d %s", r.Status, r.Body)
 		}
 
-		detail := u.must(200, "GET", "/admin/api/portal/products/"+k.products["KO-1001"]["id"].(string), nil)
+		detail := u.must(200, "GET", "/admin/api/portal/products/"+k.products["MN-1001"]["id"].(string), nil)
 		validate(t, "ProductDetail", detail)
-		if r := u.do("GET", "/admin/api/portal/products/"+k.products["KT-2001"]["id"].(string), nil); r.Status != 404 {
+		if r := u.do("GET", "/admin/api/portal/products/"+k.products["NA-2001"]["id"].(string), nil); r.Status != 404 {
 			t.Fatalf("other brand's product: %d", r.Status)
 		}
 	})
@@ -418,7 +418,7 @@ func TestPortal(t *testing.T) {
 	})
 
 	t.Run("selection, zips and CSV", func(t *testing.T) {
-		ids := []string{k.products["KO-1001"]["id"].(string), k.products["KO-1005"]["id"].(string), k.products["KT-2001"]["id"].(string)}
+		ids := []string{k.products["MN-1001"]["id"].(string), k.products["MN-1005"]["id"].(string), k.products["NA-2001"]["id"].(string)}
 		sel := u.must(200, "PUT", "/admin/api/portal/selection", map[string]any{"product_ids": ids})
 		if len(sel["product_ids"].([]any)) != 2 {
 			t.Fatalf("invisible id must be dropped: %v", sel)
@@ -441,12 +441,12 @@ func TestPortal(t *testing.T) {
 				rc.Close()
 			}
 		}
-		if !names["KO-1001/KO-1001_NVY_1_front_web.jpg"] || !names["KO-1005/KO-1005_COG_3_inside_web.jpg"] || len(names) != 7+1 {
+		if !names["MN-1001/MN-1001_NVY_1_front_web.jpg"] || !names["MN-1005/MN-1005_COG_3_inside_web.jpg"] || len(names) != 7+1 {
 			t.Fatalf("zip entries %v", names)
 		}
 		// The rights, embargo and AI provenance travel with the files (import-format.md §2.3).
 		arows, err := csv.NewReader(bytes.NewReader(assetsCSV)).ReadAll()
-		if err != nil || len(arows) != 1+7 || arows[0][0] != "file" || arows[1][0] != "KO-1001_NVY_1_front_web.jpg" {
+		if err != nil || len(arows) != 1+7 || arows[0][0] != "file" || arows[1][0] != "MN-1001_NVY_1_front_web.jpg" {
 			t.Fatalf("assets.csv: %v %v", err, arows)
 		}
 		pz := u.do("GET", "/admin/api/portal/products/"+ids[0]+"/download.zip", nil)
@@ -466,7 +466,7 @@ func TestPortal(t *testing.T) {
 		if rows[0][0] != "brand" || rows[0][len(rows[0])-1] != "image_files" || len(rows) != 1+8+1 {
 			t.Fatalf("csv header %v, %d rows", rows[0], len(rows))
 		}
-		img := u.do("GET", "/admin/api/portal/assets/"+k.asset(k.all, "KO-1001_NVY_1")["id"].(string)+"/download?variant=original", nil)
+		img := u.do("GET", "/admin/api/portal/assets/"+k.asset(k.all, "MN-1001_NVY_1")["id"].(string)+"/download?variant=original", nil)
 		if img.Status != 200 || !strings.Contains(img.Header.Get("Content-Disposition"), "attachment") {
 			t.Fatalf("image download %d", img.Status)
 		}
@@ -499,7 +499,7 @@ func TestPortal(t *testing.T) {
 		}
 		before := totals["downloads"].(float64)
 		k.admin.must(200, "GET", "/admin/api/portal/products", nil)
-		r := k.admin.do("GET", "/admin/api/portal/products/"+k.products["KT-2001"]["id"].(string)+"/download.zip", nil)
+		r := k.admin.do("GET", "/admin/api/portal/products/"+k.products["NA-2001"]["id"].(string)+"/download.zip", nil)
 		if r.Status != 200 {
 			t.Fatalf("admin preview zip %d", r.Status)
 		}
@@ -580,8 +580,8 @@ func TestSetupCodeTypedLoosely(t *testing.T) {
 		c := n.client()
 		c.session()
 		c.must(201, "POST", "/admin/api/setup", map[string]any{"setup_code": typed,
-			"company": map[string]any{"name": "Kestrel Outfitters", "default_language": "en"},
-			"admin":   map[string]any{"name": "Ada", "email": "ada@kestrel.example", "password": "a long enough password"}})
+			"company": map[string]any{"name": "MAISON NOOR Group", "default_language": "en"},
+			"admin":   map[string]any{"name": "Ada", "email": "ada@maison-noor.example", "password": "a long enough password"}})
 	}
 	for typed, want := range map[string]string{"k7qx 9m2p vt4c": "K7QX-9M2P-VT4C", "K7QX9M2PVT4C": "K7QX-9M2P-VT4C", " k7qx-9m2p-vt4c": "K7QX-9M2P-VT4C"} {
 		found := false
@@ -598,13 +598,13 @@ func TestSetupCodeTypedLoosely(t *testing.T) {
 }
 
 func TestMailTextFullStops(t *testing.T) {
-	vars := map[string]string{"brand": "Kestrel Outfitters B.V.", "portal": "Beeldbank"}
+	vars := map[string]string{"brand": "MAISON NOOR Group B.V.", "portal": "Beeldbank"}
 	for in, want := range map[string]string{
-		"Bedankt voor je aanvraag bij {{brand}}.": "Bedankt voor je aanvraag bij Kestrel Outfitters B.V.",
-		"{{brand}}. Tot ziens.":                   "Kestrel Outfitters B.V. Tot ziens.",
+		"Bedankt voor je aanvraag bij {{brand}}.": "Bedankt voor je aanvraag bij MAISON NOOR Group B.V.",
+		"{{brand}}. Tot ziens.":                   "MAISON NOOR Group B.V. Tot ziens.",
 		"{{portal}}.":                             "Beeldbank.",
-		"{{brand}}, {{missing}}.":                 "Kestrel Outfitters B.V., {{missing}}.",
-		"{brand}!":                                "Kestrel Outfitters B.V.!",
+		"{{brand}}, {{missing}}.":                 "MAISON NOOR Group B.V., {{missing}}.",
+		"{brand}!":                                "MAISON NOOR Group B.V.!",
 	} {
 		if got := interpolate(in, vars); got != want {
 			t.Errorf("interpolate(%q) = %q, want %q", in, got, want)

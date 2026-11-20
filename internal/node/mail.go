@@ -281,8 +281,8 @@ func mailDate(t time.Time) string { return t.UTC().Format("2006-01-02") }
 var placeholderRe = regexp.MustCompile(`\{\{\s*([a-z_]+)\s*\}\}|\{([a-z_]+)\}`)
 
 // interpolate fills in {{name}} / {name} placeholders. A value that ends in a
-// full stop (a company name like "Kestrel B.V.") swallows the full stop the
-// sentence puts right after it, so e-mails never read "Kestrel B.V..".
+// full stop (a company name like "MAISON NOOR B.V.") swallows the full stop the
+// sentence puts right after it, so e-mails never read "MAISON NOOR B.V..".
 func interpolate(s string, vars map[string]string) string {
 	var b strings.Builder
 	last := 0

@@ -5,13 +5,13 @@
       "after_op": 0,
       "type": "brand",
       "op": "upsert",
-      "external_id": "kestrel-lab"
+      "external_id": "maison-noor-lab"
     },
     {
       "after_op": 1,
       "type": "product",
       "op": "upsert",
-      "external_id": "KL-9001"
+      "external_id": "ML-9001"
     },
     {
       "after_op": 2,
@@ -29,31 +29,31 @@
       "after_op": 4,
       "type": "asset",
       "op": "upsert",
-      "external_id": "KL-9001_GRN_1"
+      "external_id": "ML-9001_GRN_1"
     },
     {
       "after_op": 6,
       "type": "product",
       "op": "upsert",
-      "external_id": "KL-9001"
+      "external_id": "ML-9001"
     },
     {
       "after_op": 7,
       "type": "asset",
       "op": "upsert",
-      "external_id": "KL-9001_GRN_1"
+      "external_id": "ML-9001_GRN_1"
     },
     {
       "after_op": 8,
       "type": "asset",
       "op": "upsert",
-      "external_id": "KL-9001_GRN_2"
+      "external_id": "ML-9001_GRN_2"
     },
     {
       "after_op": 10,
       "type": "asset",
       "op": "delete",
-      "external_id": "KL-9001_GRN_2"
+      "external_id": "ML-9001_GRN_2"
     },
     {
       "after_op": 12,
@@ -65,7 +65,7 @@
       "after_op": 13,
       "type": "product",
       "op": "delete",
-      "external_id": "KL-9001"
+      "external_id": "ML-9001"
     },
     {
       "after_op": 13,
@@ -83,13 +83,13 @@
       "after_op": 13,
       "type": "asset",
       "op": "delete",
-      "external_id": "KL-9001_GRN_1"
+      "external_id": "ML-9001_GRN_1"
     },
     {
       "after_op": 14,
       "type": "product",
       "op": "upsert",
-      "external_id": "KL-9001"
+      "external_id": "ML-9001"
     },
     {
       "after_op": 14,
@@ -107,7 +107,7 @@
       "after_op": 14,
       "type": "asset",
       "op": "upsert",
-      "external_id": "KL-9001_GRN_1"
+      "external_id": "ML-9001_GRN_1"
     },
     {
       "after_op": 15,
@@ -119,7 +119,7 @@
       "after_op": 17,
       "type": "product",
       "op": "delete",
-      "external_id": "KL-9001"
+      "external_id": "ML-9001"
     },
     {
       "after_op": 17,
@@ -131,7 +131,7 @@
       "after_op": 17,
       "type": "asset",
       "op": "delete",
-      "external_id": "KL-9001_GRN_1"
+      "external_id": "ML-9001_GRN_1"
     }
   ]
 }

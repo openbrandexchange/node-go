@@ -18,15 +18,15 @@ func TestParseImageName(t *testing.T) {
 		pos                      int
 		err                      bool
 	}{
-		{"KO-1001_NVY_1.jpg", "KO-1001", "NVY", "", "", 1, false},
-		{"KO-1001_NVY_2_back.jpg", "KO-1001", "NVY", "", "back", 2, false},
-		{"KO-1003_RST_3_model.png", "KO-1003", "RST", "model", "", 3, false},
+		{"MN-1001_NVY_1.jpg", "MN-1001", "NVY", "", "", 1, false},
+		{"MN-1001_NVY_2_back.jpg", "MN-1001", "NVY", "", "back", 2, false},
+		{"MN-1003_RST_3_model.png", "MN-1003", "RST", "model", "", 3, false},
 		{"AB_12_34_BLK_2_packshot_back.JPG", "AB_12_34", "BLK", "packshot", "back", 2, false},
-		{"KO-1004_IND_3_detail.jpg", "KO-1004", "IND", "detail", "detail", 3, false},
-		{"KO-1005_COG_2_tilted_left.webp", "KO-1005", "COG", "", "tilted_left", 2, false},
-		{"KO-1001_NVY_front.jpg", "", "", "", "", 0, true},
-		{"KO-1001_NVY_01.jpg", "", "", "", "", 0, true},
-		{"KO-1001_NVY_1.gif", "", "", "", "", 0, true},
+		{"MN-1004_IND_3_detail.jpg", "MN-1004", "IND", "detail", "detail", 3, false},
+		{"MN-1005_COG_2_tilted_left.webp", "MN-1005", "COG", "", "tilted_left", 2, false},
+		{"MN-1001_NVY_front.jpg", "", "", "", "", 0, true},
+		{"MN-1001_NVY_01.jpg", "", "", "", "", 0, true},
+		{"MN-1001_NVY_1.gif", "", "", "", "", 0, true},
 	}
 	for _, c := range cases {
 		n, err := ParseImageName(c.name)
@@ -47,7 +47,7 @@ func TestParseImageName(t *testing.T) {
 }
 
 func TestParseCSV(t *testing.T) {
-	data := []byte("\xef\xbb\xbfStyle Number;Name:EN;Colour-Code;attr:Fit Type\r\n\"KO-1\";\"Sweater; \"\"soft\"\"\";NVY;slim\r\n;;;\r\n")
+	data := []byte("\xef\xbb\xbfStyle Number;Name:EN;Colour-Code;attr:Fit Type\r\n\"MN-1\";\"Sweater; \"\"soft\"\"\";NVY;slim\r\n;;;\r\n")
 	tb, err := ParseCSV(data)
 	if err != nil {
 		t.Fatal(err)
@@ -136,7 +136,7 @@ func TestGTINCellAndSlug(t *testing.T) {
 	if g, err := GTINCell("2000 1001 01025"); err != nil || g != "2000100101025" {
 		t.Fatalf("%v %v", g, err)
 	}
-	if s := Slug("Kestrel Trail"); s != "kestrel-trail" {
+	if s := Slug("NOOR ATELIER"); s != "noor-atelier" {
 		t.Fatal(s)
 	}
 	if s := Slug("  Éclair & Co. "); s != "eclair-co" {
@@ -147,7 +147,7 @@ func TestGTINCellAndSlug(t *testing.T) {
 func TestSafeEntry(t *testing.T) {
 	var buf bytes.Buffer
 	zw := zip.NewWriter(&buf)
-	for _, n := range []string{"ok/KO-1_A_1.jpg", "../evil.jpg", "/abs.jpg", "C:/x.jpg", "a/CON.jpg"} {
+	for _, n := range []string{"ok/MN-1_A_1.jpg", "../evil.jpg", "/abs.jpg", "C:/x.jpg", "a/CON.jpg"} {
 		w, _ := zw.Create(n)
 		_, _ = w.Write([]byte("x"))
 	}

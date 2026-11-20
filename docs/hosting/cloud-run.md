@@ -29,7 +29,7 @@ Your brand portal runs at: https://brand-portal-123456789012.europe-west4.run.ap
 First-run setup code:      K7QX-9M2P-VT4C
 ```
 
-Open the address, enter the setup code, your company name and your password. Settings are environment variables in front of the command, for example `REGION=europe-west1 SERVICE=kestrel-portal ./deploy/cloudrun.sh`:
+Open the address, enter the setup code, your company name and your password. Settings are environment variables in front of the command, for example `REGION=europe-west1 SERVICE=maison-noor-portal ./deploy/cloudrun.sh`:
 
 | Variable | Default | Meaning |
 |---|---|---|

@@ -17,20 +17,20 @@ import (
 	"testing"
 )
 
-// kestrelNode is a node set up like the conformance reference path, with
-// the Kestrel fixtures imported and three retailers:
-// all (every brand), restricted (only brand kestrel), noOrig (no originals).
-type kestrelNode struct {
+// maisonNoorNode is a node set up like the conformance reference path, with
+// the MAISON NOOR fixtures imported and three retailers:
+// all (every brand), restricted (only brand maison-noor), noOrig (no originals).
+type maisonNoorNode struct {
 	*testNode
 	admin, all, restricted, noOrig *client
 	products                       map[string]map[string]any // external id → ProductDetail (all)
 	brands                         map[string]string         // external id → id
 }
 
-func newKestrelNode(t *testing.T) *kestrelNode {
+func newMaisonNoorNode(t *testing.T) *maisonNoorNode {
 	n := newTestNode(t)
 	admin := n.setup()
-	run := n.importKestrel(admin)
+	run := n.importMaisonNoor(admin)
 	if run["status"] != "succeeded" {
 		t.Fatalf("import failed: %v", run)
 	}
@@ -40,17 +40,17 @@ func newKestrelNode(t *testing.T) *kestrelNode {
 		errs := admin.must(200, "GET", "/admin/api/imports/"+run["id"].(string)+"/errors", nil)
 		t.Fatalf("import errors: %v", errs)
 	}
-	k := &kestrelNode{testNode: n, admin: admin, brands: map[string]string{}}
+	k := &maisonNoorNode{testNode: n, admin: admin, brands: map[string]string{}}
 	brands := admin.must(200, "GET", "/admin/api/catalog/brands", nil)
 	for _, b := range brands["items"].([]any) {
 		bm := b.(map[string]any)
 		k.brands[bm["external_id"].(string)] = bm["id"].(string)
 	}
-	if k.brands["kestrel"] == "" || k.brands["kestrel-trail"] == "" {
+	if k.brands["maison-noor"] == "" || k.brands["noor-atelier"] == "" {
 		t.Fatalf("brands: %v", k.brands)
 	}
 	k.all, _ = n.apiClient(admin, "All Brands Store", map[string]any{})
-	k.restricted, _ = n.apiClient(admin, "Kestrel Only Store", map[string]any{"brand_ids": []string{k.brands["kestrel"]}})
+	k.restricted, _ = n.apiClient(admin, "MAISON NOOR Only Store", map[string]any{"brand_ids": []string{k.brands["maison-noor"]}})
 	k.noOrig, _ = n.apiClient(admin, "No Originals Store", map[string]any{"allow_original": false})
 	k.products = map[string]map[string]any{}
 	page := k.all.must(200, "GET", "/obx/v1/products?limit=100", nil)
@@ -61,7 +61,7 @@ func newKestrelNode(t *testing.T) *kestrelNode {
 	return k
 }
 
-func (k *kestrelNode) asset(c *client, ext string) map[string]any {
+func (k *maisonNoorNode) asset(c *client, ext string) map[string]any {
 	for _, p := range k.products {
 		for _, a := range p["assets"].([]any) {
 			am := a.(map[string]any)
@@ -74,8 +74,8 @@ func (k *kestrelNode) asset(c *client, ext string) map[string]any {
 	return nil
 }
 
-func TestKestrelProtocol(t *testing.T) {
-	k := newKestrelNode(t)
+func TestMaisonNoorProtocol(t *testing.T) {
+	k := newMaisonNoorNode(t)
 
 	t.Run("discovery", func(t *testing.T) {
 		r := k.client().do("GET", "/.well-known/obx", nil)
@@ -152,7 +152,7 @@ func TestKestrelProtocol(t *testing.T) {
 	})
 
 	t.Run("expected products", func(t *testing.T) {
-		for _, ext := range []string{"KO-1001", "KO-1005", "KO-1008", "KO-1009", "KO-1010", "KT-2001"} {
+		for _, ext := range []string{"MN-1001", "MN-1005", "MN-1008", "MN-1009", "MN-1010", "NA-2001"} {
 			p := k.all.must(200, "GET", "/obx/v1/products/"+k.products[ext]["id"].(string), nil)
 			validate(t, "ProductDetail", p)
 			match(t, ext, readFixture(t, "expected/product-"+ext+".json"), p, nil)
@@ -160,7 +160,7 @@ func TestKestrelProtocol(t *testing.T) {
 	})
 
 	t.Run("product etag", func(t *testing.T) {
-		path := "/obx/v1/products/" + k.products["KO-1001"]["id"].(string)
+		path := "/obx/v1/products/" + k.products["MN-1001"]["id"].(string)
 		r := k.all.do("GET", path, nil)
 		r2 := k.all.do("GET", path, nil, "If-None-Match", r.Header.Get("ETag"))
 		if r2.Status != 304 {
@@ -193,21 +193,21 @@ func TestKestrelProtocol(t *testing.T) {
 	})
 
 	t.Run("expected assets", func(t *testing.T) {
-		for file, ext := range map[string]string{"asset-ai-generated": "KO-1003_RST_3", "asset-embargoed": "KO-1002_BLK_2", "asset-large-original": "KO-1002_OLV_1"} {
+		for file, ext := range map[string]string{"asset-ai-generated": "MN-1003_RST_3", "asset-embargoed": "MN-1002_BLK_2", "asset-large-original": "MN-1002_OLV_1"} {
 			a := k.asset(k.all, ext)
 			validate(t, "Asset", a)
 			match(t, file, readFixture(t, "expected/"+file+".json"), a, nil)
 		}
-		a := k.asset(k.noOrig, "KO-1001_NVY_1")
+		a := k.asset(k.noOrig, "MN-1001_NVY_1")
 		validate(t, "Asset", a)
 		match(t, "asset-without-original-scope", readFixture(t, "expected/asset-without-original-scope.json"), a, nil)
 	})
 
 	t.Run("renditions", func(t *testing.T) {
-		a := k.asset(k.all, "KO-1002_OLV_1")
+		a := k.asset(k.all, "MN-1002_OLV_1")
 		rends := a["renditions"].(map[string]any)
 		orig := rends["original"].(map[string]any)
-		want, _ := os.ReadFile(filepath.Join(specDir(t), "kestrel", "images", "KO-1002_OLV_1_front.png"))
+		want, _ := os.ReadFile(filepath.Join(specDir(t), "maison-noor", "images", "MN-1002_OLV_1_front.png"))
 		// Signed URL works without Authorization.
 		plain := k.client()
 		r := plain.do("GET", orig["url"].(string), nil)
@@ -280,7 +280,7 @@ func TestKestrelProtocol(t *testing.T) {
 	})
 
 	t.Run("originals not allowed", func(t *testing.T) {
-		a := k.asset(k.all, "KO-1001_NVY_1")
+		a := k.asset(k.all, "MN-1001_NVY_1")
 		r := k.noOrig.do("GET", "/obx/v1/assets/"+a["id"].(string)+"/renditions/original", nil)
 		if r.Status != 403 || r.JSON(t)["obx_error"] != "original_not_allowed" {
 			t.Fatalf("%d %s", r.Status, r.Body)
@@ -295,20 +295,20 @@ func TestKestrelProtocol(t *testing.T) {
 		}
 	})
 
-	t.Run("restricted retailer sees only kestrel", func(t *testing.T) {
+	t.Run("restricted retailer sees only maison-noor", func(t *testing.T) {
 		ch, _, _ := drainChanges(t, k.restricted, "", 500)
 		n := 0
 		for _, c := range ch {
-			if c["brand_id"] != k.brands["kestrel"] {
+			if c["brand_id"] != k.brands["maison-noor"] {
 				t.Fatalf("restricted retailer saw %v", c)
 			}
 			n++
 		}
 		if n != 1+6+34+23 {
-			// 1 brand, KO-1001..1006, their variants and images
+			// 1 brand, MN-1001..1006, their variants and images
 			t.Logf("restricted snapshot has %d entries", n)
 		}
-		trail := k.products["KT-2001"]["id"].(string)
+		trail := k.products["NA-2001"]["id"].(string)
 		r := k.restricted.do("GET", "/obx/v1/products/"+trail, nil)
 		if r.Status != 404 {
 			t.Fatalf("invisible product must be 404, got %d", r.Status)
@@ -344,7 +344,7 @@ func TestKestrelProtocol(t *testing.T) {
 		if len(seen) != 11 {
 			t.Fatalf("paged %d products", len(seen))
 		}
-		id := k.products["KO-1001"]["id"].(string)
+		id := k.products["MN-1001"]["id"].(string)
 		page := k.all.must(200, "GET", "/obx/v1/products?ids="+id+",prd_unknown", nil)
 		if len(page["items"].([]any)) != 1 {
 			t.Fatalf("ids filter: %v", page)
@@ -387,7 +387,7 @@ func TestKestrelProtocol(t *testing.T) {
 		c, info := k.apiClient(k.admin, "Grant Changer", map[string]any{})
 		_, cursor, _ := drainChanges(t, c, "", 500)
 		ret := info["retailer"].(map[string]any)
-		k.admin.must(200, "PATCH", "/admin/api/retailers/"+ret["id"].(string), map[string]any{"brand_ids": []string{k.brands["kestrel"]}})
+		k.admin.must(200, "PATCH", "/admin/api/retailers/"+ret["id"].(string), map[string]any{"brand_ids": []string{k.brands["maison-noor"]}})
 		ch, _, _ := drainChanges(t, c, cursor, 100)
 		if len(ch) != 1 || ch[0]["type"] != "grant" || ch[0]["resync"] != true {
 			t.Fatalf("want one grant entry with resync, got %v", ch)
@@ -419,7 +419,7 @@ func TestKestrelProtocol(t *testing.T) {
 	})
 
 	t.Run("usage appears in stats", func(t *testing.T) {
-		a := k.asset(k.all, "KO-1001_NVY_1")
+		a := k.asset(k.all, "MN-1001_NVY_1")
 		// Reporting usage needs a key that asked for usage:write.
 		var retailerID string
 		for _, it := range k.admin.must(200, "GET", "/admin/api/retailers", nil)["items"].([]any) {

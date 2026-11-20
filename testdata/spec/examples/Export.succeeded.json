@@ -8,11 +8,11 @@
     "done": 27,
     "total": 27
   },
-  "manifest_url": "https://brands.kestrel.example/obx/v1/exports/exp_1/manifest?exp=1790000000&sig=abc",
+  "manifest_url": "https://brands.maison-noor.example/obx/v1/exports/exp_1/manifest?exp=1790000000&sig=abc",
   "parts": [
     {
       "number": 1,
-      "url": "https://brands.kestrel.example/obx/v1/exports/exp_1/parts/1?exp=1790000000&sig=def",
+      "url": "https://brands.maison-noor.example/obx/v1/exports/exp_1/parts/1?exp=1790000000&sig=def",
       "bytes": 1048576,
       "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
       "files": 27

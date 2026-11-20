@@ -196,7 +196,7 @@ func (c *client) login(email, password string) {
 	c.csrf = m["csrf_token"].(string)
 }
 
-const adminEmail = "admin@kestrel.example"
+const adminEmail = "admin@maison-noor.example"
 const adminPassword = "correct horse battery"
 
 // setup completes first-run setup as in the conformance reference path.
@@ -205,7 +205,7 @@ func (n *testNode) setup() *client {
 	c.session()
 	m := c.must(201, "POST", "/admin/api/setup", map[string]any{
 		"setup_code": testSetupCode,
-		"company":    map[string]any{"name": "Kestrel Outfitters", "first_brand_name": "Kestrel", "default_language": "nl", "languages": []string{"nl", "en"}},
+		"company":    map[string]any{"name": "MAISON NOOR Group", "first_brand_name": "MAISON NOOR", "default_language": "nl", "languages": []string{"nl", "en"}},
 		"admin":      map[string]any{"name": "Ada Admin", "email": adminEmail, "password": adminPassword},
 	})
 	c.csrf = m["csrf_token"].(string)
@@ -238,15 +238,15 @@ func multipartBody(t testing.TB, files map[string][]string, fields map[string]st
 	return &buf, mw.FormDataContentType()
 }
 
-func (n *testNode) kestrelFiles() map[string][]string {
-	dir := filepath.Join(specDir(n.t), "kestrel")
+func (n *testNode) maisonNoorFiles() map[string][]string {
+	dir := filepath.Join(specDir(n.t), "maison-noor")
 	imgs, _ := filepath.Glob(filepath.Join(dir, "images", "*.png"))
 	return map[string][]string{"csv": {filepath.Join(dir, "products.csv")}, "assets_csv": {filepath.Join(dir, "assets.csv")}, "images": imgs}
 }
 
-// importKestrel imports fixtures/kestrel through the admin API.
-func (n *testNode) importKestrel(c *client) map[string]any {
-	body, ct := multipartBody(n.t, n.kestrelFiles(), nil)
+// importMaisonNoor imports fixtures/maison-noor through the admin API.
+func (n *testNode) importMaisonNoor(c *client) map[string]any {
+	body, ct := multipartBody(n.t, n.maisonNoorFiles(), nil)
 	run := c.must(202, "POST", "/admin/api/imports", body, "Content-Type", ct)
 	n.app.RunJobsNow(context.Background())
 	return c.must(200, "GET", "/admin/api/imports/"+run["id"].(string), nil)

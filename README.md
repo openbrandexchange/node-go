@@ -10,11 +10,11 @@ No Docker needed, only [Go 1.26 or newer](https://go.dev/dl/) (it fetches the ex
 go run . dev
 ```
 
-This starts the portal with SQLite and files in `./data-dev`, completes the first-run setup (setup code `DEMO-DEMO-DEMO`) and imports the demo catalog of the fictional brand Kestrel Outfitters (11 articles, 35 images). It prints:
+This starts the portal with SQLite and files in `./data-dev`, completes the first-run setup (setup code `DEMO-DEMO-DEMO`) and imports the demo catalog of the fictional brand MAISON NOOR Group (11 articles, 35 images). It prints:
 
 ```
   open:    http://localhost:8080
-  login:   admin@kestrel.example / kestrel demo password
+  login:   admin@maison-noor.example / maison-noor demo password
 ```
 
 Open the address, log in, and click **View as retailer** to see the portal as a retailer does. E-mails are not sent but written to the output. Stop with Ctrl+C; `go run . dev` again continues with the same data, `go run . dev --fresh` starts over. Another port: `PORT=9090 go run . dev`. This is for trying it out only: for a real portal use `serve` and the setup wizard below.
@@ -47,11 +47,11 @@ go run . serve
 
 Open <http://localhost:8080>. The output shows a line like `First-run setup: open http://localhost:8080 and enter this setup code: 55GX-FKYX-E5HK`; enter that code in the setup wizard together with your company name and your own password (there is never a default password).
 
-Then add the example catalog of the fictional brand Kestrel Outfitters. In the admin, go to **Imports → Choose files**, pick `testdata/kestrel-example.zip` (the spreadsheet and 35 images in one zip) and click **Start import**. Or, when you started with Go:
+Then add the example catalog of the fictional brand MAISON NOOR Group. In the admin, go to **Imports → Choose files**, pick `testdata/maison-noor-example.zip` (the spreadsheet and 35 images in one zip) and click **Start import**. Or, when you started with Go:
 
 ```sh
-go run . import --csv testdata/spec/kestrel/products.csv \
-  --assets testdata/spec/kestrel/assets.csv --images testdata/spec/kestrel/images
+go run . import --csv testdata/spec/maison-noor/products.csv \
+  --assets testdata/spec/maison-noor/assets.csv --images testdata/spec/maison-noor/images
 ```
 
 To see the retailer side, click **View as retailer**, or invite yourself under **Retailers**. Without an e-mail server nothing is sent: the admin shows the invitation link to copy, and the Docker try-out also writes the whole e-mail to the output (`OBX_MAIL_LOG_BODIES=true`).

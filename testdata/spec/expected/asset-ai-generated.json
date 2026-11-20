@@ -1,6 +1,6 @@
 {
   "id": "{{id}}",
-  "external_id": "KO-1003_RST_3",
+  "external_id": "MN-1003_RST_3",
   "product_id": "{{id}}",
   "brand_id": "{{id}}",
   "media_type": "image",
@@ -9,16 +9,16 @@
   "role": "model",
   "view": null,
   "position": 3,
-  "filename": "KO-1003_RST_3_model.png",
+  "filename": "MN-1003_RST_3_model.png",
   "alt_text": {
-    "en": "AI-generated image of a model wearing the rust tee",
-    "nl": "Met AI gegenereerd beeld van een model in het roestkleurige T-shirt"
+    "en": "AI-generated image of a model wearing the rust boxy tee",
+    "nl": "Met AI gegenereerd beeld van een model in het roestkleurige boxy T-shirt"
   },
   "content_type": "image/png",
   "width": 1200,
   "height": 1500,
-  "bytes": 10982,
-  "sha256": "dc22080cbbac972bf7b289c65d8849f9a99cd1e3e44ef8e88fc92681ead72a20",
+  "bytes": 11006,
+  "sha256": "2aeb7dfc93606e8680fa857237e00f84d541c5dc88dd75b2284411b182d63c9e",
   "rights": {
     "license": "retailer-use",
     "license_text": null,
@@ -49,8 +49,8 @@
       "content_type": "image/png",
       "width": 1200,
       "height": 1500,
-      "bytes": 10982,
-      "sha256": "dc22080cbbac972bf7b289c65d8849f9a99cd1e3e44ef8e88fc92681ead72a20"
+      "bytes": 11006,
+      "sha256": "2aeb7dfc93606e8680fa857237e00f84d541c5dc88dd75b2284411b182d63c9e"
     },
     "web": {
       "name": "web",

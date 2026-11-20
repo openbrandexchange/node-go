@@ -4,7 +4,7 @@ Decisions taken where the [spec](https://github.com/openbrandexchange/spec) (v0.
 
 ## Status
 
-- `go test ./...` covers the protocol against the Kestrel fixtures (JSON Schema validation of every response, expected products/assets/GTIN lookup), the ingest replay script (one operation at a time, as a JSON batch and as NDJSON), setup/sessions/CSRF, access requests, retailers, the portal, imports, exports and signed webhooks. The same tests run on PostgreSQL with `OBX_TEST_DATABASE_URL`, and against S3/SFTP test servers with `OBX_TEST_S3_ENDPOINT` / `OBX_TEST_SFTP`.
+- `go test ./...` covers the protocol against the MAISON NOOR fixtures (JSON Schema validation of every response, expected products/assets/GTIN lookup), the ingest replay script (one operation at a time, as a JSON batch and as NDJSON), setup/sessions/CSRF, access requests, retailers, the portal, imports, exports and signed webhooks. The same tests run on PostgreSQL with `OBX_TEST_DATABASE_URL`, and against S3/SFTP test servers with `OBX_TEST_S3_ENDPOINT` / `OBX_TEST_SFTP`.
 - `conformance/` runs the obx-go conformance suite (all profiles, including security) against an in-process node on SQLite and PostgreSQL; CI also runs the `obx-conformance` binary against a running `node-go serve` with `--rate-limit-test`: verdict CONFORMANT in both runs on SQLite (obx-go fe9b626, spec e74ccb2): in process 71 passed, S-RATE-2 skipped (it needs `--rate-limit-test`; the in-process operator offers `simulate_spec_upgrade` and `rotate_client_secret`); the binary `all --rate-limit-test` 71 passed, P-FEED-7 skipped (optional, it needs the operator).
 - Operations, security, performance and hosting are tested too: see [docs/development.md](docs/development.md#checks) for the full list CI runs.
 

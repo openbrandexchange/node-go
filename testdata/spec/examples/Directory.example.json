@@ -3,13 +3,13 @@
   "updated_at": "2026-09-28T10:00:00Z",
   "entries": [
     {
-      "id": "kestrel-outfitters",
-      "name": "Kestrel Outfitters",
-      "discovery_url": "https://brands.kestrel.example/.well-known/obx",
-      "website": "https://kestrel.example",
+      "id": "maison-noor-group",
+      "name": "MAISON NOOR Group",
+      "discovery_url": "https://brands.maison-noor.example/.well-known/obx",
+      "website": "https://maison-noor.example",
       "brands": [
-        "Kestrel",
-        "Kestrel Trail"
+        "MAISON NOOR",
+        "NOOR ATELIER"
       ],
       "countries": [
         "NL",
@@ -18,7 +18,8 @@
       ],
       "categories": [
         "fashion",
-        "outdoor"
+        "shoes",
+        "accessories"
       ],
       "languages": [
         "nl",

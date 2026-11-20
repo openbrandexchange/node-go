@@ -55,12 +55,12 @@ func (n *testNode) runImport(c *client, files map[string][]string, options map[s
 }
 
 func TestImports(t *testing.T) {
-	k := newKestrelNode(t)
+	k := newMaisonNoorNode(t)
 	counts := func(run map[string]any) map[string]any { return run["counts"].(map[string]any) }
 
 	t.Run("second import is unchanged and writes no entries", func(t *testing.T) {
 		_, cursor, _ := drainChanges(t, k.all, "", 500)
-		run := k.runImport(k.admin, k.kestrelFiles(), nil)
+		run := k.runImport(k.admin, k.maisonNoorFiles(), nil)
 		c := counts(run)
 		if c["created"].(float64) != 0 || c["updated"].(float64) != 0 || c["unchanged"].(float64) != 11+46+35 {
 			t.Fatalf("second import counts %v", c)
@@ -72,9 +72,9 @@ func TestImports(t *testing.T) {
 	})
 
 	t.Run("an import without assets.csv keeps what the images have (import rule 8)", func(t *testing.T) {
-		k.admin.must(200, "PATCH", "/admin/api/catalog/assets/KO-1001_NVY_1", map[string]any{"rights": map[string]any{"credit": "Photo: Test Studio"}})
-		defer k.admin.must(200, "PATCH", "/admin/api/catalog/assets/KO-1001_NVY_1", map[string]any{"rights": map[string]any{"credit": nil}})
-		files := k.kestrelFiles()
+		k.admin.must(200, "PATCH", "/admin/api/catalog/assets/MN-1001_NVY_1", map[string]any{"rights": map[string]any{"credit": "Photo: Test Studio"}})
+		defer k.admin.must(200, "PATCH", "/admin/api/catalog/assets/MN-1001_NVY_1", map[string]any{"rights": map[string]any{"credit": nil}})
+		files := k.maisonNoorFiles()
 		delete(files, "assets_csv")
 		c := counts(k.runImport(k.admin, files, nil))
 		if c["created"].(float64) != 0 || c["updated"].(float64) != 0 || c["errors"].(float64) != 0 {
@@ -91,45 +91,45 @@ func TestImports(t *testing.T) {
 			t.Fatalf("%s has no image %s", product, asset)
 			return nil
 		}
-		d := data("KO-1002", "KO-1002_BLK_2")
+		d := data("MN-1002", "MN-1002_BLK_2")
 		rights := d["rights"].(map[string]any)
-		if e, _ := rights["embargo_until"].(string); !strings.HasPrefix(e, "2030-01-01") || rights["credit"] != "Photo: Kestrel Studio" {
-			t.Errorf("KO-1002_BLK_2 lost its embargo or credit: %v", rights)
+		if e, _ := rights["embargo_until"].(string); !strings.HasPrefix(e, "2030-01-01") || rights["credit"] != "Photo: MAISON NOOR Studio" {
+			t.Errorf("MN-1002_BLK_2 lost its embargo or credit: %v", rights)
 		}
-		d = data("KO-1003", "KO-1003_RST_3")
+		d = data("MN-1003", "MN-1003_RST_3")
 		if d["provenance"].(map[string]any)["ai_generated"] != true || d["alt_text"].(map[string]any)["nl"] == nil {
-			t.Errorf("KO-1003_RST_3 lost its AI label or alt text: %v %v", d["provenance"], d["alt_text"])
+			t.Errorf("MN-1003_RST_3 lost its AI label or alt text: %v %v", d["provenance"], d["alt_text"])
 		}
-		if credit := data("KO-1001", "KO-1001_NVY_1")["rights"].(map[string]any)["credit"]; credit != "Photo: Test Studio" {
-			t.Errorf("KO-1001_NVY_1 lost the credit set in the admin: %v", credit)
+		if credit := data("MN-1001", "MN-1001_NVY_1")["rights"].(map[string]any)["credit"]; credit != "Photo: Test Studio" {
+			t.Errorf("MN-1001_NVY_1 lost the credit set in the admin: %v", credit)
 		}
 	})
 
 	t.Run("a column the file does not have keeps the field; an empty cell removes it (import rule 9)", func(t *testing.T) {
-		csv := "brand,style_number,name:en\nKestrel,KO-1001,Merino Crew Sweater\n"
+		csv := "brand,style_number,name:en\nMAISON NOOR,MN-1001,Fine Merino Crew-Neck Sweater\n"
 		c := counts(k.runImport(k.admin, map[string][]string{"csv": {writeTemp(t, "products.csv", []byte(csv))}}, nil))
 		if c["updated"].(float64) != 0 || c["unchanged"].(float64) != 1 {
 			t.Fatalf("a file with only the name changed the product: %v", c)
 		}
-		rec := k.admin.must(200, "GET", "/admin/api/catalog/products/KO-1001", nil)["record"].(map[string]any)["data"].(map[string]any)
-		if rec["name"].(map[string]any)["nl"] != "Merino trui met ronde hals" || rec["description"] == nil || rec["materials"] == nil || rec["care"] == nil {
-			t.Fatalf("KO-1001 lost fields whose columns the file did not have: %v", rec)
+		rec := k.admin.must(200, "GET", "/admin/api/catalog/products/MN-1001", nil)["record"].(map[string]any)["data"].(map[string]any)
+		if rec["name"].(map[string]any)["nl"] != "Fijne merino trui met ronde hals" || rec["description"] == nil || rec["materials"] == nil || rec["care"] == nil {
+			t.Fatalf("MN-1001 lost fields whose columns the file did not have: %v", rec)
 		}
-		csv = "brand,style_number,name:en,season\nKestrel,KO-1001,Merino Crew Sweater,\n"
+		csv = "brand,style_number,name:en,season\nMAISON NOOR,MN-1001,Fine Merino Crew-Neck Sweater,\n"
 		c = counts(k.runImport(k.admin, map[string][]string{"csv": {writeTemp(t, "products.csv", []byte(csv))}}, nil))
 		if c["updated"].(float64) != 1 {
 			t.Fatalf("an empty season cell: %v", c)
 		}
-		rec = k.admin.must(200, "GET", "/admin/api/catalog/products/KO-1001", nil)["record"].(map[string]any)["data"].(map[string]any)
+		rec = k.admin.must(200, "GET", "/admin/api/catalog/products/MN-1001", nil)["record"].(map[string]any)["data"].(map[string]any)
 		if rec["season"] != nil || rec["collection"] == nil {
 			t.Fatalf("the empty cell must remove the season and keep the rest: %v", rec)
 		}
 		// Back to the fixture for the other subtests.
-		k.runImport(k.admin, k.kestrelFiles(), nil)
+		k.runImport(k.admin, k.maisonNoorFiles(), nil)
 	})
 
 	t.Run("package zip and images manifest give the same result", func(t *testing.T) {
-		dir := filepath.Join(specDir(t), "kestrel")
+		dir := filepath.Join(specDir(t), "maison-noor")
 		files := map[string][]byte{}
 		files["products.csv"], _ = os.ReadFile(filepath.Join(dir, "products.csv"))
 		files["assets.csv"], _ = os.ReadFile(filepath.Join(dir, "assets.csv"))
@@ -168,7 +168,7 @@ func TestImports(t *testing.T) {
 	})
 
 	t.Run("mirror import", func(t *testing.T) {
-		all, _ := os.ReadFile(filepath.Join(specDir(t), "kestrel", "products.csv"))
+		all, _ := os.ReadFile(filepath.Join(specDir(t), "maison-noor", "products.csv"))
 		lines := strings.Split(strings.TrimRight(string(all), "\n"), "\n")
 		var missingOne, onlyOne []string
 		for i, l := range lines {
@@ -176,10 +176,10 @@ func TestImports(t *testing.T) {
 				missingOne, onlyOne = append(missingOne, l), append(onlyOne, l)
 				continue
 			}
-			if !strings.Contains(l, ",KO-1006,") {
+			if !strings.Contains(l, ",MN-1006,") {
 				missingOne = append(missingOne, l)
 			}
-			if strings.Contains(l, ",KO-1001,") && !strings.HasPrefix(l, "Kestrel Trail") {
+			if strings.Contains(l, ",MN-1001,") && !strings.HasPrefix(l, "NOOR ATELIER") {
 				onlyOne = append(onlyOne, l)
 			}
 		}
@@ -191,18 +191,18 @@ func TestImports(t *testing.T) {
 		if counts(ok)["unpublished"].(float64) != 1 {
 			t.Fatalf("mirror %v", ok)
 		}
-		rec := k.admin.must(200, "GET", "/admin/api/catalog/products/KO-1006", nil)
+		rec := k.admin.must(200, "GET", "/admin/api/catalog/products/MN-1006", nil)
 		if rec["record"].(map[string]any)["status"] != "unpublished" {
-			t.Fatalf("KO-1006 %v", rec["record"])
+			t.Fatalf("MN-1006 %v", rec["record"])
 		}
 	})
 
 	t.Run("row errors carry file, row, column and code", func(t *testing.T) {
 		csv := "brand,style_number,name:en,gtin,color_code,materials\n" +
-			"Kestrel,ERR-1,Row error test,2.00010010102E+12,BLK,\n" +
-			"Kestrel,ERR-2,Bad check digit,2000100101019,BLK,\n" +
-			"Kestrel,ERR-3,Bad materials,,,lots of cotton\n" +
-			"Kestrel,,No style,,,\n"
+			"MAISON NOOR,ERR-1,Row error test,2.00010010102E+12,BLK,\n" +
+			"MAISON NOOR,ERR-2,Bad check digit,2000100101019,BLK,\n" +
+			"MAISON NOOR,ERR-3,Bad materials,,,lots of cotton\n" +
+			"MAISON NOOR,,No style,,,\n"
 		run := k.runImport(k.admin, map[string][]string{"csv": {writeTemp(t, "products.csv", []byte(csv))}}, nil)
 		if run["status"] != "succeeded" {
 			t.Fatalf("%v", run)
@@ -224,7 +224,7 @@ func TestImports(t *testing.T) {
 
 	t.Run("ingest import with idempotency key", func(t *testing.T) {
 		ing := k.ingestToken(k.admin)
-		body, ct := multipartBody(t, map[string][]string{"csv": {filepath.Join(specDir(t), "kestrel", "products.csv")}}, map[string]string{"options": `{"dry_run":true}`})
+		body, ct := multipartBody(t, map[string][]string{"csv": {filepath.Join(specDir(t), "maison-noor", "products.csv")}}, map[string]string{"options": `{"dry_run":true}`})
 		raw, _ := io.ReadAll(body)
 		j1 := ing.must(202, "POST", "/obx/v1/ingest/imports", bytes.NewReader(raw), "Content-Type", ct, "Idempotency-Key", "imp-1")
 		j2 := ing.must(202, "POST", "/obx/v1/ingest/imports", bytes.NewReader(raw), "Content-Type", ct, "Idempotency-Key", "imp-1")
@@ -246,7 +246,7 @@ func TestImports(t *testing.T) {
 
 	t.Run("scheduled https import", func(t *testing.T) {
 		var hits atomic.Int32
-		csvBody := "brand,style_number,name:en,color_code,gtin,size\nKestrel,SCH-1,Scheduled Shirt,WHT,2000999900013,M\n"
+		csvBody := "brand,style_number,name:en,color_code,gtin,size\nMAISON NOOR,SCH-1,Scheduled Shirt,WHT,2000999900013,M\n"
 		remote := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			hits.Add(1)
 			if r.Header.Get("Authorization") != "Bearer remote-secret" {
@@ -296,10 +296,10 @@ func TestImports(t *testing.T) {
 }
 
 func TestExportAndWebhooks(t *testing.T) {
-	k := newKestrelNode(t)
+	k := newMaisonNoorNode(t)
 
 	t.Run("export", func(t *testing.T) {
-		ex := k.all.must(202, "POST", "/obx/v1/exports", map[string]any{"filter": map[string]any{"brand_ids": []string{k.brands["kestrel"]}}, "renditions": []string{"web"}})
+		ex := k.all.must(202, "POST", "/obx/v1/exports", map[string]any{"filter": map[string]any{"brand_ids": []string{k.brands["maison-noor"]}}, "renditions": []string{"web"}})
 		validate(t, "Export", ex)
 		if r := k.all.do("POST", "/obx/v1/exports", map[string]any{"renditions": []string{"web"}}); r.Status != 409 {
 			t.Fatalf("concurrent export: %d", r.Status)
@@ -388,7 +388,7 @@ func TestExportAndWebhooks(t *testing.T) {
 			t.Fatalf("%v", evt)
 		}
 		// A catalog change wakes the subscriber.
-		k.admin.must(200, "PATCH", "/admin/api/catalog/products/KO-1002", map[string]any{"season": "AW27"})
+		k.admin.must(200, "PATCH", "/admin/api/catalog/products/MN-1002", map[string]any{"season": "AW27"})
 		k.app.notifyChanges(t.Context())
 		k.app.deliverDue(t.Context())
 		select {

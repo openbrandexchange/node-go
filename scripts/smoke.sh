@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # End-to-end smoke test of a running node over HTTP(S), the way a brand uses
-# it: first-run setup, import of the Kestrel example package, then the
+# it: first-run setup, import of the MAISON NOOR example package, then the
 # portal and the retailer API. Used by the Docker, Compose and backup tests.
 #
 #   scripts/smoke.sh setup   BASE_URL SETUP_CODE    set up, import, verify
@@ -15,7 +15,7 @@ CODE="${3:-}"
 HERE="$(cd "$(dirname "$0")/.." && pwd)"
 JAR="$(mktemp)"
 trap 'rm -f "$JAR"' EXIT
-EMAIL="smoke-admin@kestrel.example"
+EMAIL="smoke-admin@maison-noor.example"
 PASSWORD="smoke test password 2026"
 # shellcheck disable=SC2086
 c() { curl -sS --fail-with-body --max-time 120 -b "$JAR" -c "$JAR" ${CURL_OPTS:-} "$@"; }
@@ -41,10 +41,10 @@ if [ "$MODE" = setup ]; then
   t="$(csrf)"
   T="$(c -H "X-CSRF-Token: $t" -H 'Content-Type: application/json' -d "{
     \"setup_code\": \"$CODE\",
-    \"company\": {\"name\": \"Kestrel Outfitters\", \"first_brand_name\": \"Kestrel\", \"default_language\": \"nl\", \"languages\": [\"nl\", \"en\"]},
+    \"company\": {\"name\": \"MAISON NOOR Group\", \"first_brand_name\": \"MAISON NOOR\", \"default_language\": \"nl\", \"languages\": [\"nl\", \"en\"]},
     \"admin\": {\"name\": \"Smoke Admin\", \"email\": \"$EMAIL\", \"password\": \"$PASSWORD\"}}" "$BASE/admin/api/setup" | jq -r .csrf_token)"
   say "setup done"
-  run="$(c -H "X-CSRF-Token: $T" -F "package=@$HERE/testdata/kestrel-example.zip" "$BASE/admin/api/imports" | jq -r .id)"
+  run="$(c -H "X-CSRF-Token: $T" -F "package=@$HERE/testdata/maison-noor-example.zip" "$BASE/admin/api/imports" | jq -r .id)"
   for _ in $(seq 1 120); do
     st="$(c "$BASE/admin/api/imports/$run" | jq -r .status)"
     [ "$st" = succeeded ] && break
@@ -52,16 +52,16 @@ if [ "$MODE" = setup ]; then
     sleep 1
   done
   [ "$st" = succeeded ] || { echo "import did not finish" >&2; exit 1; }
-  say "import of the Kestrel example succeeded"
+  say "import of the MAISON NOOR example succeeded"
 else
   T="$(login)"
   say "logged in again"
 fi
 
 products="$(c "$BASE/admin/api/portal/products?limit=200" | jq '.items | length')"
-[ "$products" -ge 8 ] || { echo "expected the Kestrel products, got $products" >&2; exit 1; }
+[ "$products" -ge 8 ] || { echo "expected the MAISON NOOR products, got $products" >&2; exit 1; }
 say "portal lists $products products"
-pid="$(c "$BASE/admin/api/portal/products?q=KO-1001" | jq -r '.items[0].id')"
+pid="$(c "$BASE/admin/api/portal/products?q=MN-1001" | jq -r '.items[0].id')"
 # Images are made in the background; wait until the product's images are there.
 for _ in $(seq 1 60); do
   n="$(c "$BASE/admin/api/portal/products/$pid" | jq '[.assets[]?] | length')"

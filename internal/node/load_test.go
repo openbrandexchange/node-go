@@ -35,7 +35,7 @@ func TestLoad(t *testing.T) {
 
 	// Four distinct originals, rendered up front, shared by all assets
 	// (the metadata is what is measured, not image bytes).
-	imgs, _ := filepath.Glob(filepath.Join(specDir(t), "kestrel", "images", "*.png"))
+	imgs, _ := filepath.Glob(filepath.Join(specDir(t), "maison-noor", "images", "*.png"))
 	var shas []string
 	for _, p := range imgs[:4] {
 		data, _ := os.ReadFile(p)

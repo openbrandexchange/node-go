@@ -1,0 +1,411 @@
+{
+  "id": "{{id}}",
+  "external_id": "NA-2001",
+  "brand_id": "{{id}}",
+  "style_number": "NA-2001",
+  "name": {
+    "en": "Fluid Pleated Shorts",
+    "nl": "Soepelvallende short met plooien"
+  },
+  "description": {
+    "en": "Fluid shorts with front pleats in recycled crepe, with a soft stretch lining.",
+    "nl": "Soepelvallende short met plooien aan de voorkant van gerecyclede crêpe, met een zachte stretchvoering."
+  },
+  "item_type": "shorts",
+  "item_subtype": null,
+  "gpc_brick": null,
+  "target_group": "women",
+  "season": "SS26",
+  "collection": "Riviera",
+  "materials": [
+    {
+      "part": {
+        "code": "outer",
+        "name": {
+          "en": "Outer fabric",
+          "nl": "Buitenstof",
+          "de": "Oberstoff",
+          "fr": "Tissu extérieur"
+        }
+      },
+      "fibers": [
+        {
+          "material": {
+            "code": "polyester",
+            "name": {
+              "en": "Polyester",
+              "nl": "Polyester",
+              "de": "Polyester",
+              "fr": "Polyester"
+            }
+          },
+          "percentage": 100,
+          "qualifiers": [
+            {
+              "code": "recycled",
+              "name": {
+                "en": "Recycled",
+                "nl": "Gerecycled",
+                "de": "Recycelt",
+                "fr": "Recyclé"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "part": {
+        "code": "lining",
+        "name": {
+          "en": "Lining",
+          "nl": "Voering",
+          "de": "Futter",
+          "fr": "Doublure"
+        }
+      },
+      "fibers": [
+        {
+          "material": {
+            "code": "polyamide",
+            "name": {
+              "en": "Polyamide",
+              "nl": "Polyamide",
+              "de": "Polyamid",
+              "fr": "Polyamide"
+            }
+          },
+          "percentage": 88,
+          "qualifiers": []
+        },
+        {
+          "material": {
+            "code": "elastane",
+            "name": {
+              "en": "Elastane",
+              "nl": "Elastaan",
+              "de": "Elastan",
+              "fr": "Élasthanne"
+            }
+          },
+          "percentage": 12,
+          "qualifiers": []
+        }
+      ]
+    }
+  ],
+  "contains_animal_origin": false,
+  "footwear_materials": null,
+  "care": [
+    {
+      "code": "wash_30",
+      "category": "washing",
+      "symbol": "1_D_30",
+      "name": {
+        "en": "Wash at 30 °C",
+        "nl": "Wassen op 30 °C",
+        "de": "Waschen bei 30 °C",
+        "fr": "Lavage à 30 °C"
+      },
+      "text": null
+    },
+    {
+      "code": "do_not_bleach",
+      "category": "bleaching",
+      "symbol": "2_X",
+      "name": {
+        "en": "Do not bleach",
+        "nl": "Niet bleken",
+        "de": "Nicht bleichen",
+        "fr": "Ne pas blanchir"
+      },
+      "text": null
+    },
+    {
+      "code": "do_not_tumble_dry",
+      "category": "drying",
+      "symbol": "3_X",
+      "name": {
+        "en": "Do not tumble dry",
+        "nl": "Niet in de droger",
+        "de": "Nicht im Wäschetrockner trocknen",
+        "fr": "Ne pas sécher en tambour"
+      },
+      "text": null
+    },
+    {
+      "code": "do_not_iron",
+      "category": "ironing",
+      "symbol": "4_X",
+      "name": {
+        "en": "Do not iron",
+        "nl": "Niet strijken",
+        "de": "Nicht bügeln",
+        "fr": "Ne pas repasser"
+      },
+      "text": null
+    },
+    {
+      "code": "do_not_dry_clean",
+      "category": "professional_care",
+      "symbol": "5_X",
+      "name": {
+        "en": "Do not dry clean",
+        "nl": "Niet chemisch reinigen",
+        "de": "Nicht chemisch reinigen",
+        "fr": "Ne pas nettoyer à sec"
+      },
+      "text": null
+    }
+  ],
+  "country_of_origin": "VN",
+  "certifications": null,
+  "dpp_url": null,
+  "features": {
+    "fit": "regular"
+  },
+  "attributes": null,
+  "created_at": "{{datetime}}",
+  "updated_at": "{{datetime}}",
+  "variants": [
+    {
+      "id": "{{id}}",
+      "external_id": "NA-2001-BLK-L",
+      "product_id": "{{id}}",
+      "brand_id": "{{id}}",
+      "gtin": "02000200101031",
+      "gtin_original": "2000200101031",
+      "sku": "NA-2001-BLK-L",
+      "color": {
+        "code": "BLK",
+        "name": {
+          "en": "Black",
+          "nl": "Zwart"
+        },
+        "supplier_color": "Ink",
+        "family": "black"
+      },
+      "size": "L",
+      "size_length": null,
+      "size_system": "INT",
+      "measurements": null,
+      "updated_at": "{{datetime}}"
+    },
+    {
+      "id": "{{id}}",
+      "external_id": "NA-2001-BLK-M",
+      "product_id": "{{id}}",
+      "brand_id": "{{id}}",
+      "gtin": "02000200101024",
+      "gtin_original": "2000200101024",
+      "sku": "NA-2001-BLK-M",
+      "color": {
+        "code": "BLK",
+        "name": {
+          "en": "Black",
+          "nl": "Zwart"
+        },
+        "supplier_color": "Ink",
+        "family": "black"
+      },
+      "size": "M",
+      "size_length": null,
+      "size_system": "INT",
+      "measurements": null,
+      "updated_at": "{{datetime}}"
+    },
+    {
+      "id": "{{id}}",
+      "external_id": "NA-2001-BLK-S",
+      "product_id": "{{id}}",
+      "brand_id": "{{id}}",
+      "gtin": "02000200101017",
+      "gtin_original": "2000200101017",
+      "sku": "NA-2001-BLK-S",
+      "color": {
+        "code": "BLK",
+        "name": {
+          "en": "Black",
+          "nl": "Zwart"
+        },
+        "supplier_color": "Ink",
+        "family": "black"
+      },
+      "size": "S",
+      "size_length": null,
+      "size_system": "INT",
+      "measurements": null,
+      "updated_at": "{{datetime}}"
+    }
+  ],
+  "assets": [
+    {
+      "id": "{{id}}",
+      "external_id": "NA-2001_BLK_1",
+      "product_id": "{{id}}",
+      "brand_id": "{{id}}",
+      "media_type": "image",
+      "color_code": "BLK",
+      "variant_ids": null,
+      "role": "packshot",
+      "view": "front",
+      "position": 1,
+      "filename": "NA-2001_BLK_1_front.png",
+      "alt_text": null,
+      "content_type": "image/png",
+      "width": 1200,
+      "height": 1500,
+      "bytes": 12065,
+      "sha256": "cfa37faa338a6e03e6513578593ba63ffacdd128d0079403195b619ae1bc1255",
+      "rights": {
+        "license": "retailer-use",
+        "license_text": null,
+        "channels": [
+          "webshop",
+          "marketplace",
+          "social"
+        ],
+        "territories": null,
+        "embargo_until": null,
+        "expires_at": null,
+        "credit": null,
+        "model_release": null
+      },
+      "provenance": {
+        "ai_generated": false,
+        "ai_edited": false,
+        "source": "photo",
+        "c2pa": "none",
+        "c2pa_manifest_url": null,
+        "generator": null
+      },
+      "renditions": {
+        "original": {
+          "name": "original",
+          "url": "{{url}}",
+          "url_expires_at": "{{datetime|null}}",
+          "content_type": "image/png",
+          "width": 1200,
+          "height": 1500,
+          "bytes": 12065,
+          "sha256": "cfa37faa338a6e03e6513578593ba63ffacdd128d0079403195b619ae1bc1255"
+        },
+        "web": {
+          "name": "web",
+          "url": "{{url}}",
+          "url_expires_at": "{{datetime|null}}",
+          "content_type": "image/jpeg",
+          "width": 1200,
+          "height": 1500,
+          "bytes": "{{int}}",
+          "sha256": "{{sha256}}"
+        },
+        "square": {
+          "name": "square",
+          "url": "{{url}}",
+          "url_expires_at": "{{datetime|null}}",
+          "content_type": "image/jpeg",
+          "width": 1500,
+          "height": 1500,
+          "bytes": "{{int}}",
+          "sha256": "{{sha256}}"
+        },
+        "thumb": {
+          "name": "thumb",
+          "url": "{{url}}",
+          "url_expires_at": "{{datetime|null}}",
+          "content_type": "image/jpeg",
+          "width": 480,
+          "height": 600,
+          "bytes": "{{int}}",
+          "sha256": "{{sha256}}"
+        }
+      },
+      "updated_at": "{{datetime}}"
+    },
+    {
+      "id": "{{id}}",
+      "external_id": "NA-2001_BLK_2",
+      "product_id": "{{id}}",
+      "brand_id": "{{id}}",
+      "media_type": "image",
+      "color_code": "BLK",
+      "variant_ids": null,
+      "role": "packshot",
+      "view": "back",
+      "position": 2,
+      "filename": "NA-2001_BLK_2_back.png",
+      "alt_text": null,
+      "content_type": "image/png",
+      "width": 1200,
+      "height": 1500,
+      "bytes": 11987,
+      "sha256": "76c21165d6b4aa13e7d8242fb91bb0dcfb62d2036454c7d2d19b1787c0f36101",
+      "rights": {
+        "license": "retailer-use",
+        "license_text": null,
+        "channels": [
+          "webshop",
+          "marketplace",
+          "social"
+        ],
+        "territories": null,
+        "embargo_until": null,
+        "expires_at": null,
+        "credit": null,
+        "model_release": null
+      },
+      "provenance": {
+        "ai_generated": false,
+        "ai_edited": false,
+        "source": "photo",
+        "c2pa": "none",
+        "c2pa_manifest_url": null,
+        "generator": null
+      },
+      "renditions": {
+        "original": {
+          "name": "original",
+          "url": "{{url}}",
+          "url_expires_at": "{{datetime|null}}",
+          "content_type": "image/png",
+          "width": 1200,
+          "height": 1500,
+          "bytes": 11987,
+          "sha256": "76c21165d6b4aa13e7d8242fb91bb0dcfb62d2036454c7d2d19b1787c0f36101"
+        },
+        "web": {
+          "name": "web",
+          "url": "{{url}}",
+          "url_expires_at": "{{datetime|null}}",
+          "content_type": "image/jpeg",
+          "width": 1200,
+          "height": 1500,
+          "bytes": "{{int}}",
+          "sha256": "{{sha256}}"
+        },
+        "square": {
+          "name": "square",
+          "url": "{{url}}",
+          "url_expires_at": "{{datetime|null}}",
+          "content_type": "image/jpeg",
+          "width": 1500,
+          "height": 1500,
+          "bytes": "{{int}}",
+          "sha256": "{{sha256}}"
+        },
+        "thumb": {
+          "name": "thumb",
+          "url": "{{url}}",
+          "url_expires_at": "{{datetime|null}}",
+          "content_type": "image/jpeg",
+          "width": 480,
+          "height": 600,
+          "bytes": "{{int}}",
+          "sha256": "{{sha256}}"
+        }
+      },
+      "updated_at": "{{datetime}}"
+    }
+  ]
+}

@@ -76,7 +76,7 @@ func TestRequestIDsAndSecurityHeaders(t *testing.T) {
 		}
 	}
 	// Behind TLS (public address https) browsers are pinned to https.
-	n.app.Cfg.PublicURL = "https://images.kestrel.example"
+	n.app.Cfg.PublicURL = "https://images.maison-noor.example"
 	if h := c.do("GET", "/admin/api/setup", nil).Header.Get("Strict-Transport-Security"); !strings.HasPrefix(h, "max-age=") {
 		t.Fatalf("HSTS: %q", h)
 	}
@@ -189,7 +189,7 @@ func TestPersonalDataExportAndDeletion(t *testing.T) {
 	}
 	mine := r.JSON(t)
 	if mine["format"] != "obx-personal-data-export/1" || mine["user"].(map[string]any)["email"] != "pia@privacy.example" ||
-		mine["retailer"].(map[string]any)["name"] != "Privacy Store" || mine["controller"].(map[string]any)["name"] != "Kestrel Outfitters" {
+		mine["retailer"].(map[string]any)["name"] != "Privacy Store" || mine["controller"].(map[string]any)["name"] != "MAISON NOOR Group" {
 		t.Fatalf("my data: %v", mine)
 	}
 	if strings.Contains(string(r.Body), "password_hash") || strings.Contains(string(r.Body), "$argon2") || strings.Contains(string(r.Body), "$2a$") {
@@ -342,7 +342,7 @@ func TestSchemaNewerThanBinaryIsRefused(t *testing.T) {
 }
 
 func TestBackupAndRestore(t *testing.T) {
-	k := newKestrelNode(t)
+	k := newMaisonNoorNode(t)
 	ctx := context.Background()
 	before := k.admin.must(200, "GET", "/admin/api/catalog/products?limit=100", nil)
 	backup := filepath.Join(t.TempDir(), "backup")
@@ -418,25 +418,25 @@ func TestBackupAndRestore(t *testing.T) {
 }
 
 func TestColourlessImages(t *testing.T) {
-	k := newKestrelNode(t)
-	png, err := os.ReadFile(filepath.Join(specDir(t), "kestrel", "images", "KO-1001_NVY_1_front.png"))
+	k := newMaisonNoorNode(t)
+	png, err := os.ReadFile(filepath.Join(specDir(t), "maison-noor", "images", "MN-1001_NVY_1_front.png"))
 	if err != nil {
 		t.Fatal(err)
 	}
-	img := writeTemp(t, "KO-1001_ALL_7_detail.png", append(png, 0)) // different bytes, same picture
+	img := writeTemp(t, "MN-1001_ALL_7_detail.png", append(png, 0)) // different bytes, same picture
 	run := k.runImport(k.admin, map[string][]string{"images": {img}}, nil)
 	if run["status"] != "succeeded" || run["counts"].(map[string]any)["errors"].(float64) != 0 {
 		errs := k.admin.must(200, "GET", "/admin/api/imports/"+run["id"].(string)+"/errors", nil)
 		t.Fatalf("import: %v %v", run, errs)
 	}
 	in := k.ingestToken(k.admin)
-	rec := in.must(200, "GET", "/obx/v1/ingest/assets/KO-1001_ALL_7", nil)
+	rec := in.must(200, "GET", "/obx/v1/ingest/assets/MN-1001_ALL_7", nil)
 	doc := rec["data"].(map[string]any)
 	if doc["color_code"] != nil || doc["role"] != "detail" || doc["position"].(float64) != 7 {
 		t.Fatalf("colourless asset: %v", doc)
 	}
 	// A colour code that is neither in the catalog nor ALL stays an error.
-	bad := writeTemp(t, "KO-1001_XYZ_8.png", append(png, 1))
+	bad := writeTemp(t, "MN-1001_XYZ_8.png", append(png, 1))
 	run = k.runImport(k.admin, map[string][]string{"images": {bad}}, nil)
 	if run["counts"].(map[string]any)["errors"].(float64) != 1 {
 		t.Fatalf("unknown colour: %v", run)
@@ -501,7 +501,7 @@ func TestInterruptedImportResumes(t *testing.T) {
 	if n.app.DB.Dialect != db.SQLite {
 		t.Skip("with PostgreSQL the lease expiry resumes jobs")
 	}
-	body, ct := multipartBody(t, n.kestrelFiles(), nil)
+	body, ct := multipartBody(t, n.maisonNoorFiles(), nil)
 	run := admin.must(202, "POST", "/admin/api/imports", body, "Content-Type", ct)
 	ctx := context.Background()
 	// The process died while the job ran: status running, lease far ahead.

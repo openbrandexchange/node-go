@@ -33,7 +33,7 @@ func TestSFTPImportSource(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	dir := filepath.Join(specDir(t), "kestrel")
+	dir := filepath.Join(specDir(t), "maison-noor")
 	put := func(remote, local string) {
 		data, _ := os.ReadFile(local)
 		f, err := cl.Create(remote)

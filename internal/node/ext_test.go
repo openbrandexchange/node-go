@@ -13,38 +13,38 @@ import (
 // pointer, never a 422; PUT replaces, PATCH null removes; a CSV import
 // leaves them untouched.
 func TestExtensions(t *testing.T) {
-	k := newKestrelNode(t)
+	k := newMaisonNoorNode(t)
 	ing := k.ingestToken(k.admin)
 	_, cursor, _ := drainChanges(t, k.all, "", 500)
 	doc := readFixture(t, "examples/ProductInput.extension.json").(map[string]any)
-	doc["brand_external_id"] = "kestrel"
-	doc["x-kestrel-big"] = strings.Repeat("a", 9000) // more than 8 KiB of extensions
+	doc["brand_external_id"] = "maison-noor"
+	doc["x-noor-big"] = strings.Repeat("a", 9000) // more than 8 KiB of extensions
 	doc["unknown_top"] = 1
 	fib := doc["materials"].([]any)[0].(map[string]any)["fibers"].([]any)[0].(map[string]any)
 	fib["unknown_nested"] = true
-	fib["x-kestrel-share"] = map[string]any{"a": []any{1, 2.5}}
-	res := ing.must(201, "PUT", "/obx/v1/ingest/products/KO-1007", doc)
+	fib["x-noor-share"] = map[string]any{"a": []any{1, 2.5}}
+	res := ing.must(201, "PUT", "/obx/v1/ingest/products/MN-1007", doc)
 	if res["result"] != "created" {
 		t.Fatalf("%v", res)
 	}
 	ws, _ := json.Marshal(res["warnings"])
-	if !strings.Contains(string(ws), "/unknown_top") || !strings.Contains(string(ws), "/materials/0/fibers/0/unknown_nested") || strings.Contains(string(ws), "x-kestrel") {
+	if !strings.Contains(string(ws), "/unknown_top") || !strings.Contains(string(ws), "/materials/0/fibers/0/unknown_nested") || strings.Contains(string(ws), "x-maison-noor") {
 		t.Fatalf("warnings %s", ws)
 	}
 	asJSON := func(v any) string { b, _ := json.Marshal(v); return string(b) }
 	check := func(where string, p map[string]any) {
 		t.Helper()
-		if p["x-kestrel-fabric-weight-gsm"] != float64(180) || asJSON(p["x-kestrel-care-note"]) != `{"en":"Wrinkles are part of the look"}` ||
-			len(p["x-kestrel-big"].(string)) != 9000 || p["unknown_top"] != nil {
+		if p["x-noor-fabric-weight-gsm"] != float64(180) || asJSON(p["x-noor-care-note"]) != `{"en":"Wrinkles are part of the look"}` ||
+			len(p["x-noor-big"].(string)) != 9000 || p["unknown_top"] != nil {
 			t.Fatalf("%s: product members %v", where, p)
 		}
 		f := p["materials"].([]any)[0].(map[string]any)["fibers"].([]any)[0].(map[string]any)
-		if asJSON(f["material"]) != `{"code":"linen","name":{"de":"Leinen","en":"Linen","fr":"Lin","nl":"Linnen"},"x-kestrel-mill":"Mill 7"}` ||
-			asJSON(f["x-kestrel-share"]) != `{"a":[1,2.5]}` || f["unknown_nested"] != nil {
+		if asJSON(f["material"]) != `{"code":"linen","name":{"de":"Leinen","en":"Linen","fr":"Lin","nl":"Linnen"},"x-noor-mill":"Mill 7"}` ||
+			asJSON(f["x-noor-share"]) != `{"a":[1,2.5]}` || f["unknown_nested"] != nil {
 			t.Fatalf("%s: fibre %s", where, asJSON(f))
 		}
 	}
-	rec := ing.must(200, "GET", "/obx/v1/ingest/products/KO-1007", nil)
+	rec := ing.must(200, "GET", "/obx/v1/ingest/products/MN-1007", nil)
 	check("ingest record", rec["data"].(map[string]any))
 	p := k.all.must(200, "GET", "/obx/v1/products/"+res["id"].(string), nil)
 	validate(t, "ProductDetail", p)
@@ -56,16 +56,16 @@ func TestExtensions(t *testing.T) {
 	check("changes", ch[0]["data"].(map[string]any))
 
 	// The record written back is unchanged; a CSV import keeps the members.
-	if r := ing.must(200, "PUT", "/obx/v1/ingest/products/KO-1007", rec["data"]); r["result"] != "unchanged" {
+	if r := ing.must(200, "PUT", "/obx/v1/ingest/products/MN-1007", rec["data"]); r["result"] != "unchanged" {
 		t.Fatalf("round trip %v", r)
 	}
-	k.runImport(k.admin, k.kestrelFiles(), nil)
-	check("after an import", ing.must(200, "GET", "/obx/v1/ingest/products/KO-1007", nil)["data"].(map[string]any))
+	k.runImport(k.admin, k.maisonNoorFiles(), nil)
+	check("after an import", ing.must(200, "GET", "/obx/v1/ingest/products/MN-1007", nil)["data"].(map[string]any))
 
 	// PATCH null removes one; changing one is an update with a change entry.
-	ing.must(200, "PATCH", "/obx/v1/ingest/products/KO-1007", map[string]any{"x-kestrel-big": nil, "x-kestrel-fabric-weight-gsm": 200}, "Content-Type", "application/merge-patch+json")
+	ing.must(200, "PATCH", "/obx/v1/ingest/products/MN-1007", map[string]any{"x-noor-big": nil, "x-noor-fabric-weight-gsm": 200}, "Content-Type", "application/merge-patch+json")
 	p = k.all.must(200, "GET", "/obx/v1/products/"+res["id"].(string), nil)
-	if _, ok := p["x-kestrel-big"]; ok || p["x-kestrel-fabric-weight-gsm"] != float64(200) {
+	if _, ok := p["x-noor-big"]; ok || p["x-noor-fabric-weight-gsm"] != float64(200) {
 		t.Fatalf("after PATCH %v", p)
 	}
 	if ch, _, _ := drainChanges(t, k.all, cursor, 100); len(ch) != 1 {
@@ -75,16 +75,16 @@ func TestExtensions(t *testing.T) {
 	// Members of qualifier terms move with their term when a 0.1 key puts
 	// its qualifier first and a repeat is dropped.
 	q := readFixture(t, "examples/ProductInput.extension.json").(map[string]any)
-	q["brand_external_id"] = "kestrel"
+	q["brand_external_id"] = "maison-noor"
 	q["style_number"] = "QX-1"
 	q["materials"] = []any{map[string]any{"part": map[string]any{"code": "main"}, "fibers": []any{map[string]any{
 		"material": map[string]any{"code": "recycled_polyester"}, "percentage": 100, "qualifiers": []any{
-			map[string]any{"code": "post_consumer", "x-kestrel-src": "a"}, map[string]any{"code": "recycled", "x-kestrel-src": "b"}}}}}}
+			map[string]any{"code": "post_consumer", "x-noor-src": "a"}, map[string]any{"code": "recycled", "x-noor-src": "b"}}}}}}
 	ing.must(201, "PUT", "/obx/v1/ingest/products/QX-1", q)
 	qd := ing.must(200, "GET", "/obx/v1/ingest/products/QX-1", nil)["data"].(map[string]any)
 	qs := qd["materials"].([]any)[0].(map[string]any)["fibers"].([]any)[0].(map[string]any)["qualifiers"].([]any)
-	if len(qs) != 2 || qs[0].(map[string]any)["code"] != "recycled" || qs[0].(map[string]any)["x-kestrel-src"] != "b" ||
-		qs[1].(map[string]any)["x-kestrel-src"] != "a" {
+	if len(qs) != 2 || qs[0].(map[string]any)["code"] != "recycled" || qs[0].(map[string]any)["x-noor-src"] != "b" ||
+		qs[1].(map[string]any)["x-noor-src"] != "a" {
 		t.Fatalf("qualifier members %s", asJSON(qs))
 	}
 	if r := ing.must(200, "PUT", "/obx/v1/ingest/products/QX-1", qd); r["result"] != "unchanged" {
@@ -92,15 +92,15 @@ func TestExtensions(t *testing.T) {
 	}
 
 	// Variants (color, measurements) and assets (rights, provenance).
-	v := map[string]any{"product_external_id": "KO-1007", "color": map[string]any{"code": "WHT", "x-kestrel-dye": "natural"},
-		"size": "M", "measurements": map[string]any{"x-kestrel-fit": "slim"}, "x-kestrel-plm": 7}
-	ing.must(201, "PUT", "/obx/v1/ingest/variants/KO-1007-WHT-M", v)
-	vr := ing.must(200, "GET", "/obx/v1/ingest/variants/KO-1007-WHT-M", nil)["data"].(map[string]any)
-	if asJSON(vr["color"].(map[string]any)["x-kestrel-dye"]) != `"natural"` || vr["x-kestrel-plm"] != float64(7) ||
-		asJSON(vr["measurements"]) != `{"x-kestrel-fit":"slim"}` {
+	v := map[string]any{"product_external_id": "MN-1007", "color": map[string]any{"code": "WHT", "x-noor-dye": "natural"},
+		"size": "M", "measurements": map[string]any{"x-noor-fit": "slim"}, "x-noor-plm": 7}
+	ing.must(201, "PUT", "/obx/v1/ingest/variants/MN-1007-WHT-M", v)
+	vr := ing.must(200, "GET", "/obx/v1/ingest/variants/MN-1007-WHT-M", nil)["data"].(map[string]any)
+	if asJSON(vr["color"].(map[string]any)["x-noor-dye"]) != `"natural"` || vr["x-noor-plm"] != float64(7) ||
+		asJSON(vr["measurements"]) != `{"x-noor-fit":"slim"}` {
 		t.Fatalf("variant record %v", vr)
 	}
-	if r := ing.must(200, "PUT", "/obx/v1/ingest/variants/KO-1007-WHT-M", vr); r["result"] != "unchanged" {
+	if r := ing.must(200, "PUT", "/obx/v1/ingest/variants/MN-1007-WHT-M", vr); r["result"] != "unchanged" {
 		t.Fatalf("variant round trip %v", r)
 	}
 }
@@ -175,11 +175,11 @@ func asJSONString(v any) string { b, _ := json.Marshal(v); return string(b) }
 // TestSameGTINTwiceInOneFile: the later row is gtin_conflict on gtin and is
 // skipped; a product whose variant rows are all refused is not written.
 func TestSameGTINTwiceInOneFile(t *testing.T) {
-	k := newKestrelNode(t)
+	k := newMaisonNoorNode(t)
 	csv := "brand,style_number,name:en,gtin,color_code,size\n" +
-		"Kestrel,KL-9001,Twice,2000900100013,BLK,S\n" +
-		"Kestrel,KL-9001,Twice,2000900100013,BLK,M\n" +
-		"Kestrel,KL-9002,Other product,2000100101025,BLK,S\n"
+		"MAISON NOOR,ML-9001,Twice,2000900100013,BLK,S\n" +
+		"MAISON NOOR,ML-9001,Twice,2000900100013,BLK,M\n" +
+		"MAISON NOOR,ML-9002,Other product,2000100101025,BLK,S\n"
 	run := k.runImport(k.admin, map[string][]string{"csv": {writeTemp(t, "products.csv", []byte(csv))}}, nil)
 	items := k.admin.must(200, "GET", "/admin/api/imports/"+run["id"].(string)+"/errors", nil)["items"].([]any)
 	var got []string
@@ -190,8 +190,8 @@ func TestSameGTINTwiceInOneFile(t *testing.T) {
 	if strings.Join(got, "|") != "2 gtin gtin_conflict 2000900100013|3 gtin gtin_conflict 2000100101025" {
 		t.Fatalf("errors %v", got)
 	}
-	if r := k.admin.do("GET", "/admin/api/catalog/products/KL-9002", nil); r.Status != 404 {
-		t.Fatalf("KL-9002 was written: %d", r.Status)
+	if r := k.admin.do("GET", "/admin/api/catalog/products/ML-9002", nil); r.Status != 404 {
+		t.Fatalf("ML-9002 was written: %d", r.Status)
 	}
 	if c := run["counts"].(map[string]any); c["created"].(float64) != 2 {
 		t.Fatalf("counts %v", c)

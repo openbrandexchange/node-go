@@ -1,6 +1,6 @@
 {
   "id": "{{id}}",
-  "external_id": "KO-1002_OLV_1",
+  "external_id": "MN-1002_OLV_1",
   "product_id": "{{id}}",
   "brand_id": "{{id}}",
   "media_type": "image",
@@ -9,13 +9,13 @@
   "role": "packshot",
   "view": "front",
   "position": 1,
-  "filename": "KO-1002_OLV_1_front.png",
+  "filename": "MN-1002_OLV_1_front.png",
   "alt_text": null,
   "content_type": "image/png",
   "width": 2400,
   "height": 3000,
-  "bytes": 35148,
-  "sha256": "112995c1bf3cdc71662d08b53903d8bd48ac51841b5eb4319a529562c366d697",
+  "bytes": 35152,
+  "sha256": "130b2f2dc9e1a7ff6ccc474dd57ad039fa9fa9a926f4a0daf9427a1fe6a6c617",
   "rights": {
     "license": "retailer-use",
     "license_text": null,
@@ -46,8 +46,8 @@
       "content_type": "image/png",
       "width": 2400,
       "height": 3000,
-      "bytes": 35148,
-      "sha256": "112995c1bf3cdc71662d08b53903d8bd48ac51841b5eb4319a529562c366d697"
+      "bytes": 35152,
+      "sha256": "130b2f2dc9e1a7ff6ccc474dd57ad039fa9fa9a926f4a0daf9427a1fe6a6c617"
     },
     "web": {
       "name": "web",

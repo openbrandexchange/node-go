@@ -10,7 +10,7 @@ import (
 func TestDevSetup(t *testing.T) {
 	n := newTestNode(t)
 	ctx := context.Background()
-	acc := DevAccount{SetupCode: testSetupCode, Company: "Kestrel Outfitters", Brand: "Kestrel", Name: "Demo Admin", Email: adminEmail, Password: adminPassword}
+	acc := DevAccount{SetupCode: testSetupCode, Company: "MAISON NOOR Group", Brand: "MAISON NOOR", Name: "Demo Admin", Email: adminEmail, Password: adminPassword}
 	bad := acc
 	bad.SetupCode = "WRONG-CODE"
 	if err := n.app.DevSetup(ctx, bad); err == nil || n.app.SetupDone(ctx) {

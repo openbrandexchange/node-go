@@ -22,7 +22,7 @@ func importsFixture(t *testing.T, name string) string {
 }
 
 func TestArticleDataImports(t *testing.T) {
-	k := newKestrelNode(t)
+	k := newMaisonNoorNode(t)
 	var exp struct {
 		Cases []struct {
 			File     string                    `json:"file"`
@@ -54,7 +54,7 @@ func TestArticleDataImports(t *testing.T) {
 		t.Fatalf("variant-identity.expected.json: %v", err)
 	}
 	// I-IMP-12 first (import-format.md §1.2.1), then I-IMP-7; the protocol
-	// id of each KL-8101 variant stays the same after every file.
+	// id of each ML-8101 variant stays the same after every file.
 	exp.Cases = append(identity.Cases, exp.Cases...)
 	for _, c := range exp.Cases {
 		run := k.runImport(k.admin, map[string][]string{"csv": {importsFixture(t, c.File)}}, nil)
@@ -126,7 +126,7 @@ func TestArticleDataImports(t *testing.T) {
 				}
 				match(t, c.File+" "+ext+"."+f, v, p[f], nil)
 			}
-			if vs, ok := p["variants"].([]any); ok && ext == "KL-8101" {
+			if vs, ok := p["variants"].([]any); ok && ext == "ML-8101" {
 				for _, v := range vs {
 					vm := v.(map[string]any)
 					if prev, seen := ids[vm["external_id"].(string)]; seen && prev != vm["id"] {
@@ -143,8 +143,8 @@ func TestArticleDataImports(t *testing.T) {
 			}
 		}
 		if c.File == "id-4-gtin-of-other-product.csv" {
-			// As the conformance runner does: back to exactly the Kestrel import.
-			k.ingestToken(k.admin).must(200, "DELETE", "/obx/v1/ingest/products/KL-8101", nil)
+			// As the conformance runner does: back to exactly the MAISON NOOR import.
+			k.ingestToken(k.admin).must(200, "DELETE", "/obx/v1/ingest/products/ML-8101", nil)
 			_, cursor, _ = drainChanges(t, k.all, cursor, 100)
 		}
 	}
@@ -177,17 +177,17 @@ func TestArticleDataImports(t *testing.T) {
 				}
 			}
 		}
-		if r := k.admin.do("GET", "/admin/api/catalog/products/KL-8001", nil); r.Status != 404 {
-			t.Fatalf("a dry run wrote KL-8001: %d", r.Status)
+		if r := k.admin.do("GET", "/admin/api/catalog/products/ML-8001", nil); r.Status != 404 {
+			t.Fatalf("a dry run wrote ML-8001: %d", r.Status)
 		}
 	})
 
-	t.Run("the Kestrel import has no label warnings", func(t *testing.T) {
-		run := k.runImport(k.admin, k.kestrelFiles(), nil)
+	t.Run("the MAISON NOOR import has no label warnings", func(t *testing.T) {
+		run := k.runImport(k.admin, k.maisonNoorFiles(), nil)
 		items := k.admin.must(200, "GET", "/admin/api/imports/"+run["id"].(string)+"/errors", nil)["items"].([]any)
 		for _, e := range items {
 			if code := e.(map[string]any)["obx_error"]; strings.Contains(code.(string), "missing") || strings.Contains(code.(string), "unknown") || strings.Contains(code.(string), "not_100") {
-				t.Errorf("label warning in the Kestrel import: %v", e)
+				t.Errorf("label warning in the MAISON NOOR import: %v", e)
 			}
 		}
 	})
@@ -219,19 +219,19 @@ func TestArticleDataImports(t *testing.T) {
 		}
 		found := false
 		for _, row := range rows[1:] {
-			if row[col["style_number"]] == "KO-1009" {
+			if row[col["style_number"]] == "MN-1009" {
 				found = true
 				if row[col["strap_length_cm"]] != "85-140" || row[col["laptop_max_inch"]] != "15.6" || row[col["feature:detachable_parts"]] != "shoulder_strap" ||
 					row[col["certifications"]] != "grs:CU 200901 (material)" || row[col["color_family"]] != "grey" || row[col["feature:laptop_compartment"]] != "yes" {
-					t.Errorf("KO-1009 row %v", row)
+					t.Errorf("MN-1009 row %v", row)
 				}
 			}
-			if row[col["style_number"]] == "KT-2001" && !strings.Contains(row[col["materials"]], "100% polyester (recycled)") {
-				t.Errorf("KT-2001 materials %q", row[col["materials"]])
+			if row[col["style_number"]] == "NA-2001" && !strings.Contains(row[col["materials"]], "100% polyester (recycled)") {
+				t.Errorf("NA-2001 materials %q", row[col["materials"]])
 			}
 		}
 		if !found {
-			t.Fatal("KO-1009 not exported")
+			t.Fatal("MN-1009 not exported")
 		}
 		_, cur, _ := drainChanges(t, k.all, "", 500)
 		run := k.runImport(k.admin, map[string][]string{"csv": {writeTemp(t, "products.csv", r.Body)}}, nil)
@@ -246,7 +246,7 @@ func TestArticleDataImports(t *testing.T) {
 	})
 }
 
-func variantByExternalID(t *testing.T, k *kestrelNode, ext string) map[string]any {
+func variantByExternalID(t *testing.T, k *maisonNoorNode, ext string) map[string]any {
 	t.Helper()
 	for _, p := range k.products {
 		for _, v := range p["variants"].([]any) {
@@ -495,18 +495,18 @@ func downgradeProduct(t *testing.T, s string, v02 bool) string {
 	return string(b)
 }
 
-// TestUpgradeStoredProducts starts from products stored by 0.1 (KT-2001 with
+// TestUpgradeStoredProducts starts from products stored by 0.1 (NA-2001 with
 // the fibre key recycled_polyester, no article data properties) and 0.2
-// (KO-1008 with the flag recycled) and checks the one-time rewrites of
+// (MN-1008 with the flag recycled) and checks the one-time rewrites of
 // migrations 3 and 4: the stored objects get the 0.3 shape, exactly as a
 // fresh import gives it; the rewritten products get a change entry, the
 // untouched ones none.
 func TestUpgradeStoredProducts(t *testing.T) {
-	k := newKestrelNode(t)
+	k := newMaisonNoorNode(t)
 	ctx := context.Background()
 	_, cursor, _ := drainChanges(t, k.all, "", 500)
 	old := map[string]string{}
-	for ext, v02 := range map[string]bool{"KT-2001": false, "KO-1008": true} {
+	for ext, v02 := range map[string]bool{"NA-2001": false, "MN-1008": true} {
 		var data, rep string
 		if err := k.app.DB.QueryRow(ctx, `SELECT data, rep FROM products WHERE external_id = ?`, ext).Scan(&data, &rep); err != nil {
 			t.Fatal(err)
@@ -529,8 +529,8 @@ func TestUpgradeStoredProducts(t *testing.T) {
 			t.Fatal(err)
 		}
 	}
-	if !strings.Contains(downgradeProduct(t, old["KT-2001"], false), `"fiber":"recycled_polyester"`) ||
-		!strings.Contains(downgradeProduct(t, old["KO-1008"], true), `"fiber":"polyester","percentage":100,"recycled":true`) {
+	if !strings.Contains(downgradeProduct(t, old["NA-2001"], false), `"fiber":"recycled_polyester"`) ||
+		!strings.Contains(downgradeProduct(t, old["MN-1008"], true), `"fiber":"polyester","percentage":100,"recycled":true`) {
 		t.Fatal("the fixture products lack the recycled/organic fibres this test needs")
 	}
 	if err := k.app.upgradeTerms(ctx); err != nil {
@@ -544,7 +544,7 @@ func TestUpgradeStoredProducts(t *testing.T) {
 	for _, c := range ch {
 		got[c["data"].(map[string]any)["external_id"].(string)] = true
 	}
-	if len(ch) != 2 || !got["KT-2001"] || !got["KO-1008"] {
+	if len(ch) != 2 || !got["NA-2001"] || !got["MN-1008"] {
 		t.Fatalf("changes after the upgrade: %v", ch)
 	}
 	for ext, rep := range old {
@@ -560,7 +560,7 @@ func TestUpgradeStoredProducts(t *testing.T) {
 		}
 	}
 	// Writing the same data again is unchanged.
-	run := k.runImport(k.admin, k.kestrelFiles(), nil)
+	run := k.runImport(k.admin, k.maisonNoorFiles(), nil)
 	if c := run["counts"].(map[string]any); c["updated"].(float64) != 0 {
 		t.Fatalf("import after the upgrade: %v", c)
 	}
@@ -571,7 +571,7 @@ func TestUpgradeStoredProducts(t *testing.T) {
 // migration 5 and the one-time rewrite: the same shape as a fresh import, an
 // upsert in /changes, and their codes in the portal's qualifier facet.
 func TestUpgradeFromSingleQualifier(t *testing.T) {
-	k := newKestrelNode(t)
+	k := newMaisonNoorNode(t)
 	ctx := context.Background()
 	_, cursor, _ := drainChanges(t, k.all, "", 500)
 	draft := func(s string) string {
@@ -597,7 +597,7 @@ func TestUpgradeFromSingleQualifier(t *testing.T) {
 	}
 	old := map[string]string{}
 	if err := k.app.DB.WriteTx(ctx, func(tx *db.Tx) error {
-		for _, ext := range []string{"KO-1008", "KO-1001"} { // one qualifier; none
+		for _, ext := range []string{"MN-1008", "MN-1001"} { // one qualifier; none
 			var data, rep string
 			if err := tx.QueryRow(ctx, `SELECT data, rep FROM products WHERE external_id = ?`, ext).Scan(&data, &rep); err != nil {
 				return err
@@ -632,7 +632,7 @@ func TestUpgradeFromSingleQualifier(t *testing.T) {
 	for _, c := range ch {
 		got[c["data"].(map[string]any)["external_id"].(string)] = true
 	}
-	if len(ch) != 2 || !got["KO-1008"] || !got["KO-1001"] {
+	if len(ch) != 2 || !got["MN-1008"] || !got["MN-1001"] {
 		t.Fatalf("changes after the upgrade: %v", ch)
 	}
 	for ext, rep := range old {
@@ -648,11 +648,11 @@ func TestUpgradeFromSingleQualifier(t *testing.T) {
 		fm := f.(map[string]any)
 		counts[fm["value"].(string)] = fm["count"].(float64)
 	}
-	// recycled: KO-1008, KO-1009, KT-2001, KT-2002 (admins see both brands).
+	// recycled: MN-1008, MN-1009, NA-2001, NA-2002 (admins see both brands).
 	if counts["recycled"] != 4 || counts["post_consumer"] != 1 || counts["organic"] != 1 {
 		t.Fatalf("qualifier facet after the upgrade: %v", facets)
 	}
-	run := k.runImport(k.admin, k.kestrelFiles(), nil)
+	run := k.runImport(k.admin, k.maisonNoorFiles(), nil)
 	if c := run["counts"].(map[string]any); c["updated"].(float64) != 0 {
 		t.Fatalf("import after the upgrade: %v", c)
 	}

@@ -10,11 +10,11 @@ TMP="$HERE/tmp"
 rm -rf "$TMP" "$HERE/screenshots"
 mkdir -p "$TMP/data" "$HERE/screenshots"
 (cd "$ROOT" && go build -o "$TMP/node-go" .)
-(cd "$ROOT/testdata/spec/kestrel" && zip -qr "$TMP/images.zip" images)
+(cd "$ROOT/testdata/spec/maison-noor" && zip -qr "$TMP/images.zip" images)
 # A "nightly export" for the scheduled import: the same catalog with one renamed article.
 mkdir -p "$TMP/export"
-cp -R "$ROOT/testdata/spec/kestrel/." "$TMP/export/"
-sed 's/Merino Crew Sweater/Merino Crew Jumper/' "$ROOT/testdata/spec/kestrel/products.csv" >"$TMP/export/products.csv"
+cp -R "$ROOT/testdata/spec/maison-noor/." "$TMP/export/"
+sed 's/Fine Merino Crew-Neck Sweater/Merino Crew Jumper/' "$ROOT/testdata/spec/maison-noor/products.csv" >"$TMP/export/products.csv"
 (cd "$TMP/export" && zip -qr "$TMP/package.zip" products.csv assets.csv images)
 [ -d "$HERE/node_modules" ] || (cd "$HERE" && bun install --frozen-lockfile && bunx playwright install chromium)
 

@@ -3,14 +3,14 @@
     "index": 0,
     "op": "upsert",
     "kind": "brand",
-    "external_id": "kestrel-lab",
+    "external_id": "maison-noor-lab",
     "result": "created"
   },
   {
     "index": 1,
     "op": "upsert",
     "kind": "product",
-    "external_id": "KL-9001",
+    "external_id": "ML-9001",
     "result": "created"
   },
   {
@@ -31,42 +31,42 @@
     "index": 4,
     "op": "upsert",
     "kind": "asset",
-    "external_id": "KL-9001_GRN_1",
+    "external_id": "ML-9001_GRN_1",
     "result": "created"
   },
   {
     "index": 5,
     "op": "upsert",
     "kind": "product",
-    "external_id": "KL-9001",
+    "external_id": "ML-9001",
     "result": "unchanged"
   },
   {
     "index": 6,
     "op": "upsert",
     "kind": "product",
-    "external_id": "KL-9001",
+    "external_id": "ML-9001",
     "result": "updated"
   },
   {
     "index": 7,
     "op": "upsert",
     "kind": "asset",
-    "external_id": "KL-9001_GRN_1",
+    "external_id": "ML-9001_GRN_1",
     "result": "updated"
   },
   {
     "index": 8,
     "op": "upsert",
     "kind": "asset",
-    "external_id": "KL-9001_GRN_2",
+    "external_id": "ML-9001_GRN_2",
     "result": "created"
   },
   {
     "index": 9,
     "op": "upsert",
     "kind": "asset",
-    "external_id": "KL-9001_GRN_2b",
+    "external_id": "ML-9001_GRN_2b",
     "result": "error",
     "obx_error": "position_conflict"
   },
@@ -74,7 +74,7 @@
     "index": 10,
     "op": "unpublish",
     "kind": "asset",
-    "external_id": "KL-9001_GRN_2",
+    "external_id": "ML-9001_GRN_2",
     "result": "updated"
   },
   {
@@ -96,14 +96,14 @@
     "index": 13,
     "op": "unpublish",
     "kind": "product",
-    "external_id": "KL-9001",
+    "external_id": "ML-9001",
     "result": "updated"
   },
   {
     "index": 14,
     "op": "publish",
     "kind": "product",
-    "external_id": "KL-9001",
+    "external_id": "ML-9001",
     "result": "updated"
   },
   {
@@ -124,7 +124,7 @@
     "index": 17,
     "op": "delete",
     "kind": "product",
-    "external_id": "KL-9001",
+    "external_id": "ML-9001",
     "result": "deleted"
   }
 ]

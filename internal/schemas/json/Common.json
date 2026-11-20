@@ -19,7 +19,7 @@
       "maxLength": 200,
       "pattern": "^[^\\x00-\\x1F\\x7F/]+$",
       "examples": [
-        "KO-1001"
+        "MN-1001"
       ]
     },
     "DateTime": {

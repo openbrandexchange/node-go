@@ -49,7 +49,7 @@ func TestAllProblemsReported(t *testing.T) {
 	clearEnv(t)
 	for k, v := range map[string]string{
 		"PORT": "eighty", "OBX_WORKERS": "0", "OBX_TRUST_PROXY": "maybe", "OBX_LOG_FORMAT": "xml",
-		"OBX_PUBLIC_URL": "images.kestrel.example", "OBX_DATABASE_URL": "mysql://u:hunter2@db/obx",
+		"OBX_PUBLIC_URL": "images.maison-noor.example", "OBX_DATABASE_URL": "mysql://u:hunter2@db/obx",
 		"OBX_BLOB_URL": "ftp://files", "OBX_SMTP_URL": "http://mail", "OBX_MAIL_FROM": "Portal <p@x.example>",
 		"OBX_SECRET_KEY": "short", "OBX_JOB_RETENTION_DAYS": "7",
 	} {
@@ -73,13 +73,13 @@ func TestAllProblemsReported(t *testing.T) {
 
 func TestPublicURLWithPathRefused(t *testing.T) {
 	clearEnv(t)
-	t.Setenv("OBX_PUBLIC_URL", "https://kestrel.example/portal")
+	t.Setenv("OBX_PUBLIC_URL", "https://maison-noor.example/portal")
 	if _, err := Load(); err == nil || !strings.Contains(err.Error(), "without a path") {
 		t.Fatalf("got %v", err)
 	}
-	t.Setenv("OBX_PUBLIC_URL", "https://images.kestrel.example/")
+	t.Setenv("OBX_PUBLIC_URL", "https://images.maison-noor.example/")
 	c, err := Load()
-	if err != nil || c.PublicURL != "https://images.kestrel.example" || !c.Secure() {
+	if err != nil || c.PublicURL != "https://images.maison-noor.example" || !c.Secure() {
 		t.Fatalf("trailing slash: %v %v", c, err)
 	}
 }
@@ -87,7 +87,7 @@ func TestPublicURLWithPathRefused(t *testing.T) {
 func TestWarnings(t *testing.T) {
 	clearEnv(t)
 	t.Setenv("OBX_PUBLC_URL", "https://typo.example")
-	t.Setenv("OBX_PUBLIC_URL", "http://images.kestrel.example")
+	t.Setenv("OBX_PUBLIC_URL", "http://images.maison-noor.example")
 	t.Setenv("OBX_METRICS", "true")
 	c, err := Load()
 	if err != nil {

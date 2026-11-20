@@ -1,5 +1,5 @@
 {
-  "description": "Conformance I-IMP-9 and I-IMP-10 (optional: nodes that accept Excel workbooks, docs/import-format.md §5). For each workbook: send it as the import's products.xlsx (role products) or assets.xlsx (role assets), nothing else unless send says so (send.images_manifest: these files of fixtures/kestrel/images in the images_manifest, by file name and sha256). rows: the canonical rows the conversion gives, header first; rows[i] is Excel row i + 1, so a row that the conversion empties (a conversion error) or that is empty in the sheet is a row of empty strings. csv: the same rows as canonical CSV text (§5.3). errors / warnings: the ImportRowErrors of the conversion (detail starts with detail_prefix). import_errors: every ImportRowError with severity error of a dry-run import of the workbook on a node that holds fixtures/kestrel, sorted by row then column. error: the workbook-level refusal (§5.5: the import run fails with this code in ImportRun.error, nothing is imported, and its results hold this one ImportRowError with row null); detail_contains is a hint for humans, not checked by obx-conformance. number_vectors / date_vectors / format_vectors: unit test vectors for §5.4.",
+  "description": "Conformance I-IMP-9 and I-IMP-10 (optional: nodes that accept Excel workbooks, docs/import-format.md §5). For each workbook: send it as the import's products.xlsx (role products) or assets.xlsx (role assets), nothing else unless send says so (send.images_manifest: these files of fixtures/maison-noor/images in the images_manifest, by file name and sha256). rows: the canonical rows the conversion gives, header first; rows[i] is Excel row i + 1, so a row that the conversion empties (a conversion error) or that is empty in the sheet is a row of empty strings. csv: the same rows as canonical CSV text (§5.3). errors / warnings: the ImportRowErrors of the conversion (detail starts with detail_prefix). import_errors: every ImportRowError with severity error of a dry-run import of the workbook on a node that holds fixtures/maison-noor, sorted by row then column. error: the workbook-level refusal (§5.5: the import run fails with this code in ImportRun.error, nothing is imported, and its results hold this one ImportRowError with row null); detail_contains is a hint for humans, not checked by obx-conformance. number_vectors / date_vectors / format_vectors: unit test vectors for §5.4.",
   "limits": {
     "entries": 1000,
     "totalBytes": 268435456,
@@ -13,8 +13,8 @@
       "file": "products-template.xlsx",
       "role": "products",
       "sheet": "Products",
-      "what": "templates/products.xlsx as it is, yellow example rows included: the rows are exactly fixtures/kestrel/products.csv, so importing it equals I-IMP-1 without images (all unchanged on a node that holds the fixtures).",
-      "csv_file": "fixtures/kestrel/products.csv",
+      "what": "templates/products.xlsx as it is, yellow example rows included: the rows are exactly fixtures/maison-noor/products.csv, so importing it equals I-IMP-1 without images (all unchanged on a node that holds the fixtures).",
+      "csv_file": "fixtures/maison-noor/products.csv",
       "errors": [],
       "warnings": [],
       "import_errors": []
@@ -23,11 +23,11 @@
       "file": "assets-template.xlsx",
       "role": "assets",
       "sheet": "Assets",
-      "what": "templates/assets.xlsx as it is: every column of import-format.md 2.3, the rows of fixtures/kestrel/assets.csv. Sent with the two images its rows name in the images_manifest (alone, each row would be files_missing, §2.2); on a node that holds the fixtures it is all unchanged.",
+      "what": "templates/assets.xlsx as it is: every column of import-format.md 2.3, the rows of fixtures/maison-noor/assets.csv. Sent with the two images its rows name in the images_manifest (alone, each row would be files_missing, §2.2); on a node that holds the fixtures it is all unchanged.",
       "send": {
         "images_manifest": [
-          "KO-1002_BLK_2_back.png",
-          "KO-1003_RST_3_model.png"
+          "MN-1002_BLK_2_back.png",
+          "MN-1003_RST_3_model.png"
         ]
       },
       "rows": [
@@ -55,7 +55,7 @@
           "generator"
         ],
         [
-          "KO-1002_BLK_2_back.png",
+          "MN-1002_BLK_2_back.png",
           "",
           "",
           "",
@@ -69,7 +69,7 @@
           "",
           "2030-01-01T00:00:00Z",
           "",
-          "Photo: Kestrel Studio",
+          "Photo: MAISON NOOR Studio",
           "",
           "",
           "",
@@ -78,14 +78,14 @@
           ""
         ],
         [
-          "KO-1003_RST_3_model.png",
+          "MN-1003_RST_3_model.png",
           "",
           "",
           "",
           "",
           "",
-          "AI-generated image of a model wearing the rust tee",
-          "Met AI gegenereerd beeld van een model in het roestkleurige T-shirt",
+          "AI-generated image of a model wearing the rust boxy tee",
+          "Met AI gegenereerd beeld van een model in het roestkleurige boxy T-shirt",
           "",
           "",
           "",
@@ -101,7 +101,7 @@
           "fictional-image-model 1.0"
         ]
       ],
-      "csv": "file,style_number,color_code,position,role,view,alt_text:en,alt_text:nl,license,license_text,channels,territories,embargo_until,expires_at,credit,model_release,ai_generated,ai_edited,source,c2pa,generator\r\nKO-1002_BLK_2_back.png,,,,,,,,,,,,2030-01-01T00:00:00Z,,Photo: Kestrel Studio,,,,,,\r\nKO-1003_RST_3_model.png,,,,,,AI-generated image of a model wearing the rust tee,Met AI gegenereerd beeld van een model in het roestkleurige T-shirt,,,,,,,,,true,false,generated,none,fictional-image-model 1.0\r\n",
+      "csv": "file,style_number,color_code,position,role,view,alt_text:en,alt_text:nl,license,license_text,channels,territories,embargo_until,expires_at,credit,model_release,ai_generated,ai_edited,source,c2pa,generator\r\nMN-1002_BLK_2_back.png,,,,,,,,,,,,2030-01-01T00:00:00Z,,Photo: MAISON NOOR Studio,,,,,,\r\nMN-1003_RST_3_model.png,,,,,,AI-generated image of a model wearing the rust boxy tee,Met AI gegenereerd beeld van een model in het roestkleurige boxy T-shirt,,,,,,,,,true,false,generated,none,fictional-image-model 1.0\r\n",
       "errors": [],
       "warnings": [],
       "import_errors": []
@@ -127,8 +127,8 @@
           "season"
         ],
         [
-          "Kestrel",
-          "KX-9001",
+          "MAISON NOOR",
+          "MX-9001",
           "Edge Case Tee",
           "2000901000015",
           "BLK",
@@ -141,8 +141,8 @@
           "SS26"
         ],
         [
-          "Kestrel",
-          "KX-9001",
+          "MAISON NOOR",
+          "MX-9001",
           "Edge Case Tee",
           "02000901000022",
           "BLK",
@@ -183,8 +183,8 @@
           ""
         ],
         [
-          "Kestrel",
-          "KX-9003",
+          "MAISON NOOR",
+          "MX-9003",
           "Bad Check Digit",
           "2000903000018",
           "RED",
@@ -197,8 +197,8 @@
           ""
         ],
         [
-          "Kestrel",
-          "KX-9004",
+          "MAISON NOOR",
+          "MX-9004",
           "Hidden Row Still Imported",
           "2000904000012",
           "GRN",
@@ -225,8 +225,8 @@
           ""
         ],
         [
-          "Kestrel",
-          "KX-9006",
+          "MAISON NOOR",
+          "MX-9006",
           "Escapes",
           "2000906000010",
           "BLK",
@@ -239,7 +239,7 @@
           ""
         ]
       ],
-      "csv": "brand,style_number,name:en,gtin,color_code,size,weight_kg,contains_animal_origin,attr:launch_date,description:en,collection,season\r\nKestrel,KX-9001,Edge Case Tee,2000901000015,BLK,42,0.25,false,2026-03-01,\"=SUM(1,2) is text, not a formula\",Core,SS26\r\nKestrel,KX-9001,Edge Case Tee,02000901000022,BLK,44,0.3,,,,,\r\n,,,,,,,,,,,\r\n,,,,,,,,,,,\r\nKestrel,KX-9003,Bad Check Digit,2000903000018,RED,L,,,,,,\r\nKestrel,KX-9004,Hidden Row Still Imported,2000904000012,GRN,S,12.5,true,2026-03-01,,,\r\n,,,,,,,,,,,\r\nKestrel,KX-9006,Escapes,2000906000010,BLK,S,,,2026-03-01T12:00:00Z,\"Line one\r\nLine two\",Capsule_x0031_,\r\n",
+      "csv": "brand,style_number,name:en,gtin,color_code,size,weight_kg,contains_animal_origin,attr:launch_date,description:en,collection,season\r\nMAISON NOOR,MX-9001,Edge Case Tee,2000901000015,BLK,42,0.25,false,2026-03-01,\"=SUM(1,2) is text, not a formula\",Core,SS26\r\nMAISON NOOR,MX-9001,Edge Case Tee,02000901000022,BLK,44,0.3,,,,,\r\n,,,,,,,,,,,\r\n,,,,,,,,,,,\r\nMAISON NOOR,MX-9003,Bad Check Digit,2000903000018,RED,L,,,,,,\r\nMAISON NOOR,MX-9004,Hidden Row Still Imported,2000904000012,GRN,S,12.5,true,2026-03-01,,,\r\n,,,,,,,,,,,\r\nMAISON NOOR,MX-9006,Escapes,2000906000010,BLK,S,,,2026-03-01T12:00:00Z,\"Line one\r\nLine two\",Capsule_x0031_,\r\n",
       "errors": [
         {
           "file": "products.xlsx",
@@ -314,25 +314,25 @@
           "attr:launch_date"
         ],
         [
-          "Kestrel",
-          "KX-9101",
+          "MAISON NOOR",
+          "MX-9101",
           "Date 1904",
           "2026-03-01"
         ],
         [
-          "Kestrel",
-          "KX-9102",
+          "MAISON NOOR",
+          "MX-9102",
           "ISO date cell",
           "2026-03-01"
         ],
         [
-          "Kestrel",
-          "KX-9103",
+          "MAISON NOOR",
+          "MX-9103",
           "Last 1904 date",
           "9999-12-31"
         ]
       ],
-      "csv": "brand,style_number,name:en,attr:launch_date\r\nKestrel,KX-9101,Date 1904,2026-03-01\r\nKestrel,KX-9102,ISO date cell,2026-03-01\r\nKestrel,KX-9103,Last 1904 date,9999-12-31\r\n",
+      "csv": "brand,style_number,name:en,attr:launch_date\r\nMAISON NOOR,MX-9101,Date 1904,2026-03-01\r\nMAISON NOOR,MX-9102,ISO date cell,2026-03-01\r\nMAISON NOOR,MX-9103,Last 1904 date,9999-12-31\r\n",
       "errors": [],
       "warnings": [],
       "import_errors": []
@@ -353,8 +353,8 @@
           "attr:launch_date"
         ],
         [
-          "Kestrel",
-          "KX-9201",
+          "MAISON NOOR",
+          "MX-9201",
           "spacer",
           "Cdata & <Tee>",
           "x",
@@ -380,7 +380,7 @@
           ""
         ]
       ],
-      "csv": "Brand,  Style - Number ,,name:en,,season,attr:launch_date\r\nKestrel,KX-9201,spacer,Cdata & <Tee>,x,SS26,9999-12-31\r\n,,,,,,\r\n,,,,,,\r\n",
+      "csv": "Brand,  Style - Number ,,name:en,,season,attr:launch_date\r\nMAISON NOOR,MX-9201,spacer,Cdata & <Tee>,x,SS26,9999-12-31\r\n,,,,,,\r\n,,,,,,\r\n",
       "errors": [
         {
           "file": "products.xlsx",

@@ -2,7 +2,7 @@
   "index": 0,
   "op": "upsert",
   "kind": "product",
-  "external_id": "KO-1001",
+  "external_id": "MN-1001",
   "result": "unchanged",
   "id": "prd_1",
   "visibility": "visible",

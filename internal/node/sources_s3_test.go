@@ -27,7 +27,7 @@ func TestS3ImportSource(t *testing.T) {
 	}
 	ctx := context.Background()
 	_ = cl.MakeBucket(ctx, "obx-source", minio.MakeBucketOptions{})
-	dir := filepath.Join(specDir(t), "kestrel")
+	dir := filepath.Join(specDir(t), "maison-noor")
 	put := func(name, path string) {
 		data, _ := os.ReadFile(path)
 		if _, err := cl.PutObject(ctx, "obx-source", "export/"+name, bytes.NewReader(data), int64(len(data)), minio.PutObjectOptions{}); err != nil {

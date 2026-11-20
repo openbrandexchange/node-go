@@ -1,0 +1,436 @@
+{
+  "id": "{{id}}",
+  "external_id": "MN-1010",
+  "brand_id": "{{id}}",
+  "style_number": "MN-1010",
+  "name": {
+    "en": "Leather Chelsea Ankle Boot",
+    "nl": "Leren chelsea enkellaars"
+  },
+  "description": {
+    "en": "Chelsea ankle boot in full-grain leather with a leather lining, a low block heel and a removable insole.",
+    "nl": "Chelsea enkellaars van volnerf leer met leren voering, lage blokhak en uitneembaar voetbed."
+  },
+  "item_type": "shoes",
+  "item_subtype": "ankle_boot",
+  "gpc_brick": null,
+  "target_group": "women",
+  "season": "AW26",
+  "collection": "Nocturne",
+  "materials": [
+    {
+      "part": {
+        "code": "upper",
+        "name": {
+          "en": "Upper",
+          "nl": "Bovenwerk",
+          "de": "Obermaterial",
+          "fr": "Tige"
+        }
+      },
+      "fibers": [
+        {
+          "material": {
+            "code": "leather",
+            "name": {
+              "en": "Leather",
+              "nl": "Leer",
+              "de": "Leder",
+              "fr": "Cuir"
+            }
+          },
+          "percentage": 100,
+          "qualifiers": []
+        }
+      ]
+    },
+    {
+      "part": {
+        "code": "lining",
+        "name": {
+          "en": "Lining",
+          "nl": "Voering",
+          "de": "Futter",
+          "fr": "Doublure"
+        }
+      },
+      "fibers": [
+        {
+          "material": {
+            "code": "leather",
+            "name": {
+              "en": "Leather",
+              "nl": "Leer",
+              "de": "Leder",
+              "fr": "Cuir"
+            }
+          },
+          "percentage": 100,
+          "qualifiers": []
+        }
+      ]
+    },
+    {
+      "part": {
+        "code": "sole",
+        "name": {
+          "en": "Sole",
+          "nl": "Zool",
+          "de": "Sohle",
+          "fr": "Semelle"
+        }
+      },
+      "fibers": [
+        {
+          "material": {
+            "code": "rubber",
+            "name": {
+              "en": "Rubber",
+              "nl": "Rubber",
+              "de": "Gummi",
+              "fr": "Caoutchouc"
+            }
+          },
+          "percentage": 100,
+          "qualifiers": []
+        }
+      ]
+    }
+  ],
+  "contains_animal_origin": null,
+  "footwear_materials": {
+    "upper": "leather",
+    "lining_and_sock": "leather",
+    "outer_sole": "other"
+  },
+  "care": [
+    {
+      "code": "do_not_wash",
+      "category": "washing",
+      "symbol": "1_X",
+      "name": {
+        "en": "Do not wash",
+        "nl": "Niet wassen",
+        "de": "Nicht waschen",
+        "fr": "Ne pas laver"
+      },
+      "text": null
+    },
+    {
+      "code": "do_not_bleach",
+      "category": "bleaching",
+      "symbol": "2_X",
+      "name": {
+        "en": "Do not bleach",
+        "nl": "Niet bleken",
+        "de": "Nicht bleichen",
+        "fr": "Ne pas blanchir"
+      },
+      "text": null
+    },
+    {
+      "code": "do_not_tumble_dry",
+      "category": "drying",
+      "symbol": "3_X",
+      "name": {
+        "en": "Do not tumble dry",
+        "nl": "Niet in de droger",
+        "de": "Nicht im Wäschetrockner trocknen",
+        "fr": "Ne pas sécher en tambour"
+      },
+      "text": null
+    },
+    {
+      "code": "do_not_iron",
+      "category": "ironing",
+      "symbol": "4_X",
+      "name": {
+        "en": "Do not iron",
+        "nl": "Niet strijken",
+        "de": "Nicht bügeln",
+        "fr": "Ne pas repasser"
+      },
+      "text": null
+    },
+    {
+      "code": "do_not_dry_clean",
+      "category": "professional_care",
+      "symbol": "5_X",
+      "name": {
+        "en": "Do not dry clean",
+        "nl": "Niet chemisch reinigen",
+        "de": "Nicht chemisch reinigen",
+        "fr": "Ne pas nettoyer à sec"
+      },
+      "text": null
+    }
+  ],
+  "country_of_origin": "PT",
+  "certifications": [
+    {
+      "scheme": "lwg",
+      "licence_number": "LWG-200-1010",
+      "scope": "material"
+    }
+  ],
+  "dpp_url": null,
+  "features": {
+    "closure": "slip_on",
+    "detachable_parts": [
+      "insole"
+    ]
+  },
+  "attributes": null,
+  "created_at": "{{datetime}}",
+  "updated_at": "{{datetime}}",
+  "variants": [
+    {
+      "id": "{{id}}",
+      "external_id": "MN-1010-BRN-41",
+      "product_id": "{{id}}",
+      "brand_id": "{{id}}",
+      "gtin": "02000101001010",
+      "gtin_original": "2000101001010",
+      "sku": "MN-1010-BRN-41",
+      "color": {
+        "code": "BRN",
+        "name": {
+          "en": "Dark brown",
+          "nl": "Donkerbruin"
+        },
+        "supplier_color": "Espresso",
+        "family": "brown"
+      },
+      "size": "41",
+      "size_length": null,
+      "size_system": "EU",
+      "measurements": {
+        "heel_height_cm": 3.5,
+        "shaft_height_cm": 14
+      },
+      "updated_at": "{{datetime}}"
+    },
+    {
+      "id": "{{id}}",
+      "external_id": "MN-1010-BRN-42",
+      "product_id": "{{id}}",
+      "brand_id": "{{id}}",
+      "gtin": "02000101001027",
+      "gtin_original": "2000101001027",
+      "sku": "MN-1010-BRN-42",
+      "color": {
+        "code": "BRN",
+        "name": {
+          "en": "Dark brown",
+          "nl": "Donkerbruin"
+        },
+        "supplier_color": "Espresso",
+        "family": "brown"
+      },
+      "size": "42",
+      "size_length": null,
+      "size_system": "EU",
+      "measurements": {
+        "heel_height_cm": 3.5,
+        "shaft_height_cm": 14.5
+      },
+      "updated_at": "{{datetime}}"
+    },
+    {
+      "id": "{{id}}",
+      "external_id": "MN-1010-BRN-43",
+      "product_id": "{{id}}",
+      "brand_id": "{{id}}",
+      "gtin": "02000101001034",
+      "gtin_original": "2000101001034",
+      "sku": "MN-1010-BRN-43",
+      "color": {
+        "code": "BRN",
+        "name": {
+          "en": "Dark brown",
+          "nl": "Donkerbruin"
+        },
+        "supplier_color": "Espresso",
+        "family": "brown"
+      },
+      "size": "43",
+      "size_length": null,
+      "size_system": "EU",
+      "measurements": {
+        "heel_height_cm": 3.5,
+        "shaft_height_cm": 15
+      },
+      "updated_at": "{{datetime}}"
+    }
+  ],
+  "assets": [
+    {
+      "id": "{{id}}",
+      "external_id": "MN-1010_BRN_1",
+      "product_id": "{{id}}",
+      "brand_id": "{{id}}",
+      "media_type": "image",
+      "color_code": "BRN",
+      "variant_ids": null,
+      "role": "packshot",
+      "view": "side",
+      "position": 1,
+      "filename": "MN-1010_BRN_1_side.png",
+      "alt_text": null,
+      "content_type": "image/png",
+      "width": 1200,
+      "height": 1500,
+      "bytes": 10917,
+      "sha256": "8cb1a3cf2e3ba2314c53d7db9f50555b02d7b9def2360a3d5d7367a1ff2368f7",
+      "rights": {
+        "license": "retailer-use",
+        "license_text": null,
+        "channels": [
+          "webshop",
+          "marketplace",
+          "social"
+        ],
+        "territories": null,
+        "embargo_until": null,
+        "expires_at": null,
+        "credit": null,
+        "model_release": null
+      },
+      "provenance": {
+        "ai_generated": false,
+        "ai_edited": false,
+        "source": "photo",
+        "c2pa": "none",
+        "c2pa_manifest_url": null,
+        "generator": null
+      },
+      "renditions": {
+        "original": {
+          "name": "original",
+          "url": "{{url}}",
+          "url_expires_at": "{{datetime|null}}",
+          "content_type": "image/png",
+          "width": 1200,
+          "height": 1500,
+          "bytes": 10917,
+          "sha256": "8cb1a3cf2e3ba2314c53d7db9f50555b02d7b9def2360a3d5d7367a1ff2368f7"
+        },
+        "web": {
+          "name": "web",
+          "url": "{{url}}",
+          "url_expires_at": "{{datetime|null}}",
+          "content_type": "image/jpeg",
+          "width": 1200,
+          "height": 1500,
+          "bytes": "{{int}}",
+          "sha256": "{{sha256}}"
+        },
+        "square": {
+          "name": "square",
+          "url": "{{url}}",
+          "url_expires_at": "{{datetime|null}}",
+          "content_type": "image/jpeg",
+          "width": 1500,
+          "height": 1500,
+          "bytes": "{{int}}",
+          "sha256": "{{sha256}}"
+        },
+        "thumb": {
+          "name": "thumb",
+          "url": "{{url}}",
+          "url_expires_at": "{{datetime|null}}",
+          "content_type": "image/jpeg",
+          "width": 480,
+          "height": 600,
+          "bytes": "{{int}}",
+          "sha256": "{{sha256}}"
+        }
+      },
+      "updated_at": "{{datetime}}"
+    },
+    {
+      "id": "{{id}}",
+      "external_id": "MN-1010_BRN_2",
+      "product_id": "{{id}}",
+      "brand_id": "{{id}}",
+      "media_type": "image",
+      "color_code": "BRN",
+      "variant_ids": null,
+      "role": "packshot",
+      "view": "front",
+      "position": 2,
+      "filename": "MN-1010_BRN_2_front.png",
+      "alt_text": null,
+      "content_type": "image/png",
+      "width": 1200,
+      "height": 1500,
+      "bytes": 11023,
+      "sha256": "08019a3addb1ebd0e72ade9d56dfdb5e7db9d14c47555c0757a9d7183aa2e3d2",
+      "rights": {
+        "license": "retailer-use",
+        "license_text": null,
+        "channels": [
+          "webshop",
+          "marketplace",
+          "social"
+        ],
+        "territories": null,
+        "embargo_until": null,
+        "expires_at": null,
+        "credit": null,
+        "model_release": null
+      },
+      "provenance": {
+        "ai_generated": false,
+        "ai_edited": false,
+        "source": "photo",
+        "c2pa": "none",
+        "c2pa_manifest_url": null,
+        "generator": null
+      },
+      "renditions": {
+        "original": {
+          "name": "original",
+          "url": "{{url}}",
+          "url_expires_at": "{{datetime|null}}",
+          "content_type": "image/png",
+          "width": 1200,
+          "height": 1500,
+          "bytes": 11023,
+          "sha256": "08019a3addb1ebd0e72ade9d56dfdb5e7db9d14c47555c0757a9d7183aa2e3d2"
+        },
+        "web": {
+          "name": "web",
+          "url": "{{url}}",
+          "url_expires_at": "{{datetime|null}}",
+          "content_type": "image/jpeg",
+          "width": 1200,
+          "height": 1500,
+          "bytes": "{{int}}",
+          "sha256": "{{sha256}}"
+        },
+        "square": {
+          "name": "square",
+          "url": "{{url}}",
+          "url_expires_at": "{{datetime|null}}",
+          "content_type": "image/jpeg",
+          "width": 1500,
+          "height": 1500,
+          "bytes": "{{int}}",
+          "sha256": "{{sha256}}"
+        },
+        "thumb": {
+          "name": "thumb",
+          "url": "{{url}}",
+          "url_expires_at": "{{datetime|null}}",
+          "content_type": "image/jpeg",
+          "width": 480,
+          "height": 600,
+          "bytes": "{{int}}",
+          "sha256": "{{sha256}}"
+        }
+      },
+      "updated_at": "{{datetime}}"
+    }
+  ]
+}

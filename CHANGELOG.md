@@ -20,6 +20,10 @@ are always forward-only and applied automatically on start.
 ### Changed
 - Browser tests (`e2e/`) run on Bun: `bun.lock`, `bun install --frozen-lockfile`, `bunx
   playwright`, `bun audit` in CI, Dependabot ecosystem `bun`.
+- Demo and test data follow spec 0.3.1 (spec 7a4c9ef): the fictional brand is now the fashion
+  house MAISON NOOR instead of Kestrel. `node-go dev` logs in as `admin@maison-noor.example`,
+  the example catalog is `testdata/maison-noor-example.zip` (article numbers MN-/NA-), and the
+  spec fixtures are synced from `fixtures/maison-noor`.
 
 ### Fixed
 - The public logo is cached as `public, max-age=86400` as intended (it was sent as `private`).

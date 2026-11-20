@@ -251,7 +251,7 @@ func TestPortalAppearance(t *testing.T) {
 			t.Fatalf("too wide: %d %s", r.Status, r.Body)
 		}
 		// Both style_numbers and query: allowed, style_numbers wins in the UI.
-		both := map[string]any{"id": "p", "type": "products", "style_numbers": []any{"KO-1001"}, "query": "season=AW26"}
+		both := map[string]any{"id": "p", "type": "products", "style_numbers": []any{"MN-1001"}, "query": "season=AW26"}
 		admin.must(200, "PATCH", "/admin/api/settings", map[string]any{"branding": map[string]any{"home": map[string]any{"blocks": []any{both}}}})
 		admin.must(200, "PATCH", "/admin/api/settings", map[string]any{"branding": fixture})
 		// At most 200 images: the 201st is 409 limit_exceeded.
