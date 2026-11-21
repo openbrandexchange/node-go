@@ -14,7 +14,7 @@
 # For a quick local try without a domain: docker compose -f docker-compose.local.yml up
 #
 # The node runs the published image ghcr.io/openbrandexchange/node-go (the
-# newest 0.3.x; OBX_VERSION picks another tag, e.g. 0.3.0). To build it from
+# newest 0.3.x; OBX_VERSION picks another tag, e.g. 0.3.1). To build it from
 # this folder instead:
 #   docker compose -f docker-compose.yml -f docker-compose.build.yml up -d --build
 

@@ -7,6 +7,12 @@ are always forward-only and applied automatically on start.
 
 ## [Unreleased]
 
+## [0.3.1] - 2026-11-21
+
+Implements Open Brand Exchange specification 0.3.1: portal appearance in the Node Admin API and the
+MAISON NOOR test data. Also: the one-line installer with built-in HTTPS for your own Linux server.
+The web interface is admin-ui 0.3.1.
+
 ### Added
 - One-line installer for Linux servers: `curl -fsSL https://openbrandexchange.com/install.sh | sudo sh -s -- --domain portal.yourbrand.com`
   (`install.sh`, attached to every release). Checks DNS, ports, firewall, systemd and disk first with plain explanations;
@@ -321,6 +327,8 @@ SQLite and PostgreSQL.
   waiting for the requester's software, so the status address no longer hands out a secret that
   stopped working ("Show the key" in the admin renews it).
 
+[0.3.1]: https://github.com/openbrandexchange/node-go/releases/tag/v0.3.1
+[0.3.0]: https://github.com/openbrandexchange/node-go/releases/tag/v0.3.0
 [0.2.1]: https://github.com/openbrandexchange/node-go/releases/tag/v0.2.1
 [0.2.0]: https://github.com/openbrandexchange/node-go/releases/tag/v0.2.0
 [0.1.0]: https://github.com/openbrandexchange/node-go/releases/tag/v0.1.0
