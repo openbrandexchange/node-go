@@ -26,12 +26,12 @@ import (
 // Software and Version identify this implementation in discovery.
 const (
 	Software    = "obx-node-go"
-	SpecVersion = "0.3.0"
+	SpecVersion = "0.3.1"
 	OBXVersion  = "0.3"
 )
 
 // Version is set at build time (-ldflags "-X .../node.Version=...").
-var Version = "0.3.0"
+var Version = "0.3.1"
 
 // App holds the node's shared state.
 type App struct {
