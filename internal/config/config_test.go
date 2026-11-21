@@ -112,3 +112,100 @@ func TestSecretKeyFromEnvironment(t *testing.T) {
 		t.Fatal("a key file was written although OBX_SECRET_KEY is set")
 	}
 }
+
+// OBX_DOMAIN alone is enough for a public portal with built-in HTTPS.
+func TestBuiltInHTTPS(t *testing.T) {
+	clearEnv(t)
+	t.Setenv("OBX_DOMAIN", "Portal.YourBrand.example.")
+	t.Setenv("OBX_TLS", "auto")
+	t.Setenv("OBX_ACME_EMAIL", "it@yourbrand.example")
+	c, err := Load()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if c.PublicURL != "https://portal.yourbrand.example" || c.TLSHost() != "portal.yourbrand.example" || c.HTTPPort != 80 || c.HTTPSPort != 443 || !c.Secure() {
+		t.Fatalf("built-in https: %+v", c)
+	}
+	if c.MailFrom != "no-reply@portal.yourbrand.example" {
+		t.Fatalf("mail from: %s", c.MailFrom)
+	}
+
+	// The host of OBX_PUBLIC_URL is used when OBX_DOMAIN is not set.
+	clearEnv(t)
+	t.Setenv("OBX_PUBLIC_URL", "https://images.yourbrand.example/")
+	t.Setenv("OBX_TLS", "AUTO")
+	if c, err = Load(); err != nil || c.TLSHost() != "images.yourbrand.example" {
+		t.Fatalf("public url host: %v %+v", err, c)
+	}
+
+	// Another HTTPS port ends up in the default public address.
+	clearEnv(t)
+	t.Setenv("OBX_DOMAIN", "portal.yourbrand.example")
+	t.Setenv("OBX_TLS", "auto")
+	t.Setenv("OBX_HTTPS_PORT", "8443")
+	t.Setenv("OBX_HTTP_PORT", "8080")
+	if c, err = Load(); err != nil || c.PublicURL != "https://portal.yourbrand.example:8443" {
+		t.Fatalf("custom port: %v %+v", err, c)
+	}
+
+	// Off (the default): OBX_DOMAIN only sets the address, the node serves http on PORT.
+	clearEnv(t)
+	t.Setenv("OBX_DOMAIN", "portal.yourbrand.example")
+	t.Setenv("OBX_TRUST_PROXY", "true")
+	if c, err = Load(); err != nil || c.TLS != "off" || c.TLSHost() != "" || c.PublicURL != "https://portal.yourbrand.example" || c.Port != 8080 {
+		t.Fatalf("behind a proxy: %v %+v", err, c)
+	}
+	for _, w := range c.Warnings() {
+		if strings.Contains(w, "OBX_TRUST_PROXY") {
+			t.Fatalf("unexpected warning: %s", w)
+		}
+	}
+}
+
+func TestBuiltInHTTPSProblems(t *testing.T) {
+	cases := []struct {
+		env  map[string]string
+		want string
+	}{
+		{map[string]string{"OBX_TLS": "on"}, "OBX_TLS must be off or auto"},
+		{map[string]string{"OBX_TLS": "auto"}, "needs an https://"},
+		{map[string]string{"OBX_TLS": "auto", "OBX_PUBLIC_URL": "https://localhost"}, "public domain name"},
+		{map[string]string{"OBX_TLS": "auto", "OBX_PUBLIC_URL": "https://203.0.113.10"}, "public domain name"},
+		{map[string]string{"OBX_DOMAIN": "https://portal.yourbrand.example"}, "OBX_DOMAIN must be a host name"},
+		{map[string]string{"OBX_DOMAIN": "portal.yourbrand.example:443"}, "OBX_DOMAIN must be a host name"},
+		{map[string]string{"OBX_TLS": "auto", "OBX_DOMAIN": "a.yourbrand.example", "OBX_PUBLIC_URL": "https://b.yourbrand.example"}, "differ"},
+		{map[string]string{"OBX_TLS": "auto", "OBX_DOMAIN": "a.yourbrand.example", "OBX_ACME_EMAIL": "IT <it@x.example>"}, "OBX_ACME_EMAIL"},
+		{map[string]string{"OBX_TLS": "auto", "OBX_DOMAIN": "a.yourbrand.example", "OBX_ACME_DIRECTORY": "http://acme.example/dir"}, "OBX_ACME_DIRECTORY"},
+		{map[string]string{"OBX_TLS": "auto", "OBX_DOMAIN": "a.yourbrand.example", "OBX_HTTP_PORT": "443"}, "must differ"},
+		{map[string]string{"OBX_TLS": "auto", "OBX_PUBLIC_URL": "https://a.yourbrand.example:9443"}, "OBX_HTTPS_PORT is 443"},
+		{map[string]string{"OBX_HTTPS_PORT": "0"}, "OBX_HTTPS_PORT must be between"},
+	}
+	for _, tc := range cases {
+		clearEnv(t)
+		for k, v := range tc.env {
+			t.Setenv(k, v)
+		}
+		_, err := Load()
+		if err == nil || !strings.Contains(err.Error(), tc.want) {
+			t.Errorf("%v: want %q, got %v", tc.env, tc.want, err)
+		}
+	}
+}
+
+func TestTrustProxyWarningWithBuiltInHTTPS(t *testing.T) {
+	clearEnv(t)
+	t.Setenv("OBX_DOMAIN", "portal.yourbrand.example")
+	t.Setenv("OBX_TLS", "auto")
+	t.Setenv("OBX_TRUST_PROXY", "true")
+	c, err := Load()
+	if err != nil {
+		t.Fatal(err)
+	}
+	found := false
+	for _, w := range c.Warnings() {
+		found = found || strings.Contains(w, "OBX_TRUST_PROXY")
+	}
+	if !found {
+		t.Fatal("no warning for OBX_TRUST_PROXY with built-in https")
+	}
+}

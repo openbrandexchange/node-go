@@ -13,19 +13,19 @@ Releases follow [Semantic Versioning](https://semver.org/). Within a major versi
 1. **Back up** ([operations.md](operations.md#backups)): `node-go backup --to …` (or rely on Litestream / your PostgreSQL backups), and keep the secret key.
 2. **Replace the software:**
 
-| Hosting | Command |
-|---|---|
-| Docker Compose (this repository, published image) | `git pull && docker compose pull && docker compose up -d` (a patch release comes with `pull`; for a new minor version set `OBX_VERSION` or pull the new `docker-compose.yml`) |
-| Docker Compose, built from source | `git pull && docker compose -f docker-compose.yml -f docker-compose.build.yml up -d --build` |
-| Docker with a published image | change the tag (`ghcr.io/openbrandexchange/node-go:0.3.0`) and `docker compose up -d` |
-| Google Cloud Run | `git pull && ./deploy/cloudrun.sh` (same settings as the first time) |
-| Fly.io | `git pull && fly deploy` |
-| Railway / Render | push the new commit to your fork; the platform rebuilds |
-| Linux server (systemd) | `git pull && sudo ./deploy/install-linux.sh --domain …`, or copy the new binary to `/usr/local/bin/node-go` and `sudo systemctl restart node-go` |
+   On a server set up with the installer, run the install command again; it downloads the newest
+   release, verifies it, keeps the settings and data and restarts the portal:
+
+   ```sh
+   curl -fsSL https://openbrandexchange.com/install.sh | sudo sh -s -- --domain portal.yourbrand.com
+   ```
+
+   Add `--version X.Y.Z` for a specific release. Installed by hand: replace `/usr/local/bin/node-go`
+   with the binary from the new release archive and `sudo systemctl restart node-go`.
 
 3. **Check:** `curl https://your-portal/readyz` shows the new `version` and `schema_version`; sign in once; look at the log for `warn` lines.
 
-With SQLite and Litestream the old and the new instance must not run at the same time for long (both would write the replica): Cloud Run and Fly.io switch over within seconds. Changes made in those seconds on the old instance can be lost; update when the portal is quiet (evening), or use PostgreSQL for zero-downtime updates.
+The portal is unavailable for the few seconds of the restart; running requests get 25 seconds to finish and interrupted jobs resume afterwards. Update when the portal is quiet (evening) if you like.
 
 ## From 0.2 to 0.3
 

@@ -39,7 +39,7 @@ Upload sizes are limited before anything is buffered; declared checksums are ver
 
 ## Operations
 
-- The Docker image runs as an unprivileged user (uid 10001); the systemd unit uses `ProtectSystem=strict`, `NoNewPrivileges` and friends; base images are pinned by digest, Litestream by checksum.
+- The Docker image runs as an unprivileged user (uid 10001); the systemd unit written by `install.sh` runs as the unprivileged `obx` user with only `CAP_NET_BIND_SERVICE` (ports 80 and 443), `ProtectSystem=strict`, `NoNewPrivileges`, `MemoryDenyWriteExecute` and friends; the installer verifies every download against the release's `checksums.txt`; base images are pinned by digest, Litestream by checksum.
 - Logs never contain query strings, request bodies, passwords, tokens or client addresses ([operations.md](operations.md#logs)). The audit log records who changed what ([operations.md](operations.md#audit-log)).
 - Dependencies are checked on every change: `govulncheck`, the licence check, Dependabot updates; CI runs the race detector and the conformance suite's security profile.
 - `/metrics` is off unless `OBX_METRICS_TOKEN` is set.
@@ -47,5 +47,5 @@ Upload sizes are limited before anything is buffered; declared checksums are ver
 ## Known limits
 
 - Rate limits are kept in memory: they reset on restart and are per instance (the portal runs as one instance).
-- `OBX_TRUST_PROXY=true` takes the client address from `X-Forwarded-For`; set it only when every request comes through your proxy or platform (Caddy, Cloud Run, Fly.io, Railway, Render), otherwise a client could choose its own address for the rate limits.
+- `OBX_TRUST_PROXY=true` takes the client address from `X-Forwarded-For`; set it only when every request comes through your proxy or platform (nginx, Caddy, a load balancer), otherwise a client could choose its own address for the rate limits.
 - Renditions assume sRGB; embedded ICC profiles of originals are kept but not converted.

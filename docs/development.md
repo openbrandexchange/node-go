@@ -14,7 +14,8 @@
 | `ui/dist` | the vendored admin-ui build (`scripts/update-ui.sh`) |
 | `conformance/` | the OBX conformance suite against an in-process node (separate module; needs `../obx-go`) |
 | `e2e/` | Playwright: every task in the browser, axe on every screen, keyboard-only tasks |
-| `deploy/`, `docker-compose*.yml`, `Dockerfile`, `fly.toml`, `render.yaml`, `railway.json` | hosting |
+| `install.sh` | the installer for Linux servers ([docs/hosting/linux.md](hosting/linux.md)), attached to every release |
+| `deploy/`, `docker-compose*.yml`, `Dockerfile` | Docker, for local development and CI only ([docs/development/docker.md](development/docker.md)) |
 | `scripts/` | checks and tests of the hosting (see below) |
 
 ## Checks
@@ -36,7 +37,7 @@ CI (`.github/workflows/ci.yml`) runs all of these on every push and pull request
 | load test | `OBX_LOAD_TEST=1 go test ./internal/node -run TestLoad -v` ([performance.md](performance.md)) |
 | Docker image, Litestream restore, backup/restore | `scripts/test-docker.sh` |
 | Compose + Caddy over HTTPS | `scripts/test-compose-https.sh` |
-| Cloud Run script against the real gcloud | `scripts/test-cloudrun.sh` |
+| install.sh for real (install, update, uninstall, purge, behind-proxy) on a throwaway Linux machine | `scripts/test-install.sh` (CI job `installer`) |
 | release build | `goreleaser release --snapshot --clean` (or `docker run --rm -v "$PWD":/src -w /src goreleaser/goreleaser:v2.18.2 release --snapshot --clean`) |
 
 The conformance jobs need the private `obx-go` repository while the repositories are private: add a repository secret **`OBX_READ_TOKEN`** (a fine-grained token with read access to `openbrandexchange/obx-go` contents). Without it those jobs print a notice and are skipped.

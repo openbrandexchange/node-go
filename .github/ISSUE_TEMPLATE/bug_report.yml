@@ -24,12 +24,10 @@ body:
     attributes:
       label: Where does the portal run?
       options:
-        - Google Cloud Run (deploy/cloudrun.sh)
-        - Docker Compose with Caddy
-        - Docker (other)
-        - Fly.io
-        - Railway or Render
-        - Linux server with systemd
+        - Linux server with install.sh (built-in HTTPS)
+        - Linux server with install.sh --behind-proxy
+        - Docker (local development)
+        - Linux server, installed by hand
         - go run / from source
         - Other
     validations:

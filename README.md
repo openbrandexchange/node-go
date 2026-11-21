@@ -1,4 +1,4 @@
-# Portal for Google Cloud & Docker
+# Portal for your own server
 
 **Your own brand portal for retailers, in one program.** Retailers log in, find your products, paste a list of EANs, and download images and article data. Their shop software can fetch the same content automatically. You publish by uploading a spreadsheet and photos, or let your own systems do it for you.
 
@@ -19,7 +19,7 @@ This starts the portal with SQLite and files in `./data-dev`, completes the firs
 
 Open the address, log in, and click **View as retailer** to see the portal as a retailer does. E-mails are not sent but written to the output. Stop with Ctrl+C; `go run . dev` again continues with the same data, `go run . dev --fresh` starts over. Another port: `PORT=9090 go run . dev`. This is for trying it out only: for a real portal use `serve` and the setup wizard below.
 
-This is `node-go`: the Go edition of an [Open Brand Exchange](https://openbrandexchange.com) node. It runs as a single program with no other services required, on Google Cloud Run, any Docker host, Fly.io, Railway, Render or a plain Linux server.
+This is `node-go`: the Go edition of an [Open Brand Exchange](https://openbrandexchange.com) node. It runs as a single program with no other services required, on any Linux server, with HTTPS built in.
 
 | For | What they get |
 |---|---|
@@ -32,14 +32,7 @@ The interface speaks 25 European languages. Images keep their original bytes (in
 
 ## Try it in 60 seconds
 
-With Docker:
-
-```sh
-git clone https://github.com/openbrandexchange/node-go && cd node-go
-docker compose -f docker-compose.local.yml up
-```
-
-Or with Go 1.26 or newer (it fetches the exact toolchain of `go.mod` itself):
+With Go 1.26 or newer (it fetches the exact toolchain of `go.mod` itself):
 
 ```sh
 go run . serve
@@ -54,24 +47,17 @@ go run . import --csv testdata/spec/maison-noor/products.csv \
   --assets testdata/spec/maison-noor/assets.csv --images testdata/spec/maison-noor/images
 ```
 
-To see the retailer side, click **View as retailer**, or invite yourself under **Retailers**. Without an e-mail server nothing is sent: the admin shows the invitation link to copy, and the Docker try-out also writes the whole e-mail to the output (`OBX_MAIL_LOG_BODIES=true`).
+To see the retailer side, click **View as retailer**, or invite yourself under **Retailers**. Without an e-mail server nothing is sent: the admin shows the invitation link to copy (with `OBX_MAIL_LOG_BODIES=true` the whole e-mail is written to the output).
 
-Everything is stored in `./data` with Go, or in the Docker volume `obx-local-data`.
+Everything is stored in `./data`. Developers can also run it in Docker: [docs/development/docker.md](docs/development/docker.md) (for local development only).
 
-A scheduled import only fetches from `https://` addresses outside your own network. To try one on your own computer, against a file served from it or a local SFTP or MinIO server, start the portal with `OBX_ALLOW_PRIVATE_URLS=true` (for example under `environment:` in `docker-compose.local.yml`) and use `http://host.docker.internal:<port>/…` as the address. Never set it on a real server.
+A scheduled import only fetches from `https://` addresses outside your own network. To try one on your own computer, against a file served from it or a local SFTP or MinIO server, start the portal with `OBX_ALLOW_PRIVATE_URLS=true` and use `http://localhost:<port>/…` as the address. Never set it on a real server.
 
 ## Put it online
 
-Each option is one command; the guides explain domain names, e-mail and backups.
-
-| Where | Command | Guide |
-|---|---|---|
-| **Hetzner Cloud, in the EU (recommended)** | a server in Nuremberg, Falkenstein or Helsinki, then the Docker command below | [docs/hosting/hetzner.md](docs/hosting/hetzner.md) |
-| Google Cloud Run | `./deploy/cloudrun.sh` (`DRY_RUN=1` first to only see the commands) | [docs/hosting/cloud-run.md](docs/hosting/cloud-run.md) |
-| Your own server with Docker (automatic HTTPS) | `DOMAIN=images.yourbrand.com ADMIN_EMAIL=you@yourbrand.com docker compose up -d` | [docs/hosting/docker.md](docs/hosting/docker.md) |
-| Fly.io | `./deploy/fly.sh your-portal` | [docs/hosting/fly.md](docs/hosting/fly.md) |
-| Railway or Render | deploy this repository (the config files are included) | [docs/hosting/railway-render.md](docs/hosting/railway-render.md) |
-| A Linux server without Docker | `sudo ./deploy/install-linux.sh --domain images.yourbrand.com --with-caddy` | [docs/hosting/linux.md](docs/hosting/linux.md) |
+1. Get a Linux server (any VPS, [examples](docs/hosting/vps.md)) and point `portal.yourbrand.com` at its IP address with an A record ([DNS help](docs/hosting/linux.md#1-point-your-address-at-the-server-dns)).
+2. On the server: `curl -fsSL https://openbrandexchange.com/install.sh | sudo sh -s -- --domain portal.yourbrand.com`
+3. Open `https://portal.yourbrand.com` and enter the setup code the installer printed. HTTPS is automatic; run the same command again to update. Guide: [docs/hosting/linux.md](docs/hosting/linux.md).
 
 Settings are environment variables with sensible defaults: see [docs/configuration.md](docs/configuration.md). Storage can be local disk (default), any S3-compatible bucket (Hetzner Object Storage, AWS S3, Cloudflare R2, MinIO) or Google Cloud Storage; the database SQLite (default, continuously backed up with Litestream if you like) or PostgreSQL.
 

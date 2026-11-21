@@ -10,6 +10,7 @@ import (
 	"encoding/base64"
 	"fmt"
 	"log/slog"
+	"net"
 	"net/mail"
 	"net/url"
 	"os"
@@ -49,6 +50,15 @@ type Config struct {
 	JobRetentionDays        int // OBX_JOB_RETENTION_DAYS: finished jobs, batch results, downloads
 	WebhookLogRetentionDays int // OBX_WEBHOOK_LOG_RETENTION_DAYS: webhook delivery log
 	ShutdownDelaySeconds    int // OBX_SHUTDOWN_DELAY: seconds /readyz reports 503 before the server stops
+	// Built-in HTTPS (OBX_TLS=auto): a Let's Encrypt certificate for the
+	// portal's domain, served on HTTPSPort, with HTTPPort answering the ACME
+	// http-01 challenge and redirecting everything else to https.
+	Domain        string // OBX_DOMAIN: the portal's host name; sets the default OBX_PUBLIC_URL
+	TLS           string // OBX_TLS: off (default, plain http on PORT) or auto
+	ACMEEmail     string // OBX_ACME_EMAIL: Let's Encrypt contact for expiry notices (optional)
+	ACMEDirectory string // OBX_ACME_DIRECTORY: ACME directory URL (default Let's Encrypt production)
+	HTTPPort      int    // OBX_HTTP_PORT (80)
+	HTTPSPort     int    // OBX_HTTPS_PORT (443)
 }
 
 // Known lists every variable the node reads; others starting with OBX_ are
@@ -61,6 +71,8 @@ var Known = map[string]bool{
 	"OBX_METRICS_TOKEN": true, "OBX_CUSTOM_DOMAIN_HELP": true, "OBX_TEST_RATE_LIMIT": true,
 	"OBX_CHANGE_RETENTION_DAYS": true, "OBX_JOB_RETENTION_DAYS": true, "OBX_WEBHOOK_LOG_RETENTION_DAYS": true,
 	"OBX_SHUTDOWN_DELAY": true, "OBX_S3_ACCESS_KEY_ID": true, "OBX_S3_SECRET_ACCESS_KEY": true,
+	"OBX_DOMAIN": true, "OBX_TLS": true, "OBX_ACME_EMAIL": true, "OBX_ACME_DIRECTORY": true,
+	"OBX_HTTP_PORT": true, "OBX_HTTPS_PORT": true,
 	// Read by the command-line tools and tests, not by the server.
 	"OBX_URL": true, "OBX_TOKEN": true, "OBX_TEST_DATABASE_URL": true, "OBX_TEST_LOG": true,
 	"OBX_TEST_S3_ENDPOINT": true, "OBX_TEST_S3_BLOBS": true, "OBX_TEST_SFTP": true, "OBX_LOAD_TEST": true,
@@ -115,6 +127,10 @@ func Load() (*Config, error) {
 		LogLevel:         strings.ToLower(env("OBX_LOG_LEVEL", "info")),
 		CustomDomainHelp: os.Getenv("OBX_CUSTOM_DOMAIN_HELP"),
 		MetricsToken:     strings.TrimSpace(os.Getenv("OBX_METRICS_TOKEN")),
+		Domain:           strings.TrimSuffix(strings.ToLower(strings.TrimSpace(os.Getenv("OBX_DOMAIN"))), "."),
+		TLS:              strings.ToLower(env("OBX_TLS", "off")),
+		ACMEEmail:        strings.TrimSpace(os.Getenv("OBX_ACME_EMAIL")),
+		ACMEDirectory:    strings.TrimSpace(os.Getenv("OBX_ACME_DIRECTORY")),
 	}
 	c.Port = c.intVar(&p, "PORT", 8080, 1, 65535)
 	c.Workers = c.intVar(&p, "OBX_WORKERS", 2, 1, 64)
@@ -123,6 +139,8 @@ func Load() (*Config, error) {
 	c.JobRetentionDays = c.intVar(&p, "OBX_JOB_RETENTION_DAYS", 30, 8, 36500)
 	c.WebhookLogRetentionDays = c.intVar(&p, "OBX_WEBHOOK_LOG_RETENTION_DAYS", 8, 1, 365)
 	c.ShutdownDelaySeconds = c.intVar(&p, "OBX_SHUTDOWN_DELAY", 0, 0, 60)
+	c.HTTPPort = c.intVar(&p, "OBX_HTTP_PORT", 80, 1, 65535)
+	c.HTTPSPort = c.intVar(&p, "OBX_HTTPS_PORT", 443, 1, 65535)
 	c.AllowPrivateURLs = boolVar(&p, "OBX_ALLOW_PRIVATE_URLS", false)
 	c.MailLogBodies = boolVar(&p, "OBX_MAIL_LOG_BODIES", false)
 	c.TrustProxy = boolVar(&p, "OBX_TRUST_PROXY", false)
@@ -144,7 +162,17 @@ func Load() (*Config, error) {
 		p.add("OBX_DATA_DIR %q is not a usable path: %v", c.DataDir, err)
 	}
 	c.DataDir = abs
-	c.PublicURL = strings.TrimRight(env("OBX_PUBLIC_URL", platformURL(c.Port)), "/")
+	if c.Domain != "" && !validHostName(c.Domain) {
+		p.add("OBX_DOMAIN must be a host name such as portal.yourbrand.com (no https://, port or path), got %q", c.Domain)
+	}
+	defURL := platformURL(c.Port)
+	if c.Domain != "" {
+		defURL = "https://" + c.Domain
+		if c.TLS == "auto" && c.HTTPSPort != 443 {
+			defURL += ":" + strconv.Itoa(c.HTTPSPort)
+		}
+	}
+	c.PublicURL = strings.TrimRight(env("OBX_PUBLIC_URL", defURL), "/")
 	u, err := url.Parse(c.PublicURL)
 	switch {
 	case err != nil || (u.Scheme != "http" && u.Scheme != "https") || u.Host == "":
@@ -153,6 +181,7 @@ func Load() (*Config, error) {
 	case u.Path != "" || u.RawQuery != "" || u.Fragment != "":
 		p.add("OBX_PUBLIC_URL must be the bare address without a path (the portal runs at the root of its own domain), got %q", c.PublicURL)
 	}
+	c.checkTLS(&p, u)
 	c.DatabaseURL = env("OBX_DATABASE_URL", env("DATABASE_URL", "sqlite:"+filepath.Join(c.DataDir, "obx.db")))
 	if !strings.HasPrefix(c.DatabaseURL, "sqlite:") && !strings.HasPrefix(c.DatabaseURL, "postgres://") && !strings.HasPrefix(c.DatabaseURL, "postgresql://") {
 		p.add("OBX_DATABASE_URL must start with sqlite: or postgres:// (got %q)", redact(c.DatabaseURL))
@@ -240,7 +269,79 @@ func (c *Config) Warnings() []string {
 	if c.Metrics && c.MetricsToken == "" {
 		w = append(w, "OBX_METRICS is on without OBX_METRICS_TOKEN: /metrics is readable by anyone who can reach the node.")
 	}
+	if c.TLS == "auto" && c.TrustProxy {
+		w = append(w, "OBX_TRUST_PROXY is on while the node serves HTTPS itself (OBX_TLS=auto): clients can then choose their own address for the rate limits. Switch it off unless a proxy really sits in front.")
+	}
 	return w
+}
+
+// checkTLS validates the built-in HTTPS settings against the public URL u.
+func (c *Config) checkTLS(p *problems, u *url.URL) {
+	switch c.TLS {
+	case "off":
+		return
+	case "auto":
+	default:
+		p.add("OBX_TLS must be off or auto, got %q", c.TLS)
+		return
+	}
+	host := u.Hostname()
+	switch {
+	case u.Scheme != "https":
+		p.add("OBX_TLS=auto needs an https:// OBX_PUBLIC_URL (or only OBX_DOMAIN), got %q", c.PublicURL)
+	case c.Domain != "" && !strings.EqualFold(host, c.Domain):
+		p.add("OBX_DOMAIN (%s) and the host of OBX_PUBLIC_URL (%s) differ; set one of them, or both to the same name", c.Domain, host)
+	case !validHostName(host) || host == "localhost" || strings.HasSuffix(host, ".localhost"):
+		p.add("OBX_TLS=auto needs a public domain name (Let's Encrypt does not issue certificates for %q); use OBX_TLS=off for local use", host)
+	}
+	if port := u.Port(); port != "" && port != strconv.Itoa(c.HTTPSPort) {
+		p.add("OBX_PUBLIC_URL uses port %s but OBX_HTTPS_PORT is %d", port, c.HTTPSPort)
+	}
+	if c.HTTPPort == c.HTTPSPort {
+		p.add("OBX_HTTP_PORT and OBX_HTTPS_PORT must differ")
+	}
+	if c.ACMEEmail != "" {
+		if a, err := mail.ParseAddress(c.ACMEEmail); err != nil || a.Name != "" {
+			p.add("OBX_ACME_EMAIL must be a plain e-mail address such as you@yourbrand.com, got %q", c.ACMEEmail)
+		}
+	}
+	if c.ACMEDirectory != "" {
+		if du, err := url.Parse(c.ACMEDirectory); err != nil || du.Scheme != "https" || du.Host == "" {
+			p.add("OBX_ACME_DIRECTORY must be an https:// address, got %q", c.ACMEDirectory)
+		}
+	}
+}
+
+// TLSHost returns the host name the built-in HTTPS gets a certificate for,
+// or "" when OBX_TLS is off.
+func (c *Config) TLSHost() string {
+	if c.TLS != "auto" {
+		return ""
+	}
+	u, err := url.Parse(c.PublicURL)
+	if err != nil {
+		return ""
+	}
+	return strings.ToLower(u.Hostname())
+}
+
+// validHostName reports whether s is a DNS name with at least two labels
+// (not an IP address, no port, path or scheme).
+func validHostName(s string) bool {
+	if len(s) > 253 || !strings.Contains(s, ".") || net.ParseIP(s) != nil {
+		return false
+	}
+	for _, label := range strings.Split(s, ".") {
+		if label == "" || len(label) > 63 || label[0] == '-' || label[len(label)-1] == '-' {
+			return false
+		}
+		for _, r := range label {
+			if !(r >= 'a' && r <= 'z' || r >= 'A' && r <= 'Z' || r >= '0' && r <= '9' || r == '-') {
+				return false
+			}
+		}
+	}
+	return true
 }
 
 // redact removes a password from a URL for error messages.

@@ -1,3 +1,4 @@
+# For local development only (production: docs/hosting/linux.md).
 # Build the node from this folder instead of pulling the published image.
 # Add it after docker-compose.yml (or docker-compose.local.yml):
 #   docker compose -f docker-compose.yml -f docker-compose.build.yml up -d --build

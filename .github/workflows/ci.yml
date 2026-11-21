@@ -29,7 +29,7 @@ jobs:
       - name: Staticcheck
         run: go run honnef.co/go/tools/cmd/staticcheck@v0.8.1 ./...
       - name: Shell scripts
-        run: shellcheck deploy/*.sh scripts/*.sh e2e/run.sh
+        run: shellcheck install.sh deploy/*.sh scripts/*.sh e2e/run.sh
       - name: GoReleaser configuration
         uses: goreleaser/goreleaser-action@v7
         with:
@@ -215,5 +215,16 @@ jobs:
         run: scripts/test-docker.sh
       - name: Docker Compose with Caddy over HTTPS (DOMAIN + ADMIN_EMAIL only)
         run: scripts/test-compose-https.sh
-      - name: Cloud Run script against the real gcloud CLI
-        run: scripts/test-cloudrun.sh
+
+  installer:
+    # install.sh for real on the runner (systemd, root via sudo): a fresh
+    # install with built-in HTTPS, an update, behind-proxy mode, uninstall
+    # and purge. No certificate is requested (the test domain does not resolve).
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-go@v7
+        with:
+          go-version-file: go.mod
+      - name: Dry runs, real installs, update, uninstall (sh = dash)
+        run: scripts/test-install.sh

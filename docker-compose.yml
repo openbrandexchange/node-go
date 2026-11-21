@@ -1,4 +1,9 @@
-# Brand portal with automatic HTTPS (Caddy + Let's Encrypt).
+# FOR LOCAL DEVELOPMENT AND TESTING ONLY. To put the portal online, use the
+# installer on a Linux server (docs/hosting/linux.md):
+#   curl -fsSL https://openbrandexchange.com/install.sh | sudo sh -s -- --domain portal.yourbrand.com
+#
+# The portal behind Caddy with HTTPS, as CI tests it (scripts/test-compose-https.sh
+# runs it with DOMAIN=localhost and Caddy's local certificate authority).
 #
 #   1. Point a DNS record for your domain at this server (ports 80 and 443 open).
 #   2. DOMAIN=images.yourbrand.com ADMIN_EMAIL=you@yourbrand.com docker compose up -d

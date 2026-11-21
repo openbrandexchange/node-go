@@ -1,5 +1,6 @@
 # node-go: Open Brand Exchange brand portal (Go edition).
-# One image for every host: Docker/Compose, Cloud Run, Fly.io, Railway, Render.
+# For local development and testing (docker-compose*.yml, scripts/test-docker.sh).
+# To put the portal online, use install.sh on a Linux server (docs/hosting/linux.md).
 # Multi-arch (linux/amd64, linux/arm64); the Go build cross-compiles on the
 # build machine. Litestream is included; it only runs when
 # LITESTREAM_REPLICA_URL is set. Base images are pinned by digest and kept

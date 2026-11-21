@@ -29,7 +29,7 @@ should update when a release says it contains a security fix ([docs/upgrading.md
 ## Scope
 
 This repository: the portal code, the Docker image, the release archives and the deployment
-templates (`deploy/`, `docker-compose.yml`, Cloud Run, Fly.io, Railway, Render). Problems in the
+installer (`install.sh`) and the development files (`deploy/`, `docker-compose.yml`). Problems in the
 protocol itself go to the spec repository's private reporting in the same way; problems in the
 admin screens to the admin-ui repository. When in doubt, e-mail us and we route it.
 

@@ -1,3 +1,4 @@
+# For local development only (production: docs/hosting/linux.md).
 # Try the portal on your own computer: docker compose -f docker-compose.local.yml up
 # Then open http://localhost:8080 and use the setup code printed in the output.
 # Runs the published image; to build from this folder instead:

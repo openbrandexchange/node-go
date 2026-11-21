@@ -39,9 +39,7 @@ archives:
       - SECURITY.md
       - docs/*.md
       - docs/**/*.md
-      - deploy/Caddyfile
-      - deploy/install-linux.sh
-      - deploy/systemd/*
+      - install.sh
       - src: build/third-party-licenses/**/*
         dst: third-party-licenses
 
@@ -66,6 +64,11 @@ release:
     name: node-go
   draft: true
   prerelease: auto
+  # The installer is attached to every release, so
+  # https://github.com/openbrandexchange/node-go/releases/latest/download/install.sh
+  # (where https://openbrandexchange.com/install.sh redirects to) is always the newest one.
+  extra_files:
+    - glob: ./install.sh
   footer: |
-    Docker image: `ghcr.io/openbrandexchange/node-go:{{ .Version }}` (linux/amd64, linux/arm64).
+    Install or update on a Linux server: `curl -fsSL https://openbrandexchange.com/install.sh | sudo sh -s -- --domain portal.yourbrand.com` ([guide](https://github.com/openbrandexchange/node-go/blob/v{{ .Version }}/docs/hosting/linux.md)).
     Verify downloads with `sha256sum -c checksums.txt`.

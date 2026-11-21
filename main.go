@@ -32,6 +32,7 @@ import (
 
 	"github.com/openbrandexchange/node-go/internal/config"
 	"github.com/openbrandexchange/node-go/internal/node"
+	"github.com/openbrandexchange/node-go/internal/tlsauto"
 	"github.com/openbrandexchange/node-go/ui"
 )
 
@@ -140,17 +141,38 @@ func serve() error {
 	}
 	defer app.Close()
 	app.Start()
-	srv := &http.Server{
-		Addr:              fmt.Sprintf(":%d", app.Cfg.Port),
-		Handler:           app.Handler(),
-		ReadHeaderTimeout: 20 * time.Second,
-		IdleTimeout:       120 * time.Second,
-		MaxHeaderBytes:    64 << 10,
-		ErrorLog:          slog.NewLogLogger(app.Log.Handler(), slog.LevelWarn),
+	newServer := func(port int, h http.Handler) *http.Server {
+		return &http.Server{
+			Addr:              fmt.Sprintf(":%d", port),
+			Handler:           h,
+			ReadHeaderTimeout: 20 * time.Second,
+			IdleTimeout:       120 * time.Second,
+			MaxHeaderBytes:    64 << 10,
+			ErrorLog:          slog.NewLogLogger(app.Log.Handler(), slog.LevelWarn),
+		}
 	}
-	errc := make(chan error, 1)
-	go func() { errc <- srv.ListenAndServe() }()
-	app.Log.Info("node-go is listening", "port", app.Cfg.Port, "public_url", app.Cfg.PublicURL, "blobs", app.Store.Describe(), "database", app.DB.Dialect)
+	var servers []*http.Server
+	errc := make(chan error, 2)
+	if app.Cfg.TLS == "auto" {
+		// Built-in HTTPS: a Let's Encrypt certificate for the domain on
+		// OBX_HTTPS_PORT; OBX_HTTP_PORT answers the ACME challenge and
+		// redirects to https. Binding 80/443 needs root or (with systemd)
+		// AmbientCapabilities=CAP_NET_BIND_SERVICE, as install.sh sets up.
+		m := tlsauto.Manager(app.Cfg)
+		srvTLS := newServer(app.Cfg.HTTPSPort, app.Handler())
+		srvTLS.TLSConfig = tlsauto.TLSConfig(m)
+		srvHTTP := newServer(app.Cfg.HTTPPort, tlsauto.HTTPHandler(m, app.Cfg, app.Handler()))
+		srvHTTP.IdleTimeout = 30 * time.Second
+		servers = append(servers, srvTLS, srvHTTP)
+		go func() { errc <- listenHint(srvTLS.ListenAndServeTLS("", ""), app.Cfg.HTTPSPort) }()
+		go func() { errc <- listenHint(srvHTTP.ListenAndServe(), app.Cfg.HTTPPort) }()
+		app.Log.Info("node-go is listening with built-in HTTPS (Let's Encrypt)", "domain", app.Cfg.TLSHost(), "https_port", app.Cfg.HTTPSPort, "http_port", app.Cfg.HTTPPort, "certificates", tlsauto.CacheDir(app.Cfg), "public_url", app.Cfg.PublicURL, "blobs", app.Store.Describe(), "database", app.DB.Dialect)
+	} else {
+		srv := newServer(app.Cfg.Port, app.Handler())
+		servers = append(servers, srv)
+		go func() { errc <- srv.ListenAndServe() }()
+		app.Log.Info("node-go is listening", "port", app.Cfg.Port, "public_url", app.Cfg.PublicURL, "blobs", app.Store.Describe(), "database", app.DB.Dialect)
+	}
 	select {
 	case err := <-errc:
 		if !errors.Is(err, http.ErrServerClosed) {
@@ -166,13 +188,23 @@ func serve() error {
 		app.Log.Info("shutting down: finishing running requests (at most 25 s)")
 		sctx, cancel := context.WithTimeout(context.Background(), 25*time.Second)
 		defer cancel()
-		if err := srv.Shutdown(sctx); err != nil {
-			app.Log.Warn("requests were still running at shutdown", "error", err)
+		for _, srv := range servers {
+			if err := srv.Shutdown(sctx); err != nil {
+				app.Log.Warn("requests were still running at shutdown", "error", err)
+			}
 		}
 	}
 	app.Stop()
 	app.Log.Info("stopped")
 	return nil
+}
+
+// listenHint explains the usual reason a privileged port cannot be opened.
+func listenHint(err error, port int) error {
+	if err != nil && port < 1024 && errors.Is(err, syscall.EACCES) {
+		return fmt.Errorf("%w: port %d needs root or the CAP_NET_BIND_SERVICE capability (install.sh sets AmbientCapabilities=CAP_NET_BIND_SERVICE in the systemd unit)", err, port)
+	}
+	return err
 }
 
 // Local try-out (node-go dev): known login, demo catalog, no Docker.
@@ -487,6 +519,13 @@ func healthcheck() error {
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "8080"
+	}
+	if strings.EqualFold(strings.TrimSpace(os.Getenv("OBX_TLS")), "auto") {
+		// With built-in HTTPS the plain-http port answers /healthz too.
+		port = os.Getenv("OBX_HTTP_PORT")
+		if port == "" {
+			port = "80"
+		}
 	}
 	c := &http.Client{Timeout: 5 * time.Second}
 	resp, err := c.Get("http://127.0.0.1:" + port + "/healthz")

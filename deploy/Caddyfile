@@ -1,3 +1,5 @@
+# For local development and testing only (docker-compose.yml). In production
+# node-go does HTTPS itself (OBX_TLS=auto, set up by install.sh).
 # Caddy in front of node-go (docker-compose.yml): automatic HTTPS for DOMAIN
 # with a Let's Encrypt certificate; ADMIN_EMAIL is the ACME account contact.
 {

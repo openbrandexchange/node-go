@@ -1,6 +1,6 @@
 # Changelog
 
-All notable changes to the Portal for Google Cloud & Docker (`node-go`) are listed here. The project
+All notable changes to the Portal for your own server (`node-go`) are listed here. The project
 follows [Semantic Versioning](https://semver.org/): the major version changes when an upgrade needs
 more than replacing the software (see [docs/upgrading.md](docs/upgrading.md)); database migrations
 are always forward-only and applied automatically on start.
@@ -8,6 +8,16 @@ are always forward-only and applied automatically on start.
 ## [Unreleased]
 
 ### Added
+- One-line installer for Linux servers: `curl -fsSL https://openbrandexchange.com/install.sh | sudo sh -s -- --domain portal.yourbrand.com`
+  (`install.sh`, attached to every release). Checks DNS, ports, firewall, systemd and disk first with plain explanations;
+  downloads the release and verifies it against `checksums.txt`; installs the hardened `node-go` systemd service (user `obx`,
+  only `CAP_NET_BIND_SERVICE`); prints the setup code. Running it again updates in place. Options `--email`, `--version`,
+  `--behind-proxy`, `--edition ts` (the node-ts standalone binary behind Caddy), `--archive`, `--dry-run`, `--uninstall [--purge]`.
+  Tested for real on a Linux runner in CI (`scripts/test-install.sh`).
+- Built-in HTTPS: with `OBX_TLS=auto` and `OBX_DOMAIN` the node gets and renews a Let's Encrypt certificate itself, serves
+  HTTPS on port 443 and answers the ACME challenge, `/healthz` and a redirect to https on port 80. Certificates are kept in
+  `$OBX_DATA_DIR/acme`. New settings `OBX_DOMAIN`, `OBX_TLS`, `OBX_ACME_EMAIL`, `OBX_ACME_DIRECTORY`, `OBX_HTTP_PORT`,
+  `OBX_HTTPS_PORT` ([configuration.md](docs/configuration.md#https)).
 - The web interface is admin-ui e78ccf2: the showroom redesign (theme engine, Appearance editor in the settings,
   start page, quick view).
 - **Portal appearance** (node-admin 0.3.x, additive): `branding.theme` (colours, fonts, radius,
@@ -26,6 +36,13 @@ are always forward-only and applied automatically on start.
   house MAISON NOOR instead of Kestrel. `node-go dev` logs in as `admin@maison-noor.example`,
   the example catalog is `testdata/maison-noor-example.zip` (article numbers MN-/NA-), and the
   spec fixtures are synced from `fixtures/maison-noor`.
+
+### Removed
+- Container hosting as a production route: the Cloud Run, Fly.io, Railway and Render guides and files (`deploy/cloudrun.sh`,
+  `deploy/fly.sh`, `fly.toml`, `railway.json`, `render.yaml`, `scripts/test-cloudrun.sh`), `deploy/install-linux.sh` (replaced
+  by `install.sh`) and `deploy/systemd/` (the installer writes the unit). `docs/hosting/hetzner.md` is now
+  `docs/hosting/vps.md` (Hetzner, DigitalOcean, TransIP, Scaleway). The Dockerfile and Compose files stay, for local
+  development and CI ([docs/development/docker.md](docs/development/docker.md)); the image is still published.
 
 ### Fixed
 - The public logo is cached as `public, max-age=86400` as intended (it was sent as `private`).
