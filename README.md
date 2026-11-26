@@ -1,3 +1,6 @@
+> [!WARNING]
+> **Deprecated: use [node-rs](https://github.com/openbrandexchange/node-rs).** node-go is no longer developed; node-rs, the reference node in Rust, does everything it did (one binary on Linux, or Docker). Moving over: [docs/migrating.md](https://github.com/openbrandexchange/node-rs/blob/main/docs/migrating.md). This repository will be archived after one node-rs release has run in production; until then only security fixes.
+
 # Portal for your own server
 
 **Your own brand portal for retailers, in one program.** Retailers log in, find your products, paste a list of EANs, and download images and article data. Their shop software can fetch the same content automatically. You publish by uploading a spreadsheet and photos, or let your own systems do it for you.
